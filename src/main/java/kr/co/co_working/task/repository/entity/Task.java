@@ -1,4 +1,4 @@
-package kr.co.co_working.repository.entity;
+package kr.co.co_working.task.repository.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

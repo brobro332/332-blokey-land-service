@@ -1,4 +1,6 @@
-package kr.co.co_working.repository.entity;
+package kr.co.co_working.task.repository.entity;
 
-public class TaskRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface TaskRepository extends JpaRepository<Task, Long> {
 }

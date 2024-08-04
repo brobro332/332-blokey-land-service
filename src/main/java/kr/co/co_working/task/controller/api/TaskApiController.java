@@ -1,6 +1,6 @@
 package kr.co.co_working.task.controller.api;
 
-import kr.co.co_working.service.TaskService;
+import kr.co.co_working.task.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class TaskApiController {
-    private TaskService service;
+    private final TaskService service;
 
     @PostMapping("/api/v1/task")
     public ResponseEntity<String> createTask() throws Exception {
