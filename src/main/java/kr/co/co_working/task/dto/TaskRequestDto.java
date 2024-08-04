@@ -19,4 +19,12 @@ public class TaskRequestDto {
         private String type;
         private String description;
     }
+
+    @Getter
+    @Setter
+    public static class READ {
+        private String name;
+        private String type;
+        private String description;
+    }
 }

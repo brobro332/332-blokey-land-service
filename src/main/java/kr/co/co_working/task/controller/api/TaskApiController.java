@@ -25,6 +25,17 @@ public class TaskApiController {
     }
 
     /**
+     * selectTask : Task 조회
+     * @param dto
+     * @return
+     * @throws Exception
+     */
+    @GetMapping("/api/v1/task")
+    public ResponseDto<?> selectTaskList(@RequestBody TaskRequestDto.READ dto) throws Exception {
+        return ResponseDto.ofSuccess("작업 조회에 성공했습니다.", service.selectTaskList(dto));
+    }
+
+    /**
      * updateTask : Task 수정
      * @param id
      * @param dto

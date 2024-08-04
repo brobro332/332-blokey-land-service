@@ -1,13 +1,16 @@
 package kr.co.co_working.task.service;
 
 import kr.co.co_working.task.dto.TaskRequestDto;
+import kr.co.co_working.task.dto.TaskResponseDto;
+import kr.co.co_working.task.repository.TaskDslRepository;
+import kr.co.co_working.task.repository.TaskRepository;
 import kr.co.co_working.task.repository.entity.Task;
-import kr.co.co_working.task.repository.entity.TaskRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -15,6 +18,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TaskService {
     private final TaskRepository repository;
+    private final TaskDslRepository dslRepository;
 
     /**
      * createTask : Task 등록
@@ -32,6 +36,21 @@ public class TaskService {
 
             // 2. 등록
             repository.save(task);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw e;
+        }
+    }
+
+    /**
+     * selectTaskList : Task 조회
+     * @param dto
+     * @return
+     * @throws Exception
+     */
+    public List<TaskResponseDto> selectTaskList(TaskRequestDto.READ dto) throws Exception {
+        try {
+            return dslRepository.selectTaskList(dto);
         } catch (Exception e) {
             log.error(e.getMessage());
             throw e;
