@@ -1,6 +1,7 @@
-package kr.co.co_working.repository.entity;
+package kr.co.co_working.task.repository.entity;
 
 import jakarta.persistence.*;
+import kr.co.co_working.common.entity.CommonTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "tbl_task")
-public class Task {
+public class Task extends CommonTime {
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "task_id")
     private Long id;
@@ -26,6 +27,12 @@ public class Task {
 
     @Builder
     public Task(String name, String type, String description) {
+        this.name = name;
+        this.type = type;
+        this.description = description;
+    }
+
+    public void updateTask(String name, String type, String description) {
         this.name = name;
         this.type = type;
         this.description = description;
