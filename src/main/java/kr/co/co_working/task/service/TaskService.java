@@ -50,6 +50,7 @@ public class TaskService {
      */
     public List<TaskResponseDto> selectTaskList(TaskRequestDto.READ dto) throws Exception {
         try {
+            // QueryDSL 동적 쿼리 결과 반환
             return dslRepository.selectTaskList(dto);
         } catch (Exception e) {
             log.error(e.getMessage());

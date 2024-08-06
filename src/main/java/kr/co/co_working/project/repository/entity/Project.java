@@ -30,8 +30,7 @@ public class Project extends CommonTime {
     private List<Task> tasks;
 
     @Builder
-    public Project(Long id, String name, String description, List<Task> tasks) {
-        this.id = id;
+    public Project(String name, String description, List<Task> tasks) {
         this.name = name;
         this.description = description;
         this.tasks = tasks;

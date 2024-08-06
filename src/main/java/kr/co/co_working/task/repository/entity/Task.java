@@ -2,6 +2,7 @@ package kr.co.co_working.task.repository.entity;
 
 import jakarta.persistence.*;
 import kr.co.co_working.common.entity.CommonTime;
+import kr.co.co_working.project.repository.entity.Project;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,11 +26,16 @@ public class Task extends CommonTime {
     @Column(name = "task_description", nullable = false, length = 200)
     private String description;
 
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    private Project project;
+
     @Builder
-    public Task(String name, String type, String description) {
+    public Task(String name, String type, String description, Project project) {
         this.name = name;
         this.type = type;
         this.description = description;
+        this.project = project;
     }
 
     public void updateTask(String name, String type, String description) {
