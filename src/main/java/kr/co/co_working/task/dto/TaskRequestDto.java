@@ -15,6 +15,7 @@ public class TaskRequestDto {
     @Getter
     @Setter
     public static class UPDATE {
+        private Long id;
         private String name;
         private String type;
         private String description;

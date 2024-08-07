@@ -1,5 +1,6 @@
 package kr.co.co_working.project.dto;
 
+import kr.co.co_working.task.dto.TaskRequestDto;
 import kr.co.co_working.task.repository.entity.Task;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +20,7 @@ public class ProjectRequestDto {
     public static class UPDATE {
         private String name;
         private String description;
-        private List<Task> tasks;
+        private List<TaskRequestDto.UPDATE> tasks;
     }
 
     @Getter

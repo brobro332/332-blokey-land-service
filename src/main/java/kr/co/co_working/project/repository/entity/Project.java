@@ -35,4 +35,10 @@ public class Project extends CommonTime {
         this.description = description;
         this.tasks = tasks;
     }
+
+    public void updateProject(String name, String description, List<Task> tasks) {
+        this.name = name;
+        this.description = description;
+        this.tasks = tasks;
+    }
 }
