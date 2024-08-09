@@ -28,7 +28,7 @@ public class TaskService {
      * @param dto
      * @throws Exception
      */
-    public void createTask(TaskRequestDto.CREATE dto) throws Exception {
+    public Long createTask(TaskRequestDto.CREATE dto) throws Exception {
         try {
             // 1. Project 조회
             Optional<Project> selectedProject = projectRepository.findById(dto.getProjectId());
@@ -49,6 +49,9 @@ public class TaskService {
             // 3. 등록
             repository.save(task);
             project.insertTask(task);
+
+            // 4. ID 반환
+            return task.getId();
         } catch (Exception e) {
             log.error(e.getMessage());
             throw e;

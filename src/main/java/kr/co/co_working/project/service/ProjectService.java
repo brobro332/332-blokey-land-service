@@ -11,7 +11,9 @@ import kr.co.co_working.task.repository.entity.Task;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,16 +30,21 @@ public class ProjectService {
      * @param dto
      * @throws Exception
      */
-    public void createProject(ProjectRequestDto.CREATE dto) throws Exception {
+    @Transactional
+    public Long createProject(ProjectRequestDto.CREATE dto) throws Exception {
         try {
             // 1. Project 빌드
             Project project = Project.builder()
                     .name(dto.getName())
                     .description(dto.getDescription())
+                    .tasks(new ArrayList<>())
                     .build();
 
             // 2. 등록
             repository.save(project);
+
+            // 3. ID 반환
+            return project.getId();
         } catch (Exception e) {
             log.error(e.getMessage());
             throw e;

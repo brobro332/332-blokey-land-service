@@ -13,6 +13,7 @@ public class ProjectRequestDto {
     public static class CREATE {
         private String name;
         private String description;
+        private List<Task> tasks;
     }
 
     @Getter
