@@ -10,5 +10,4 @@ public class CoWorkingApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CoWorkingApplication.class, args);
 	}
-
 }

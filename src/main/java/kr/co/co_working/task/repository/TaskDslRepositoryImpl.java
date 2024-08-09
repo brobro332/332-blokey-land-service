@@ -20,8 +20,18 @@ import static kr.co.co_working.task.repository.entity.QTask.task;
 public class TaskDslRepositoryImpl implements TaskDslRepository {
     private final JPAQueryFactory factory;
 
+    /**
+     * SELECT task_id, task_name, task_type, task_description, task_createdAt, task_modifiedAt
+     * FROM tbl_task
+     * WHERE task_name = ?
+     * AND task_type = ?
+     * AND task_description = ?;
+     *
+     * @param dto
+     * @return
+     */
     @Override
-    public List<TaskResponseDto> selectTaskList(TaskRequestDto.READ dto) {
+    public List<TaskResponseDto> readTaskList(TaskRequestDto.READ dto) {
         return factory
                 .select(new QTaskResponseDto(task.id, task.name, task.type, task.description, task.createdAt, task.modifiedAt))
                 .from(task)
@@ -31,13 +41,22 @@ public class TaskDslRepositoryImpl implements TaskDslRepository {
                 .fetch();
     }
 
+    /**
+     * SELECT *
+     * FROM tbl_task T
+     * [INNER] JOIN tbl_project P
+     * WHERE T.project_id = P.project_id;
+     *
+     * @param id
+     * @return
+     */
     @Override
     public List<Task> selectTaskListByProject(Long id) {
         return factory
                 .select(task)
                 .from(task)
                 .join(task.project, project)
-                .where(idEq(id))
+                .where(projectIdEq(id))
                 .fetch();
     }
 
@@ -53,7 +72,7 @@ public class TaskDslRepositoryImpl implements TaskDslRepository {
         return descriptionCond != null ? task.description.eq(descriptionCond) : null;
     }
 
-    private BooleanExpression idEq(Long idCond) {
-        return idCond != null ? task.id.eq(idCond) : null;
+    private BooleanExpression projectIdEq(Long idCond) {
+        return idCond != null ? task.project.id.eq(idCond) : null;
     }
 }

@@ -17,16 +17,16 @@ public class ProjectRequestDto {
 
     @Getter
     @Setter
-    public static class UPDATE {
+    public static class READ {
         private String name;
-        private String description;
-        private List<TaskRequestDto.UPDATE> tasks;
+        public READ() { }
     }
 
     @Getter
     @Setter
-    public static class READ {
+    public static class UPDATE {
         private String name;
-        public READ() { }
+        private String description;
+        private List<TaskRequestDto.UPDATE> tasks;
     }
 }

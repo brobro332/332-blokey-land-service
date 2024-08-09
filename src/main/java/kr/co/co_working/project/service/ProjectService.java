@@ -1,6 +1,8 @@
 package kr.co.co_working.project.service;
 
 import kr.co.co_working.project.dto.ProjectRequestDto;
+import kr.co.co_working.project.dto.ProjectResponseDto;
+import kr.co.co_working.project.repository.ProjectDslRepository;
 import kr.co.co_working.project.repository.ProjectRepository;
 import kr.co.co_working.project.repository.entity.Project;
 import kr.co.co_working.task.dto.TaskRequestDto;
@@ -18,7 +20,8 @@ import java.util.Optional;
 @Slf4j
 public class ProjectService {
     private final ProjectRepository repository;
-    private final TaskDslRepository taskRepository;
+    private final ProjectDslRepository dslRepository;
+    private final TaskDslRepository taskDslRepository;
 
     /**
      * createProject : Project 등록
@@ -42,6 +45,22 @@ public class ProjectService {
     }
 
     /**
+     * readProjectList : Project 조회
+     * @param dto
+     * @return
+     * @throws Exception
+     */
+    public List<ProjectResponseDto> readProjectList(ProjectRequestDto.READ dto) throws Exception {
+        try {
+            // QueryDSL 동적 쿼리 결과 반환
+            return dslRepository.readProjectList(dto);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw e;
+        }
+    }
+
+    /**
      * updateProject : Project 수정
      * @param id
      * @param dto
@@ -58,14 +77,16 @@ public class ProjectService {
             }
 
             // 3. 프로젝트에 해당하는 업무 리스트 조회하여 DTO 수정사항 수정
-            List<Task> tasks = taskRepository.selectTaskListByProject(selectedProject.get().getId());
+            Project project = selectedProject.get();
+            List<Task> tasks = taskDslRepository.selectTaskListByProject(project.getId());
             List<TaskRequestDto.UPDATE> changedTasks = dto.getTasks();
             for (TaskRequestDto.UPDATE changedTask : changedTasks) {
                 for (Task task : tasks) {
                     if (changedTask.getId() == task.getId()) {
                         task.updateTask(changedTask.getName()
                                         , changedTask.getType()
-                                        , changedTask.getDescription());
+                                        , changedTask.getDescription()
+                                        , project);
                     }
                 }
             }

@@ -41,4 +41,13 @@ public class Project extends CommonTime {
         this.description = description;
         this.tasks = tasks;
     }
+
+    public void insertTask(Task task) {
+        this.tasks.add(task);
+        task.updateTask(task.getName(), task.getType(), task.getDescription(), this);
+    }
+
+    public void deleteTask(Task task) {
+        this.tasks.remove(task);
+    }
 }

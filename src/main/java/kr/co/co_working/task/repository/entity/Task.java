@@ -38,9 +38,10 @@ public class Task extends CommonTime {
         this.project = project;
     }
 
-    public void updateTask(String name, String type, String description) {
+    public void updateTask(String name, String type, String description, Project project) {
         this.name = name;
         this.type = type;
         this.description = description;
+        this.project = project;
     }
 }

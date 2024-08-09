@@ -25,6 +25,17 @@ public class ProjectApiController {
     }
 
     /**
+     * readProjectList : Project 조회
+     * @param dto
+     * @return
+     * @throws Exception
+     */
+    @GetMapping("/api/v1/project")
+    public ResponseDto<?> readProjectList(@RequestBody ProjectRequestDto.READ dto) throws Exception {
+        return ResponseDto.ofSuccess("프로젝트 조회에 성공했습니다.", service.readProjectList(dto));
+    }
+
+    /**
      * updateProject : Project 수정
      * @param id
      * @param dto

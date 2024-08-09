@@ -7,6 +7,6 @@ import kr.co.co_working.task.repository.entity.Task;
 import java.util.List;
 
 public interface TaskDslRepository {
-    List<TaskResponseDto> selectTaskList(TaskRequestDto.READ dto);
+    List<TaskResponseDto> readTaskList(TaskRequestDto.READ dto);
     List<Task> selectTaskListByProject(Long id);
 }
