@@ -28,23 +28,18 @@ public class ProjectService {
      */
     @Transactional
     public Long createProject(ProjectRequestDto.CREATE dto) throws Exception {
-        try {
-            // 1. Project 빌드
-            Project project = Project.builder()
-                    .name(dto.getName())
-                    .description(dto.getDescription())
-                    .tasks(new ArrayList<>())
-                    .build();
+        // 1. Project 빌드
+        Project project = Project.builder()
+                .name(dto.getName())
+                .description(dto.getDescription())
+                .tasks(new ArrayList<>())
+                .build();
 
-            // 2. 등록
-            repository.save(project);
+        // 2. 등록
+        repository.save(project);
 
-            // 3. ID 반환
-            return project.getId();
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            throw e;
-        }
+        // 3. ID 반환
+        return project.getId();
     }
 
     /**
@@ -54,13 +49,8 @@ public class ProjectService {
      * @throws Exception
      */
     public List<ProjectResponseDto> readProjectList(ProjectRequestDto.READ dto) throws Exception {
-        try {
-            // QueryDSL 동적 쿼리 결과 반환
-            return dslRepository.readProjectList(dto);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            throw e;
-        }
+        // QueryDSL 동적 쿼리 결과 반환
+        return dslRepository.readProjectList(dto);
     }
 
     /**
@@ -70,22 +60,17 @@ public class ProjectService {
      * @throws Exception
      */
     public void updateProject(Long id, ProjectRequestDto.UPDATE dto) throws Exception {
-        try {
-            // 1. ID에 해당하는 프로젝트 조회
-            Optional<Project> selectedProject = repository.findById(id);
+        // 1. ID에 해당하는 프로젝트 조회
+        Optional<Project> selectedProject = repository.findById(id);
 
-            // 2. 부재 시 예외 처리
-            if (selectedProject.isEmpty()) {
-                throw new Exception("수정하려는 프로젝트가 존재하지 않습니다.");
-            }
-
-            // 3. 프로젝트 수정사항 처리
-            Project project = selectedProject.get();
-            project.updateProject(dto.getName(), dto.getDescription());
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            throw e;
+        // 2. 부재 시 예외 처리
+        if (selectedProject.isEmpty()) {
+            throw new Exception("수정하려는 프로젝트가 존재하지 않습니다.");
         }
+
+        // 3. 프로젝트 수정사항 처리
+        Project project = selectedProject.get();
+        project.updateProject(dto.getName(), dto.getDescription());
     }
 
     /**
@@ -94,20 +79,15 @@ public class ProjectService {
      * @throws Exception
      */
     public void deleteProject(Long id) throws Exception {
-        try {
-            // 1. ID에 해당하는 프로젝트 조회
-            Optional<Project> selectedProject = repository.findById(id);
+        // 1. ID에 해당하는 프로젝트 조회
+        Optional<Project> selectedProject = repository.findById(id);
 
-            // 2. 부재 시 예외 처리
-            if (selectedProject.isEmpty()) {
-                throw new Exception("삭제하려는 프로젝트가 존재하지 않습니다.");
-            }
-
-            // 3. 존재 시 삭제 처리
-            repository.delete(selectedProject.get());
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            throw e;
+        // 2. 부재 시 예외 처리
+        if (selectedProject.isEmpty()) {
+            throw new Exception("삭제하려는 프로젝트가 존재하지 않습니다.");
         }
+
+        // 3. 존재 시 삭제 처리
+        repository.delete(selectedProject.get());
     }
 }
