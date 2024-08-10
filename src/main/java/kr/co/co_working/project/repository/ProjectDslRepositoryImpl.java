@@ -21,7 +21,7 @@ public class ProjectDslRepositoryImpl implements ProjectDslRepository {
     /**
      * SELECT project_id, project_name, project_description, project_createdAt, project_modifiedAt
      * FROM tbl_project
-     * WHERE project_name = ?;
+     * WHERE project_name LIKE ?;
      *
      * @param dto
      * @return
@@ -31,11 +31,11 @@ public class ProjectDslRepositoryImpl implements ProjectDslRepository {
         return factory
                 .select(new QProjectResponseDto(project.id, project.name, project.description, project.createdAt, project.modifiedAt))
                 .from(project)
-                .where(nameEq(dto.getName()))
+                .where(nameContains(dto.getName()))
                 .fetch();
     }
 
-    private BooleanExpression nameEq(String nameCond) {
-        return nameCond != null ? project.name.eq(nameCond) : null;
+    private BooleanExpression nameContains(String nameCond) {
+        return nameCond != null ? project.name.contains(nameCond) : null;
     }
 }

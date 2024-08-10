@@ -5,9 +5,6 @@ import kr.co.co_working.project.dto.ProjectResponseDto;
 import kr.co.co_working.project.repository.ProjectDslRepository;
 import kr.co.co_working.project.repository.ProjectRepository;
 import kr.co.co_working.project.repository.entity.Project;
-import kr.co.co_working.task.dto.TaskRequestDto;
-import kr.co.co_working.task.repository.TaskDslRepository;
-import kr.co.co_working.task.repository.entity.Task;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,7 +20,6 @@ import java.util.Optional;
 public class ProjectService {
     private final ProjectRepository repository;
     private final ProjectDslRepository dslRepository;
-    private final TaskDslRepository taskDslRepository;
 
     /**
      * createProject : Project 등록
@@ -83,20 +79,9 @@ public class ProjectService {
                 throw new Exception("수정하려는 프로젝트가 존재하지 않습니다.");
             }
 
-            // 3. 프로젝트에 해당하는 업무 리스트 조회하여 DTO 수정사항 수정
+            // 3. 프로젝트 수정사항 처리
             Project project = selectedProject.get();
-            List<Task> tasks = taskDslRepository.selectTaskListByProject(project.getId());
-            List<TaskRequestDto.UPDATE> changedTasks = dto.getTasks();
-            for (TaskRequestDto.UPDATE changedTask : changedTasks) {
-                for (Task task : tasks) {
-                    if (changedTask.getId() == task.getId()) {
-                        task.updateTask(changedTask.getName()
-                                        , changedTask.getType()
-                                        , changedTask.getDescription()
-                                        , project);
-                    }
-                }
-            }
+            project.updateProject(dto.getName(), dto.getDescription());
         } catch (Exception e) {
             log.error(e.getMessage());
             throw e;

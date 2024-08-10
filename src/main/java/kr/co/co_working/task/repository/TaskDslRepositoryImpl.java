@@ -23,9 +23,9 @@ public class TaskDslRepositoryImpl implements TaskDslRepository {
     /**
      * SELECT task_id, task_name, task_type, task_description, task_createdAt, task_modifiedAt
      * FROM tbl_task
-     * WHERE task_name = ?
-     * AND task_type = ?
-     * AND task_description = ?;
+     * WHERE task_name LIKE ?
+     * AND task_type LIKE ?
+     * AND task_description LIKE ?;
      *
      * @param dto
      * @return
@@ -35,44 +35,21 @@ public class TaskDslRepositoryImpl implements TaskDslRepository {
         return factory
                 .select(new QTaskResponseDto(task.id, task.name, task.type, task.description, task.createdAt, task.modifiedAt))
                 .from(task)
-                .where(   nameEq(dto.getName())
-                        , typeEq(dto.getType())
-                        , descriptionEq(dto.getDescription()) )
+                .where(   nameContains(dto.getName())
+                        , typeContains(dto.getType())
+                        , descriptionContains(dto.getDescription()) )
                 .fetch();
     }
 
-    /**
-     * SELECT *
-     * FROM tbl_task T
-     * [INNER] JOIN tbl_project P
-     * WHERE T.project_id = P.project_id;
-     *
-     * @param id
-     * @return
-     */
-    @Override
-    public List<Task> selectTaskListByProject(Long id) {
-        return factory
-                .select(task)
-                .from(task)
-                .join(task.project, project)
-                .where(projectIdEq(id))
-                .fetch();
+    private BooleanExpression nameContains(String nameCond) {
+        return nameCond != null ? task.name.contains(nameCond) : null;
     }
 
-    private BooleanExpression nameEq(String nameCond) {
-        return nameCond != null ? task.name.eq(nameCond) : null;
+    private BooleanExpression typeContains(String typeCond) {
+        return typeCond != null ? task.type.contains(typeCond) : null;
     }
 
-    private BooleanExpression typeEq(String typeCond) {
-        return typeCond != null ? task.type.eq(typeCond) : null;
-    }
-
-    private BooleanExpression descriptionEq(String descriptionCond) {
-        return descriptionCond != null ? task.description.eq(descriptionCond) : null;
-    }
-
-    private BooleanExpression projectIdEq(Long idCond) {
-        return idCond != null ? task.project.id.eq(idCond) : null;
+    private BooleanExpression descriptionContains(String descriptionCond) {
+        return descriptionCond != null ? task.description.contains(descriptionCond) : null;
     }
 }

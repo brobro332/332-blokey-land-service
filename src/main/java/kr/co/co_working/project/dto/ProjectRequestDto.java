@@ -2,6 +2,7 @@ package kr.co.co_working.project.dto;
 
 import kr.co.co_working.task.dto.TaskRequestDto;
 import kr.co.co_working.task.repository.entity.Task;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,7 +21,12 @@ public class ProjectRequestDto {
     @Setter
     public static class READ {
         private String name;
+
         public READ() { }
+
+        public READ(String name) {
+            this.name = name;
+        }
     }
 
     @Getter
@@ -29,5 +35,12 @@ public class ProjectRequestDto {
         private String name;
         private String description;
         private List<TaskRequestDto.UPDATE> tasks;
+
+        @Builder
+        public UPDATE(String name, String description, List<TaskRequestDto.UPDATE> tasks) {
+            this.name = name;
+            this.description = description;
+            this.tasks = tasks;
+        }
     }
 }
