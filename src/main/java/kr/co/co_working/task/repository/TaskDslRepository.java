@@ -6,5 +6,5 @@ import kr.co.co_working.task.dto.TaskResponseDto;
 import java.util.List;
 
 public interface TaskDslRepository {
-    List<TaskResponseDto> selectTaskList(TaskRequestDto.READ dto);
+    List<TaskResponseDto> readTaskList(TaskRequestDto.READ dto);
 }

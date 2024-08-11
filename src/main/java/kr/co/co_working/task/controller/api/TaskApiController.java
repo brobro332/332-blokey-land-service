@@ -31,8 +31,8 @@ public class TaskApiController {
      * @throws Exception
      */
     @GetMapping("/api/v1/task")
-    public ResponseDto<?> selectTaskList(@RequestBody TaskRequestDto.READ dto) throws Exception {
-        return ResponseDto.ofSuccess("작업 조회에 성공했습니다.", service.selectTaskList(dto));
+    public ResponseDto<?> readTaskList(@RequestBody TaskRequestDto.READ dto) throws Exception {
+        return ResponseDto.ofSuccess("작업 조회에 성공했습니다.", service.readTaskList(dto));
     }
 
     /**
@@ -53,12 +53,14 @@ public class TaskApiController {
     /**
      * deleteTask : Task 삭제
      * @param id
+     * @param dto
      * @return
      * @throws Exception
      */
     @DeleteMapping("/api/v1/task/{task_id}")
-    public ResponseDto<?> deleteTask(@PathVariable(name = "task_id") Long id) throws Exception {
-        service.deleteTask(id);
+    public ResponseDto<?> deleteTask(@PathVariable(name = "task_id") Long id,
+                                     @RequestBody TaskRequestDto.DELETE dto) throws Exception {
+        service.deleteTask(id, dto);
 
         return ResponseDto.ofSuccess("작업 삭제에 성공했습니다.");
     }
