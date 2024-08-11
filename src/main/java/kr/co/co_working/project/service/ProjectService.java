@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -59,13 +60,13 @@ public class ProjectService {
      * @param dto
      * @throws Exception
      */
-    public void updateProject(Long id, ProjectRequestDto.UPDATE dto) throws Exception {
+    public void updateProject(Long id, ProjectRequestDto.UPDATE dto) throws NoSuchElementException, Exception {
         // 1. ID에 해당하는 프로젝트 조회
         Optional<Project> selectedProject = repository.findById(id);
 
         // 2. 부재 시 예외 처리
         if (selectedProject.isEmpty()) {
-            throw new Exception("수정하려는 프로젝트가 존재하지 않습니다.");
+            throw new NoSuchElementException("수정하려는 프로젝트가 존재하지 않습니다. ID : " + id);
         }
 
         // 3. 프로젝트 수정사항 처리
@@ -78,13 +79,13 @@ public class ProjectService {
      * @param id
      * @throws Exception
      */
-    public void deleteProject(Long id) throws Exception {
+    public void deleteProject(Long id) throws NoSuchElementException, Exception {
         // 1. ID에 해당하는 프로젝트 조회
         Optional<Project> selectedProject = repository.findById(id);
 
         // 2. 부재 시 예외 처리
         if (selectedProject.isEmpty()) {
-            throw new Exception("삭제하려는 프로젝트가 존재하지 않습니다.");
+            throw new NoSuchElementException("삭제하려는 프로젝트가 존재하지 않습니다. ID : " + id);
         }
 
         // 3. 존재 시 삭제 처리

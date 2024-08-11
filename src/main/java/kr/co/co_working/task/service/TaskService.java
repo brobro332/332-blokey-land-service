@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Slf4j
@@ -28,13 +29,13 @@ public class TaskService {
      * @param dto
      * @throws Exception
      */
-    public Long createTask(TaskRequestDto.CREATE dto) throws Exception {
+    public Long createTask(TaskRequestDto.CREATE dto) throws NoSuchElementException, Exception {
         // 1. Project 조회
         Optional<Project> selectedProject = projectRepository.findById(dto.getProjectId());
 
         // 2. 부재 시 예외 처리
         if (selectedProject.isEmpty()) {
-            throw new Exception("등록하려는 업무에 해당하는 프로젝트가 존재하지 않습니다.");
+            throw new NoSuchElementException("등록하려는 업무에 해당하는 프로젝트가 존재하지 않습니다. ID : " + dto.getProjectId());
         }
         Project project = selectedProject.get();
 
@@ -71,13 +72,13 @@ public class TaskService {
      * @throws Exception
      */
     @Transactional
-    public void updateTask(Long id, TaskRequestDto.UPDATE dto) throws Exception {
+    public void updateTask(Long id, TaskRequestDto.UPDATE dto) throws NoSuchElementException, Exception {
         // 1. Project 조회
         Optional<Project> selectedProject = projectRepository.findById(dto.getProjectId());
 
         // 2. 부재 시 예외 처리
         if (selectedProject.isEmpty()) {
-            throw new Exception("수정하려는 업무에 해당하는 프로젝트가 존재하지 않습니다.");
+            throw new NoSuchElementException("수정하려는 업무에 해당하는 프로젝트가 존재하지 않습니다. ID : " + dto.getProjectId());
         }
 
         // 3. ID에 해당하는 업무 조회
@@ -85,7 +86,7 @@ public class TaskService {
 
         // 4. 부재 시 예외 처리
         if (selectedTask.isEmpty()) {
-            throw new Exception("수정하려는 업무가 존재하지 않습니다.");
+            throw new NoSuchElementException("수정하려는 업무가 존재하지 않습니다. ID" + id);
         }
 
         // 5. 존재 시 수정 처리
@@ -100,13 +101,13 @@ public class TaskService {
      * @throws Exception
      */
     @Transactional
-    public void deleteTask(Long id, TaskRequestDto.DELETE dto) throws Exception {
+    public void deleteTask(Long id, TaskRequestDto.DELETE dto) throws NoSuchElementException, Exception {
         // 1. Project 조회
         Optional<Project> selectedProject = projectRepository.findById(dto.getProjectId());
 
         // 2. 부재 시 예외 처리
         if (selectedProject.isEmpty()) {
-            throw new Exception("수정하려는 업무에 해당하는 프로젝트가 존재하지 않습니다.");
+            throw new NoSuchElementException("수정하려는 업무에 해당하는 프로젝트가 존재하지 않습니다. ID : " + dto.getProjectId());
         }
         Project project = selectedProject.get();
 
@@ -115,7 +116,7 @@ public class TaskService {
 
         // 4. 부재 시 예외 처리
         if (selectedTask.isEmpty()) {
-            throw new Exception("삭제하려는 업무가 존재하지 않습니다.");
+            throw new NoSuchElementException("삭제하려는 업무가 존재하지 않습니다. ID : " + id);
         }
         Task task = selectedTask.get();
 
