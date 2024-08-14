@@ -36,7 +36,6 @@ class ProjectServiceTest {
 
         /* when */
         Long id = service.createProject(dto);
-        repository.flush();
 
         /* then */
         Project project = repository.findById(id).get();
@@ -53,7 +52,6 @@ class ProjectServiceTest {
         dto.setDescription("프로젝트 관리 프로그램 만들기");
         dto.setTasks(new ArrayList<>());
         service.createProject(dto);
-        repository.flush();
 
         /* when */
         List<ProjectResponseDto> projects = dslRepository.readProjectList(new ProjectRequestDto.READ("젝트"));
@@ -70,7 +68,6 @@ class ProjectServiceTest {
         dto.setDescription("프로젝트 관리 프로그램 만들기");
         dto.setTasks(new ArrayList<>());
         Long id = service.createProject(dto);
-        repository.flush();
 
         /* when */
         service.updateProject(id, new ProjectRequestDto.UPDATE("프로젝트 B", "명세 수정", new ArrayList<>()));
@@ -95,7 +92,6 @@ class ProjectServiceTest {
             idList.add(service.createProject(dto));
             dto = null;
         }
-        repository.flush();
 
         /* when */
         repository.delete(repository.findById(idList.get(0)).get());

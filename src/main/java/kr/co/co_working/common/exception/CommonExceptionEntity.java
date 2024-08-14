@@ -4,12 +4,12 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class GlobalExceptionEntity {
+public class CommonExceptionEntity {
     private String code;
     private String errorMessage;
 
     @Builder
-    public GlobalExceptionEntity(String code, String errorMessage) {
+    public CommonExceptionEntity(String code, String errorMessage) {
         this.code = code;
         this.errorMessage = errorMessage;
     }

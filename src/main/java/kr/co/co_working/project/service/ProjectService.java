@@ -27,7 +27,6 @@ public class ProjectService {
      * @param dto
      * @throws Exception
      */
-    @Transactional
     public Long createProject(ProjectRequestDto.CREATE dto) throws Exception {
         // 1. Project 빌드
         Project project = Project.builder()
@@ -60,6 +59,7 @@ public class ProjectService {
      * @param dto
      * @throws Exception
      */
+    @Transactional
     public void updateProject(Long id, ProjectRequestDto.UPDATE dto) throws NoSuchElementException, Exception {
         // 1. ID에 해당하는 프로젝트 조회
         Optional<Project> selectedProject = repository.findById(id);
@@ -79,6 +79,7 @@ public class ProjectService {
      * @param id
      * @throws Exception
      */
+    @Transactional
     public void deleteProject(Long id) throws NoSuchElementException, Exception {
         // 1. ID에 해당하는 프로젝트 조회
         Optional<Project> selectedProject = repository.findById(id);
