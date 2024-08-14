@@ -10,19 +10,19 @@ import java.util.NoSuchElementException;
 
 @RestControllerAdvice
 @Slf4j
-public class GlobalExceptionHandler {
-    @ExceptionHandler({GlobalException.class})
-    public ResponseEntity<GlobalExceptionEntity> exceptionHandler(GlobalException e) {
+public class CommonExceptionHandler {
+    @ExceptionHandler({CommonException.class})
+    public ResponseEntity<CommonExceptionEntity> exceptionHandler(CommonException e) {
         return ResponseEntity
                 .status(e.getException().getStatus())
-                .body(GlobalExceptionEntity.builder()
+                .body(CommonExceptionEntity.builder()
                         .code(e.getException().getCode())
                         .errorMessage(e.getException().getMessage())
                         .build());
     }
 
     @ExceptionHandler({RuntimeException.class})
-    public ResponseEntity<GlobalExceptionEntity> exceptionHandler(RuntimeException e) {
+    public ResponseEntity<CommonExceptionEntity> exceptionHandler(RuntimeException e) {
         StackTraceElement[] stackTraceElements = e.getStackTrace();
         StringBuilder sb = new StringBuilder();
         sb.append("예외 발생 지점 : ")
@@ -36,14 +36,14 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(ExceptionType.BAD_REQUEST.getStatus())
-                .body(GlobalExceptionEntity.builder()
+                .body(CommonExceptionEntity.builder()
                         .code(ExceptionType.BAD_REQUEST.getCode())
                         .errorMessage(e.getMessage())
                         .build());
     }
 
     @ExceptionHandler({NoSuchElementException.class})
-    public ResponseEntity<GlobalExceptionEntity> exceptionHandler(NoSuchElementException e) {
+    public ResponseEntity<CommonExceptionEntity> exceptionHandler(NoSuchElementException e) {
         StackTraceElement[] stackTraceElements = e.getStackTrace();
         StringBuilder sb = new StringBuilder();
         sb.append("예외 발생 지점 : ")
@@ -57,14 +57,14 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(ExceptionType.BAD_REQUEST.getStatus())
-                .body(GlobalExceptionEntity.builder()
+                .body(CommonExceptionEntity.builder()
                         .code(ExceptionType.BAD_REQUEST.getCode())
                         .errorMessage(e.getMessage())
                         .build());
     }
 
     @ExceptionHandler({AccessDeniedException.class})
-    public ResponseEntity<GlobalExceptionEntity> exceptionHandler(AccessDeniedException e) {
+    public ResponseEntity<CommonExceptionEntity> exceptionHandler(AccessDeniedException e) {
         StackTraceElement[] stackTraceElements = e.getStackTrace();
         StringBuilder sb = new StringBuilder();
         sb.append("예외 발생 지점 : ")
@@ -78,14 +78,14 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(ExceptionType.ACCESS_DENIED_EXCEPTION.getStatus())
-                .body(GlobalExceptionEntity.builder()
+                .body(CommonExceptionEntity.builder()
                         .code(ExceptionType.ACCESS_DENIED_EXCEPTION.getCode())
                         .errorMessage(e.getMessage())
                         .build());
     }
 
     @ExceptionHandler({Exception.class})
-    public ResponseEntity<GlobalExceptionEntity> exceptionHandler(Exception e) {
+    public ResponseEntity<CommonExceptionEntity> exceptionHandler(Exception e) {
         StackTraceElement[] stackTraceElements = e.getStackTrace();
         StringBuilder sb = new StringBuilder();
         sb.append("예외 발생 지점 : ")
@@ -99,7 +99,7 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(ExceptionType.INTERNAL_SERVER_ERROR.getStatus())
-                .body(GlobalExceptionEntity.builder()
+                .body(CommonExceptionEntity.builder()
                         .code(ExceptionType.INTERNAL_SERVER_ERROR.getCode())
                         .errorMessage(e.getMessage())
                         .build());

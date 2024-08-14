@@ -33,6 +33,9 @@ public class TeamRequestDto {
     public static class UPDATE {
         private String name;
         private String description;
+
+        public UPDATE () { }
+
         @Builder
         public UPDATE(String name, String description, List<TaskRequestDto.UPDATE> tasks) {
             this.name = name;
