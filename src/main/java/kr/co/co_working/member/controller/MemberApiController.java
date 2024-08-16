@@ -4,8 +4,10 @@ import kr.co.co_working.common.dto.ResponseDto;
 import kr.co.co_working.member.dto.MemberRequestDto;
 import kr.co.co_working.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.NoSuchElementException;
 

@@ -2,7 +2,6 @@ package kr.co.co_working.member.service;
 
 import ch.qos.logback.core.util.StringUtil;
 import kr.co.co_working.member.dto.MemberRequestDto;
-import kr.co.co_working.member.dto.MemberResponseDto;
 import kr.co.co_working.member.repository.MemberRepository;
 import kr.co.co_working.member.repository.entity.Member;
 import kr.co.co_working.team.repository.TeamRepository;
@@ -11,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
