@@ -17,7 +17,7 @@ public class CommonExceptionHandler {
                 .status(e.getException().getStatus())
                 .body(CommonExceptionEntity.builder()
                         .code(e.getException().getCode())
-                        .errorMessage(e.getException().getMessage())
+                        .message(e.getException().getMessage())
                         .build());
     }
 
@@ -38,7 +38,7 @@ public class CommonExceptionHandler {
                 .status(ExceptionType.BAD_REQUEST.getStatus())
                 .body(CommonExceptionEntity.builder()
                         .code(ExceptionType.BAD_REQUEST.getCode())
-                        .errorMessage(e.getMessage())
+                        .message(e.getMessage())
                         .build());
     }
 
@@ -59,7 +59,7 @@ public class CommonExceptionHandler {
                 .status(ExceptionType.BAD_REQUEST.getStatus())
                 .body(CommonExceptionEntity.builder()
                         .code(ExceptionType.BAD_REQUEST.getCode())
-                        .errorMessage(e.getMessage())
+                        .message(e.getMessage())
                         .build());
     }
 
@@ -80,7 +80,7 @@ public class CommonExceptionHandler {
                 .status(ExceptionType.ACCESS_DENIED_EXCEPTION.getStatus())
                 .body(CommonExceptionEntity.builder()
                         .code(ExceptionType.ACCESS_DENIED_EXCEPTION.getCode())
-                        .errorMessage(e.getMessage())
+                        .message(e.getMessage())
                         .build());
     }
 
@@ -101,7 +101,7 @@ public class CommonExceptionHandler {
                 .status(ExceptionType.INTERNAL_SERVER_ERROR.getStatus())
                 .body(CommonExceptionEntity.builder()
                         .code(ExceptionType.INTERNAL_SERVER_ERROR.getCode())
-                        .errorMessage(e.getMessage())
+                        .message(e.getMessage())
                         .build());
     }
 }

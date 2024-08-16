@@ -6,6 +6,8 @@ import kr.co.co_working.team.service.TeamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.NoSuchElementException;
+
 @RestController
 @RequiredArgsConstructor
 public class TeamApiController {
@@ -40,24 +42,26 @@ public class TeamApiController {
      * @param id
      * @param dto
      * @return
+     * @throws NoSuchElementException
      * @throws Exception
      */
     @PutMapping("/api/v1/team/{team_id}")
     public ResponseDto<?> updateTeam(@PathVariable(name = "team_id") Long id,
-                                     @RequestBody TeamRequestDto.UPDATE dto) throws Exception {
+                                     @RequestBody TeamRequestDto.UPDATE dto) throws NoSuchElementException, Exception {
         service.updateTeam(id, dto);
 
         return ResponseDto.ofSuccess("팀 수정에 성공했습니다.");
     }
 
     /**
-     * 
+     * deleteTeam : Team 삭제
      * @param id
-     * @return deleteTeam : Team 삭제
+     * @return
+     * @throws NoSuchElementException
      * @throws Exception
      */
     @DeleteMapping("/api/v1/team/{team_id}")
-    public ResponseDto<?> deleteTeam(@PathVariable(name = "team_id") Long id) throws Exception {
+    public ResponseDto<?> deleteTeam(@PathVariable(name = "team_id") Long id) throws NoSuchElementException, Exception {
         service.deleteTeam(id);
 
         return ResponseDto.ofSuccess("팀 삭제에 성공했습니다.");

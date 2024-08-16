@@ -57,7 +57,7 @@ public class TeamService {
      * @throws Exception
      */
     @Transactional
-    public void updateTeam(Long id, TeamRequestDto.UPDATE dto) throws Exception {
+    public void updateTeam(Long id, TeamRequestDto.UPDATE dto) throws NoSuchElementException, Exception {
         // 1. Team 조회
         Optional<Team> selectedTeam = repository.findById(id);
 
@@ -77,7 +77,7 @@ public class TeamService {
      * @throws Exception
      */
     @Transactional
-    public void deleteTeam(Long id) throws Exception {
+    public void deleteTeam(Long id) throws NoSuchElementException, Exception {
         // 1. Team 조회
         Optional<Team> selectedTeam = repository.findById(id);
 
