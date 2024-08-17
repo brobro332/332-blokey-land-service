@@ -5,6 +5,8 @@ import kr.co.co_working.project.dto.ProjectResponseDto;
 import kr.co.co_working.project.repository.ProjectDslRepository;
 import kr.co.co_working.project.repository.ProjectRepository;
 import kr.co.co_working.project.repository.entity.Project;
+import kr.co.co_working.team.repository.TeamRepository;
+import kr.co.co_working.team.repository.entity.Team;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ import java.util.Optional;
 @Slf4j
 public class ProjectService {
     private final ProjectRepository repository;
+    private final TeamRepository teamRepository;
     private final ProjectDslRepository dslRepository;
 
     /**
@@ -28,17 +31,26 @@ public class ProjectService {
      * @throws Exception
      */
     public Long createProject(ProjectRequestDto.CREATE dto) throws Exception {
-        // 1. Project 빌드
+        // 1. Team 조회
+        Optional<Team> selectedTeam = teamRepository.findById(dto.getTeamId());
+
+        // 2. 부재 시 예외 처리
+        if (selectedTeam.isEmpty()) {
+            throw new NoSuchElementException("등록하려는 팀이 존재하지 않습니다.");
+        }
+
+        // 3. Project 빌드
         Project project = Project.builder()
                 .name(dto.getName())
                 .description(dto.getDescription())
+                .team(selectedTeam.get())
                 .tasks(new ArrayList<>())
                 .build();
 
-        // 2. 등록
+        // 4. 등록
         repository.save(project);
 
-        // 3. ID 반환
+        // 5. ID 반환
         return project.getId();
     }
 
@@ -71,7 +83,7 @@ public class ProjectService {
 
         // 3. 프로젝트 수정사항 처리
         Project project = selectedProject.get();
-        project.updateProject(dto.getName(), dto.getDescription());
+        project.updateProject(dto.getName(), dto.getDescription(), project.getTeam());
     }
 
     /**

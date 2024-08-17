@@ -1,12 +1,8 @@
 package kr.co.co_working.project.dto;
 
-import kr.co.co_working.task.dto.TaskRequestDto;
-import kr.co.co_working.task.repository.entity.Task;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 public class ProjectRequestDto {
     @Getter
@@ -14,18 +10,18 @@ public class ProjectRequestDto {
     public static class CREATE {
         private String name;
         private String description;
-        private List<Task> tasks;
+        private Long teamId;
     }
 
     @Getter
     @Setter
     public static class READ {
         private String name;
+        private Long teamId;
 
-        public READ() { }
-
-        public READ(String name) {
+        public READ(String name, Long teamId) {
             this.name = name;
+            this.teamId = teamId;
         }
     }
 
@@ -34,13 +30,13 @@ public class ProjectRequestDto {
     public static class UPDATE {
         private String name;
         private String description;
-        private List<TaskRequestDto.UPDATE> tasks;
+        private Long teamId;
 
         @Builder
-        public UPDATE(String name, String description, List<TaskRequestDto.UPDATE> tasks) {
+        public UPDATE(String name, String description, Long teamId) {
             this.name = name;
             this.description = description;
-            this.tasks = tasks;
+            this.teamId = teamId;
         }
     }
 }

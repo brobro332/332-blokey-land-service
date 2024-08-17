@@ -2,13 +2,12 @@ package kr.co.co_working.member.controller;
 
 import kr.co.co_working.common.dto.ResponseDto;
 import kr.co.co_working.member.dto.MemberRequestDto;
+import kr.co.co_working.member.dto.MemberResponseDto;
 import kr.co.co_working.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -28,6 +27,17 @@ public class MemberApiController {
         service.createMember(dto);
 
         return ResponseDto.ofSuccess("멤버 등록에 성공했습니다.");
+    }
+
+    /**
+     * readMemberList : Member 조회
+     * @param dto
+     * @return
+     * @throws Exception
+     */
+    @GetMapping("/api/v1/member")
+    public ResponseDto<?> readMemberList(@RequestBody MemberRequestDto.READ dto) throws Exception {
+        return ResponseDto.ofSuccess("멤버 조회에 성공했습니다.", service.readMemberList(dto));
     }
 
     /**

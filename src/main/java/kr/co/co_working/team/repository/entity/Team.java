@@ -2,12 +2,14 @@ package kr.co.co_working.team.repository.entity;
 
 import jakarta.persistence.*;
 import kr.co.co_working.common.entity.CommonTime;
-import kr.co.co_working.member.repository.entity.Member;
+import kr.co.co_working.memberTeam.repository.entity.MemberTeam;
+import kr.co.co_working.project.repository.entity.Project;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,8 +27,11 @@ public class Team extends CommonTime {
     @Column(name = "team_description", nullable = false, length = 200)
     private String description;
 
-    @OneToMany(mappedBy = "email", cascade = CascadeType.ALL)
-    private List<Member> members;
+    @OneToMany(mappedBy = "team", cascade = CascadeType.REMOVE)
+    private List<Project> projects = new ArrayList<>();
+
+    @OneToMany(mappedBy = "team")
+    private List<MemberTeam> memberTeams = new ArrayList<>();
 
     @Builder
     public Team(String name, String description) {
@@ -39,12 +44,8 @@ public class Team extends CommonTime {
         this.description = description;
     }
 
-    public void insertMember(Member member) {
-        this.members.add(member);
-        member.updateMember(member.getName(), member.getDescription(), this);
-    }
-
-    public void deleteMember(Member member) {
-        this.members.remove(member);
+    public void insertProject(Project project) {
+        this.projects.add(project);
+        project.updateProject(project.getName(), project.getDescription(), this);
     }
 }

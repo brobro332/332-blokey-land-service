@@ -14,6 +14,7 @@ public class TeamRequestDto {
     public static class CREATE {
         private String name;
         private String description;
+        private String email;
     }
 
     @Getter

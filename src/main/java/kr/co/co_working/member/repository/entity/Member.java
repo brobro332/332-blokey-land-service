@@ -2,11 +2,14 @@ package kr.co.co_working.member.repository.entity;
 
 import jakarta.persistence.*;
 import kr.co.co_working.common.entity.CommonTime;
-import kr.co.co_working.team.repository.entity.Team;
+import kr.co.co_working.memberTeam.repository.entity.MemberTeam;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -26,22 +29,19 @@ public class Member extends CommonTime {
     @Column(name = "member_description", nullable = false, length = 200)
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "team_id")
-    private Team team;
+    @OneToMany(mappedBy = "member")
+    private List<MemberTeam> memberTeams = new ArrayList<>();
 
     @Builder
-    public Member(String email, String password, String name, String description, Team team) {
+    public Member(String email, String password, String name, String description) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.description = description;
-        this.team = team;
     }
 
-    public void updateMember(String name, String description, Team team) {
+    public void updateMember(String name, String description) {
         this.name = name;
         this.description = description;
-        this.team = team;
     }
 }

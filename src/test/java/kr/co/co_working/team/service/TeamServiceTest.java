@@ -1,5 +1,7 @@
 package kr.co.co_working.team.service;
 
+import kr.co.co_working.member.dto.MemberRequestDto;
+import kr.co.co_working.member.service.MemberService;
 import kr.co.co_working.team.dto.TeamRequestDto;
 import kr.co.co_working.team.dto.TeamResponseDto;
 import kr.co.co_working.team.repository.TeamRepository;
@@ -13,8 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 @Transactional
 class TeamServiceTest {
@@ -22,14 +22,25 @@ class TeamServiceTest {
     TeamService service;
 
     @Autowired
+    MemberService memberService;
+
+    @Autowired
     TeamRepository repository;
 
     @Test
     public void createTeam() throws Exception {
         /* given */
+        MemberRequestDto.CREATE memberDto = new MemberRequestDto.CREATE();
+        memberDto.setEmail("test@korea.kr");
+        memberDto.setPassword("1234");
+        memberDto.setName("김아무개");
+        memberDto.setDescription("test");
+        memberService.createMember(memberDto);
+
         TeamRequestDto.CREATE dto = new TeamRequestDto.CREATE();
         dto.setName("팀명 1");
         dto.setDescription("팀 소개입니다.");
+        dto.setEmail(memberDto.getEmail());
 
         /* when */
         Long id = service.createTeam(dto);
@@ -43,10 +54,17 @@ class TeamServiceTest {
     @Test
     public void readTeam() throws Exception {
         /* given */
+        MemberRequestDto.CREATE memberDto = new MemberRequestDto.CREATE();
+        memberDto.setEmail("test@korea.kr");
+        memberDto.setPassword("1234");
+        memberDto.setName("김아무개");
+        memberDto.setDescription("test");
+        memberService.createMember(memberDto);
+
         TeamRequestDto.CREATE createDto = new TeamRequestDto.CREATE();
         createDto.setName("팀명 1");
         createDto.setDescription("팀 소개입니다.");
-
+        createDto.setEmail(memberDto.getEmail());
         service.createTeam(createDto);
 
         TeamRequestDto.READ readDto = new TeamRequestDto.READ();
@@ -64,9 +82,17 @@ class TeamServiceTest {
     @Test
     public void updateTeam() throws Exception {
         /* given */
+        MemberRequestDto.CREATE memberDto = new MemberRequestDto.CREATE();
+        memberDto.setEmail("test@korea.kr");
+        memberDto.setPassword("1234");
+        memberDto.setName("김아무개");
+        memberDto.setDescription("test");
+        memberService.createMember(memberDto);
+
         TeamRequestDto.CREATE createDto = new TeamRequestDto.CREATE();
         createDto.setName("팀명 1");
         createDto.setDescription("팀 소개입니다.");
+        createDto.setEmail(memberDto.getEmail());
 
         Long id = service.createTeam(createDto);
 
@@ -86,18 +112,26 @@ class TeamServiceTest {
     @Test
     public void deleteTeam() throws Exception {
         /* given */
+        MemberRequestDto.CREATE memberDto = new MemberRequestDto.CREATE();
+        memberDto.setEmail("test@korea.kr");
+        memberDto.setPassword("1234");
+        memberDto.setName("김아무개");
+        memberDto.setDescription("test");
+        memberService.createMember(memberDto);
+
         List<Long> idList = new ArrayList<>();
         for (int i = 1; i <= 2; i++) {
             TeamRequestDto.CREATE createDto = new TeamRequestDto.CREATE();
             createDto.setName("팀명 " + i);
             createDto.setDescription("팀 소개입니다. " + i);
+            createDto.setEmail(memberDto.getEmail());
             idList.add(service.createTeam(createDto));
             createDto = null;
         }
 
         /* when */
         Team team = repository.findById(idList.get(0)).get();
-        repository.delete(team);
+        service.deleteTeam(team.getId());
 
         /* then */
         List<Team> teams = repository.findAll();

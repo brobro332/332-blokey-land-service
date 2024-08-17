@@ -19,11 +19,11 @@ public class MemberRequestDto {
     @Setter
     public static class READ {
         private String email;
+        private String name;
 
-        public READ() { }
-
-        public READ(String email) {
+        public READ(String email, String name) {
             this.email = email;
+            this.name = name;
         }
     }
 
