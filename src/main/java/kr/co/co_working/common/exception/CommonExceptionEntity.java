@@ -6,11 +6,11 @@ import lombok.Getter;
 @Getter
 public class CommonExceptionEntity {
     private String code;
-    private String errorMessage;
+    private String message;
 
     @Builder
-    public CommonExceptionEntity(String code, String errorMessage) {
+    public CommonExceptionEntity(String code, String message) {
         this.code = code;
-        this.errorMessage = errorMessage;
+        this.message = message;
     }
 }

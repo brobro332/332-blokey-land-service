@@ -3,11 +3,13 @@ package kr.co.co_working.project.repository.entity;
 import jakarta.persistence.*;
 import kr.co.co_working.common.entity.CommonTime;
 import kr.co.co_working.task.repository.entity.Task;
+import kr.co.co_working.team.repository.entity.Team;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,18 +29,24 @@ public class Project extends CommonTime {
     private String description;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-    private List<Task> tasks;
+    private List<Task> tasks = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "team_id")
+    private Team team;
 
     @Builder
-    public Project(String name, String description, List<Task> tasks) {
+    public Project(String name, String description, Team team, List<Task> tasks) {
         this.name = name;
         this.description = description;
+        this.team = team;
         this.tasks = tasks;
     }
 
-    public void updateProject(String name, String description) {
+    public void updateProject(String name, String description, Team team) {
         this.name = name;
         this.description = description;
+        this.team = team;
     }
 
     public void insertTask(Task task) {

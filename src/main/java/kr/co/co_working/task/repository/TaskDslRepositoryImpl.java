@@ -5,13 +5,11 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.co.co_working.task.dto.QTaskResponseDto;
 import kr.co.co_working.task.dto.TaskRequestDto;
 import kr.co.co_working.task.dto.TaskResponseDto;
-import kr.co.co_working.task.repository.entity.Task;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static kr.co.co_working.project.repository.entity.QProject.project;
 import static kr.co.co_working.task.repository.entity.QTask.task;
 
 
