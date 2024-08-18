@@ -23,8 +23,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberTeamService memberTeamService;
+
     private final MemberRepository repository;
+
     private final TeamRepository teamRepository;
+
     private final MemberDslRepository dslRepository;
 
     /**
@@ -76,27 +79,36 @@ public class MemberService {
             throw new NoSuchElementException("수정하려는 멤버가 존재하지 않습니다. EMAIL : " + dto.getEmail());
         }
 
-        // 3. Team 조회
-        Optional<Team> selectedTeam = teamRepository.findById(dto.getTeamId());
-
-        // 4. 부재 시 예외처리
-        if (selectedTeam.isEmpty()) {
-            throw new NoSuchElementException("수정하려는 팀이 존재하지 않습니다. ID : " + dto.getTeamId());
-        }
-
-        // 5. 객체 추출
+        // 3. Member 추출
         Member member = selectedMember.get();
-        Team team = selectedTeam.get();
 
-        // 6. Member 수정
-        member.updateMember(dto.getName(), dto.getDescription());
+        // 4. 요청에 Team 정보가 있다면
+        Team team = null;
+        if (dto.getTeamId() != null) {
+            Optional<Team> selectedTeam = teamRepository.findById(dto.getTeamId());
 
-        // 7. Member 객체에 Team 정보가 있다면 MemberTeam 수정
-        if (member.getMemberTeams() != null) {
+            // 부재 시 예외처리
+            if (selectedTeam.isEmpty()) {
+                throw new NoSuchElementException("수정하려는 팀이 존재하지 않습니다. ID : " + dto.getTeamId());
+            }
+
+            // Team 추출
+            team = selectedTeam.get();
+
+            // Member 객체에 Team 정보가 있다면 MemberTeam 수정
             memberTeamService.updateMemberTeam(member, team);
         }
+
+        // 5. Member 수정
+        member.updateMember(dto.getName(), dto.getDescription());
     }
 
+    /**
+     * deleteMember : Member 삭제
+     * @param dto
+     * @throws NoSuchElementException
+     * @throws Exception
+     */
     @Transactional
     public void deleteMember(MemberRequestDto.DELETE dto) throws NoSuchElementException, Exception {
         // 1. Member 조회
@@ -110,22 +122,7 @@ public class MemberService {
         // 3. Member 객체 추출
         Member member = selectedMember.get();
         
-        // 4. Member 객체에 Team 정보가 있다면
-        if (member.getMemberTeams() != null) {
-            // Team 조회
-            Optional<Team> selectedTeam = teamRepository.findById(dto.getTeamId());
-
-            // 부재 시 예외처리
-            if (selectedTeam.isEmpty()) {
-                throw new NoSuchElementException("수정하려는 팀이 존재하지 않습니다. ID : " + dto.getTeamId());
-            }
-
-            // Team 객체 추출
-            Team team = selectedTeam.get();
-
-            // Member, MemberTeam 삭제
-            repository.delete(member);
-            memberTeamService.deleteMemberTeam(team);
-        }
+        // 4. Member 삭제
+        repository.delete(member);
     }
 }

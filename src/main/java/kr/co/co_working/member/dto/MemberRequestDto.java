@@ -21,6 +21,8 @@ public class MemberRequestDto {
         private String email;
         private String name;
 
+        public READ() { }
+
         public READ(String email, String name) {
             this.email = email;
             this.name = name;
@@ -50,6 +52,7 @@ public class MemberRequestDto {
     @Setter
     public static class DELETE {
         private String email;
-        private Long teamId;
+
+        public DELETE() { }
     }
 }
