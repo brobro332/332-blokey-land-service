@@ -1,8 +1,7 @@
 package kr.co.co_working.team.service;
 
 import kr.co.co_working.member.repository.MemberRepository;
-import kr.co.co_working.member.repository.entity.Member;
-import kr.co.co_working.memberTeam.repository.MemberTeamRepository;
+import kr.co.co_working.member.Member;
 import kr.co.co_working.memberTeam.service.MemberTeamService;
 import kr.co.co_working.team.dto.TeamRequestDto;
 import kr.co.co_working.team.dto.TeamResponseDto;

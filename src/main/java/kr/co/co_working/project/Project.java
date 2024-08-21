@@ -1,8 +1,9 @@
-package kr.co.co_working.project.repository.entity;
+package kr.co.co_working.project;
 
 import jakarta.persistence.*;
-import kr.co.co_working.common.entity.CommonTime;
-import kr.co.co_working.task.repository.entity.Task;
+import kr.co.co_working.common.CommonTime;
+import kr.co.co_working.milestone.Milestone;
+import kr.co.co_working.task.Task;
 import kr.co.co_working.team.repository.entity.Team;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -28,19 +29,23 @@ public class Project extends CommonTime {
     @Column(name = "project_description", nullable = false, length = 200)
     private String description;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "project", cascade = CascadeType.REMOVE)
     private List<Task> tasks = new ArrayList<>();
 
-    @ManyToOne
+    @OneToMany(mappedBy = "project", cascade = CascadeType.REMOVE)
+    private List<Milestone> milestones = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
     private Team team;
 
     @Builder
-    public Project(String name, String description, Team team, List<Task> tasks) {
+    public Project(String name, String description, Team team, List<Task> tasks, List<Milestone> milestones) {
         this.name = name;
         this.description = description;
         this.team = team;
         this.tasks = tasks;
+        this.milestones = milestones;
     }
 
     public void updateProject(String name, String description, Team team) {

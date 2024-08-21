@@ -5,7 +5,7 @@ import kr.co.co_working.member.dto.MemberRequestDto;
 import kr.co.co_working.member.dto.MemberResponseDto;
 import kr.co.co_working.member.repository.MemberDslRepository;
 import kr.co.co_working.member.repository.MemberRepository;
-import kr.co.co_working.member.repository.entity.Member;
+import kr.co.co_working.member.Member;
 import kr.co.co_working.memberTeam.service.MemberTeamService;
 import kr.co.co_working.team.repository.TeamRepository;
 import kr.co.co_working.team.repository.entity.Team;

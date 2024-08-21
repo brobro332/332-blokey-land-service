@@ -1,8 +1,8 @@
 package kr.co.co_working.memberTeam.service;
 
-import kr.co.co_working.member.repository.entity.Member;
+import kr.co.co_working.member.Member;
 import kr.co.co_working.memberTeam.repository.MemberTeamRepository;
-import kr.co.co_working.memberTeam.repository.entity.MemberTeam;
+import kr.co.co_working.memberTeam.MemberTeam;
 import kr.co.co_working.team.repository.entity.Team;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

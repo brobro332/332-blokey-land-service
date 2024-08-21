@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static kr.co.co_working.project.repository.entity.QProject.project;
+import static kr.co.co_working.project.QProject.project;
 
 @Repository
 @RequiredArgsConstructor

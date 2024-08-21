@@ -5,7 +5,7 @@ import kr.co.co_working.member.service.MemberService;
 import kr.co.co_working.project.dto.ProjectRequestDto;
 import kr.co.co_working.project.dto.ProjectResponseDto;
 import kr.co.co_working.project.repository.ProjectRepository;
-import kr.co.co_working.project.repository.entity.Project;
+import kr.co.co_working.project.Project;
 import kr.co.co_working.team.dto.TeamRequestDto;
 import kr.co.co_working.team.service.TeamService;
 import org.junit.jupiter.api.Assertions;

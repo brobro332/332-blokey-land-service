@@ -1,45 +1,52 @@
-package kr.co.co_working.team.dto;
+package kr.co.co_working.milestone.dto;
 
-import kr.co.co_working.task.dto.TaskRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
-public class TeamRequestDto {
+public class MilestoneRequestDto {
     @Getter
     @Setter
     public static class CREATE {
+        private Long projectId;
         private String name;
         private String description;
-        private String email;
     }
 
     @Getter
     @Setter
     public static class READ {
         private String name;
+        private String description;
 
-        public READ() { }
-
-        public READ(String name) {
+        @Builder
+        public READ(String name, String description) {
             this.name = name;
+            this.description = description;
         }
     }
 
     @Getter
     @Setter
     public static class UPDATE {
+        private Long id;
+        private Long projectId;
         private String name;
         private String description;
 
-        public UPDATE () { }
-
         @Builder
-        public UPDATE(String name, String description, List<TaskRequestDto.UPDATE> tasks) {
+        public UPDATE(Long projectId, String name, String description) {
+            this.projectId = projectId;
             this.name = name;
             this.description = description;
         }
+    }
+
+    @Getter
+    @Setter
+    public static class DELETE {
+        private Long projectId;
+
+        public DELETE() { }
     }
 }

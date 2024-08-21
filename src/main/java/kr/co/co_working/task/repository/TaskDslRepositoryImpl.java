@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static kr.co.co_working.task.repository.entity.QTask.task;
+import static kr.co.co_working.task.QTask.task;
 
 
 @Repository

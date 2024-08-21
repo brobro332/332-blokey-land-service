@@ -1,12 +1,12 @@
 package kr.co.co_working.task.service;
 
 import kr.co.co_working.project.repository.ProjectRepository;
-import kr.co.co_working.project.repository.entity.Project;
+import kr.co.co_working.project.Project;
 import kr.co.co_working.task.dto.TaskRequestDto;
 import kr.co.co_working.task.dto.TaskResponseDto;
 import kr.co.co_working.task.repository.TaskDslRepository;
 import kr.co.co_working.task.repository.TaskRepository;
-import kr.co.co_working.task.repository.entity.Task;
+import kr.co.co_working.task.Task;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

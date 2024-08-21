@@ -1,9 +1,9 @@
 package kr.co.co_working.team.repository.entity;
 
 import jakarta.persistence.*;
-import kr.co.co_working.common.entity.CommonTime;
-import kr.co.co_working.memberTeam.repository.entity.MemberTeam;
-import kr.co.co_working.project.repository.entity.Project;
+import kr.co.co_working.common.CommonTime;
+import kr.co.co_working.memberTeam.MemberTeam;
+import kr.co.co_working.project.Project;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
