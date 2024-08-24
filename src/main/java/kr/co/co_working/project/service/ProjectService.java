@@ -6,7 +6,7 @@ import kr.co.co_working.project.repository.ProjectDslRepository;
 import kr.co.co_working.project.repository.ProjectRepository;
 import kr.co.co_working.project.Project;
 import kr.co.co_working.team.repository.TeamRepository;
-import kr.co.co_working.team.repository.entity.Team;
+import kr.co.co_working.team.Team;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

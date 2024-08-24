@@ -8,7 +8,7 @@ import kr.co.co_working.member.repository.MemberRepository;
 import kr.co.co_working.member.Member;
 import kr.co.co_working.memberTeam.service.MemberTeamService;
 import kr.co.co_working.team.repository.TeamRepository;
-import kr.co.co_working.team.repository.entity.Team;
+import kr.co.co_working.team.Team;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

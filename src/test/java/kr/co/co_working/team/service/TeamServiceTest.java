@@ -5,7 +5,7 @@ import kr.co.co_working.member.service.MemberService;
 import kr.co.co_working.team.dto.TeamRequestDto;
 import kr.co.co_working.team.dto.TeamResponseDto;
 import kr.co.co_working.team.repository.TeamRepository;
-import kr.co.co_working.team.repository.entity.Team;
+import kr.co.co_working.team.Team;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

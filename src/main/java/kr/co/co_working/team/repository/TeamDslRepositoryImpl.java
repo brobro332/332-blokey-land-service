@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static kr.co.co_working.team.repository.entity.QTeam.team;
+import static kr.co.co_working.team.QTeam.team;
 
 
 @Repository

@@ -1,4 +1,4 @@
-package kr.co.co_working.team.repository.entity;
+package kr.co.co_working.team;
 
 import jakarta.persistence.*;
 import kr.co.co_working.common.CommonTime;

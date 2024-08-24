@@ -7,7 +7,7 @@ import kr.co.co_working.team.dto.TeamRequestDto;
 import kr.co.co_working.team.dto.TeamResponseDto;
 import kr.co.co_working.team.repository.TeamDslRepository;
 import kr.co.co_working.team.repository.TeamRepository;
-import kr.co.co_working.team.repository.entity.Team;
+import kr.co.co_working.team.Team;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

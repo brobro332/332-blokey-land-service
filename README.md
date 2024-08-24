@@ -27,3 +27,6 @@ java-co-working
 └── Team
     └── Team CRUD API
 ``` 
+
+### ⛓ **ERD**
+![java-co-work](https://github.com/user-attachments/assets/859e775c-6d5b-4fae-ac75-2d91f677828d)

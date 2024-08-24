@@ -3,6 +3,7 @@ package kr.co.co_working.task;
 import jakarta.persistence.*;
 import kr.co.co_working.common.CommonTime;
 import kr.co.co_working.member.Member;
+import kr.co.co_working.memberTask.MemberTask;
 import kr.co.co_working.project.Project;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -37,8 +38,11 @@ public class Task extends CommonTime {
     @Column(name = "task_endAt", nullable = false)
     private LocalDateTime endAt;
 
-    @Column(name = "task_members")
+    @OneToMany(mappedBy = "task", cascade = CascadeType.REMOVE)
     List<Member> members = new ArrayList<>();
+
+    @OneToMany(mappedBy = "task")
+    private List<MemberTask> memberTasks = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")

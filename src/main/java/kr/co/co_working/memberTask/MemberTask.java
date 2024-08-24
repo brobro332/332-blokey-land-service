@@ -1,8 +1,9 @@
-package kr.co.co_working.memberTeam;
+package kr.co.co_working.memberTask;
 
 import jakarta.persistence.*;
 import kr.co.co_working.common.CommonTime;
 import kr.co.co_working.member.Member;
+import kr.co.co_working.task.Task;
 import kr.co.co_working.team.Team;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -10,13 +11,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "tbl_member_team")
+@Table(name = "tbl_member_task")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MemberTeam extends CommonTime {
+public class MemberTask extends CommonTime {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "member_team_id")
+    @Column(name = "member_task_id")
     private Long id;
 
     @ManyToOne
@@ -24,17 +25,17 @@ public class MemberTeam extends CommonTime {
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name = "team_id")
-    private Team team;
+    @JoinColumn(name = "task_id")
+    private Task task;
 
     @Builder
-    public MemberTeam(Member member, Team team) {
+    public MemberTask(Member member, Task task) {
         this.member = member;
-        this.team = team;
+        this.task = task;
     }
 
-    public void updateMemberTeam(Member member, Team team) {
+    public void updateMemberTask(Member member, Task task) {
         this.member = member;
-        this.team = team;
+        this.task = task;
     }
 }

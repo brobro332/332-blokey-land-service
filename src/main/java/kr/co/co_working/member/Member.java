@@ -2,7 +2,9 @@ package kr.co.co_working.member;
 
 import jakarta.persistence.*;
 import kr.co.co_working.common.CommonTime;
+import kr.co.co_working.memberTask.MemberTask;
 import kr.co.co_working.memberTeam.MemberTeam;
+import kr.co.co_working.task.Task;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,6 +33,9 @@ public class Member extends CommonTime {
 
     @OneToMany(mappedBy = "member")
     private List<MemberTeam> memberTeams = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<MemberTask> memberTasks = new ArrayList<>();
 
     @Builder
     public Member(String email, String password, String name, String description) {
