@@ -11,17 +11,17 @@ import java.time.LocalDateTime;
 public class MilestoneResponseDto {
         private Long id;
         private String name;
-        private String type;
         private String description;
+        private LocalDateTime dueAt;
         private LocalDateTime createAt;
         private LocalDateTime modifiedAt;
 
         @QueryProjection
-        public MilestoneResponseDto(Long id, String name, String type, String description, LocalDateTime createAt, LocalDateTime modifiedAt) {
+        public MilestoneResponseDto(Long id, String name, String description, LocalDateTime dueAt, LocalDateTime createAt, LocalDateTime modifiedAt) {
                 this.id = id;
                 this.name = name;
-                this.type = type;
                 this.description = description;
+                this.dueAt = dueAt;
                 this.createAt = createAt;
                 this.modifiedAt = modifiedAt;
         }
