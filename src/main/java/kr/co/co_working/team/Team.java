@@ -24,7 +24,7 @@ public class Team extends CommonTime {
     @Column(name = "team_name", nullable = false, length = 20)
     private String name;
 
-    @Column(name = "team_description", nullable = false, length = 200)
+    @Column(name = "team_description", length = 200)
     private String description;
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.REMOVE)

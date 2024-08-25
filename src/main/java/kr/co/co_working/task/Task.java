@@ -29,7 +29,7 @@ public class Task extends CommonTime {
     @Column(name = "task_type", nullable = false, length = 10)
     private String type;
 
-    @Column(name = "task_description", nullable = false, length = 200)
+    @Column(name = "task_description", length = 200)
     private String description;
 
     @Column(name = "task_startAt", nullable = false)

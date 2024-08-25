@@ -28,7 +28,7 @@ public class Member extends CommonTime {
     @Column(name = "member_name", nullable = false, length = 20)
     private String name;
 
-    @Column(name = "member_description", nullable = false, length = 200)
+    @Column(name = "member_description", length = 200)
     private String description;
 
     @OneToMany(mappedBy = "member")

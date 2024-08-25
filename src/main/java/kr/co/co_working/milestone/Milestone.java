@@ -23,7 +23,7 @@ public class Milestone extends CommonTime {
     @Column(name = "milestone_name", nullable = false, length = 20)
     private String name;
 
-    @Column(name = "milestone_description", nullable = false, length = 200)
+    @Column(name = "milestone_description", length = 200)
     private String description;
 
     @Column(name = "milestone_dueAt", nullable = false)
