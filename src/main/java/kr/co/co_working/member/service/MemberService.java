@@ -6,6 +6,8 @@ import kr.co.co_working.member.dto.MemberResponseDto;
 import kr.co.co_working.member.repository.MemberDslRepository;
 import kr.co.co_working.member.repository.MemberRepository;
 import kr.co.co_working.member.Member;
+import kr.co.co_working.memberTeam.MemberTeam;
+import kr.co.co_working.memberTeam.repository.MemberTeamRepository;
 import kr.co.co_working.memberTeam.service.MemberTeamService;
 import kr.co.co_working.team.repository.TeamRepository;
 import kr.co.co_working.team.Team;
@@ -30,6 +32,8 @@ public class MemberService {
 
     private final MemberDslRepository dslRepository;
 
+    private final MemberTeamRepository memberTeamRepository;
+
     /**
      * createMember : Member 등록
      * @param dto
@@ -46,10 +50,10 @@ public class MemberService {
                 .description(StringUtil.nullStringToEmpty(dto.getDescription()))
                 .build();
 
-        // 4. Member 등록
+        // 2. Member 등록
         repository.save(member);
 
-        // 5. Email 반환
+        // 3. Email 반환
         return member.getEmail();
     }
 
@@ -121,8 +125,16 @@ public class MemberService {
 
         // 3. Member 객체 추출
         Member member = selectedMember.get();
-        
-        // 4. Member 삭제
+
+        // 4. MemberTeam 조회
+        List<MemberTeam> memberTeams = memberTeamRepository.findByMemberEmail(member.getEmail());
+
+        // 5. 조회한 Member 객체에 해당하는 MemberTeam 삭제
+        for (MemberTeam memberTeam : memberTeams) {
+            memberTeamRepository.delete(memberTeam);
+        }
+
+        // 6. Member 삭제
         repository.delete(member);
     }
 }

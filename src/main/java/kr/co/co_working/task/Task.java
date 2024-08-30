@@ -38,9 +38,6 @@ public class Task extends CommonTime {
     @Column(name = "task_endAt", nullable = false)
     private LocalDateTime endAt;
 
-    @OneToMany(mappedBy = "task", cascade = CascadeType.REMOVE)
-    List<Member> members = new ArrayList<>();
-
     @OneToMany(mappedBy = "task")
     private List<MemberTask> memberTasks = new ArrayList<>();
 

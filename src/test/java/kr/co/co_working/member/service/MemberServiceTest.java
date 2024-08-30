@@ -25,11 +25,7 @@ class MemberServiceTest {
     @Test
     public void createMember() throws Exception {
         /* given */
-        MemberRequestDto.CREATE dto = new MemberRequestDto.CREATE();
-        dto.setEmail("test@korea.kr");
-        dto.setPassword("1234");
-        dto.setName("김아무개");
-        dto.setDescription("test");
+        MemberRequestDto.CREATE dto = getCreateDto();
 
         /* when */
         service.createMember(dto);
@@ -47,13 +43,8 @@ class MemberServiceTest {
     @Test
     public void readMemberList() throws Exception {
         /* given */
-        MemberRequestDto.CREATE createDto = new MemberRequestDto.CREATE();
-        createDto.setEmail("test@korea.kr");
-        createDto.setPassword("1234");
-        createDto.setName("김아무개");
-        createDto.setDescription("test");
+        MemberRequestDto.CREATE createDto = getCreateDto();
         service.createMember(createDto);
-
         MemberRequestDto.READ readDto = new MemberRequestDto.READ("test@korea.kr", "무개");
 
         /* when */
@@ -70,11 +61,7 @@ class MemberServiceTest {
     @Test
     public void updateMember() throws Exception {
         /* given */
-        MemberRequestDto.CREATE createDto = new MemberRequestDto.CREATE();
-        createDto.setEmail("test@korea.kr");
-        createDto.setPassword("1234");
-        createDto.setName("김아무개");
-        createDto.setDescription("test");
+        MemberRequestDto.CREATE createDto = getCreateDto();
         service.createMember(createDto);
 
         MemberRequestDto.UPDATE updateDto = MemberRequestDto.UPDATE.builder()
@@ -98,15 +85,11 @@ class MemberServiceTest {
     @Test
     public void deleteMember() throws Exception {
         /* given */
-        MemberRequestDto.CREATE createDto = new MemberRequestDto.CREATE();
-        createDto.setEmail("test@korea.kr");
-        createDto.setPassword("1234");
-        createDto.setName("김아무개");
-        createDto.setDescription("test");
+        MemberRequestDto.CREATE createDto = getCreateDto();
         service.createMember(createDto);
 
         MemberRequestDto.DELETE deleteDto = new MemberRequestDto.DELETE();
-        deleteDto.setEmail("test@korea.kr");
+        deleteDto.setEmail(createDto.getEmail());
 
         /* when */
         service.deleteMember(deleteDto);
@@ -116,5 +99,19 @@ class MemberServiceTest {
         List<MemberResponseDto> members = service.readMemberList(readDto);
 
         Assertions.assertEquals(0, members.size());
+    }
+
+    /**
+     * getCreateDto : Member CREATE DTO 반환
+     * @return
+     */
+    private static MemberRequestDto.CREATE getCreateDto() {
+        MemberRequestDto.CREATE dto = new MemberRequestDto.CREATE();
+        dto.setEmail("test@korea.kr");
+        dto.setPassword("1234");
+        dto.setName("김아무개");
+        dto.setDescription("test");
+
+        return dto;
     }
 }
