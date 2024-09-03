@@ -1,6 +1,7 @@
 package kr.co.co_working.team.service;
 
 import kr.co.co_working.member.Member;
+import kr.co.co_working.member.dto.MemberRequestDto;
 import kr.co.co_working.member.repository.MemberRepository;
 import kr.co.co_working.member.service.MemberService;
 import kr.co.co_working.memberTeam.service.MemberTeamService;
@@ -116,5 +117,40 @@ public class TeamService {
         // 4. 존재 시 삭제 처리
         memberTeamService.deleteMemberTeamByTeamId(team);
         repository.delete(team);
+    }
+
+    @Transactional
+    public void deleteMemberFromTeam(String email, Long teamId) throws NoSuchElementException, Exception {
+        // 1. Team 조회
+        Optional<Team> selectedTeam = repository.findById(teamId);
+
+        // 2. 부재 시 예외 처리
+        if (selectedTeam.isEmpty()) {
+            throw new NoSuchElementException("수정하려는 팀이 존재하지 않습니다. ID : " + teamId);
+        }
+
+        // 3. Member 조회
+        Optional<Member> selectedMember = memberRepository.findById(email);
+
+        // 4. 부재 시 예외 처리
+        if (selectedMember.isEmpty()) {
+            throw new NoSuchElementException("제외하려는 멤버가 존재하지 않습니다. Email : " + email);
+        }
+
+        // 5. 객체 추출
+        Member member = selectedMember.get();
+        Team team = selectedTeam.get();
+
+        // 6. DTO 생성
+        MemberRequestDto.UPDATE memberDto = MemberRequestDto.UPDATE.builder()
+                .email(email)
+                .teamId(null)
+                .build();
+
+        // 7. Member 수정
+        memberService.updateMember(memberDto);
+
+        // 8. MemberTeam 삭제
+        memberTeamService.deleteMemberTeam(member, team);
     }
 }
