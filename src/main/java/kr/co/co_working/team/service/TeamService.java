@@ -1,13 +1,14 @@
 package kr.co.co_working.team.service;
 
-import kr.co.co_working.member.repository.MemberRepository;
 import kr.co.co_working.member.Member;
+import kr.co.co_working.member.repository.MemberRepository;
+import kr.co.co_working.member.service.MemberService;
 import kr.co.co_working.memberTeam.service.MemberTeamService;
+import kr.co.co_working.team.Team;
 import kr.co.co_working.team.dto.TeamRequestDto;
 import kr.co.co_working.team.dto.TeamResponseDto;
 import kr.co.co_working.team.repository.TeamDslRepository;
 import kr.co.co_working.team.repository.TeamRepository;
-import kr.co.co_working.team.Team;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,13 +20,15 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class TeamService {
+    private final MemberService memberService;
+
+    private final MemberTeamService memberTeamService;
+
     private final TeamRepository repository;
 
     private final MemberRepository memberRepository;
 
     private final TeamDslRepository dslRepository;
-
-    private final MemberTeamService memberTeamService;
 
     /**
      * createTeam : Team 등록
@@ -111,7 +114,7 @@ public class TeamService {
         Team team = selectedTeam.get();
 
         // 4. 존재 시 삭제 처리
-        memberTeamService.deleteMemberTeam(team);
+        memberTeamService.deleteMemberTeamByTeamId(team);
         repository.delete(team);
     }
 }
