@@ -119,6 +119,8 @@ public class TeamService {
         repository.delete(team);
     }
 
+    // createMemberFromTeam
+
     @Transactional
     public void deleteMemberFromTeam(String email, Long teamId) throws NoSuchElementException, Exception {
         // 1. Team 조회
@@ -144,7 +146,6 @@ public class TeamService {
         // 6. DTO 생성
         MemberRequestDto.UPDATE memberDto = MemberRequestDto.UPDATE.builder()
                 .email(email)
-                .teamId(null)
                 .build();
 
         // 7. Member 수정

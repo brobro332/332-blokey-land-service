@@ -1,16 +1,13 @@
 package kr.co.co_working.member.service;
 
 import ch.qos.logback.core.util.StringUtil;
+import kr.co.co_working.member.Member;
 import kr.co.co_working.member.dto.MemberRequestDto;
 import kr.co.co_working.member.dto.MemberResponseDto;
 import kr.co.co_working.member.repository.MemberDslRepository;
 import kr.co.co_working.member.repository.MemberRepository;
-import kr.co.co_working.member.Member;
 import kr.co.co_working.memberTeam.MemberTeam;
 import kr.co.co_working.memberTeam.repository.MemberTeamRepository;
-import kr.co.co_working.memberTeam.service.MemberTeamService;
-import kr.co.co_working.team.repository.TeamRepository;
-import kr.co.co_working.team.Team;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,11 +21,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class MemberService {
-    private final MemberTeamService memberTeamService;
-
     private final MemberRepository repository;
-
-    private final TeamRepository teamRepository;
 
     private final MemberDslRepository dslRepository;
 
@@ -86,24 +79,7 @@ public class MemberService {
         // 3. Member 추출
         Member member = selectedMember.get();
 
-        // 4. 요청에 Team 정보가 있다면
-        Team team = null;
-        if (dto.getTeamId() != null) {
-            Optional<Team> selectedTeam = teamRepository.findById(dto.getTeamId());
-
-            // 부재 시 예외처리
-            if (selectedTeam.isEmpty()) {
-                throw new NoSuchElementException("수정하려는 팀이 존재하지 않습니다. ID : " + dto.getTeamId());
-            }
-
-            // Team 추출
-            team = selectedTeam.get();
-
-            // Member 객체에 Team 정보가 있다면 MemberTeam 수정
-            memberTeamService.updateMemberTeam(member, team);
-        }
-
-        // 5. Member 수정
+        // 4. Member 수정
         member.updateMember(dto.getName(), dto.getDescription());
     }
 

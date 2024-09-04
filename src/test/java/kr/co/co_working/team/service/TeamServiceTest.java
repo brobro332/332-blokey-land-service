@@ -38,7 +38,7 @@ class TeamServiceTest {
         MemberRequestDto.CREATE memberDto = getCreateMemberDto();
         memberService.createMember(memberDto);
 
-        TeamRequestDto.CREATE dto = getCreateMemberDto(memberDto);
+        TeamRequestDto.CREATE dto = getCreateTeamDto(memberDto);
 
         /* when */
         Long id = service.createTeam(dto);
@@ -61,7 +61,7 @@ class TeamServiceTest {
         MemberRequestDto.CREATE memberDto = getCreateMemberDto();
         memberService.createMember(memberDto);
 
-        TeamRequestDto.CREATE createDto = getCreateMemberDto(memberDto);
+        TeamRequestDto.CREATE createDto = getCreateTeamDto(memberDto);
         service.createTeam(createDto);
 
         TeamRequestDto.READ readDto = new TeamRequestDto.READ();
@@ -82,7 +82,7 @@ class TeamServiceTest {
         MemberRequestDto.CREATE memberDto = getCreateMemberDto();
         memberService.createMember(memberDto);
 
-        TeamRequestDto.CREATE createDto = getCreateMemberDto(memberDto);
+        TeamRequestDto.CREATE createDto = getCreateTeamDto(memberDto);
 
         Long id = service.createTeam(createDto);
 
@@ -127,6 +127,10 @@ class TeamServiceTest {
         Assertions.assertEquals("팀 소개입니다. 2", teams.get(0).getDescription());
     }
 
+    /**
+     * getCreateDto : Member CREATE DTO 반환
+     * @return
+     */
     private static MemberRequestDto.CREATE getCreateMemberDto() {
         MemberRequestDto.CREATE memberDto = new MemberRequestDto.CREATE();
         memberDto.setEmail("test@korea.kr");
@@ -136,7 +140,12 @@ class TeamServiceTest {
         return memberDto;
     }
 
-    private static TeamRequestDto.CREATE getCreateMemberDto(MemberRequestDto.CREATE memberDto) {
+    /**
+     * getCreateTeamDto : Team CREATE DTO 반환
+     * @param memberDto
+     * @return
+     */
+    private static TeamRequestDto.CREATE getCreateTeamDto(MemberRequestDto.CREATE memberDto) {
         TeamRequestDto.CREATE dto = new TeamRequestDto.CREATE();
         dto.setName("팀명 1");
         dto.setDescription("팀 소개입니다.");

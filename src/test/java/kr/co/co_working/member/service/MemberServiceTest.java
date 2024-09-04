@@ -4,6 +4,9 @@ import kr.co.co_working.member.dto.MemberRequestDto;
 import kr.co.co_working.member.dto.MemberResponseDto;
 import kr.co.co_working.member.repository.MemberRepository;
 import kr.co.co_working.member.Member;
+import kr.co.co_working.memberTeam.repository.MemberTeamRepository;
+import kr.co.co_working.team.dto.TeamRequestDto;
+import kr.co.co_working.team.service.TeamService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +21,6 @@ import java.util.Optional;
 class MemberServiceTest {
     @Autowired
     MemberService service;
-
     @Autowired
     MemberRepository repository;
 
@@ -61,9 +63,10 @@ class MemberServiceTest {
     @Test
     public void updateMember() throws Exception {
         /* given */
-        MemberRequestDto.CREATE createDto = getCreateDto();
-        service.createMember(createDto);
+        MemberRequestDto.CREATE createMemberDto = getCreateDto();
+        service.createMember(createMemberDto);
 
+        /* when */
         MemberRequestDto.UPDATE updateDto = MemberRequestDto.UPDATE.builder()
                 .email("test@korea.kr")
                 .name("박아무개")
@@ -74,10 +77,9 @@ class MemberServiceTest {
         service.updateMember(updateDto);
 
         /* then */
-        Optional<Member> selectedMember = repository.findById(createDto.getEmail());
+        Optional<Member> selectedMember = repository.findById(createMemberDto.getEmail());
         Member member = selectedMember.get();
 
-        Assertions.assertEquals("test@korea.kr", member.getEmail());
         Assertions.assertEquals("박아무개", member.getName());
         Assertions.assertEquals("수정입니다.", member.getDescription());
     }

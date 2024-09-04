@@ -8,7 +8,6 @@ public class MemberRequestDto {
     @Getter
     @Setter
     public static class CREATE {
-        private Long teamId;
         private String email;
         private String password;
         private String name;
@@ -35,16 +34,14 @@ public class MemberRequestDto {
         private String email;
         private String name;
         private String description;
-        private Long teamId;
 
         public UPDATE () { }
 
         @Builder
-        public UPDATE(String email, String name, String description, Long teamId) {
+        public UPDATE(String email, String name, String description) {
             this.email = email;
             this.name = name;
             this.description = description;
-            this.teamId = teamId;
         }
     }
 
