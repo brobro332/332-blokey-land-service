@@ -41,11 +41,10 @@ public class ProjectService {
 
         // 3. Project 빌드
         Project project = Project.builder()
-                .name(dto.getName())
-                .description(dto.getDescription())
-                .team(selectedTeam.get())
-                .tasks(new ArrayList<>())
-                .build();
+            .name(dto.getName())
+            .description(dto.getDescription())
+            .team(selectedTeam.get())
+            .build();
 
         // 4. 등록
         repository.save(project);
@@ -83,7 +82,10 @@ public class ProjectService {
 
         // 3. 프로젝트 수정사항 처리
         Project project = selectedProject.get();
-        project.updateProject(dto.getName(), dto.getDescription(), project.getTeam());
+        project.updateProject(
+            dto.getName(),
+            dto.getDescription()
+        );
     }
 
     /**

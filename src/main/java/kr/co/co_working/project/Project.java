@@ -40,18 +40,15 @@ public class Project extends CommonTime {
     private Team team;
 
     @Builder
-    public Project(String name, String description, Team team, List<Task> tasks, List<Milestone> milestones) {
+    public Project(String name, String description, Team team) {
         this.name = name;
         this.description = description;
         this.team = team;
-        this.tasks = tasks;
-        this.milestones = milestones;
     }
 
-    public void updateProject(String name, String description, Team team) {
+    public void updateProject(String name, String description) {
         this.name = name;
         this.description = description;
-        this.team = team;
     }
 
     public void insertTask(Task task) {

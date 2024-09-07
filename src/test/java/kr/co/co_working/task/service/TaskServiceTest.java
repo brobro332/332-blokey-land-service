@@ -206,6 +206,11 @@ class TaskServiceTest {
         Assertions.assertEquals(1, project.getTasks().size());
     }
 
+    /**
+     * 
+     * @return getCreateMemberDto : Member DTO 생성
+     * @throws Exception
+     */
     private MemberRequestDto.CREATE getCreateMemberDto() throws Exception {
         MemberRequestDto.CREATE memberDto = new MemberRequestDto.CREATE();
         memberDto.setEmail("test@korea.kr");
@@ -215,6 +220,11 @@ class TaskServiceTest {
         return memberDto;
     }
 
+    /**
+     * getCreateTeamDto : Team DTO 생성
+     * @param memberDto
+     * @return
+     */
     private static TeamRequestDto.CREATE getCreateTeamDto(MemberRequestDto.CREATE memberDto) {
         TeamRequestDto.CREATE teamDto = new TeamRequestDto.CREATE();
         teamDto.setName("팀명 1");
@@ -223,6 +233,12 @@ class TaskServiceTest {
         return teamDto;
     }
 
+    /**
+     * getCreateTaskDto : Task DTO 생성
+     * @param projectId
+     * @param email
+     * @return
+     */
     private static TaskRequestDto.CREATE getCreateTaskDto(Long projectId, String email) {
         TaskRequestDto.CREATE taskDto = new TaskRequestDto.CREATE();
         taskDto.setEmail(email);
@@ -235,6 +251,11 @@ class TaskServiceTest {
         return taskDto;
     }
 
+    /**
+     * getCreateProjectDto : Project DTO 생성
+     * @param teamId
+     * @return
+     */
     private static ProjectRequestDto.CREATE getCreateProjectDto(Long teamId) {
         ProjectRequestDto.CREATE projectDto = new ProjectRequestDto.CREATE();
         projectDto.setName("프로젝트 A");

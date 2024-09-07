@@ -46,6 +46,6 @@ public class Team extends CommonTime {
 
     public void insertProject(Project project) {
         this.projects.add(project);
-        project.updateProject(project.getName(), project.getDescription(), this);
+        project.updateProject(project.getName(), project.getDescription());
     }
 }
