@@ -24,6 +24,13 @@ java-co-working
 │   └── Project CRUD API
 ├── Task
 │   └── Task CRUD API
-└── Team
-    └── Team CRUD API
+├── Team
+│   └── Team CRUD API
+├── Member
+│   └── Member CRUD API
+└── Milestone
+    └── Milestone CRUD API
 ``` 
+
+### ⛓ **ERD**
+![java-co-work](https://github.com/user-attachments/assets/67837a5d-9212-4eec-864b-e6abb630e96e)

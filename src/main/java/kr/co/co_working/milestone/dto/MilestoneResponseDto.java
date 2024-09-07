@@ -1,7 +1,6 @@
-package kr.co.co_working.member.dto;
+package kr.co.co_working.milestone.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
-import kr.co.co_working.team.Team;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,19 +8,20 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class MemberResponseDto {
-        private String email;
+public class MilestoneResponseDto {
+        private Long id;
         private String name;
         private String description;
-        private Team team;
+        private LocalDateTime dueAt;
         private LocalDateTime createAt;
         private LocalDateTime modifiedAt;
 
         @QueryProjection
-        public MemberResponseDto(String email, String name, String description, LocalDateTime createAt, LocalDateTime modifiedAt) {
-                this.email = email;
+        public MilestoneResponseDto(Long id, String name, String description, LocalDateTime dueAt, LocalDateTime createAt, LocalDateTime modifiedAt) {
+                this.id = id;
                 this.name = name;
                 this.description = description;
+                this.dueAt = dueAt;
                 this.createAt = createAt;
                 this.modifiedAt = modifiedAt;
         }

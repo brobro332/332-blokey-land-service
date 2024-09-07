@@ -4,9 +4,9 @@ import kr.co.co_working.project.dto.ProjectRequestDto;
 import kr.co.co_working.project.dto.ProjectResponseDto;
 import kr.co.co_working.project.repository.ProjectDslRepository;
 import kr.co.co_working.project.repository.ProjectRepository;
-import kr.co.co_working.project.repository.entity.Project;
+import kr.co.co_working.project.Project;
 import kr.co.co_working.team.repository.TeamRepository;
-import kr.co.co_working.team.repository.entity.Team;
+import kr.co.co_working.team.Team;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -41,11 +41,10 @@ public class ProjectService {
 
         // 3. Project 빌드
         Project project = Project.builder()
-                .name(dto.getName())
-                .description(dto.getDescription())
-                .team(selectedTeam.get())
-                .tasks(new ArrayList<>())
-                .build();
+            .name(dto.getName())
+            .description(dto.getDescription())
+            .team(selectedTeam.get())
+            .build();
 
         // 4. 등록
         repository.save(project);
@@ -83,7 +82,10 @@ public class ProjectService {
 
         // 3. 프로젝트 수정사항 처리
         Project project = selectedProject.get();
-        project.updateProject(dto.getName(), dto.getDescription(), project.getTeam());
+        project.updateProject(
+            dto.getName(),
+            dto.getDescription()
+        );
     }
 
     /**

@@ -1,7 +1,6 @@
 package kr.co.co_working.team.dto;
 
 import kr.co.co_working.task.dto.TaskRequestDto;
-import kr.co.co_working.task.repository.entity.Task;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

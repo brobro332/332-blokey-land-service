@@ -1,9 +1,9 @@
-package kr.co.co_working.team.repository.entity;
+package kr.co.co_working.team;
 
 import jakarta.persistence.*;
-import kr.co.co_working.common.entity.CommonTime;
-import kr.co.co_working.memberTeam.repository.entity.MemberTeam;
-import kr.co.co_working.project.repository.entity.Project;
+import kr.co.co_working.common.CommonTime;
+import kr.co.co_working.memberTeam.MemberTeam;
+import kr.co.co_working.project.Project;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,7 +24,7 @@ public class Team extends CommonTime {
     @Column(name = "team_name", nullable = false, length = 20)
     private String name;
 
-    @Column(name = "team_description", nullable = false, length = 200)
+    @Column(name = "team_description", length = 200)
     private String description;
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.REMOVE)
@@ -46,6 +46,6 @@ public class Team extends CommonTime {
 
     public void insertProject(Project project) {
         this.projects.add(project);
-        project.updateProject(project.getName(), project.getDescription(), this);
+        project.updateProject(project.getName(), project.getDescription());
     }
 }

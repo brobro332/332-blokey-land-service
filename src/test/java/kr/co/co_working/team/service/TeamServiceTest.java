@@ -2,10 +2,12 @@ package kr.co.co_working.team.service;
 
 import kr.co.co_working.member.dto.MemberRequestDto;
 import kr.co.co_working.member.service.MemberService;
+import kr.co.co_working.memberTeam.MemberTeam;
+import kr.co.co_working.memberTeam.repository.MemberTeamRepository;
 import kr.co.co_working.team.dto.TeamRequestDto;
 import kr.co.co_working.team.dto.TeamResponseDto;
 import kr.co.co_working.team.repository.TeamRepository;
-import kr.co.co_working.team.repository.entity.Team;
+import kr.co.co_working.team.Team;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,20 +29,16 @@ class TeamServiceTest {
     @Autowired
     TeamRepository repository;
 
+    @Autowired
+    MemberTeamRepository memberTeamRepository;
+
     @Test
     public void createTeam() throws Exception {
         /* given */
-        MemberRequestDto.CREATE memberDto = new MemberRequestDto.CREATE();
-        memberDto.setEmail("test@korea.kr");
-        memberDto.setPassword("1234");
-        memberDto.setName("김아무개");
-        memberDto.setDescription("test");
+        MemberRequestDto.CREATE memberDto = getCreateMemberDto();
         memberService.createMember(memberDto);
 
-        TeamRequestDto.CREATE dto = new TeamRequestDto.CREATE();
-        dto.setName("팀명 1");
-        dto.setDescription("팀 소개입니다.");
-        dto.setEmail(memberDto.getEmail());
+        TeamRequestDto.CREATE dto = getCreateTeamDto(memberDto);
 
         /* when */
         Long id = service.createTeam(dto);
@@ -49,22 +47,21 @@ class TeamServiceTest {
         Team team = repository.findById(id).get();
         Assertions.assertEquals("팀명 1", team.getName());
         Assertions.assertEquals("팀 소개입니다.", team.getDescription());
+
+        MemberTeam memberTeam = memberTeamRepository.findByTeamId(id);
+        Assertions.assertEquals(id, memberTeam.getTeam().getId());
+        Assertions.assertEquals(memberDto.getEmail(), memberTeam.getMember().getEmail());
     }
-    
+
+
+
     @Test
     public void readTeam() throws Exception {
         /* given */
-        MemberRequestDto.CREATE memberDto = new MemberRequestDto.CREATE();
-        memberDto.setEmail("test@korea.kr");
-        memberDto.setPassword("1234");
-        memberDto.setName("김아무개");
-        memberDto.setDescription("test");
+        MemberRequestDto.CREATE memberDto = getCreateMemberDto();
         memberService.createMember(memberDto);
 
-        TeamRequestDto.CREATE createDto = new TeamRequestDto.CREATE();
-        createDto.setName("팀명 1");
-        createDto.setDescription("팀 소개입니다.");
-        createDto.setEmail(memberDto.getEmail());
+        TeamRequestDto.CREATE createDto = getCreateTeamDto(memberDto);
         service.createTeam(createDto);
 
         TeamRequestDto.READ readDto = new TeamRequestDto.READ();
@@ -82,17 +79,10 @@ class TeamServiceTest {
     @Test
     public void updateTeam() throws Exception {
         /* given */
-        MemberRequestDto.CREATE memberDto = new MemberRequestDto.CREATE();
-        memberDto.setEmail("test@korea.kr");
-        memberDto.setPassword("1234");
-        memberDto.setName("김아무개");
-        memberDto.setDescription("test");
+        MemberRequestDto.CREATE memberDto = getCreateMemberDto();
         memberService.createMember(memberDto);
 
-        TeamRequestDto.CREATE createDto = new TeamRequestDto.CREATE();
-        createDto.setName("팀명 1");
-        createDto.setDescription("팀 소개입니다.");
-        createDto.setEmail(memberDto.getEmail());
+        TeamRequestDto.CREATE createDto = getCreateTeamDto(memberDto);
 
         Long id = service.createTeam(createDto);
 
@@ -112,11 +102,7 @@ class TeamServiceTest {
     @Test
     public void deleteTeam() throws Exception {
         /* given */
-        MemberRequestDto.CREATE memberDto = new MemberRequestDto.CREATE();
-        memberDto.setEmail("test@korea.kr");
-        memberDto.setPassword("1234");
-        memberDto.setName("김아무개");
-        memberDto.setDescription("test");
+        MemberRequestDto.CREATE memberDto = getCreateMemberDto();
         memberService.createMember(memberDto);
 
         List<Long> idList = new ArrayList<>();
@@ -139,5 +125,31 @@ class TeamServiceTest {
         Assertions.assertEquals(1, teams.size());
         Assertions.assertEquals("팀명 2", teams.get(0).getName());
         Assertions.assertEquals("팀 소개입니다. 2", teams.get(0).getDescription());
+    }
+
+    /**
+     * getCreateDto : Member CREATE DTO 반환
+     * @return
+     */
+    private static MemberRequestDto.CREATE getCreateMemberDto() {
+        MemberRequestDto.CREATE memberDto = new MemberRequestDto.CREATE();
+        memberDto.setEmail("test@korea.kr");
+        memberDto.setPassword("1234");
+        memberDto.setName("김아무개");
+        memberDto.setDescription("test");
+        return memberDto;
+    }
+
+    /**
+     * getCreateTeamDto : Team CREATE DTO 반환
+     * @param memberDto
+     * @return
+     */
+    private static TeamRequestDto.CREATE getCreateTeamDto(MemberRequestDto.CREATE memberDto) {
+        TeamRequestDto.CREATE dto = new TeamRequestDto.CREATE();
+        dto.setName("팀명 1");
+        dto.setDescription("팀 소개입니다.");
+        dto.setEmail(memberDto.getEmail());
+        return dto;
     }
 }

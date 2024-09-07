@@ -1,14 +1,15 @@
 package kr.co.co_working.team.service;
 
+import kr.co.co_working.member.Member;
+import kr.co.co_working.member.dto.MemberRequestDto;
 import kr.co.co_working.member.repository.MemberRepository;
-import kr.co.co_working.member.repository.entity.Member;
-import kr.co.co_working.memberTeam.repository.MemberTeamRepository;
+import kr.co.co_working.member.service.MemberService;
 import kr.co.co_working.memberTeam.service.MemberTeamService;
+import kr.co.co_working.team.Team;
 import kr.co.co_working.team.dto.TeamRequestDto;
 import kr.co.co_working.team.dto.TeamResponseDto;
 import kr.co.co_working.team.repository.TeamDslRepository;
 import kr.co.co_working.team.repository.TeamRepository;
-import kr.co.co_working.team.repository.entity.Team;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,13 +21,15 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class TeamService {
+    private final MemberService memberService;
+
+    private final MemberTeamService memberTeamService;
+
     private final TeamRepository repository;
 
     private final MemberRepository memberRepository;
 
     private final TeamDslRepository dslRepository;
-
-    private final MemberTeamService memberTeamService;
 
     /**
      * createTeam : Team 등록
@@ -112,7 +115,43 @@ public class TeamService {
         Team team = selectedTeam.get();
 
         // 4. 존재 시 삭제 처리
-        memberTeamService.deleteMemberTeam(team);
+        memberTeamService.deleteMemberTeamByTeamId(team);
         repository.delete(team);
+    }
+
+    // createMemberFromTeam
+
+    @Transactional
+    public void deleteMemberFromTeam(String email, Long teamId) throws NoSuchElementException, Exception {
+        // 1. Team 조회
+        Optional<Team> selectedTeam = repository.findById(teamId);
+
+        // 2. 부재 시 예외 처리
+        if (selectedTeam.isEmpty()) {
+            throw new NoSuchElementException("수정하려는 팀이 존재하지 않습니다. ID : " + teamId);
+        }
+
+        // 3. Member 조회
+        Optional<Member> selectedMember = memberRepository.findById(email);
+
+        // 4. 부재 시 예외 처리
+        if (selectedMember.isEmpty()) {
+            throw new NoSuchElementException("제외하려는 멤버가 존재하지 않습니다. Email : " + email);
+        }
+
+        // 5. 객체 추출
+        Member member = selectedMember.get();
+        Team team = selectedTeam.get();
+
+        // 6. DTO 생성
+        MemberRequestDto.UPDATE memberDto = MemberRequestDto.UPDATE.builder()
+                .email(email)
+                .build();
+
+        // 7. Member 수정
+        memberService.updateMember(memberDto);
+
+        // 8. MemberTeam 삭제
+        memberTeamService.deleteMemberTeam(member, team);
     }
 }

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static kr.co.co_working.member.repository.entity.QMember.member;
+import static kr.co.co_working.member.QMember.member;
 
 
 @Repository

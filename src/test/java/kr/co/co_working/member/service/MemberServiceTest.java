@@ -1,9 +1,9 @@
 package kr.co.co_working.member.service;
 
+import kr.co.co_working.member.Member;
 import kr.co.co_working.member.dto.MemberRequestDto;
 import kr.co.co_working.member.dto.MemberResponseDto;
 import kr.co.co_working.member.repository.MemberRepository;
-import kr.co.co_working.member.repository.entity.Member;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,18 +18,13 @@ import java.util.Optional;
 class MemberServiceTest {
     @Autowired
     MemberService service;
-
     @Autowired
     MemberRepository repository;
 
     @Test
     public void createMember() throws Exception {
         /* given */
-        MemberRequestDto.CREATE dto = new MemberRequestDto.CREATE();
-        dto.setEmail("test@korea.kr");
-        dto.setPassword("1234");
-        dto.setName("김아무개");
-        dto.setDescription("test");
+        MemberRequestDto.CREATE dto = getCreateDto();
 
         /* when */
         service.createMember(dto);
@@ -47,13 +42,8 @@ class MemberServiceTest {
     @Test
     public void readMemberList() throws Exception {
         /* given */
-        MemberRequestDto.CREATE createDto = new MemberRequestDto.CREATE();
-        createDto.setEmail("test@korea.kr");
-        createDto.setPassword("1234");
-        createDto.setName("김아무개");
-        createDto.setDescription("test");
+        MemberRequestDto.CREATE createDto = getCreateDto();
         service.createMember(createDto);
-
         MemberRequestDto.READ readDto = new MemberRequestDto.READ("test@korea.kr", "무개");
 
         /* when */
@@ -70,13 +60,10 @@ class MemberServiceTest {
     @Test
     public void updateMember() throws Exception {
         /* given */
-        MemberRequestDto.CREATE createDto = new MemberRequestDto.CREATE();
-        createDto.setEmail("test@korea.kr");
-        createDto.setPassword("1234");
-        createDto.setName("김아무개");
-        createDto.setDescription("test");
-        service.createMember(createDto);
+        MemberRequestDto.CREATE createMemberDto = getCreateDto();
+        service.createMember(createMemberDto);
 
+        /* when */
         MemberRequestDto.UPDATE updateDto = MemberRequestDto.UPDATE.builder()
                 .email("test@korea.kr")
                 .name("박아무개")
@@ -87,10 +74,9 @@ class MemberServiceTest {
         service.updateMember(updateDto);
 
         /* then */
-        Optional<Member> selectedMember = repository.findById(createDto.getEmail());
+        Optional<Member> selectedMember = repository.findById(createMemberDto.getEmail());
         Member member = selectedMember.get();
 
-        Assertions.assertEquals("test@korea.kr", member.getEmail());
         Assertions.assertEquals("박아무개", member.getName());
         Assertions.assertEquals("수정입니다.", member.getDescription());
     }
@@ -98,15 +84,11 @@ class MemberServiceTest {
     @Test
     public void deleteMember() throws Exception {
         /* given */
-        MemberRequestDto.CREATE createDto = new MemberRequestDto.CREATE();
-        createDto.setEmail("test@korea.kr");
-        createDto.setPassword("1234");
-        createDto.setName("김아무개");
-        createDto.setDescription("test");
+        MemberRequestDto.CREATE createDto = getCreateDto();
         service.createMember(createDto);
 
         MemberRequestDto.DELETE deleteDto = new MemberRequestDto.DELETE();
-        deleteDto.setEmail("test@korea.kr");
+        deleteDto.setEmail(createDto.getEmail());
 
         /* when */
         service.deleteMember(deleteDto);
@@ -116,5 +98,19 @@ class MemberServiceTest {
         List<MemberResponseDto> members = service.readMemberList(readDto);
 
         Assertions.assertEquals(0, members.size());
+    }
+
+    /**
+     * getCreateDto : Member CREATE DTO 반환
+     * @return
+     */
+    private static MemberRequestDto.CREATE getCreateDto() {
+        MemberRequestDto.CREATE dto = new MemberRequestDto.CREATE();
+        dto.setEmail("test@korea.kr");
+        dto.setPassword("1234");
+        dto.setName("김아무개");
+        dto.setDescription("test");
+
+        return dto;
     }
 }

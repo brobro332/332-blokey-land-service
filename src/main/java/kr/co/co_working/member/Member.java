@@ -1,8 +1,10 @@
-package kr.co.co_working.member.repository.entity;
+package kr.co.co_working.member;
 
 import jakarta.persistence.*;
-import kr.co.co_working.common.entity.CommonTime;
-import kr.co.co_working.memberTeam.repository.entity.MemberTeam;
+import kr.co.co_working.common.CommonTime;
+import kr.co.co_working.memberTask.MemberTask;
+import kr.co.co_working.memberTeam.MemberTeam;
+import kr.co.co_working.task.Task;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,11 +28,14 @@ public class Member extends CommonTime {
     @Column(name = "member_name", nullable = false, length = 20)
     private String name;
 
-    @Column(name = "member_description", nullable = false, length = 200)
+    @Column(name = "member_description", length = 200)
     private String description;
 
     @OneToMany(mappedBy = "member")
     private List<MemberTeam> memberTeams = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<MemberTask> memberTasks = new ArrayList<>();
 
     @Builder
     public Member(String email, String password, String name, String description) {

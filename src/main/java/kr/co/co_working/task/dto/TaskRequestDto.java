@@ -4,14 +4,19 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 public class TaskRequestDto {
     @Getter
     @Setter
     public static class CREATE {
         private Long projectId;
+        private String email;
         private String name;
         private String type;
         private String description;
+        private LocalDateTime startAt;
+        private LocalDateTime endAt;
     }
 
     @Getter
@@ -20,12 +25,16 @@ public class TaskRequestDto {
         private String name;
         private String type;
         private String description;
+        private LocalDateTime startAt;
+        private LocalDateTime endAt;
 
         @Builder
-        public READ(String name, String type, String description) {
+        public READ(String name, String type, String description, LocalDateTime startAt, LocalDateTime endAt) {
             this.name = name;
             this.type = type;
             this.description = description;
+            this.startAt = startAt;
+            this.endAt = endAt;
         }
     }
 
@@ -37,13 +46,17 @@ public class TaskRequestDto {
         private String name;
         private String type;
         private String description;
+        private LocalDateTime startAt;
+        private LocalDateTime endAt;
 
         @Builder
-        public UPDATE(Long projectId, String name, String type, String description) {
+        public UPDATE(Long projectId, String name, String type, String description, LocalDateTime startAt, LocalDateTime endAt) {
             this.projectId = projectId;
             this.name = name;
             this.type = type;
             this.description = description;
+            this.startAt = startAt;
+            this.endAt = endAt;
         }
     }
 
