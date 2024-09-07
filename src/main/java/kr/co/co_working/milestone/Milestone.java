@@ -41,10 +41,9 @@ public class Milestone extends CommonTime {
         this.project = project;
     }
 
-    public void updateMilestone(String name, String description, LocalDateTime dueAt, Project project) {
+    public void updateMilestone(String name, String description, LocalDateTime dueAt) {
         this.name = name;
         this.description = description;
         this.dueAt = dueAt;
-        this.project = project;
     }
 }

@@ -27,7 +27,8 @@ public class TaskDslRepositoryImpl implements TaskDslRepository {
      * WHERE task_name LIKE ?
      * AND task_type LIKE ?
      * AND task_description LIKE ?
-     * AND now between task_start_at and task_end_at;
+     * AND ( task_start_at <= ?
+     *       OR task_end_at >= ? );
      *
      * @param dto
      * @return

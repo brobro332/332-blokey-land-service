@@ -28,7 +28,7 @@ public class MilestoneService {
      * @throws NoSuchElementException
      * @throws Exception
      */
-    public void createMilestone(MilestoneRequestDto.CREATE dto) throws NoSuchElementException, Exception {
+    public Long createMilestone(MilestoneRequestDto.CREATE dto) throws NoSuchElementException, Exception {
         // 1. Project 조회
         Optional<Project> selectedProject = projectRepository.findById(dto.getProjectId());
 
@@ -46,6 +46,9 @@ public class MilestoneService {
 
         // 4. Milestone 등록
         repository.save(milestone);
+
+        // 5. ID 반환
+        return milestone.getId();
     }
 
     /**
@@ -97,7 +100,10 @@ public class MilestoneService {
         Project project = selectedProject.get();
 
         // 6. Milestone 수정
-        milestone.updateMilestone(dto.getName(), dto.getDescription(), dto.getDueAt(), project);
+        milestone.updateMilestone(dto.getName(),
+            dto.getDescription(),
+            dto.getDueAt()
+        );
     }
 
     /**

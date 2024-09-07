@@ -22,14 +22,16 @@ public class MilestoneRequestDto {
         private Long projectId;
         private String name;
         private String description;
-        private LocalDateTime dueAt;
+        private LocalDateTime startAt;
+        private LocalDateTime endAt;
 
         @Builder
-        public READ(Long projectId, String name, String description, LocalDateTime dueAt) {
+        public READ(Long projectId, String name, String description, LocalDateTime startAt, LocalDateTime endAt) {
             this.projectId = projectId;
             this.name = name;
             this.description = description;
-            this.dueAt = dueAt;
+            this.startAt = startAt;
+            this.endAt = endAt;
         }
     }
 
@@ -43,7 +45,8 @@ public class MilestoneRequestDto {
         private LocalDateTime dueAt;
 
         @Builder
-        public UPDATE(Long projectId, String name, String description, LocalDateTime dueAt) {
+        public UPDATE(Long id, Long projectId, String name, String description, LocalDateTime dueAt) {
+            this.id = id;
             this.projectId = projectId;
             this.name = name;
             this.description = description;
@@ -57,6 +60,9 @@ public class MilestoneRequestDto {
         private Long id;
         private Long projectId;
 
-        public DELETE() { }
+        public DELETE(Long id, Long projectId) {
+            this.id = id;
+            this.projectId = projectId;
+        }
     }
 }
