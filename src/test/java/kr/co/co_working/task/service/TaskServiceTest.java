@@ -94,11 +94,12 @@ class TaskServiceTest {
 
         /* when */
         List<TaskResponseDto> tasks = taskService.readTaskList(TaskRequestDto.READ.builder()
-                                                                                        .name("")
-                                                                                        .type("")
-                                                                                        .description("")
-
-                                                                                        .build());
+            .name("")
+            .type("")
+            .description("")
+            .startAt(LocalDateTime.of(2024, 9, 11, 0, 0, 0))
+            .endAt(LocalDateTime.of(2024, 9, 5, 0, 0, 0))
+            .build());
 
         /* then */
         Assertions.assertEquals(1, tasks.size());
@@ -130,7 +131,16 @@ class TaskServiceTest {
             taskIdList.add(taskService.createTask(taskDto));
 
             /* when */
-            taskService.updateTask(taskIdList.get(0), new TaskRequestDto.UPDATE(projectId, "수정된 테스트", "라디오 버튼", "수정된 명세", taskDto.getStartAt(), taskDto.getEndAt()));
+            taskService.updateTask(taskIdList.get(0),
+                    new TaskRequestDto.UPDATE(
+                            projectId,
+                            "수정된 테스트",
+                            "라디오 버튼",
+                            "수정된 명세",
+                            LocalDateTime.of(2024, 9, 5, 0, 0, 0),
+                            LocalDateTime.of(2024, 9, 11, 0, 0, 0)
+                    )
+            );
             taskDto = null;
         }
         Project project = projectRepository.findById(projectId).get();
@@ -147,6 +157,9 @@ class TaskServiceTest {
 
         Assertions.assertEquals("수정된 명세", task.getDescription());
         Assertions.assertEquals(task.getDescription(), project.getTasks().get(0).getDescription());
+
+        Assertions.assertEquals(task.getStartAt(), LocalDateTime.of(2024, 9, 5, 0, 0, 0));
+        Assertions.assertEquals(task.getEndAt(), LocalDateTime.of(2024, 9, 11, 0, 0, 0));
     }
 
     @Test

@@ -22,9 +22,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository repository;
-
     private final MemberDslRepository dslRepository;
-
     private final MemberTeamRepository memberTeamRepository;
 
     /**

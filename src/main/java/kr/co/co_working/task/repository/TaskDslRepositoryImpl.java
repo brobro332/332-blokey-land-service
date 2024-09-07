@@ -1,5 +1,6 @@
 package kr.co.co_working.task.repository;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -33,17 +34,15 @@ public class TaskDslRepositoryImpl implements TaskDslRepository {
      */
     @Override
     public List<TaskResponseDto> readTaskList(TaskRequestDto.READ dto) {
-        BooleanExpression   dateCond    = null;
+        BooleanBuilder      booleanBuilder    = new BooleanBuilder();
         LocalDateTime       startAt     = dto.getStartAt();
         LocalDateTime       endAt       = dto.getEndAt();
-        LocalDateTime       now         = LocalDateTime.now();
 
-        if (startAt != null && endAt != null) {
-            dateCond = Expressions.asDate(now).between(startAt, endAt);
-        } else if (startAt != null) {
-            dateCond = Expressions.asDate(now).after(startAt);
-        } else if (endAt != null) {
-            dateCond = Expressions.asDate(now).before(endAt);
+        if (startAt != null) {
+            booleanBuilder.or(task.endAt.goe(startAt));
+        }
+        if (endAt != null) {
+            booleanBuilder.or(task.startAt.loe(endAt));
         }
 
         return factory
@@ -52,7 +51,7 @@ public class TaskDslRepositoryImpl implements TaskDslRepository {
                 .where(   nameContains(dto.getName())
                         , typeContains(dto.getType())
                         , descriptionContains(dto.getDescription())
-                        , dateCond)
+                        , booleanBuilder)
                 .fetch();
     }
 
