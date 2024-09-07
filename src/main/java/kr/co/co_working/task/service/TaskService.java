@@ -1,5 +1,8 @@
 package kr.co.co_working.task.service;
 
+import kr.co.co_working.member.Member;
+import kr.co.co_working.member.repository.MemberRepository;
+import kr.co.co_working.memberTask.service.MemberTaskService;
 import kr.co.co_working.project.repository.ProjectRepository;
 import kr.co.co_working.project.Project;
 import kr.co.co_working.task.dto.TaskRequestDto;
@@ -20,8 +23,10 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class TaskService {
+    private final MemberTaskService memberTaskService;
     private final TaskRepository repository;
     private final TaskDslRepository dslRepository;
+    private final MemberRepository memberRepository;
     private final ProjectRepository projectRepository;
 
     /**
@@ -44,13 +49,22 @@ public class TaskService {
                 .name(dto.getName())
                 .type(dto.getType())
                 .description(dto.getDescription())
+                .startAt(dto.getStartAt())
+                .endAt(dto.getEndAt())
                 .build();
 
-        // 3. 등록
+        // 4. Member 조회
+        Optional<Member> selectedMember = memberRepository.findById(dto.getEmail());
+
+        // 5. Member 추출
+        Member member = selectedMember.get();
+
+        // 6. 등록
         repository.save(task);
+        memberTaskService.createMemberTask(member, task);
         project.insertTask(task);
 
-        // 4. ID 반환
+        // 7. ID 반환
         return task.getId();
     }
 
@@ -91,7 +105,7 @@ public class TaskService {
 
         // 5. 존재 시 수정 처리
         Task task = selectedTask.get();
-            task.updateTask(dto.getName(), dto.getType(), dto.getDescription(), task.getProject());
+            task.updateTask(dto.getName(), dto.getType(), dto.getDescription(), task.getProject(), dto.getStartAt(), dto.getEndAt());
     }
 
     /**
@@ -121,6 +135,7 @@ public class TaskService {
         Task task = selectedTask.get();
 
         // 5. 존재 시 삭제 처리
+        memberTaskService.deleteMemberTask(task);
         repository.delete(task);
         project.deleteTask(task);
     }

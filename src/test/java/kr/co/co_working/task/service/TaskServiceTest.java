@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,30 +46,16 @@ class TaskServiceTest {
     @Test
     public void createTask() throws Exception {
         /* given */
-        MemberRequestDto.CREATE memberDto = new MemberRequestDto.CREATE();
-        memberDto.setEmail("test@korea.kr");
-        memberDto.setPassword("1234");
-        memberDto.setName("김아무개");
-        memberDto.setDescription("test");
+        MemberRequestDto.CREATE memberDto = getCreateMemberDto();
         memberService.createMember(memberDto);
 
-        TeamRequestDto.CREATE teamDto = new TeamRequestDto.CREATE();
-        teamDto.setName("팀명 1");
-        teamDto.setDescription("팀 소개입니다.");
-        teamDto.setEmail(memberDto.getEmail());
+        TeamRequestDto.CREATE teamDto = getCreateTeamDto(memberDto);
         Long teamId = teamService.createTeam(teamDto);
 
-        ProjectRequestDto.CREATE projectDto = new ProjectRequestDto.CREATE();
-        projectDto.setName("프로젝트 A");
-        projectDto.setDescription("프로젝트 관리 프로그램 만들기");
-        projectDto.setTeamId(teamId);
+        ProjectRequestDto.CREATE projectDto = getCreateProjectDto(teamId);
         Long projectId = projectService.createProject(projectDto);
 
-        TaskRequestDto.CREATE taskDto = new TaskRequestDto.CREATE();
-        taskDto.setName("테스트테스트테스트테스트테스트테스트테스");
-        taskDto.setType("텍스트");
-        taskDto.setDescription("금주 프로젝트 개발 건에 대한 테스트");
-        taskDto.setProjectId(projectId);
+        TaskRequestDto.CREATE taskDto = getCreateTaskDto(projectId, memberDto.getEmail());
 
         /* when */
         Long taskId = taskService.createTask(taskDto);
@@ -86,35 +73,23 @@ class TaskServiceTest {
         Assertions.assertEquals(taskDto.getDescription(), task.getDescription());
         Assertions.assertEquals(taskDto.getProjectId(), task.getProject().getId());
         Assertions.assertEquals(20, task.getName().length());
+        Assertions.assertEquals(taskDto.getStartAt(), task.getStartAt());
+        Assertions.assertEquals(taskDto.getEndAt(), task.getEndAt());
     }
 
     @Test
     public void readTaskList() throws Exception {
         /* given */
-        MemberRequestDto.CREATE memberDto = new MemberRequestDto.CREATE();
-        memberDto.setEmail("test@korea.kr");
-        memberDto.setPassword("1234");
-        memberDto.setName("김아무개");
-        memberDto.setDescription("test");
+        MemberRequestDto.CREATE memberDto = getCreateMemberDto();
         memberService.createMember(memberDto);
 
-        TeamRequestDto.CREATE teamDto = new TeamRequestDto.CREATE();
-        teamDto.setName("팀명 1");
-        teamDto.setDescription("팀 소개입니다.");
-        teamDto.setEmail(memberDto.getEmail());
+        TeamRequestDto.CREATE teamDto = getCreateTeamDto(memberDto);
         Long teamId = teamService.createTeam(teamDto);
 
-        ProjectRequestDto.CREATE projectDto = new ProjectRequestDto.CREATE();
-        projectDto.setName("프로젝트 A");
-        projectDto.setDescription("프로젝트 관리 프로그램 만들기");
-        projectDto.setTeamId(teamId);
+        ProjectRequestDto.CREATE projectDto = getCreateProjectDto(teamId);
         Long projectId = projectService.createProject(projectDto);
 
-        TaskRequestDto.CREATE taskDto = new TaskRequestDto.CREATE();
-        taskDto.setName("테스트테스트테스트테스트테스트테스트테스");
-        taskDto.setType("텍스트");
-        taskDto.setDescription("금주 프로젝트 개발 건에 대한 테스트");
-        taskDto.setProjectId(projectId);
+        TaskRequestDto.CREATE taskDto = getCreateTaskDto(projectId, memberDto.getEmail());
         taskService.createTask(taskDto);
 
         /* when */
@@ -122,6 +97,7 @@ class TaskServiceTest {
                                                                                         .name("")
                                                                                         .type("")
                                                                                         .description("")
+
                                                                                         .build());
 
         /* then */
@@ -131,37 +107,30 @@ class TaskServiceTest {
     @Test
     public void updateTask() throws Exception {
         /* given */
-        MemberRequestDto.CREATE memberDto = new MemberRequestDto.CREATE();
-        memberDto.setEmail("test@korea.kr");
-        memberDto.setPassword("1234");
-        memberDto.setName("김아무개");
-        memberDto.setDescription("test");
+        MemberRequestDto.CREATE memberDto = getCreateMemberDto();
         memberService.createMember(memberDto);
 
-        TeamRequestDto.CREATE teamDto = new TeamRequestDto.CREATE();
-        teamDto.setName("팀명 1");
-        teamDto.setDescription("팀 소개입니다.");
-        teamDto.setEmail(memberDto.getEmail());
+        TeamRequestDto.CREATE teamDto = getCreateTeamDto(memberDto);
         Long teamId = teamService.createTeam(teamDto);
 
-        ProjectRequestDto.CREATE projectDto = new ProjectRequestDto.CREATE();
-        projectDto.setName("프로젝트 A");
-        projectDto.setDescription("프로젝트 관리 프로그램 만들기");
-        projectDto.setTeamId(teamId);
+        ProjectRequestDto.CREATE projectDto = getCreateProjectDto(teamId);
         Long projectId = projectService.createProject(projectDto);
 
         List<Long> taskIdList = new ArrayList<>();
         for (int i = 1; i <= 2; i++) {
             TaskRequestDto.CREATE taskDto = new TaskRequestDto.CREATE();
+            taskDto.setEmail(memberDto.getEmail());
             taskDto.setName("테스트 " + i);
             taskDto.setType("텍스트 " + i);
             taskDto.setDescription("금주 프로젝트 개발 건에 대한 테스트 " + i);
             taskDto.setProjectId(projectId);
+            taskDto.setStartAt(LocalDateTime.of(2024, 9, 5, 0, 0, 0));
+            taskDto.setEndAt(LocalDateTime.of(2024, 9, 11, 0, 0, 0));
 
             taskIdList.add(taskService.createTask(taskDto));
 
             /* when */
-            taskService.updateTask(taskIdList.get(0), new TaskRequestDto.UPDATE(projectId, "수정된 테스트", "라디오 버튼", "수정된 명세"));
+            taskService.updateTask(taskIdList.get(0), new TaskRequestDto.UPDATE(projectId, "수정된 테스트", "라디오 버튼", "수정된 명세", taskDto.getStartAt(), taskDto.getEndAt()));
             taskDto = null;
         }
         Project project = projectRepository.findById(projectId).get();
@@ -183,32 +152,25 @@ class TaskServiceTest {
     @Test
     public void deleteTask() throws Exception {
         /* given */
-        MemberRequestDto.CREATE memberDto = new MemberRequestDto.CREATE();
-        memberDto.setEmail("test@korea.kr");
-        memberDto.setPassword("1234");
-        memberDto.setName("김아무개");
-        memberDto.setDescription("test");
+        MemberRequestDto.CREATE memberDto = getCreateMemberDto();
         memberService.createMember(memberDto);
 
-        TeamRequestDto.CREATE teamDto = new TeamRequestDto.CREATE();
-        teamDto.setName("팀명 1");
-        teamDto.setDescription("팀 소개입니다.");
-        teamDto.setEmail(memberDto.getEmail());
+        TeamRequestDto.CREATE teamDto = getCreateTeamDto(memberDto);
         Long teamId = teamService.createTeam(teamDto);
 
-        ProjectRequestDto.CREATE projectDto = new ProjectRequestDto.CREATE();
-        projectDto.setName("프로젝트 A");
-        projectDto.setDescription("프로젝트 관리 프로그램 만들기");
-        projectDto.setTeamId(teamId);
+        ProjectRequestDto.CREATE projectDto = getCreateProjectDto(teamId);
         Long projectId = projectService.createProject(projectDto);
 
         List<Long> taskIdList = new ArrayList<>();
         for (int i = 1; i <= 2; i++) {
             TaskRequestDto.CREATE taskDto = new TaskRequestDto.CREATE();
+            taskDto.setEmail(memberDto.getEmail());
             taskDto.setName("테스트 " + i);
             taskDto.setType("텍스트 " + i);
             taskDto.setDescription("금주 프로젝트 개발 건에 대한 테스트 " + i);
             taskDto.setProjectId(projectId);
+            taskDto.setStartAt(LocalDateTime.of(2024, 9, 5, 0, 0, 0));
+            taskDto.setEndAt(LocalDateTime.of(2024, 9, 11, 0, 0, 0));
 
             taskIdList.add(taskService.createTask(taskDto));
             taskDto = null;
@@ -229,5 +191,42 @@ class TaskServiceTest {
         Assertions.assertEquals("금주 프로젝트 개발 건에 대한 테스트 2", task.getDescription());
 
         Assertions.assertEquals(1, project.getTasks().size());
+    }
+
+    private MemberRequestDto.CREATE getCreateMemberDto() throws Exception {
+        MemberRequestDto.CREATE memberDto = new MemberRequestDto.CREATE();
+        memberDto.setEmail("test@korea.kr");
+        memberDto.setPassword("1234");
+        memberDto.setName("김아무개");
+        memberDto.setDescription("test");
+        return memberDto;
+    }
+
+    private static TeamRequestDto.CREATE getCreateTeamDto(MemberRequestDto.CREATE memberDto) {
+        TeamRequestDto.CREATE teamDto = new TeamRequestDto.CREATE();
+        teamDto.setName("팀명 1");
+        teamDto.setDescription("팀 소개입니다.");
+        teamDto.setEmail(memberDto.getEmail());
+        return teamDto;
+    }
+
+    private static TaskRequestDto.CREATE getCreateTaskDto(Long projectId, String email) {
+        TaskRequestDto.CREATE taskDto = new TaskRequestDto.CREATE();
+        taskDto.setEmail(email);
+        taskDto.setName("테스트테스트테스트테스트테스트테스트테스");
+        taskDto.setType("텍스트");
+        taskDto.setDescription("금주 프로젝트 개발 건에 대한 테스트");
+        taskDto.setProjectId(projectId);
+        taskDto.setStartAt(LocalDateTime.of(2024, 9, 5, 0, 0, 0));
+        taskDto.setEndAt(LocalDateTime.of(2024, 9, 11, 0, 0, 0));
+        return taskDto;
+    }
+
+    private static ProjectRequestDto.CREATE getCreateProjectDto(Long teamId) {
+        ProjectRequestDto.CREATE projectDto = new ProjectRequestDto.CREATE();
+        projectDto.setName("프로젝트 A");
+        projectDto.setDescription("프로젝트 관리 프로그램 만들기");
+        projectDto.setTeamId(teamId);
+        return projectDto;
     }
 }

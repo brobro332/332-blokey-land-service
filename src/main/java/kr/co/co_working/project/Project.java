@@ -56,7 +56,7 @@ public class Project extends CommonTime {
 
     public void insertTask(Task task) {
         this.tasks.add(task);
-        task.updateTask(task.getName(), task.getType(), task.getDescription(), this);
+        task.updateTask(task.getName(), task.getType(), task.getDescription(), this, task.getStartAt(), task.getEndAt());
     }
 
     public void deleteTask(Task task) {

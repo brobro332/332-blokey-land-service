@@ -1,12 +1,9 @@
 package kr.co.co_working.member.service;
 
+import kr.co.co_working.member.Member;
 import kr.co.co_working.member.dto.MemberRequestDto;
 import kr.co.co_working.member.dto.MemberResponseDto;
 import kr.co.co_working.member.repository.MemberRepository;
-import kr.co.co_working.member.Member;
-import kr.co.co_working.memberTeam.repository.MemberTeamRepository;
-import kr.co.co_working.team.dto.TeamRequestDto;
-import kr.co.co_working.team.service.TeamService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

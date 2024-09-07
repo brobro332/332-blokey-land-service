@@ -32,10 +32,10 @@ public class Task extends CommonTime {
     @Column(name = "task_description", length = 200)
     private String description;
 
-    @Column(name = "task_startAt", nullable = false)
+    @Column(name = "task_start_at", nullable = false)
     private LocalDateTime startAt;
 
-    @Column(name = "task_endAt", nullable = false)
+    @Column(name = "task_end_at", nullable = false)
     private LocalDateTime endAt;
 
     @OneToMany(mappedBy = "task")
@@ -46,17 +46,21 @@ public class Task extends CommonTime {
     private Project project;
 
     @Builder
-    public Task(String name, String type, String description, Project project) {
+    public Task(String name, String type, String description, Project project, LocalDateTime startAt, LocalDateTime endAt) {
         this.name = name;
         this.type = type;
         this.description = description;
         this.project = project;
+        this.startAt = startAt;
+        this.endAt = endAt;
     }
 
-    public void updateTask(String name, String type, String description, Project project) {
+    public void updateTask(String name, String type, String description, Project project, LocalDateTime startAt, LocalDateTime endAt) {
         this.name = name;
         this.type = type;
         this.description = description;
         this.project = project;
+        this.startAt = startAt;
+        this.endAt = endAt;
     }
 }
