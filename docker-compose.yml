@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  oracle-db:
+    image: gvenzl/oracle-xe:11-slim
+    ports:
+      - "1521:1521"
+    environment:
+      ORACLE_USER: system
+      ORACLE_PASSWORD: 1234
+    networks:
+      - oracle-network
+
+  spring-app:
+    build: .
+    image: spring-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - oracle-db
+    restart: on-failure:3
+    networks:
+      - oracle-network
+
+networks:
+  oracle-network:
+    driver: bridge
