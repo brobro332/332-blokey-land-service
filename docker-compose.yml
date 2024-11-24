@@ -3,8 +3,6 @@ version: '3.8'
 services:
   oracle-db:
     image: gvenzl/oracle-xe:11-slim
-    ports:
-      - "1521:1521"
     environment:
       ORACLE_USER: system
       ORACLE_PASSWORD: 1234
