@@ -9,8 +9,8 @@ function CustomCheckbox({ text, isChecked, onChange }) {
           checked={isChecked}
           onChange={(e) => onChange(e.target.checked)}
         />
+        &nbsp;{text}
       </label>
-      &nbsp;{text}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import CustomInput from "./CustomInput";
 import { Link } from "react-router-dom";
+import CustomInput from "../tags/CustomInput";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");

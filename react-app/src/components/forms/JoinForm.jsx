@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ValidAgreeCheckbox from './ValidAgreeCheckbox';
+import ValidAgreeCheckbox from '../contents/ValidAgreeCheckbox';
 
 const JoinForm = () => {
   const [checkboxes, setCheckboxes] = useState({
@@ -34,7 +34,12 @@ const JoinForm = () => {
           {/* 동의 버튼 */}
           <button 
             type="button" 
-            style={styles.agreeButton} 
+            style={
+              {
+                ...styles.agreeButton,
+                ...(!isAllChecked ? styles.disabledButton : {})
+              }
+            } 
             disabled={!isAllChecked}
           >
             동의
@@ -90,6 +95,10 @@ const styles = {
       borderRadius: "4px",
       cursor: "pointer",
       float: "right"
+    },
+    disabledButton: {
+      backgroundColor: '#46BE46',
+      cursor: 'not-allowed'
     },
     buttons: {
       display: 'flex',           

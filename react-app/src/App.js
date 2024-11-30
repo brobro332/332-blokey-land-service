@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LoginForm from "./LoginForm";
-import JoinForm from "./JoinForm";
+import LoginForm from "./components/forms/LoginForm";
+import JoinForm from "./components/forms/JoinForm";
 
 function App() {
   return (
