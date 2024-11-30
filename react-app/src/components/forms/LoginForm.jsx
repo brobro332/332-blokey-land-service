@@ -58,7 +58,7 @@ const LoginForm = () => {
         </form>
       </div>
       <div style={styles.containerJoin}>
-        처음이신가요? <Link to="/joinForm">회원가입</Link>
+        처음이신가요? <Link to="/policy-form">회원가입</Link>
       </div>
     </div>
   );
@@ -94,6 +94,12 @@ const styles = {
     border: "1px solid #ccc",
     borderRadius: "4px",
   },
+  hr: {
+    backgroundColor: "#ddd",
+    width: "100%",
+    height: "1px",
+    border: "0",
+  },
   loginButton: {
     padding: "10px",
     fontSize: "16px",
@@ -102,12 +108,6 @@ const styles = {
     border: "none",
     borderRadius: "4px",
     cursor: "pointer",
-  },
-  hr: {
-    backgroundColor: "#ddd",
-    width: "100%",
-    height: "1px",
-    border: "0",
   },
   googleLoginButton: {
     padding: "10px",

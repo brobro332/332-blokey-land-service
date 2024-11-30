@@ -1,6 +1,6 @@
 import React from "react";
 
-const CustomInput = ({ type = 'text', value, onChange, placeholder, style, disabled = 'false' }) => {
+const CustomInput = ({ type = 'text', value, onChange, placeholder, style, disabled, index, onInputChange }) => {
     return <input type={type} value={value} onChange={onChange} placeholder={placeholder} style={style} disabled={disabled}/>;
 };
 

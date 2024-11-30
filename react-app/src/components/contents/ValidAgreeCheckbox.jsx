@@ -8,7 +8,7 @@ function ValidAgreeCheckbox({ onCheckboxChange }) {
     termsOfUse: false,
     privacyPolicy: false,
   });
-
+  
   const handleCheckboxChange = (name, isChecked) => {
     setCheckboxes((prevState) => {
       const updatedCheckboxes = { ...prevState, [name]: isChecked };
