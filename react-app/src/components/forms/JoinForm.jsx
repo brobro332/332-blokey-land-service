@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import CustomInput from '../tags/CustomInput';
 import InputWithButton from '../contents/InputWithButton';
+import { useNavigate } from 'react-router-dom';
 
 const JoinForm = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [certification, setCertification] = useState("");
   const [password, setPassword] = useState("");
@@ -10,7 +12,7 @@ const JoinForm = () => {
   const [nickname, setNickname] = useState("");
   const [isEntered, setIsEntered] = useState(false);
   const [isConfirmable, setIsConfirmable] = useState(false);
-  const [isAllEntered, setIsAllEntered] = useState(false); 
+  const [isAllEntered, setIsAllEntered] = useState(false);
 
   let isSended = false;
 
@@ -40,6 +42,10 @@ const JoinForm = () => {
 
   const handleConfirmationButtonClick = () => {
 
+  };
+
+  const handleButtonClick = () => {
+    navigate(`/join-complete-form?nickname= + ${nickname}`);
   };
 
   useEffect(() => {
@@ -153,6 +159,7 @@ const JoinForm = () => {
               }
             } 
             disabled={!isAllEntered}
+            onClick={handleButtonClick}
           >
             동의
           </button>

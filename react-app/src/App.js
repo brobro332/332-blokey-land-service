@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginForm from "./components/forms/LoginForm";
 import PolicyForm from "./components/forms/PolicyForm";
 import JoinForm from "./components/forms/JoinForm";
+import JoinCompleteForm from "./components/forms/JoinCompleteForm";
 
 function App() {
   return (
@@ -16,6 +17,9 @@ function App() {
 
         {/* 회원가입 개인정보입력 페이지 */}
         <Route path="/join-form" element={<JoinForm />} />
+
+        {/* 회원가입 완료 페이지 */}
+        <Route path="/join-complete-form" element={<JoinCompleteForm />} />
       </Routes>
     </Router>
   );

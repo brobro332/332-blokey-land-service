@@ -11,7 +11,7 @@ const PolicyForm = () => {
   });
 
   const isAllChecked = Object.values(checkboxes).every(value => value === true);
-  
+
   const handleCheckboxChange = (updatedCheckboxes) => {
     setCheckboxes(updatedCheckboxes);
   };
