@@ -7,8 +7,8 @@ const LoginForm = () => {
   const [password, setPassword] = useState("");
 
   const handleLogin = () => {
-    // 로그인 로직 (API 호출 등)
-  };
+  
+  }
 
   return (
     <div>

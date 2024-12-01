@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import CustomInput from '../tags/CustomInput';
 import InputWithButton from '../contents/InputWithButton';
 import { useNavigate } from 'react-router-dom';
@@ -9,7 +10,7 @@ const JoinForm = () => {
   const [certification, setCertification] = useState("");
   const [password, setPassword] = useState("");
   const [confirmation, setConfirmation] = useState("");
-  const [nickname, setNickname] = useState("");
+  const [name, setName] = useState("");
   const [isEntered, setIsEntered] = useState(false);
   const [isConfirmable, setIsConfirmable] = useState(false);
   const [isAllEntered, setIsAllEntered] = useState(false);
@@ -32,8 +33,23 @@ const JoinForm = () => {
     }
   }, [isSended, password]);
 
-  const handleJoin = () => {
-    // 회원가입 로직 (API 호출 등)
+  const handleJoin = async () => {
+    const body = {
+      email: email,
+      password: password,
+      name: name
+    };
+
+    try {
+      const result = await axios.post("http://localhost:8080/api/v1/member", body);
+      if (result.status === 200) {
+        navigate(`/join-complete-form?name= + ${name}`);
+      } else {
+        alert("회원가입에 실패하였습니다. 관리자에게 문의해주세요.");
+      }
+    } catch(e) {
+      alert("네트워크에 문제가 있습니다.");
+    }
   };
 
   const handleCertificationButtonClick = () => {
@@ -45,7 +61,7 @@ const JoinForm = () => {
   };
 
   const handleButtonClick = () => {
-    navigate(`/join-complete-form?nickname= + ${nickname}`);
+    handleJoin();
   };
 
   useEffect(() => {
@@ -54,10 +70,10 @@ const JoinForm = () => {
       certification.trim() !== "" &&
       password.trim() !== "" &&
       confirmation.trim() !== "" &&
-      nickname.trim() !== "";
+      name.trim() !== "";
     
     setIsAllEntered(allFieldsFilled);
-  }, [email, certification, password, confirmation, nickname]);
+  }, [email, certification, password, confirmation, name]);
 
   return (
     <div>
@@ -66,7 +82,6 @@ const JoinForm = () => {
         <form
           onSubmit={(e) => {
           e.preventDefault();
-          handleJoin();
         }}
           style={styles.form}
         >
@@ -137,8 +152,8 @@ const JoinForm = () => {
           {/* 닉네임 입력 */}
           <CustomInput
             type="text"
-            value={nickname}
-            onChange={(e) => setNickname(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             placeholder="닉네임"
             style={styles.input}
           />
