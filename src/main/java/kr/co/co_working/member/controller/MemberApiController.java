@@ -2,12 +2,10 @@ package kr.co.co_working.member.controller;
 
 import kr.co.co_working.common.dto.ResponseDto;
 import kr.co.co_working.member.dto.MemberRequestDto;
-import kr.co.co_working.member.dto.MemberResponseDto;
 import kr.co.co_working.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController

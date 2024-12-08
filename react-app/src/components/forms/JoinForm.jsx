@@ -41,7 +41,16 @@ const JoinForm = () => {
     };
 
     try {
-      const result = await axios.post("http://localhost:8080/api/v1/member", body);
+      const result = await axios.post(
+        "http://localhost:8080/api/v1/member"
+        , body
+        , { 
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8'
+            // 'Authorization': ''
+          }
+        }
+      );
       if (result.status === 200) {
         navigate(`/join-complete-form?name= + ${name}`);
       } else {
