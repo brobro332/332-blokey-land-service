@@ -7,6 +7,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -17,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final CorsConfigurationSource corsConfig;
+
     private static final List<Endpoint> AUTH_IGNORE_LIST = new ArrayList<>();
 
     static {
@@ -25,9 +28,15 @@ public class SecurityConfig {
         AUTH_IGNORE_LIST.add(new Endpoint("/join-form", HttpMethod.GET));
         AUTH_IGNORE_LIST.add(new Endpoint("/join-complete-form", HttpMethod.GET));
         AUTH_IGNORE_LIST.add(new Endpoint("/api/v1/member", HttpMethod.POST));
+        AUTH_IGNORE_LIST.add(new Endpoint("/api/v1/authentication", HttpMethod.POST));
     }
 
     private record Endpoint(String url, HttpMethod method) { }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
