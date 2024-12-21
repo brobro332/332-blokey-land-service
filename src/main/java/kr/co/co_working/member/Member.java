@@ -22,7 +22,7 @@ public class Member extends CommonTime {
     @Column(name = "member_email", nullable = false)
     private String email;
 
-    @Column(name = "member_password", nullable = false, length = 10)
+    @Column(name = "member_password", nullable = false, length = 100)
     private String password;
 
     @Column(name = "member_name", nullable = false, length = 20)

@@ -10,6 +10,7 @@ import kr.co.co_working.memberTeam.MemberTeam;
 import kr.co.co_working.memberTeam.repository.MemberTeamRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,7 @@ public class MemberService {
     private final MemberRepository repository;
     private final MemberDslRepository dslRepository;
     private final MemberTeamRepository memberTeamRepository;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * createMember : Member 등록
@@ -36,7 +38,7 @@ public class MemberService {
         // 1. Member 빌드
         Member member = Member.builder()
                 .email(dto.getEmail())
-                .password(dto.getPassword())
+                .password(passwordEncoder.encode(dto.getPassword()))
                 .name(dto.getName())
                 .description(StringUtil.nullStringToEmpty(dto.getDescription()))
                 .build();

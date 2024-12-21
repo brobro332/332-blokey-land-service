@@ -6,7 +6,7 @@ const JoinCompleteForm = () => {
 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const nickname = queryParams.get("nickname");
+  const name = queryParams.get("name");
 
   const handleButtonClick = () => {
     navigate('/');
@@ -35,7 +35,7 @@ const JoinCompleteForm = () => {
               color: "#0A6E0A",
               fontWeight: "bold"
             }
-          }>{nickname}</span>님의 회원가입이 성공적으로 완료되었습니다. <br/>
+          }>{name}</span>님의 회원가입이 성공적으로 완료되었습니다. <br/>
           사용자 정보 수정을 원하신다면 [사용자 정보] 메뉴를 이용해주세요. 
         </div>
         <br/>
