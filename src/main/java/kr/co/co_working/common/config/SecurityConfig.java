@@ -1,5 +1,7 @@
 package kr.co.co_working.common.config;
 
+import kr.co.co_working.common.jwt.JwtAuthenticationFilter;
+import kr.co.co_working.common.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +12,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.util.ArrayList;
@@ -19,6 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final CorsConfigurationSource corsConfig;
+    private final JwtProvider provider;
 
     private static final List<Endpoint> AUTH_IGNORE_LIST = new ArrayList<>();
 
@@ -57,7 +61,9 @@ public class SecurityConfig {
                     }
                 }
                 authorize.anyRequest().authenticated();
-            });
+            })
+            .addFilterBefore(new JwtAuthenticationFilter(provider),
+                UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

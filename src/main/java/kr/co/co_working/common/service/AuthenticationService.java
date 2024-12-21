@@ -1,14 +1,18 @@
 package kr.co.co_working.common.service;
 
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import kr.co.co_working.common.dto.AuthenticationRequestDto;
 import kr.co.co_working.member.Member;
 import kr.co.co_working.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
