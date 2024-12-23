@@ -37,11 +37,11 @@ public class MemberService {
     public String createMember(MemberRequestDto.CREATE dto) throws NoSuchElementException, Exception {
         // 1. Member 빌드
         Member member = Member.builder()
-                .email(dto.getEmail())
-                .password(passwordEncoder.encode(dto.getPassword()))
-                .name(dto.getName())
-                .description(StringUtil.nullStringToEmpty(dto.getDescription()))
-                .build();
+            .email(dto.getEmail())
+            .password(passwordEncoder.encode(dto.getPassword()))
+            .name(dto.getName())
+            .description(StringUtil.nullStringToEmpty(dto.getDescription()))
+            .build();
 
         // 2. Member 등록
         repository.save(member);

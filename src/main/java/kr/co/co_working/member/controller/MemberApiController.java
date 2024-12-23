@@ -33,7 +33,7 @@ public class MemberApiController {
      * @return
      * @throws Exception
      */
-    @GetMapping("/api/v1/member")
+    @GetMapping("/api/v1/memberList")
     public ResponseDto<?> readMemberList(@RequestBody MemberRequestDto.READ dto) throws Exception {
         return ResponseDto.ofSuccess("멤버 조회에 성공했습니다.", service.readMemberList(dto));
     }
