@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -20,6 +21,8 @@ class MemberServiceTest {
     MemberService service;
     @Autowired
     MemberRepository repository;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Test
     public void createMember() throws Exception {
@@ -34,7 +37,7 @@ class MemberServiceTest {
         Member member = selectedMember.get();
 
         Assertions.assertEquals("test@korea.kr", member.getEmail());
-        Assertions.assertEquals("1234", member.getPassword());
+        Assertions.assertEquals(passwordEncoder.matches("1234", member.getPassword()), true);
         Assertions.assertEquals("김아무개", member.getName());
         Assertions.assertEquals("test", member.getDescription());
     }

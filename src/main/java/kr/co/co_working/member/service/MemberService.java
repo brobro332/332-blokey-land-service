@@ -37,11 +37,11 @@ public class MemberService {
     public String createMember(MemberRequestDto.CREATE dto) throws NoSuchElementException, Exception {
         // 1. Member 빌드
         Member member = Member.builder()
-                .email(dto.getEmail())
-                .password(passwordEncoder.encode(dto.getPassword()))
-                .name(dto.getName())
-                .description(StringUtil.nullStringToEmpty(dto.getDescription()))
-                .build();
+            .email(dto.getEmail())
+            .password(passwordEncoder.encode(dto.getPassword()))
+            .name(dto.getName())
+            .description(StringUtil.nullStringToEmpty(dto.getDescription()))
+            .build();
 
         // 2. Member 등록
         repository.save(member);
@@ -49,9 +49,9 @@ public class MemberService {
         // 3. Email 반환
         return member.getEmail();
     }
-
+    
     /**
-     * readMemberList : Member 조회
+     * readMemberList : MemberList 조회
      * @param dto
      * @return
      * @throws Exception
