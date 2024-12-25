@@ -66,4 +66,36 @@ public class TeamApiController {
 
         return ResponseDto.ofSuccess("팀 삭제에 성공했습니다.");
     }
+
+    /**
+     * addMemberToTeam : Team 데이터에 Member 추가
+     * @param email
+     * @param teamId
+     * @return
+     * @throws NoSuchElementException
+     * @throws Exception
+     */
+    @DeleteMapping("/api/v1/team/{team_id}/{email}")
+    public ResponseDto<?> addMemberToTeam(@PathVariable(name="team_id") Long teamId,
+                                            @PathVariable(name="email") String email) throws NoSuchElementException, Exception {
+        service.addMemberToTeam(teamId, email);
+
+        return ResponseDto.ofSuccess("멤버 추가에 성공하였습니다.");
+    }
+
+    /**
+     * removeMemberFromTeam : Team 데이터에서 Member 제외
+     * @param email
+     * @param teamId
+     * @return
+     * @throws NoSuchElementException
+     * @throws Exception
+     */
+    @DeleteMapping("/api/v1/team/{email}/{team_id}")
+    public ResponseDto<?> removeMemberFromTeam(@PathVariable(name="email") String email,
+                                               @PathVariable(name="team_id") Long teamId) throws NoSuchElementException, Exception {
+        service.removeMemberFromTeam(email, teamId);
+
+        return ResponseDto.ofSuccess("멤버 제외에 성공하였습니다.");
+    }
 }

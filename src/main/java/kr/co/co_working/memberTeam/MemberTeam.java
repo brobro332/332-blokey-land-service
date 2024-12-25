@@ -4,14 +4,12 @@ import jakarta.persistence.*;
 import kr.co.co_working.common.CommonTime;
 import kr.co.co_working.member.Member;
 import kr.co.co_working.team.Team;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "tbl_member_team")
 @Getter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberTeam extends CommonTime {
     @Id
@@ -19,11 +17,11 @@ public class MemberTeam extends CommonTime {
     @Column(name = "member_team_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
     private Team team;
 

@@ -10,5 +10,5 @@ public interface MemberTeamRepository extends JpaRepository<MemberTeam, Long> {
 
     List<MemberTeam> findByMemberEmail(String email);
 
-    MemberTeam findByTeamId(Long teamId);
+    List<MemberTeam> findByTeamId(Long teamId);
 }

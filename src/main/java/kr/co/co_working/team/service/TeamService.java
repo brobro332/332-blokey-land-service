@@ -127,13 +127,39 @@ public class TeamService {
     }
 
     @Transactional
-    public void deleteMemberFromTeam(String email, Long teamId) throws NoSuchElementException, Exception {
+    public void addMemberToTeam(Long teamId, String email) throws NoSuchElementException, Exception {
         // 1. Team 조회
         Optional<Team> selectedTeam = repository.findById(teamId);
 
         // 2. 부재 시 예외 처리
         if (selectedTeam.isEmpty()) {
-            throw new NoSuchElementException("수정하려는 팀이 존재하지 않습니다. ID : " + teamId);
+            throw new NoSuchElementException("해당 팀이 존재하지 않습니다. ID : " + teamId);
+        }
+
+        // 3. Member 조회
+        Optional<Member> selectedMember = memberRepository.findById(email);
+
+        // 4. 부재 시 예외 처리
+        if (selectedMember.isEmpty()) {
+            throw new NoSuchElementException("추가하려는 멤버가 존재하지 않습니다. Email : " + email);
+        }
+
+        // 5. 객체 추출
+        Member member = selectedMember.get();
+        Team team = selectedTeam.get();
+
+        // 6. MemberTeam 등록
+        memberTeamService.createMemberTeam(member, team);
+    }
+
+    @Transactional
+    public void removeMemberFromTeam(String email, Long teamId) throws NoSuchElementException, Exception {
+        // 1. Team 조회
+        Optional<Team> selectedTeam = repository.findById(teamId);
+
+        // 2. 부재 시 예외 처리
+        if (selectedTeam.isEmpty()) {
+            throw new NoSuchElementException("해당 팀이 존재하지 않습니다. ID : " + teamId);
         }
 
         // 3. Member 조회
@@ -148,15 +174,7 @@ public class TeamService {
         Member member = selectedMember.get();
         Team team = selectedTeam.get();
 
-        // 6. DTO 생성
-        MemberRequestDto.UPDATE memberDto = MemberRequestDto.UPDATE.builder()
-                .email(email)
-                .build();
-
-        // 7. Member 수정
-        memberService.updateMember(memberDto);
-
-        // 8. MemberTeam 삭제
+        // 7. MemberTeam 삭제
         memberTeamService.deleteMemberTeam(member, team);
     }
 }

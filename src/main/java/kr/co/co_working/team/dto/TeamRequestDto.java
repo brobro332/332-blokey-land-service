@@ -3,6 +3,7 @@ package kr.co.co_working.team.dto;
 import kr.co.co_working.task.dto.TaskRequestDto;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
@@ -16,26 +17,24 @@ public class TeamRequestDto {
         private String description;
     }
 
+    @NoArgsConstructor
     @Getter
     @Setter
     public static class READ {
         private String name;
-
-        public READ() { }
 
         public READ(String name) {
             this.name = name;
         }
     }
 
+    @NoArgsConstructor
     @Getter
     @Setter
     public static class UPDATE {
         private String email;
         private String name;
         private String description;
-
-        public UPDATE () { }
 
         @Builder
         public UPDATE(String name, String description, List<TaskRequestDto.UPDATE> tasks) {
