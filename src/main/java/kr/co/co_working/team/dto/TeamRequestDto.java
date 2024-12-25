@@ -11,9 +11,9 @@ public class TeamRequestDto {
     @Getter
     @Setter
     public static class CREATE {
+        private String email;
         private String name;
         private String description;
-        private String email;
     }
 
     @Getter
@@ -31,6 +31,7 @@ public class TeamRequestDto {
     @Getter
     @Setter
     public static class UPDATE {
+        private String email;
         private String name;
         private String description;
 

@@ -2,6 +2,7 @@ package kr.co.co_working.task.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -60,11 +61,10 @@ public class TaskRequestDto {
         }
     }
 
+    @NoArgsConstructor
     @Getter
     @Setter
     public static class DELETE {
         private Long projectId;
-
-        public DELETE() { }
     }
 }

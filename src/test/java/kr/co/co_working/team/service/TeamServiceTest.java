@@ -89,6 +89,7 @@ class TeamServiceTest {
         TeamRequestDto.UPDATE updateDto = new TeamRequestDto.UPDATE();
         updateDto.setName("팀명 2");
         updateDto.setDescription("팀 소개 수정입니다.");
+        updateDto.setEmail("test@korea.kr");
 
         /* when */
         service.updateTeam(id, updateDto);
@@ -97,6 +98,7 @@ class TeamServiceTest {
         Team team = repository.findById(id).get();
         Assertions.assertEquals("팀명 2", team.getName());
         Assertions.assertEquals("팀 소개 수정입니다.", team.getDescription());
+        Assertions.assertEquals("test@korea.kr", team.getLeader());
     }
 
     @Test

@@ -47,14 +47,15 @@ public class TeamService {
             throw new NoSuchElementException("등록하려는 멤버가 존재하지 않습니다.");
         }
 
-        // 3. Team 빌드
-        Team team = Team.builder()
-                .name(dto.getName())
-                .description(dto.getDescription())
-                .build();
-
-        // 4. Member 추출
+        // 3. Member 추출
         Member member = selectedMember.get();
+
+        // 4. Team 빌드
+        Team team = Team.builder()
+            .name(dto.getName())
+            .description(dto.getDescription())
+            .leader(dto.getEmail())
+            .build();
 
         // 5. Team, MemberTeam 등록
         repository.save(team);
@@ -91,9 +92,15 @@ public class TeamService {
             throw new NoSuchElementException("수정하려는 팀이 존재하지 않습니다. ID : " + id);
         }
 
-        // 3. 존재 시 수정 처리
+        // 3. 리더 추출
+        Optional<Member> member = memberRepository.findById(dto.getEmail());
+        if (member.isEmpty()) {
+            throw new NoSuchElementException("리더로 지정하려는 멤버가 존재하지 않습니다. Email : " + dto.getEmail());
+        }
+
+        // 4. 존재 시 수정 처리
         Team team = selectedTeam.get();
-        team.updateTeam(dto.getName(), dto.getDescription());
+        team.updateTeam(dto.getName(), dto.getDescription(), dto.getEmail());
     }
 
     /**
@@ -118,8 +125,6 @@ public class TeamService {
         memberTeamService.deleteMemberTeamByTeamId(team);
         repository.delete(team);
     }
-
-    // createMemberFromTeam
 
     @Transactional
     public void deleteMemberFromTeam(String email, Long teamId) throws NoSuchElementException, Exception {

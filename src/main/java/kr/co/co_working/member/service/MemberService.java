@@ -49,9 +49,9 @@ public class MemberService {
         // 3. Email 반환
         return member.getEmail();
     }
-
+    
     /**
-     * readMemberList : Member 조회
+     * readMemberList : MemberList 조회
      * @param dto
      * @return
      * @throws Exception
