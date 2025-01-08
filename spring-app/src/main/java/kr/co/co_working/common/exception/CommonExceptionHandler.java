@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.nio.file.AccessDeniedException;
+import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 @RestControllerAdvice
@@ -23,16 +24,7 @@ public class CommonExceptionHandler {
 
     @ExceptionHandler({RuntimeException.class})
     public ResponseEntity<CommonExceptionEntity> exceptionHandler(RuntimeException e) {
-        StackTraceElement[] stackTraceElements = e.getStackTrace();
-        StringBuilder sb = new StringBuilder();
-        sb.append("예외 발생 지점 : ")
-                .append(stackTraceElements[0].getClassName()).append(".")
-                .append(stackTraceElements[0].getMethodName()).append(" ")
-                .append("(line ").append(stackTraceElements[0].getLineNumber()).append(")");
-
-        log.error("=".repeat(sb.length() + 5));
-        log.error(sb.toString());
-        log.error("=".repeat(sb.length() + 5));
+        log.error(Arrays.toString(e.getStackTrace()));
 
         return ResponseEntity
                 .status(ExceptionType.BAD_REQUEST.getStatus())
@@ -44,16 +36,7 @@ public class CommonExceptionHandler {
 
     @ExceptionHandler({NoSuchElementException.class})
     public ResponseEntity<CommonExceptionEntity> exceptionHandler(NoSuchElementException e) {
-        StackTraceElement[] stackTraceElements = e.getStackTrace();
-        StringBuilder sb = new StringBuilder();
-        sb.append("예외 발생 지점 : ")
-                .append(stackTraceElements[0].getClassName()).append(".")
-                .append(stackTraceElements[0].getMethodName()).append(" ")
-                .append("(line ").append(stackTraceElements[0].getLineNumber()).append(")");
-
-        log.error("=".repeat(sb.length() + 5));
-        log.error(sb.toString());
-        log.error("=".repeat(sb.length() + 5));
+        log.error(Arrays.toString(e.getStackTrace()));
 
         return ResponseEntity
                 .status(ExceptionType.BAD_REQUEST.getStatus())
@@ -65,16 +48,7 @@ public class CommonExceptionHandler {
 
     @ExceptionHandler({AccessDeniedException.class})
     public ResponseEntity<CommonExceptionEntity> exceptionHandler(AccessDeniedException e) {
-        StackTraceElement[] stackTraceElements = e.getStackTrace();
-        StringBuilder sb = new StringBuilder();
-        sb.append("예외 발생 지점 : ")
-                .append(stackTraceElements[0].getClassName()).append(".")
-                .append(stackTraceElements[0].getMethodName()).append(" ")
-                .append("(line ").append(stackTraceElements[0].getLineNumber()).append(")");
-
-        log.error("=".repeat(sb.length() + 5));
-        log.error(sb.toString());
-        log.error("=".repeat(sb.length() + 5));
+        log.error(Arrays.toString(e.getStackTrace()));
 
         return ResponseEntity
                 .status(ExceptionType.ACCESS_DENIED_EXCEPTION.getStatus())
@@ -86,16 +60,7 @@ public class CommonExceptionHandler {
 
     @ExceptionHandler({Exception.class})
     public ResponseEntity<CommonExceptionEntity> exceptionHandler(Exception e) {
-        StackTraceElement[] stackTraceElements = e.getStackTrace();
-        StringBuilder sb = new StringBuilder();
-        sb.append("예외 발생 지점 : ")
-                .append(stackTraceElements[0].getClassName()).append(".")
-                .append(stackTraceElements[0].getMethodName()).append(" ")
-                .append("(line ").append(stackTraceElements[0].getLineNumber()).append(")");
-
-        log.error("=".repeat(sb.length() + 5));
-        log.error(sb.toString());
-        log.error("=".repeat(sb.length() + 5));
+        log.error(Arrays.toString(e.getStackTrace()));
 
         return ResponseEntity
                 .status(ExceptionType.INTERNAL_SERVER_ERROR.getStatus())

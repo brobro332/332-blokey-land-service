@@ -1,18 +1,17 @@
 package kr.co.co_working.project.service;
 
+import kr.co.co_working.project.Project;
 import kr.co.co_working.project.dto.ProjectRequestDto;
 import kr.co.co_working.project.dto.ProjectResponseDto;
 import kr.co.co_working.project.repository.ProjectDslRepository;
 import kr.co.co_working.project.repository.ProjectRepository;
-import kr.co.co_working.project.Project;
-import kr.co.co_working.team.repository.TeamRepository;
 import kr.co.co_working.team.Team;
+import kr.co.co_working.team.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;

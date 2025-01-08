@@ -2,12 +2,9 @@ package kr.co.co_working.member.controller;
 
 import kr.co.co_working.common.dto.ResponseDto;
 import kr.co.co_working.member.dto.MemberRequestDto;
-import kr.co.co_working.member.dto.MemberResponseDto;
 import kr.co.co_working.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -30,14 +27,14 @@ public class MemberApiController {
     }
 
     /**
-     * readMemberList : Member 조회
+     * readMemberList : MemberList 조회
      * @param dto
      * @return
      * @throws Exception
      */
-    @GetMapping("/api/v1/member")
+    @GetMapping("/api/v1/memberList")
     public ResponseDto<?> readMemberList(@RequestBody MemberRequestDto.READ dto) throws Exception {
-        return ResponseDto.ofSuccess("멤버 조회에 성공했습니다.", service.readMemberList(dto));
+        return ResponseDto.ofSuccess("멤버목록 조회에 성공했습니다.", service.readMemberList(dto));
     }
 
     /**

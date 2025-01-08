@@ -27,6 +27,9 @@ public class Team extends CommonTime {
     @Column(name = "team_description", length = 200)
     private String description;
 
+    @Column(name = "leader_email")
+    private String leader;
+
     @OneToMany(mappedBy = "team", cascade = CascadeType.REMOVE)
     private List<Project> projects = new ArrayList<>();
 
@@ -34,14 +37,16 @@ public class Team extends CommonTime {
     private List<MemberTeam> memberTeams = new ArrayList<>();
 
     @Builder
-    public Team(String name, String description) {
+    public Team(String name, String description, String leader) {
         this.name = name;
         this.description = description;
+        this.leader = leader;
     }
 
-    public void updateTeam(String name, String description) {
+    public void updateTeam(String name, String description, String leader) {
         this.name = name;
         this.description = description;
+        this.leader = leader;
     }
 
     public void insertProject(Project project) {

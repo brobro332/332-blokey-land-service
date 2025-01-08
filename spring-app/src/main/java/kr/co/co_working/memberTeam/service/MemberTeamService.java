@@ -6,7 +6,9 @@ import kr.co.co_working.memberTeam.repository.MemberTeamRepository;
 import kr.co.co_working.team.Team;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -21,6 +23,8 @@ public class MemberTeamService {
      * @return
      * @throws Exception
      */
+
+    @Transactional
     public Long createMemberTeam(Member member, Team team) throws Exception {
         // 1. MemberTeam 빌드
         MemberTeam memberTeam = MemberTeam.builder()
@@ -41,6 +45,7 @@ public class MemberTeamService {
      * @throws NoSuchElementException
      * @throws Exception
      */
+    @Transactional
     public void deleteMemberTeam(Member member, Team team) throws NoSuchElementException, Exception {
         // 1. MemberTeam 조회
         MemberTeam memberTeam = repository.findByMemberEmailAndTeamId(member.getEmail(), team.getId());
@@ -60,16 +65,19 @@ public class MemberTeamService {
      * @throws NoSuchElementException
      * @throws Exception
      */
+    @Transactional
     public void deleteMemberTeamByTeamId(Team team) throws NoSuchElementException, Exception {
         // 1. MemberTeam 조회
-        MemberTeam memberTeam = repository.findByTeamId(team.getId());
+        List<MemberTeam> memberTeamList = repository.findByTeamId(team.getId());
 
         // 2. 부재 시 예외 처리
-        if (memberTeam == null) {
+        if (memberTeamList.size() == 0) {
             throw new NoSuchElementException("삭제하려는 멤버-팀 데이터가 존재하지 않습니다.");
         }
 
         // 3. MemberTeam 삭제
-        repository.delete(memberTeam);
+        for (MemberTeam memberTeam : memberTeamList) {
+            repository.delete(memberTeam);
+        }
     }
 }

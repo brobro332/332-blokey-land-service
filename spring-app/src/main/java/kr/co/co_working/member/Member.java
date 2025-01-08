@@ -5,10 +5,7 @@ import kr.co.co_working.common.CommonTime;
 import kr.co.co_working.memberTask.MemberTask;
 import kr.co.co_working.memberTeam.MemberTeam;
 import kr.co.co_working.task.Task;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,13 +13,14 @@ import java.util.List;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@ToString
 @Table(name = "tbl_member")
 public class Member extends CommonTime {
     @Id
     @Column(name = "member_email", nullable = false)
     private String email;
 
-    @Column(name = "member_password", nullable = false, length = 10)
+    @Column(name = "member_password", nullable = false, length = 100)
     private String password;
 
     @Column(name = "member_name", nullable = false, length = 20)
@@ -31,9 +29,11 @@ public class Member extends CommonTime {
     @Column(name = "member_description", length = 200)
     private String description;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "member")
     private List<MemberTeam> memberTeams = new ArrayList<>();
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "member")
     private List<MemberTask> memberTasks = new ArrayList<>();
 

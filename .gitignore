@@ -1,39 +1,39 @@
-HELP.md
-.gradle
-build/
-!gradle/wrapper/gradle-wrapper.jar
+spring-app/HELP.md
+spring-app/.gradle
+spring-app/build/
+!spring-app/gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
 
 ### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-bin/
+spring-app/.apt_generated
+spring-app/.classpath
+spring-app/.factorypath
+spring-app/.project
+spring-app/.settings
+spring-app/.springBeans
+spring-app/.sts4-cache
+spring-app/bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-*.yml
-out/
+spring-app/.idea
+spring-app/*.iws
+spring-app/*.iml
+spring-app/*.ipr
+spring-app/*.yml
+spring-app/out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 **/src/main/generated/
 
 ### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+/spring-app/nbproject/private/
+/spring-app/nbbuild/
+/spring-app/dist/
+/spring-app/nbdist/
+/spring-app/.nb-gradle/
 
 ### VS Code ###
-.vscode/
+spring-app/.vscode/
