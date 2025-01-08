@@ -1,5 +1,13 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import {
+  FancyText,
+  Container,
+  BorderlessContent,
+  ButtonsDiv,
+  ActiveButton,
+  MintColorText
+} from '../../styles/styles';
 
 const JoinCompleteForm = () => {
   const navigate = useNavigate();
@@ -14,64 +22,30 @@ const JoinCompleteForm = () => {
     
   return (
     <div>
-      <div style={styles.container}>
-        <h3>CO-WORKING</h3>
-        <h4 style={
-          {
-            color: "#0A6E0A",
-            marginBottom: "0"
-          }
-        }>회원가입 완료</h4>
-        <div style={
-            {
-                ...styles.container,
-                textAlign: "left",
-                border: "none",
-                margin: "0"
-            }    
-        }>
-          <span style={
-            {
-              color: "#0A6E0A",
-              fontWeight: "bold"
-            }
-          }>{name}</span>님의 회원가입이 성공적으로 완료되었습니다. <br/>
-          사용자 정보 수정을 원하신다면 [사용자 정보] 메뉴를 이용해주세요. 
-        </div>
+      <Container>
+        <FancyText>CO-WORKING</FancyText>
+        <MintColorText>
+          <h4>회원가입 완료</h4>
+        </MintColorText>
+        <BorderlessContent>
+          <MintColorText>
+            <span>{name}</span>님의 회원가입이 성공적으로 완료되었습니다. <br/>
+            사용자 정보 수정을 원하신다면 [사용자 정보] 메뉴를 이용해주세요.
+          </MintColorText>
+        </BorderlessContent>
         <br/>
-        <div style={styles.buttons}>
+        <ButtonsDiv>
           {/* 홈으로 돌아가기 버튼 */}
-          <button 
+          <ActiveButton
             type="button" 
-            style={styles.affirmationButton} 
             onClick={handleButtonClick}
           >
             홈으로 돌아가기
-          </button>
-        </div>
-      </div>
+          </ActiveButton>
+        </ButtonsDiv>
+      </Container>
     </div>
   );
-};
-
-const styles = {
-    container: {
-        maxWidth: '400px',
-        margin: '50px auto',
-        padding: '20px',
-        border: '1px solid #ddd',
-        borderRadius: '8px',
-        textAlign: 'center',
-    },
-    affirmationButton: {
-      padding: "10px",
-      fontSize: "16px",
-      color: "#fff",
-      backgroundColor: "#0A6E0A",
-      border: "none",
-      borderRadius: "4px",
-      cursor: "pointer",
-    }
 };
 
 export default JoinCompleteForm;
