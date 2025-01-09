@@ -50,7 +50,7 @@ const JoinForm = () => {
 
     try {
       const result = await axios.post(
-        "http://localhost:8080/api/v1/member"
+        "http://spring-app:8080/api/v1/member"
         , body
         , { 
           headers: {
