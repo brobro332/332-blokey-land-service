@@ -15,6 +15,7 @@
 - 빌드 도구: `Gradle`
 - ORM: `JPA`
 - 동적쿼리 라이브러리: `QueryDSL`
+- 배포: `OCI`
 
 ```bash
 java-co-working
