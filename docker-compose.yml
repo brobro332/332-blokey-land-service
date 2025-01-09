@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  oracle-db:
+    image: gvenzl/oracle-xe:11-slim
+    environment:
+      ORACLE_USER: system
+      ORACLE_PASSWORD: 1234
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+    healthcheck:
+      test: ["CMD-SHELL", "echo 'SELECT 1 FROM DUAL;' | sqlplus -s system/1234@localhost:1521/xe"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    networks:
+      - app-network
+
+  spring-app:
+    build:
+      context: ./backend
+    image: spring-app
+    ports:
+      - "18080:18080"
+    volumes:
+      - ./backend:/usr/local/app
+    depends_on:
+      - oracle-db
+    restart: on-failure:3
+    networks:
+      - app-network
+
+  react-app:
+    build:
+      context: ./frontend
+    image: react-app
+    ports:
+      - "80:80"
+    volumes:
+      - ./frontend:/app 
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  oracle-data:
+    driver: local
