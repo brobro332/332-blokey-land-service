@@ -17,7 +17,7 @@ services:
       - app-network
 
   spring-app:
-    build: .
+    build: ./spring-app
     image: spring-app
     ports:
       - "18080:18080"
