@@ -17,13 +17,12 @@ services:
       - app-network
 
   spring-app:
-    build:
-      context: ./backend
+    build: .
     image: spring-app
     ports:
       - "18080:18080"
     volumes:
-      - ./backend:/usr/local/app
+      - .:/usr/local/app
     depends_on:
       - oracle-db
     restart: on-failure:3
@@ -31,13 +30,12 @@ services:
       - app-network
 
   react-app:
-    build:
-      context: ./frontend
+    build: ./react-app
     image: react-app
     ports:
       - "80:80"
     volumes:
-      - ./frontend:/app 
+      - ./react-app:/app 
     networks:
       - app-network
 
