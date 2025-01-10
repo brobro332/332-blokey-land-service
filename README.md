@@ -9,7 +9,7 @@
 ### 🛠 **프로젝트 환경**
 - 언어: `Java 17`
 - 프레임워크 : `Spring boot 3.3.2`
-- 데이터베이스: `Oracle 11g`
+- 데이터베이스: `Oracle 11g XE`
 - IDE: `IntelliJ`
 - CSR : `React`
 - 빌드 도구: `Gradle`
