@@ -4,9 +4,6 @@ FROM openjdk:17-jdk-slim
 # 기본 포트 설정
 EXPOSE 18080
 
-# application.yml 파일을 컨테이너로 복사
-COPY /home/ubuntu/application.yml /app/src/main/resources/application.yml
-
 # JAR 파일 복사
 COPY ./build/libs/co-working-0.0.1-SNAPSHOT.jar /usr/local/app/co-working-0.0.1-SNAPSHOT.jar
 

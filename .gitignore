@@ -22,7 +22,7 @@ spring-app/.idea
 spring-app/*.iws
 spring-app/*.iml
 spring-app/*.ipr
-spring-app/*.yml
+spring-app/src/main/resources/*.yml
 spring-app/out/
 !**/src/main/**/out/
 !**/src/test/**/out/
