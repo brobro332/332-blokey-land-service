@@ -5,7 +5,7 @@ WORKDIR /app
 
 # Gradle 빌드 (JAR 파일 생성)
 COPY . .
-RUN gradle clean build
+RUN sleep 60 && gradle clean build
 
 # Base image
 FROM openjdk:17-jdk-slim
@@ -17,7 +17,7 @@ WORKDIR /usr/local/app
 COPY --from=build /app/build/libs/co-working-0.0.1-SNAPSHOT.jar /usr/local/app/co-working-0.0.1-SNAPSHOT.jar
 
 # 애플리케이션 실행
-ENTRYPOINT ["sh", "-c", "sleep 60 && java -jar /usr/local/app/co-working-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "/usr/local/app/co-working-0.0.1-SNAPSHOT.jar"]
 
 # 기본 포트 설정 (애플리케이션이 8080 포트를 사용한다고 가정)
 EXPOSE 8080
