@@ -27,6 +27,9 @@ dependencies {
 	/* Oracle */
 	runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
 
+	/* H2 */
+	testImplementation 'com.h2database:h2'
+
 	/* QueryDSL */
 	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
 	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
