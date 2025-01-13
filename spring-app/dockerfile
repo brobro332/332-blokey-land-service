@@ -5,7 +5,7 @@ WORKDIR /app
 
 # Gradle 빌드 (JAR 파일 생성)
 COPY . .
-RUN sleep 60 && gradle clean build
+RUN gradle clean build
 
 # Base image
 FROM openjdk:17-jdk-slim
