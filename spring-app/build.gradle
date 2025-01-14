@@ -25,7 +25,7 @@ repositories {
 
 dependencies {
 	/* Oracle */
-	runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
+ implementation group: 'com.oracle.database.jdbc', name: 'ojdbc8', version: '23.2.0.0'
 
 	/* H2 */
 	testImplementation 'com.h2database:h2'
