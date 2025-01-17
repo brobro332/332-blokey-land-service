@@ -13,5 +13,4 @@ jwt:
   secret-key: THISISEXAMPLESTRINGFORTESTCLASSONLY
 
 server:
-  port:
-    18080
+  port: 18080
