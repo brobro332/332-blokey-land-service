@@ -8,7 +8,7 @@ services:
     volumes:
       - oracle-data:/opt/oracle/oradata
     healthcheck:
-      test: ["CMD-SHELL", "tnsping xe"]
+      test: ["CMD-SHELL", "echo 'SELECT 1 FROM DUAL;' | sqlplus -s system/1234@localhost:1521/xe"]
       interval: 10s
       timeout: 10s
       retries: 5
