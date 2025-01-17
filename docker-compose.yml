@@ -16,6 +16,10 @@ services:
       - app-network
 
   spring-app:
+    environment:
+    - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@//oracle-db:1521/xe
+    - SPRING_DATASOURCE_USERNAME=system
+    - SPRING_DATASOURCE_PASSWORD=1234
     build: ./spring-app
     image: spring-app
     ports:
@@ -23,10 +27,6 @@ services:
     volumes:
       - .:/usr/local/app
     depends_on:
-    environment:
-    - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@//oracle-db:1521/xe
-    - SPRING_DATASOURCE_USERNAME=system
-    - SPRING_DATASOURCE_PASSWORD=1234
       oracle-db:
         condition: service_healthy  
     restart: on-failure:3
