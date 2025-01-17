@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   oracle-db:
+    container_name: oracle-db
     image: gvenzl/oracle-xe:11-slim
     environment:
       ORACLE_PASSWORD: 1234
@@ -13,9 +14,10 @@ services:
       timeout: 10s
       retries: 5
     networks:
-      - pipeline01_app-network
+      - app-network
 
   spring-app:
+    container_name: spring-app
     build: ./spring-app
     image: spring-app
     ports:
@@ -27,9 +29,10 @@ services:
         condition: service_healthy  
     restart: on-failure:3
     networks:
-      - pipeline01_app-network
+      - app-network
 
   react-app:
+    container_name: react-app
     build: ./react-app
     image: react-app
     ports:
@@ -37,11 +40,12 @@ services:
     volumes:
       - ./react-app:/app 
     networks:
-      - pipeline01_app-network
+      - app-network
 
 networks:
-  pipeline01_app-network:
+  app-network:
     driver: bridge
+    name: app-network
 
 volumes:
   oracle-data:
