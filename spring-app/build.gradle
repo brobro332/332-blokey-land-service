@@ -25,7 +25,7 @@ repositories {
 
 dependencies {
 	/* Oracle */
-        runtimeOnly 'com.oracle.database.jdbc:ojdbc11:21.9.0.0'
+	runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
 
 	/* H2 */
 	testImplementation 'com.h2database:h2'
