@@ -4,6 +4,8 @@ services:
   oracle-db:
     container_name: oracle-db
     image: gvenzl/oracle-xe:11-slim
+    ports:
+      - "1521:1521"
     environment:
       ORACLE_PASSWORD: 1234
     volumes:
