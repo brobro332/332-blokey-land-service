@@ -30,7 +30,7 @@ services:
     depends_on:
       oracle-db:
         condition: service_healthy
-    restart: on-failure:3
+    restart: always
     networks:
       - app-network
 
