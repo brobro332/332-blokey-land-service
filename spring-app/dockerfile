@@ -14,7 +14,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /usr/local/app
 
 # JAR 파일 복사 (빌드 이미지에서 생성된 JAR 파일을 복사)
-COPY /app/build/libs/co-working-0.0.1-SNAPSHOT.jar /usr/local/app/co-working-0.0.1-SNAPSHOT.jar
+COPY --from=build /app/build/libs/co-working-0.0.1-SNAPSHOT.jar /usr/local/app/co-working-0.0.1-SNAPSHOT.jar
 
 # 애플리케이션 실행
 ENTRYPOINT ["java", "-jar", "/usr/local/app/co-working-0.0.1-SNAPSHOT.jar"]
