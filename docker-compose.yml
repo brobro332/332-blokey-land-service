@@ -6,12 +6,6 @@ services:
     image: gvenzl/oracle-xe:11-slim
     ports:
       - "1521:1521"
-    healthcheck:
-      test: ["CMD-SHELL", "echo 'SELECT 1 FROM DUAL;' | sqlplus -s system/1234@localhost:1521/xe"]
-      interval: 30s
-      retries: 3
-      start_period: 10s
-      timeout: 10s
     environment:
       ORACLE_PASSWORD: 1234
     volumes:
@@ -22,15 +16,13 @@ services:
   spring-app:
     container_name: spring-app
     build: ./spring-app
-    image: spring-app
     ports:
       - "18080:18080"
     volumes:
       - ./spring-app:/usr/local/app
     depends_on:
-      oracle-db:
-        condition: service_healthy
-    restart: always
+      oracle-db
+    restart: on-failure
     networks:
       - app-network
 
@@ -39,7 +31,7 @@ services:
     build: ./react-app
     image: react-app
     ports:
-      - "80:80"
+      - "3000:3000"
     volumes:
       - ./react-app:/app
     networks:
