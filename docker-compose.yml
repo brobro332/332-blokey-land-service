@@ -20,7 +20,7 @@ services:
     ports:
       - "18080:18080"
     volumes:
-      - ./spring-app:/usr/local/app
+      - ./logs:/usr/local/app/logs
     depends_on:
       - oracle-db
     restart: on-failure
