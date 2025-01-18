@@ -1,16 +1,23 @@
 version: '3.8'
 
 services:
-  db:
-    hostname: db
-    container_name: db
+  oracle-db:
+    container_name: oracle-db
     image: gvenzl/oracle-xe:11-slim
     ports:
       - "1521:1521"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:1521"]
+      interval: 30s
+      retries: 3
+      start_period: 10s
+      timeout: 10s
     environment:
       ORACLE_PASSWORD: 1234
     volumes:
       - oracle-data:/opt/oracle/oradata
+    networks:
+      app-network
 
   spring-app:
     container_name: spring-app
@@ -20,6 +27,12 @@ services:
       - "18080:18080"
     volumes:
       - ./spring-app:/usr/local/app
+    depends_on:
+      oracle-db:
+        condition: service_healthy
+    restart: on-failure:3
+    networks:
+      app-network
 
   react-app:
     container_name: react-app
@@ -28,8 +41,15 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./react-app:/app 
+      - ./react-app:/app
+    networks:
+      app-network
 
+networks:
+  app-network:
+    name: app-network
+    driver: bridge
+  
 volumes:
   oracle-data:
     driver: local
