@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   db:
+    hostname: db
     container_name: db
     image: gvenzl/oracle-xe:11-slim
     ports:
