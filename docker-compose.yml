@@ -10,11 +10,6 @@ services:
       ORACLE_PASSWORD: 1234
     volumes:
       - oracle-data:/opt/oracle/oradata
-    healthcheck:
-      test: ["CMD-SHELL", "echo 'SELECT 1 FROM DUAL;' | sqlplus -s system/1234@localhost:1521/xe"]
-      interval: 10s
-      timeout: 10s
-      retries: 5
 
   spring-app:
     container_name: spring-app
@@ -24,10 +19,6 @@ services:
       - "18080:18080"
     volumes:
       - ./spring-app:/usr/local/app
-    depends_on:
-      db:
-        condition: service_healthy  
-    restart: on-failure:3
 
   react-app:
     container_name: react-app
