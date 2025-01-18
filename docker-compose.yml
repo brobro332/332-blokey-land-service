@@ -25,7 +25,8 @@ services:
     ports:
       - "18080:18080"
     volumes:
-      - .:/usr/local/app
+      - ./spring-app:/usr/local/app
+      - ./spring-app/src/main/resources/application.yml:/usr/local/app/src/main/resources/application.yml
     depends_on:
       oracle-db:
         condition: service_healthy  
