@@ -17,7 +17,7 @@ services:
     volumes:
       - oracle-data:/opt/oracle/oradata
     networks:
-      app-network
+      - app-network
 
   spring-app:
     container_name: spring-app
@@ -32,7 +32,7 @@ services:
         condition: service_healthy
     restart: on-failure:3
     networks:
-      app-network
+      - app-network
 
   react-app:
     container_name: react-app
@@ -43,7 +43,7 @@ services:
     volumes:
       - ./react-app:/app
     networks:
-      app-network
+      - app-network
 
 networks:
   app-network:
