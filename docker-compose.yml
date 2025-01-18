@@ -31,6 +31,8 @@ services:
       oracle-db:
         condition: service_healthy
     restart: on-failure:3
+    command: >
+      sh -c "sleep 60"
     networks:
       - app-network
 
