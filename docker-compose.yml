@@ -1,8 +1,8 @@
 version: '3.8'
 
 services:
-  oracle-db:
-    container_name: oracle-db
+  db:
+    container_name: db
     image: gvenzl/oracle-xe:11-slim
     ports:
       - "1521:1521"
@@ -26,7 +26,6 @@ services:
       - "18080:18080"
     volumes:
       - ./spring-app:/usr/local/app
-      - ./spring-app/src/main/resources/application.yml:/usr/local/app/src/main/resources/application.yml
     depends_on:
       oracle-db:
         condition: service_healthy  
@@ -47,8 +46,7 @@ services:
 
 networks:
   app-network:
-    external:
-      name: app-network
+    name: app-network
 
 volumes:
   oracle-data:
