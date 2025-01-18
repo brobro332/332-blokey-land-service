@@ -5,6 +5,7 @@ WORKDIR /app
 
 # Gradle 빌드 (JAR 파일 생성)
 COPY . .
+WORKDIR /app/spring-app
 RUN gradle clean build
 
 # Base image
