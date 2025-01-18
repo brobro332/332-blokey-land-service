@@ -15,6 +15,7 @@ services:
 
   spring-app:
     container_name: spring-app
+    image: spring-app
     build: ./spring-app
     ports:
       - "18080:18080"
