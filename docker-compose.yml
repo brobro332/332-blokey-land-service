@@ -7,7 +7,7 @@ services:
     ports:
       - "1521:1521"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:1521"]
+      test: ["CMD-SHELL", "echo 'SELECT 1 FROM DUAL;' | sqlplus -s system/1234@localhost:1521/xe"]
       interval: 30s
       retries: 3
       start_period: 10s
