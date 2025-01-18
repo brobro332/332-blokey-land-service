@@ -27,7 +27,7 @@ services:
     volumes:
       - ./spring-app:/usr/local/app
     depends_on:
-      oracle-db:
+      db:
         condition: service_healthy  
     restart: on-failure:3
     networks:
