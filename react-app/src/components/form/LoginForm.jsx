@@ -1,8 +1,41 @@
-import React from 'react';
-import { Box, Typography, TextField, Button, Link } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Box, Typography, TextField, Button, Link, Snackbar, Alert } from '@mui/material';
+import CheckIcon from '@mui/icons-material/Check';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const LoginForm = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  const navigate = useNavigate();
+
+  const handleLogin = async () => {
+    try {
+      const result = await axios.post(
+        "http://localhost:8080/api/v1/authentication",
+        { 
+          email: email,
+          password: password
+        },
+        { 
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+          }
+        }
+      );
+  
+      if (result.status === 200) {
+        navigate('/main');
+      } else {
+        setOpenSnackbar(true);
+      }
+    } catch (e) {
+      setOpenSnackbar(true);
+    }
+  };
+
   return (
     <Box sx={{ display: 'flex', height: '100vh', backgroundColor: '#3D3D3D', 
         alignItems: 'center' }}>
@@ -43,33 +76,42 @@ const LoginForm = () => {
           </Typography>
         </Typography>
         
-        {/* 입력 필드 */}
-        <TextField
-          label='아이디'
-          variant='outlined'
-          margin='normal'
-          size='small'
-          fullWidth
-          sx={{ height: '20px' }}
-        />
-        <TextField
-          label='비밀번호'
-          type='password'
-          variant='outlined'
-          margin='normal'
-          size='small'
-          fullWidth
-          sx={{ height: '20px' }}
-        />
-        <Button variant='contained' color='primary' fullWidth sx={{ 
-          marginTop: '20px',
-          marginBottom: '20px' 
-        }}>
-          로그인
-        </Button>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleLogin();
+          }}
+        >
+          {/* 입력 필드 */}
+          <TextField
+            label='이메일'
+            onChange={(e) => setEmail(e.target.value)}
+            variant='outlined'
+            margin='normal'
+            size='small'
+            fullWidth
+            sx={{ height: '20px' }}
+          />
+          <TextField
+            label='비밀번호'
+            type='password'
+            onChange={(e) => setPassword(e.target.value)}
+            variant='outlined'
+            margin='normal'
+            size='small'
+            fullWidth
+            sx={{ height: '20px' }}
+          />
+          <Button variant='contained' type="submit" color='primary' fullWidth sx={{ 
+            marginTop: '20px',
+            marginBottom: '20px' 
+          }}>
+            로그인
+          </Button>
+        </form>
         <Typography variant='body2' align='center'>
           📢 서비스 이용이 처음이신가요?{' '}
-          <Link component={RouterLink} to="/signup" underline="hover">
+          <Link component={RouterLink} to="/join-form" underline="hover">
             회원가입
           </Link>
         </Typography>
@@ -77,6 +119,22 @@ const LoginForm = () => {
 
       {/* 오른쪽 여백 */}
       <Box sx={{ flex: 1 }} />
+      
+      {/* 메시지 알림 */}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        onClose={() => setOpenSnackbar(false)}
+      >
+        <Alert
+          onClose={() => setOpenSnackbar(false)}
+          severity="error"
+          icon={<CheckIcon fontSize="inherit" />}
+        >
+          로그인에 실패하였습니다. 관리자에게 문의해주세요.
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
