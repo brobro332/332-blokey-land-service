@@ -2,8 +2,8 @@ import React from 'react';
 import LoginForm from './components/form/LoginForm';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import JoinForm from './components/form/JoinForm';
-import Welcome from './components/contents/Welcome';
-import Main from './components/contents/Main';
+import Welcome from './components/page/Welcome';
+import Main from './components/page/Main';
 
 const App = () => {
   return (

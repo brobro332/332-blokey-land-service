@@ -81,7 +81,7 @@ const JoinForm = () => {
       <Box
         sx={{
           width: '300px',
-          height: '60vh',
+          height: '90vh',
           backgroundColor: 'white',
           padding: '20px',
           borderRadius: '8px',
@@ -177,7 +177,6 @@ const JoinForm = () => {
           color='inherit'
           onClick={handleCancel}
           fullWidth
-          loading={isLoading}
         >
           취소
         </Button>
