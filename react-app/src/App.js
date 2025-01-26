@@ -7,7 +7,7 @@ import Main from './components/page/Main';
 
 const App = () => {
   return (
-    <Router>  {/* 애플리케이션을 Router로 감싸기 */}
+    <Router>
       <Routes>
         {/* 로그인 및 회원가입 */}
         <Route path="/" element={<LoginForm />} />

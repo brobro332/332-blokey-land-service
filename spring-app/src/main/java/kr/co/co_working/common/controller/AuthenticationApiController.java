@@ -32,8 +32,8 @@ public class AuthenticationApiController {
         if (isValid) {
             tokens = provider.createTokens(dto.getEmail());
 
-            String accessTokenCookie = "Authorization=" + tokens.get("accessToken") + "; HttpOnly; Secure; Path=/; SameSite=Strict";
-            String refreshTokenCookie = "RefreshToken=" + tokens.get("refreshToken") + "; HttpOnly; Secure; Path=/; SameSite=Strict";
+            String accessTokenCookie = "Authorization=" + tokens.get("accessToken") + "; HttpOnly; Path=/; SameSite=Strict";
+            String refreshTokenCookie = "RefreshToken=" + tokens.get("refreshToken") + "; HttpOnly; Path=/; SameSite=Strict";
 
             response.addHeader("Set-Cookie", accessTokenCookie);
             response.addHeader("Set-Cookie", refreshTokenCookie);

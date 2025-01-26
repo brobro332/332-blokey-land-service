@@ -21,10 +21,10 @@ public class TeamRequestDto {
     @Getter
     @Setter
     public static class READ {
-        private String name;
+        private String email;
 
-        public READ(String name) {
-            this.name = name;
+        public READ(String email) {
+            this.email = email;
         }
     }
 

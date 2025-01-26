@@ -6,6 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,7 +33,7 @@ public class JwtProvider {
             .claims()
                 .subject(CookieType.Authorization.name())
                 .issuer(email)
-                .expiration(new Date(System.currentTimeMillis() + (15 * 60 * 1000)))
+                .expiration(new Date(System.currentTimeMillis() + (60 * 60 * 1000)))
                 .issuedAt(new Date(System.currentTimeMillis())).and()
             .signWith(key)
             .compact();

@@ -6,12 +6,11 @@ import axios from 'axios';
 import { useUser } from '../hook/UserProvider';
 
 const LoginForm = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   
   const { setUser } = useUser();
-
-  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const navigate = useNavigate();
 
@@ -26,7 +25,8 @@ const LoginForm = () => {
         { 
           headers: {
             'Content-Type': 'application/json; charset=UTF-8',
-          }
+          }, 
+          withCredentials: true
         }
       );
   
@@ -61,7 +61,7 @@ const LoginForm = () => {
           justifyContent: 'center',
         }}
       >
-        <Typography sx = {{ display: 'flex' }}>
+        <div style = {{ display: 'flex' }}>
           <img 
             src='/resources/logo.png' 
             alt='logo' 
@@ -79,7 +79,7 @@ const LoginForm = () => {
             }}>
             삼사미 프로젝트 매니저
           </Typography>
-        </Typography>
+        </div>
         
         <form
           onSubmit={(e) => {

@@ -33,7 +33,7 @@ public class TeamApiController {
      * @throws Exception
      */
     @GetMapping("/api/v1/team")
-    public ResponseDto<?> readTeam(@RequestBody TeamRequestDto.READ dto) throws Exception {
+    public ResponseDto<?> readTeam(@ModelAttribute TeamRequestDto.READ dto) throws Exception {
         return ResponseDto.ofSuccess("팀 조회에 성공했습니다.", service.readTeam(dto));
     }
 

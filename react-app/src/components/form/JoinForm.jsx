@@ -91,7 +91,7 @@ const JoinForm = () => {
           justifyContent: 'center',
         }}
       >
-        <Typography sx={{ display: 'flex', alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
           <img
             src='/resources/logo.png'
             alt='logo'
@@ -110,7 +110,7 @@ const JoinForm = () => {
           >
             삼사미 프로젝트 매니저
           </Typography>
-        </Typography>
+        </div>
 
         {/* 입력 필드 */}
         <TextField
@@ -166,9 +166,9 @@ const JoinForm = () => {
           color='primary'
           onClick={handleJoin}
           sx={{ marginTop: '20px', marginBottom: '20px' }}
-          disabled={!isFormFilled}
+          disabled={!isFormFilled ? true : false}
           fullWidth
-          loading={isLoading}
+          loading={isLoading ? true : false}
         >
           회원가입
         </Button>
