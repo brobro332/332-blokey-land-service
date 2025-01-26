@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, AppBar, Toolbar, Typography, Box, Drawer, List, ListItem, ListItemText, CssBaseline, IconButton, Snackbar, Alert, MenuItem, Menu } from '@mui/material';
 import AppsIcon from '@mui/icons-material/Apps';
 import CheckIcon from '@mui/icons-material/Check';
+import Workspace from '../content/Workspace';
 
 const Main = () => {
     const [selectedMenu, setSelectedMenu] = useState('대시보드');
@@ -11,8 +12,8 @@ const Main = () => {
     const open = Boolean(anchorEl);
 
     useEffect(() => {
-        setOpenSnackbar(true);
-      }, []);
+      setOpenSnackbar(true);
+    }, []);
 
     const handleMenuClick = (menuName) => {
       setAnchorEl(null);
@@ -59,10 +60,7 @@ const Main = () => {
           );
         case '워크스페이스':
           return (
-            <div>
-              <Typography variant="h5">워크스페이스</Typography>
-              <Typography variant="body1">워크스페이스 관련 콘텐츠를 여기에 표시합니다.</Typography>
-            </div>
+            <Workspace />
           );
         case '프로필':
           return (
