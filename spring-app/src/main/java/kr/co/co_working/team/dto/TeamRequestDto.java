@@ -22,6 +22,7 @@ public class TeamRequestDto {
     @Setter
     public static class READ {
         private String email;
+        private Long id;
 
         public READ(String email) {
             this.email = email;

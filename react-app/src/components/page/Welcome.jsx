@@ -80,7 +80,7 @@ const Welcome = () => {
           color='primary'
           sx={{ marginTop: '20px' }}
           fullWidth
-          loading={isLoading ? 'true' : 'false'}
+          loading={isLoading}
         >
           즉시이동
         </Button>

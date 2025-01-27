@@ -166,9 +166,9 @@ const JoinForm = () => {
           color='primary'
           onClick={handleJoin}
           sx={{ marginTop: '20px', marginBottom: '20px' }}
-          disabled={!isFormFilled ? true : false}
+          disabled={!isFormFilled}
           fullWidth
-          loading={isLoading ? true : false}
+          loading={isLoading}
         >
           회원가입
         </Button>
