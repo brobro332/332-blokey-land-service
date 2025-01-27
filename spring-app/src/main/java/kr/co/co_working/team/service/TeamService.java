@@ -75,11 +75,6 @@ public class TeamService {
         return dslRepository.readTeamList(dto);
     }
 
-    public List<MemberResponseDto> readMemberByTeam(TeamRequestDto.READ dto) throws Exception {
-        // QueryDSL 동적 쿼리 결과 반환
-        return dslRepository.readMemberListByTeam(dto);
-    }
-
     /**
      * updateTeam : Team 수정
      * @param dto

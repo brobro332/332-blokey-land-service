@@ -31,7 +31,9 @@ const LoginForm = () => {
       );
   
       if (result.status === 200) {
-        setUser({ email: email });
+        setUser({ 
+          email: email 
+        });
         navigate('/main');
       } else {
         setOpenSnackbar(true);
