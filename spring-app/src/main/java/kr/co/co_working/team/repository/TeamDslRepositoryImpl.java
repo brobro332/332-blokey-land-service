@@ -2,8 +2,6 @@ package kr.co.co_working.team.repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import kr.co.co_working.member.dto.MemberResponseDto;
-import kr.co.co_working.member.dto.QMemberResponseDto;
 import kr.co.co_working.team.dto.QTeamResponseDto;
 import kr.co.co_working.team.dto.TeamRequestDto;
 import kr.co.co_working.team.dto.TeamResponseDto;
@@ -12,9 +10,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static kr.co.co_working.team.QTeam.team;
 import static kr.co.co_working.member.QMember.member;
 import static kr.co.co_working.memberTeam.QMemberTeam.memberTeam;
+import static kr.co.co_working.team.QTeam.team;
 
 @Repository
 @RequiredArgsConstructor
@@ -54,30 +52,7 @@ public class TeamDslRepositoryImpl implements TeamDslRepository {
             .fetch();
     }
 
-    @Override
-    public List<MemberResponseDto> readMemberListByTeam(TeamRequestDto.READ dto) {
-        return factory
-                .select(
-                        new QMemberResponseDto(
-                                member.email,
-                                member.name,
-                                member.description,
-                                member.createdAt,
-                                member.modifiedAt
-                        )
-                )
-                .from(team)
-                .join(memberTeam).on(team.id.eq(memberTeam.team.id))
-                .join(member).on(member.email.eq(memberTeam.member.email))
-                .where(idEq(dto.getId()))
-                .fetch();
-    }
-
     private BooleanExpression emailEq(String emailCond) {
         return emailCond != null ? member.email.eq(emailCond) : null;
-    }
-
-    private BooleanExpression idEq(Long idCond) {
-        return idCond != null ? team.id.eq(idCond) : null;
     }
 }

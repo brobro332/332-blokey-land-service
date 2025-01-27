@@ -38,17 +38,6 @@ public class TeamApiController {
     }
 
     /**
-     * readMemberByTeam : 특정 Team 소속 Member 조회
-     * @param dto
-     * @return
-     * @throws Exception
-     */
-    @GetMapping("/api/v1/team/member")
-    public ResponseDto<?> readTeamByMember(@ModelAttribute TeamRequestDto.READ dto) throws Exception {
-        return ResponseDto.ofSuccess("팀 소속 멤버 조회에 성공했습니다.", service.readMemberByTeam(dto));
-    }
-
-    /**
      * updateTeam : Team 수정
      * @param id
      * @param dto

@@ -5,12 +5,15 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.co.co_working.member.dto.MemberRequestDto;
 import kr.co.co_working.member.dto.MemberResponseDto;
 import kr.co.co_working.member.dto.QMemberResponseDto;
+import kr.co.co_working.team.dto.TeamRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 import static kr.co.co_working.member.QMember.member;
+import static kr.co.co_working.memberTeam.QMemberTeam.memberTeam;
+import static kr.co.co_working.team.QTeam.team;
 
 @Repository
 @RequiredArgsConstructor
@@ -29,15 +32,38 @@ public class MemberDslRepositoryImpl implements MemberDslRepository {
     @Override
     public List<MemberResponseDto> readMemberList(MemberRequestDto.READ dto) {
         return factory
-                .select(new QMemberResponseDto(member.email, member.name, member.description, member.createdAt, member.modifiedAt))
-                .from(member)
-                .where(emailEq(dto.getEmail()))
-                .where(nameContains(dto.getName()))
-                .fetch();
+            .select(new QMemberResponseDto(member.email, member.name, member.description, member.createdAt, member.modifiedAt))
+            .from(member)
+            .where(emailEq(dto.getEmail()))
+            .where(nameContains(dto.getName()))
+            .fetch();
+    }
+
+    @Override
+    public List<MemberResponseDto> readMemberListByTeam(TeamRequestDto.READ dto) {
+        return factory
+            .select(
+                    new QMemberResponseDto(
+                        member.email,
+                        member.name,
+                        member.description,
+                        member.createdAt,
+                        member.modifiedAt
+                    )
+                )
+            .from(team)
+            .join(memberTeam).on(team.id.eq(memberTeam.team.id))
+            .join(member).on(member.email.eq(memberTeam.member.email))
+            .where(teamIdEq(dto.getId()))
+            .fetch();
     }
 
     private BooleanExpression emailEq(String emailCond) {
         return emailCond != null ? member.email.eq(emailCond) : null;
+    }
+
+    private BooleanExpression teamIdEq(Long idCond) {
+        return idCond != null ? team.id.eq(idCond) : null;
     }
 
     private BooleanExpression nameContains(String nameCond) {

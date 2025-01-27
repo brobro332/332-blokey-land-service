@@ -8,6 +8,7 @@ import kr.co.co_working.member.repository.MemberDslRepository;
 import kr.co.co_working.member.repository.MemberRepository;
 import kr.co.co_working.memberTeam.MemberTeam;
 import kr.co.co_working.memberTeam.repository.MemberTeamRepository;
+import kr.co.co_working.team.dto.TeamRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -48,6 +49,17 @@ public class MemberService {
 
         // 3. Email 반환
         return member.getEmail();
+    }
+
+    /**
+     * readMemberByTeam : 특정 Team 소속 MemberList 조회
+     * @param dto
+     * @return
+     * @throws Exception
+     */
+    public List<MemberResponseDto> readMemberListByTeam(TeamRequestDto.READ dto) throws Exception {
+        // QueryDSL 동적 쿼리 결과 반환
+        return dslRepository.readMemberListByTeam(dto);
     }
 
     /**
