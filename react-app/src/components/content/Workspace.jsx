@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Typography, Select, MenuItem, FormControl, InputLabel, Box, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, Link, TextField, Button } from '@mui/material';
 import axios from 'axios';
+import { useUser } from '../hook/UserProvider';
 
 const Workspace = () => {
   const [items, setItems] = useState([]);
@@ -11,6 +12,8 @@ const Workspace = () => {
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  const { user } = useUser();
+
   const isFormFilled =
     name.trim() &&
     description.trim();
@@ -18,17 +21,27 @@ const Workspace = () => {
   useEffect(() => {
     const handleOnload = async () => {
       try {
-        const result = await axios.get(
+        const result1 = await axios.get(
           "http://localhost:8080/api/v1/team",
           { 
-            params: { name: '김진형' },
+            params: { email: user.email },
             withCredentials: true
           }
         );    
-        if (result.status === 200) { 
-          setItems(result.data.data);
-          if (result.data.data.length > 0) {
-            setSelectedItem(result.data.data[0].name);
+        if (result1.status === 200) { 
+          setItems(result1.data.data);
+          if (result1.data.data.length > 0) {
+            setSelectedItem(result1.data.data[0].name);
+            const result2 = await axios.get(
+              "http://localhost:8080/api/v1/team/member",
+              { 
+                params: { id: selectedItem.id },
+                withCredentials: true
+              }
+            );
+            if (result2.status === 200) { 
+              setTeamMemberList(result2.data.data);
+            }
           }
         }
       } catch (e) {
@@ -41,6 +54,35 @@ const Workspace = () => {
 
   const handleCreateWorkspaceButton = () => {
     setIsCreating(true);
+  };
+
+  const handleCreate = async () => {
+    try {
+      const result = await axios.post(
+        "http://localhost:8080/api/v1/team",
+        { 
+          email: user.email,
+          name: name,
+          description: description
+        },
+        { 
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+          }, 
+          withCredentials: true
+        }
+      );
+  
+      if (result.status === 200) {
+        console.log(result);
+      } 
+    } catch (e) {
+      console.error(e)
+    }
+  };
+
+  const handleCancel = () => {
+    setIsCreating(false);
   };
 
   return (
@@ -72,16 +114,18 @@ const Workspace = () => {
             />
             <Button
               variant='contained'
+              onClick={handleCreate}
               color='primary'
               sx={{ marginTop: '20px', marginBottom: '20px' }}
-              disabled={!isFormFilled ? true : false}
+              disabled={!isFormFilled}
               fullWidth
-              loading={isLoading ? true : false}
+              loading={isLoading}
             >
               생성
             </Button>
             <Button
               variant='contained'
+              onClick={handleCancel}
               color='inherit'
               fullWidth
             >

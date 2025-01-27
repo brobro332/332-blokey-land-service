@@ -2,6 +2,7 @@ package kr.co.co_working.team.service;
 
 import kr.co.co_working.member.Member;
 import kr.co.co_working.member.dto.MemberRequestDto;
+import kr.co.co_working.member.dto.MemberResponseDto;
 import kr.co.co_working.member.repository.MemberRepository;
 import kr.co.co_working.member.service.MemberService;
 import kr.co.co_working.memberTeam.service.MemberTeamService;
@@ -21,8 +22,6 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class TeamService {
-    private final MemberService memberService;
-
     private final MemberTeamService memberTeamService;
 
     private final TeamRepository repository;
@@ -74,6 +73,11 @@ public class TeamService {
     public List<TeamResponseDto> readTeam(TeamRequestDto.READ dto) throws Exception {
         // QueryDSL 동적 쿼리 결과 반환
         return dslRepository.readTeamList(dto);
+    }
+
+    public List<MemberResponseDto> readMemberByTeam(TeamRequestDto.READ dto) throws Exception {
+        // QueryDSL 동적 쿼리 결과 반환
+        return dslRepository.readMemberListByTeam(dto);
     }
 
     /**

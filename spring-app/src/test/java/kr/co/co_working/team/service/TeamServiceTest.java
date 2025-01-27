@@ -67,7 +67,7 @@ class TeamServiceTest {
         service.createTeam(createDto);
 
         TeamRequestDto.READ readDto = new TeamRequestDto.READ();
-        readDto.setName("명");
+        readDto.setEmail("test@korea.kr");
 
         /* when */
         List<TeamResponseDto> teams = service.readTeam(readDto);

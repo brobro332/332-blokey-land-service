@@ -12,7 +12,6 @@ import java.util.List;
 
 import static kr.co.co_working.member.QMember.member;
 
-
 @Repository
 @RequiredArgsConstructor
 public class MemberDslRepositoryImpl implements MemberDslRepository {

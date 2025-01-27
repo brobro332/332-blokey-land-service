@@ -21,10 +21,17 @@ public class MemberRequestDto {
     public static class READ {
         private String email;
         private String name;
+        private String teamId;
 
         public READ(String email, String name) {
             this.email = email;
             this.name = name;
+        }
+
+        public READ(String email, String name, String teamId) {
+            this.email = email;
+            this.name = name;
+            this.teamId = teamId;
         }
     }
 
