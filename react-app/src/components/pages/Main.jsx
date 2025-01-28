@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, AppBar, Toolbar, Typography, Box, Drawer, List, ListItem, ListItemText, CssBaseline, IconButton, Snackbar, Alert, MenuItem, Menu } from '@mui/material';
 import AppsIcon from '@mui/icons-material/Apps';
 import CheckIcon from '@mui/icons-material/Check';
-import Workspace from '../content/Workspace';
+import Workspace from '../contents/workspace/Workspace';
 
 const Main = () => {
   const [selectedMenu, setSelectedMenu] = useState('대시보드');
