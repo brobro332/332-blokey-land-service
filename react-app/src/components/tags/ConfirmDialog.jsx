@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 
-const ConfirmDialog = ({ open, onClose, title, content }) => {
+const ConfirmDialog = ({ open, onConfirm, onClose, title, content }) => {
   return (
     <Dialog open={open} onClose={() => onClose(false)}>
       <DialogTitle>{title}</DialogTitle>
@@ -16,7 +16,7 @@ const ConfirmDialog = ({ open, onClose, title, content }) => {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => onClose(true)} color="primary" variant="contained">
+        <Button onClick={onConfirm} color="primary" variant="contained">
           확인
         </Button>
         <Button onClick={() => onClose(false)} color="inherit">

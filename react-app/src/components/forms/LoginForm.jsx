@@ -3,7 +3,7 @@ import { Box, Typography, TextField, Button, Link, Snackbar, Alert } from '@mui/
 import CheckIcon from '@mui/icons-material/Check';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useUser } from '../hook/UserProvider';
+import { useUser } from '../hooks/UserProvider';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
