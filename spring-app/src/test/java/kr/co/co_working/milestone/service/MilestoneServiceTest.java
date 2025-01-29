@@ -11,13 +11,19 @@ import kr.co.co_working.project.service.ProjectService;
 import kr.co.co_working.team.dto.TeamRequestDto;
 import kr.co.co_working.team.service.TeamService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 @SpringBootTest
@@ -38,6 +44,19 @@ class MilestoneServiceTest {
 
     @Autowired
     MilestoneRepository repository;
+
+    @BeforeEach
+    void setUp() {
+        String email = "test@korea.kr";
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+            email, null, Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
+        );
+
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        securityContext.setAuthentication(authentication);
+
+        SecurityContextHolder.setContext(securityContext);
+    }
 
     @Test
     public void createMilestone() throws Exception {
@@ -174,7 +193,6 @@ class MilestoneServiceTest {
      */
     private static MemberRequestDto.CREATE getCreateMemberDto() {
         MemberRequestDto.CREATE memberDto = new MemberRequestDto.CREATE();
-        memberDto.setEmail("test@korea.kr");
         memberDto.setPassword("1234");
         memberDto.setName("김아무개");
         memberDto.setDescription("test");
@@ -190,7 +208,6 @@ class MilestoneServiceTest {
         TeamRequestDto.CREATE teamDto = new TeamRequestDto.CREATE();
         teamDto.setName("팀명 1");
         teamDto.setDescription("팀 소개입니다.");
-        teamDto.setEmail(memberDto.getEmail());
         return teamDto;
     }
 

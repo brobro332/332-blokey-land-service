@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Box, TextField, Button } from "@mui/material";
-import { useUser } from "../../hooks/UserProvider";
 import axios from "axios";
 
 const CreateWorkspace = ({
@@ -16,8 +15,7 @@ const CreateWorkspace = ({
   );
   const [isLoading, setIsLoading] = useState(false);
 
-  const { user } = useUser();
-  const isFormFilled = name.trim() && description.trim();
+ const isFormFilled = name.trim() && description.trim();
 
   useEffect(() => {
     if (!isEditing) {
@@ -30,7 +28,6 @@ const CreateWorkspace = ({
     setIsLoading(true);
     try {
       const body = {
-        email: user.email,
         name: name,
         description: description,
       };
@@ -61,7 +58,6 @@ const CreateWorkspace = ({
     try {
       const body = {
         id: selectedItem.id,
-        email: user.email,
         name: name,
         description: description,
       };

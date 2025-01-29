@@ -11,6 +11,8 @@ import kr.co.co_working.memberTeam.repository.MemberTeamRepository;
 import kr.co.co_working.team.dto.TeamRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,8 +39,11 @@ public class MemberService {
      */
     public String createMember(MemberRequestDto.CREATE dto) throws NoSuchElementException, Exception {
         // 1. Member 빌드
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
         Member member = Member.builder()
-            .email(dto.getEmail())
+            .email(email)
             .password(passwordEncoder.encode(dto.getPassword()))
             .name(dto.getName())
             .description(StringUtil.nullStringToEmpty(dto.getDescription()))
@@ -81,11 +86,14 @@ public class MemberService {
     @Transactional
     public void updateMember(MemberRequestDto.UPDATE dto) throws NoSuchElementException, Exception {
         // 1. Member 조회
-        Optional<Member> selectedMember = repository.findById(dto.getEmail());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        Optional<Member> selectedMember = repository.findById(email);
 
         // 2. 부재 시 예외 처리
         if (selectedMember.isEmpty()) {
-            throw new NoSuchElementException("수정하려는 멤버가 존재하지 않습니다. EMAIL : " + dto.getEmail());
+            throw new NoSuchElementException("수정하려는 멤버가 존재하지 않습니다. EMAIL : " + email);
         }
 
         // 3. Member 추출
@@ -97,18 +105,20 @@ public class MemberService {
 
     /**
      * deleteMember : Member 삭제
-     * @param dto
      * @throws NoSuchElementException
      * @throws Exception
      */
     @Transactional
-    public void deleteMember(MemberRequestDto.DELETE dto) throws NoSuchElementException, Exception {
+    public void deleteMember() throws NoSuchElementException, Exception {
         // 1. Member 조회
-        Optional<Member> selectedMember = repository.findById(dto.getEmail());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        Optional<Member> selectedMember = repository.findById(email);
 
         // 2. 부재 시 예외 처리
         if (selectedMember.isEmpty()) {
-            throw new NoSuchElementException("수정하려는 멤버가 존재하지 않습니다. EMAIL : " + dto.getEmail());
+            throw new NoSuchElementException("수정하려는 멤버가 존재하지 않습니다. EMAIL : " + email);
         }
 
         // 3. Member 객체 추출

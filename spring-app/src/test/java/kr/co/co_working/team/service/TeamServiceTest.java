@@ -9,13 +9,20 @@ import kr.co.co_working.team.dto.TeamRequestDto;
 import kr.co.co_working.team.dto.TeamResponseDto;
 import kr.co.co_working.team.repository.TeamRepository;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @SpringBootTest
@@ -34,9 +41,25 @@ class TeamServiceTest {
     @Autowired
     MemberTeamRepository memberTeamRepository;
 
+    @BeforeEach
+    void setUp() {
+        String email = "test@korea.kr";
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+            email, null, Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
+        );
+
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        securityContext.setAuthentication(authentication);
+
+        SecurityContextHolder.setContext(securityContext);
+    }
+
     @Test
     public void createTeam() throws Exception {
         /* given */
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
         MemberRequestDto.CREATE memberDto = getCreateMemberDto();
         memberService.createMember(memberDto);
 
@@ -52,7 +75,7 @@ class TeamServiceTest {
 
         List<MemberTeam> memberTeam = memberTeamRepository.findByTeamId(id);
         Assertions.assertEquals(id, memberTeam.get(0).getTeam().getId());
-        Assertions.assertEquals(memberDto.getEmail(), memberTeam.get(0).getMember().getEmail());
+        Assertions.assertEquals(email, memberTeam.get(0).getMember().getEmail());
     }
 
 
@@ -67,7 +90,6 @@ class TeamServiceTest {
         service.createTeam(createDto);
 
         TeamRequestDto.READ readDto = new TeamRequestDto.READ();
-        readDto.setEmail("test@korea.kr");
 
         /* when */
         List<TeamResponseDto> teams = service.readTeam(readDto);
@@ -91,7 +113,6 @@ class TeamServiceTest {
         TeamRequestDto.UPDATE updateDto = new TeamRequestDto.UPDATE();
         updateDto.setName("팀명 2");
         updateDto.setDescription("팀 소개 수정입니다.");
-        updateDto.setEmail("test@korea.kr");
 
         /* when */
         service.updateTeam(id, updateDto);
@@ -100,7 +121,6 @@ class TeamServiceTest {
         Team team = repository.findById(id).get();
         Assertions.assertEquals("팀명 2", team.getName());
         Assertions.assertEquals("팀 소개 수정입니다.", team.getDescription());
-        Assertions.assertEquals("test@korea.kr", team.getLeader());
     }
 
     @Test
@@ -114,7 +134,6 @@ class TeamServiceTest {
             TeamRequestDto.CREATE createDto = new TeamRequestDto.CREATE();
             createDto.setName("팀명 " + i);
             createDto.setDescription("팀 소개입니다. " + i);
-            createDto.setEmail(memberDto.getEmail());
             idList.add(service.createTeam(createDto));
             createDto = null;
         }
@@ -151,23 +170,21 @@ class TeamServiceTest {
     @Test
     public void removeMemberToTeam() throws Exception {
         /* given */
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
         MemberRequestDto.CREATE memberDto = getCreateMemberDto();
-        String email = memberService.createMember(memberDto);
+        memberService.createMember(memberDto);
 
         TeamRequestDto.CREATE teamDto = getCreateTeamDto(memberDto);
         Long teamId = service.createTeam(teamDto);
 
         /* when */
-        MemberRequestDto.CREATE memberDtoToAdd = getCreateMemberDto();
-        memberDtoToAdd.setEmail("other@korea.kr");
-        String emailToAdd = memberService.createMember(memberDtoToAdd);
-
-        service.addMemberToTeam(teamId, emailToAdd);
-        service.removeMemberFromTeam(emailToAdd, teamId);
+        service.removeMemberFromTeam(email, teamId);
 
         /* then */
-        List<MemberTeam> memberTeam2 = memberTeamRepository.findByTeamId(teamId);
-        Assertions.assertEquals(1, memberTeam2.size());
+        List<MemberTeam> memberTeam = memberTeamRepository.findByTeamId(teamId);
+        Assertions.assertEquals(0, memberTeam.size());
     }
 
     /**
@@ -176,7 +193,6 @@ class TeamServiceTest {
      */
     private static MemberRequestDto.CREATE getCreateMemberDto() {
         MemberRequestDto.CREATE memberDto = new MemberRequestDto.CREATE();
-        memberDto.setEmail("test@korea.kr");
         memberDto.setPassword("1234");
         memberDto.setName("김아무개");
         memberDto.setDescription("test");
@@ -192,7 +208,6 @@ class TeamServiceTest {
         TeamRequestDto.CREATE dto = new TeamRequestDto.CREATE();
         dto.setName("팀명 1");
         dto.setDescription("팀 소개입니다.");
-        dto.setEmail(memberDto.getEmail());
         return dto;
     }
 }

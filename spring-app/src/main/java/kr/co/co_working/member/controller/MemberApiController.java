@@ -71,8 +71,8 @@ public class MemberApiController {
      * @throws Exception
      */
     @DeleteMapping("/api/v1/member")
-    public ResponseDto<?> deleteMember(@RequestBody MemberRequestDto.DELETE dto) throws NoSuchElementException, Exception {
-        service.deleteMember(dto);
+    public ResponseDto<?> deleteMember() throws NoSuchElementException, Exception {
+        service.deleteMember();
         
         return ResponseDto.ofSuccess("멤버 삭제에 성공했습니다.");
     }

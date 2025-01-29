@@ -12,6 +12,8 @@ import kr.co.co_working.team.dto.TeamResponseDto;
 import kr.co.co_working.team.repository.TeamDslRepository;
 import kr.co.co_working.team.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,7 +41,10 @@ public class TeamService {
      */
     public Long createTeam(TeamRequestDto.CREATE dto) throws NoSuchElementException, Exception {
         // 1. Member 조회
-        Optional<Member> selectedMember = memberRepository.findById(dto.getEmail());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        Optional<Member> selectedMember = memberRepository.findById(email);
 
         // 2. 부재 시 예외 처리
         if (selectedMember.isEmpty()) {
@@ -53,7 +58,7 @@ public class TeamService {
         Team team = Team.builder()
             .name(dto.getName())
             .description(dto.getDescription())
-            .leader(dto.getEmail())
+            .leader(email)
             .build();
 
         // 5. Team, MemberTeam 등록
@@ -91,15 +96,9 @@ public class TeamService {
             throw new NoSuchElementException("수정하려는 팀이 존재하지 않습니다. ID : " + id);
         }
 
-        // 3. 리더 추출
-        Optional<Member> member = memberRepository.findById(dto.getEmail());
-        if (member.isEmpty()) {
-            throw new NoSuchElementException("리더로 지정하려는 멤버가 존재하지 않습니다. Email : " + dto.getEmail());
-        }
-
-        // 4. 존재 시 수정 처리
+        // 3. 존재 시 수정 처리
         Team team = selectedTeam.get();
-        team.updateTeam(dto.getName(), dto.getDescription(), dto.getEmail());
+        team.updateTeam(dto.getName(), dto.getDescription());
     }
 
     /**

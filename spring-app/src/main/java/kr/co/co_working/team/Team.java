@@ -43,10 +43,9 @@ public class Team extends CommonTime {
         this.leader = leader;
     }
 
-    public void updateTeam(String name, String description, String leader) {
+    public void updateTeam(String name, String description) {
         this.name = name;
         this.description = description;
-        this.leader = leader;
     }
 
     public void insertProject(Project project) {

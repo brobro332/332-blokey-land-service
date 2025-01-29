@@ -12,7 +12,6 @@ public class TeamRequestDto {
     @Getter
     @Setter
     public static class CREATE {
-        private String email;
         private String name;
         private String description;
     }
@@ -21,24 +20,18 @@ public class TeamRequestDto {
     @Getter
     @Setter
     public static class READ {
-        private String email;
         private Long id;
-
-        public READ(String email) {
-            this.email = email;
-        }
     }
 
     @NoArgsConstructor
     @Getter
     @Setter
     public static class UPDATE {
-        private String email;
         private String name;
         private String description;
 
         @Builder
-        public UPDATE(String name, String description, List<TaskRequestDto.UPDATE> tasks) {
+        public UPDATE(String name, String description) {
             this.name = name;
             this.description = description;
         }
