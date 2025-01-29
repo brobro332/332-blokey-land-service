@@ -7,6 +7,8 @@ import kr.co.co_working.member.Member;
 import kr.co.co_working.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,13 @@ public class AuthenticationService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * isValidMember : 사용자 유효여부 확인
+     * @param dto
+     * @return
+     * @throws NoSuchElementException
+     * @throws Exception
+     */
     public boolean isValidMember(AuthenticationRequestDto.LOGIN dto) throws NoSuchElementException, Exception {
         boolean isValid = false;
 
@@ -34,5 +43,24 @@ public class AuthenticationService {
         }
 
         return isValid;
+    }
+
+    /**
+     * isValidPassword : 비밀번호 일치여부 확인
+     * @param dto
+     * @throws NoSuchElementException
+     * @throws Exception
+     */
+    public void isValidPassword(AuthenticationRequestDto.CHECK dto) throws NoSuchElementException, Exception {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        
+        Optional<Member> optionalMember = memberRepository.findById(email);
+        if (optionalMember.isPresent()) {
+            Member member = optionalMember.get();
+            if (!passwordEncoder.matches(dto.getPassword(), member.getPassword())) {
+                throw new NoSuchElementException("비밀번호가 일치하지 않습니다.");
+            }
+        }
     }
 }

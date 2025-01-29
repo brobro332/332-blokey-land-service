@@ -44,7 +44,7 @@ const CreateWorkspace = ({
       );
 
       if (result.status === 200) {
-        onWorkspaceCreated(body);
+        onWorkspaceCreated();
       }
     } catch (e) {
       console.error(e);
@@ -74,7 +74,7 @@ const CreateWorkspace = ({
       );
 
       if (result.status === 200) {
-        onWorkspaceUpdated(body);
+        onWorkspaceUpdated();
       }
     } catch (e) {
       console.error(e);

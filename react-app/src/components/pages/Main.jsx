@@ -175,7 +175,8 @@ const Main = () => {
         component='main'
         sx={{
           bgcolor: 'background.default',
-          pt: 10
+          pt: 10,
+          width: '100%'
         }}
         >
         {/* 메인 컨텐츠 */}

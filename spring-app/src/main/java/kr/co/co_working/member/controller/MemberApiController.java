@@ -28,14 +28,13 @@ public class MemberApiController {
     }
 
     /**
-     * readMemberByTeam : 특정 Team 소속 MemberList 조회
-     * @param dto
+     * readMemberList : Member 조회
      * @return
      * @throws Exception
      */
-    @GetMapping("/api/v1/team/memberList")
-    public ResponseDto<?> readTeamByMemberList(@ModelAttribute TeamRequestDto.READ dto) throws Exception {
-        return ResponseDto.ofSuccess("멤버 조회에 성공했습니다.", service.readMemberListByTeam(dto));
+    @GetMapping("/api/v1/member")
+    public ResponseDto<?> readMember() throws Exception {
+        return ResponseDto.ofSuccess("멤버 조회에 성공했습니다.", service.readMember());
     }
 
     /**
@@ -47,6 +46,17 @@ public class MemberApiController {
     @GetMapping("/api/v1/memberList")
     public ResponseDto<?> readMemberList(@RequestBody MemberRequestDto.READ dto) throws Exception {
         return ResponseDto.ofSuccess("멤버목록 조회에 성공했습니다.", service.readMemberList(dto));
+    }
+
+    /**
+     * readMemberByTeam : 특정 Team 소속 MemberList 조회
+     * @param dto
+     * @return
+     * @throws Exception
+     */
+    @GetMapping("/api/v1/team/memberList")
+    public ResponseDto<?> readTeamByMemberList(@ModelAttribute TeamRequestDto.READ dto) throws Exception {
+        return ResponseDto.ofSuccess("멤버목록 조회에 성공했습니다.", service.readMemberListByTeam(dto));
     }
 
     /**
@@ -64,8 +74,21 @@ public class MemberApiController {
     }
 
     /**
-     * deleteMember : Member 삭제
+     * updatePassword : Member 비밀번호 수정
      * @param dto
+     * @return
+     * @throws NoSuchElementException
+     * @throws Exception
+     */
+    @PutMapping("/api/v1/member/password")
+    public ResponseDto<?> updatePassword(@RequestBody MemberRequestDto.PASSWORD dto) throws NoSuchElementException, Exception {
+        service.updatePassword(dto);
+
+        return ResponseDto.ofSuccess("멤버 비밀번호 수정에 성공했습니다.");
+    }
+
+    /**
+     * deleteMember : Member 삭제
      * @return
      * @throws NoSuchElementException
      * @throws Exception

@@ -44,4 +44,11 @@ public class MemberRequestDto {
             this.description = description;
         }
     }
+
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    public static class PASSWORD {
+        private String password;
+    }
 }
