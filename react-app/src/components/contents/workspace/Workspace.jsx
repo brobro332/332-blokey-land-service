@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Box, Card, Chip, Typography } from "@mui/material";
+import { Box, Card, Chip, Divider, Typography } from "@mui/material";
 import CreateWorkspace from "./CreateWorkspace";
 import SelectWorkspace from "./SelectWorkspace";
 import TeamMemberTable from "./TeamMemberTable";
 import axios from "axios";
-import { useUser } from "../../hooks/UserProvider";
 import ConfirmDialog from "../../tags/ConfirmDialog";
 
 const Workspace = () => {
@@ -16,12 +15,9 @@ const Workspace = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const { user } = useUser();
-
   const fetchTeams = useCallback(async () => {
     try {
       const response = await axios.get("http://localhost:8080/api/v1/team", {
-        params: { email: user.email },
         withCredentials: true,
       });
       if (response.status === 200) {
@@ -35,7 +31,7 @@ const Workspace = () => {
     } catch (e) {
       console.error(e);
     }
-  }, [user.email]);
+  }, []);
   
   const deleteTeam = async () => {
     try {
@@ -123,6 +119,8 @@ const Workspace = () => {
 
   return (
     <Box sx={{ padding: "20px" }}>
+      <Typography variant="h6" sx={{ marginBottom : '10px' }}>워크스페이스</Typography>
+      <Divider sx={{ marginBottom : '15px' }}/>
       {isCreating || isEditing ? (
         <CreateWorkspace
           onCancel={handleCancel}

@@ -7,6 +7,8 @@ import kr.co.co_working.member.dto.MemberResponseDto;
 import kr.co.co_working.member.dto.QMemberResponseDto;
 import kr.co.co_working.team.dto.TeamRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -31,6 +33,9 @@ public class MemberDslRepositoryImpl implements MemberDslRepository {
      */
     @Override
     public List<MemberResponseDto> readMemberList(MemberRequestDto.READ dto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
         return factory
             .select(
                 new QMemberResponseDto(
@@ -42,7 +47,7 @@ public class MemberDslRepositoryImpl implements MemberDslRepository {
                 )
             )
             .from(member)
-            .where(emailEq(dto.getEmail()))
+            .where(emailEq(email))
             .where(nameContains(dto.getName()))
             .fetch();
     }

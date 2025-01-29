@@ -6,6 +6,8 @@ import kr.co.co_working.team.dto.QTeamResponseDto;
 import kr.co.co_working.team.dto.TeamRequestDto;
 import kr.co.co_working.team.dto.TeamResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -33,6 +35,9 @@ public class TeamDslRepositoryImpl implements TeamDslRepository {
      */
     @Override
     public List<TeamResponseDto> readTeamList(TeamRequestDto.READ dto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
         return factory
             .select(
                 new QTeamResponseDto(
@@ -48,7 +53,7 @@ public class TeamDslRepositoryImpl implements TeamDslRepository {
             .from(team)
             .join(memberTeam).on(team.id.eq(memberTeam.team.id))
             .join(member).on(member.email.eq(memberTeam.member.email))
-            .where(emailEq(dto.getEmail()))
+            .where(emailEq(email))
             .fetch();
     }
 

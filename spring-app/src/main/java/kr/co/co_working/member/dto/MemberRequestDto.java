@@ -9,7 +9,6 @@ public class MemberRequestDto {
     @Getter
     @Setter
     public static class CREATE {
-        private String email;
         private String password;
         private String name;
         private String description;
@@ -19,17 +18,14 @@ public class MemberRequestDto {
     @Getter
     @Setter
     public static class READ {
-        private String email;
         private String name;
         private String teamId;
 
-        public READ(String email, String name) {
-            this.email = email;
+        public READ(String name) {
             this.name = name;
         }
 
-        public READ(String email, String name, String teamId) {
-            this.email = email;
+        public READ(String name, String teamId) {
             this.name = name;
             this.teamId = teamId;
         }
@@ -39,22 +35,13 @@ public class MemberRequestDto {
     @Getter
     @Setter
     public static class UPDATE {
-        private String email;
         private String name;
         private String description;
 
         @Builder
-        public UPDATE(String email, String name, String description) {
-            this.email = email;
+        public UPDATE(String name, String description) {
             this.name = name;
             this.description = description;
         }
-    }
-
-    @NoArgsConstructor
-    @Getter
-    @Setter
-    public static class DELETE {
-        private String email;
     }
 }

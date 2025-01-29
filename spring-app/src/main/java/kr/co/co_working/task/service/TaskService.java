@@ -12,6 +12,8 @@ import kr.co.co_working.task.repository.TaskRepository;
 import kr.co.co_working.task.Task;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,7 +56,10 @@ public class TaskService {
                 .build();
 
         // 4. Member 조회
-        Optional<Member> selectedMember = memberRepository.findById(dto.getEmail());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        Optional<Member> selectedMember = memberRepository.findById(email);
 
         // 5. Member 추출
         Member member = selectedMember.get();
