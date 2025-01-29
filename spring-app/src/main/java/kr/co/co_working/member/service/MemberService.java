@@ -57,14 +57,25 @@ public class MemberService {
     }
 
     /**
-     * readMemberByTeam : 특정 Team 소속 MemberList 조회
-     * @param dto
+     * readMember : Member 조회
      * @return
      * @throws Exception
      */
-    public List<MemberResponseDto> readMemberListByTeam(TeamRequestDto.READ dto) throws Exception {
-        // QueryDSL 동적 쿼리 결과 반환
-        return dslRepository.readMemberListByTeam(dto);
+    public MemberResponseDto readMember() throws Exception {
+        // 1. Member 조회
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        Member member = repository.findById(email).orElseThrow(() -> new Exception("조회하려는 멤버가 존재하지 않습니다. EMAIL :" + email));
+
+        // 2. Member 반환
+        return new MemberResponseDto(
+            member.getEmail(),
+            member.getName(),
+            member.getDescription(),
+            member.getCreatedAt(),
+            member.getModifiedAt()
+        );
     }
 
     /**
@@ -75,6 +86,17 @@ public class MemberService {
      */
     public List<MemberResponseDto> readMemberList(MemberRequestDto.READ dto) throws Exception {
         return dslRepository.readMemberList(dto);
+    }
+
+    /**
+     * readMemberByTeam : 특정 Team 소속 MemberList 조회
+     * @param dto
+     * @return
+     * @throws Exception
+     */
+    public List<MemberResponseDto> readMemberListByTeam(TeamRequestDto.READ dto) throws Exception {
+        // QueryDSL 동적 쿼리 결과 반환
+        return dslRepository.readMemberListByTeam(dto);
     }
 
     /**
@@ -101,6 +123,33 @@ public class MemberService {
 
         // 4. Member 수정
         member.updateMember(dto.getName(), dto.getDescription());
+    }
+
+    /**
+     * updatePassword : Member 비밀번호 수정
+     * @param dto
+     * @throws NoSuchElementException
+     * @throws Exception
+     */
+    @Transactional
+    public void updatePassword(MemberRequestDto.PASSWORD dto) throws NoSuchElementException, Exception {
+        // 1. Member 조회
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        Optional<Member> selectedMember = repository.findById(email);
+
+        // 2. 부재 시 예외 처리
+        if (selectedMember.isEmpty()) {
+            throw new NoSuchElementException("수정하려는 멤버가 존재하지 않습니다. EMAIL : " + email);
+        }
+
+        // 3. Member 추출
+        Member member = selectedMember.get();
+
+        // 4. 비밀번호 수정
+        String encodedPassword = passwordEncoder.encode(dto.getPassword());
+        member.updatePassword(encodedPassword);
     }
 
     /**

@@ -22,6 +22,14 @@ public class AuthenticationApiController {
     private final AuthenticationService service;
     private final JwtProvider provider;
 
+    /**
+     * login : 로그인
+     * @param response
+     * @param dto
+     * @return
+     * @throws NoSuchElementException
+     * @throws Exception
+     */
     @PostMapping("/api/v1/authentication")
     public ResponseDto<?> login(HttpServletResponse response, @RequestBody AuthenticationRequestDto.LOGIN dto) throws NoSuchElementException, Exception {
         // 1. 사용자 확인
@@ -40,5 +48,17 @@ public class AuthenticationApiController {
         }
 
         return ResponseDto.ofSuccess("로그인에 성공했습니다.");
+    }
+
+    /**
+     * checkPassword : 비밀번호 일치여부 확인
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/api/v1/authorization")
+    public ResponseDto<?> checkPassword(@RequestBody AuthenticationRequestDto.CHECK dto) throws NoSuchElementException, Exception {
+        service.isValidPassword(dto);
+
+        return ResponseDto.ofSuccess("비밀번호가 일치합니다.");
     }
 }

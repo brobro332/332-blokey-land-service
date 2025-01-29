@@ -49,4 +49,8 @@ public class Member extends CommonTime {
         this.name = name;
         this.description = description;
     }
+
+    public void updatePassword(String password) {
+        this.password = password;
+    }
 }

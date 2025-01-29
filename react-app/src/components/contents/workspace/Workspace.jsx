@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Card, Chip, Divider, Typography } from "@mui/material";
 import CreateWorkspace from "./CreateWorkspace";
 import SelectWorkspace from "./SelectWorkspace";
@@ -15,7 +15,7 @@ const Workspace = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const fetchTeams = useCallback(async () => {
+  const fetchTeams = async () => {
     try {
       const response = await axios.get("http://localhost:8080/api/v1/team", {
         withCredentials: true,
@@ -31,7 +31,7 @@ const Workspace = () => {
     } catch (e) {
       console.error(e);
     }
-  }, []);
+  };
   
   const deleteTeam = async () => {
     try {
@@ -52,7 +52,7 @@ const Workspace = () => {
 
   useEffect(() => {
     fetchTeams();
-  }, [fetchTeams]);
+  }, []);
 
   useEffect(() => {
     const fetchTeamMembers = async () => {
@@ -99,12 +99,12 @@ const Workspace = () => {
     setIsEditing(false);
   };
 
-  const handleWorkspaceCreated = (newWorkspace) => {
+  const handleWorkspaceCreated = () => {
     setIsCreating(false);
     fetchTeams();
   };
 
-  const handleWorkspaceUpdated = (updatedWorkspace) => {
+  const handleWorkspaceUpdated = () => {
     setIsEditing(false);
     fetchTeams();
   };
