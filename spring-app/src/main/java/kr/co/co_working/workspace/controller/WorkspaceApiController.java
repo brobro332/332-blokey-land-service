@@ -48,7 +48,7 @@ public class WorkspaceApiController {
      * @throws Exception
      */
     @PutMapping("/api/v1/workspace/{workspace_id}")
-    public ResponseDto<?> updateWorkspace(@PathVariable(name = "team_id") Long id,
+    public ResponseDto<?> updateWorkspace(@PathVariable(name = "workspace_id") Long id,
                                      @RequestBody WorkspaceRequestDto.UPDATE dto) throws NoSuchElementException, Exception {
         service.updateWorkspace(id, dto);
 
@@ -63,7 +63,7 @@ public class WorkspaceApiController {
      * @throws Exception
      */
     @DeleteMapping("/api/v1/workspace/{workspace_id}")
-    public ResponseDto<?> deleteWorkspace(@PathVariable(name = "team_id") Long id) throws NoSuchElementException, Exception {
+    public ResponseDto<?> deleteWorkspace(@PathVariable(name = "workspace_id") Long id) throws NoSuchElementException, Exception {
         service.deleteWorkspace(id);
 
         return ResponseDto.ofSuccess("워크스페이스 삭제에 성공했습니다.");
@@ -78,7 +78,7 @@ public class WorkspaceApiController {
      * @throws Exception
      */
     @DeleteMapping("/api/v1/workspace/{workspace_id}/{email}")
-    public ResponseDto<?> addMemberToWorkspace(@PathVariable(name="team_id") Long teamId,
+    public ResponseDto<?> addMemberToWorkspace(@PathVariable(name="workspace_id") Long teamId,
                                             @PathVariable(name="email") String email) throws NoSuchElementException, Exception {
         service.addMemberToWorkspace(teamId, email);
 
@@ -95,7 +95,7 @@ public class WorkspaceApiController {
      */
     @DeleteMapping("/api/v1/workspace/{email}/{workspace_id}")
     public ResponseDto<?> removeMemberFromWorkspace(@PathVariable(name="email") String email,
-                                               @PathVariable(name="team_id") Long teamId) throws NoSuchElementException, Exception {
+                                               @PathVariable(name="workspace_id") Long teamId) throws NoSuchElementException, Exception {
         service.removeMemberFromWorkspace(email, teamId);
 
         return ResponseDto.ofSuccess("멤버 제외에 성공하였습니다.");

@@ -2,30 +2,30 @@ import React, { useEffect, useState } from "react";
 import { Box, Card, Chip, Divider, Typography } from "@mui/material";
 import CreateWorkspace from "./CreateWorkspace";
 import SelectWorkspace from "./SelectWorkspace";
-import TeamMemberTable from "./TeamMemberTable";
+import MemberTable from "./MemberTable";
 import axios from "axios";
 import ConfirmDialog from "../../tags/ConfirmDialog";
 
 const Workspace = () => {
   const [items, setItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
-  const [teamMemberList, setTeamMemberList] = useState([]);
+  const [memberList, setMemberList] = useState([]);
   const [page, setPage] = useState(1);
   const [isCreating, setIsCreating] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const fetchTeams = async () => {
+  const fetchWorkspaceList = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/v1/team", {
+      const response = await axios.get("http://localhost:8080/api/v1/workspace", {
         withCredentials: true,
       });
       if (response.status === 200) {
-        const teamList = response.data.data;
+        const workspaceList = response.data.data;
 
-        if (teamList.length > 0) {
-          setItems(teamList);
-          setSelectedItem(teamList[0]);
+        if (workspaceList.length > 0) {
+          setItems(workspaceList);
+          setSelectedItem(workspaceList[0]);
         }
       }
     } catch (e) {
@@ -33,16 +33,16 @@ const Workspace = () => {
     }
   };
   
-  const deleteTeam = async () => {
+  const deleteWorkspace = async () => {
     try {
       const resultObject = await axios.delete(
-        "http://localhost:8080/api/v1/team/" + selectedItem.id,
+        "http://localhost:8080/api/v1/workspace/" + selectedItem.id,
         {
           withCredentials: true
         }
       );
       if (resultObject.status === 200) {
-        fetchTeams();
+        fetchWorkspaceList();
         setIsDialogOpen(false);
       }
     } catch (e) {
@@ -51,15 +51,15 @@ const Workspace = () => {
   };
 
   useEffect(() => {
-    fetchTeams();
+    fetchWorkspaceList();
   }, []);
 
   useEffect(() => {
-    const fetchTeamMembers = async () => {
+    const fetchMembers = async () => {
       if (selectedItem !== null) {
         try {
           const memberListObject = await axios.get(
-            "http://localhost:8080/api/v1/team/memberList",
+            "http://localhost:8080/api/v1/workspace/memberList",
             {
               params: { id: selectedItem.id },
               withCredentials: true,
@@ -69,7 +69,7 @@ const Workspace = () => {
             const memberList = memberListObject.data.data;
 
             setPage(memberList.length);
-            setTeamMemberList(memberList);
+            setMemberList(memberList);
           }
         } catch (e) {
           console.error(e);
@@ -77,7 +77,7 @@ const Workspace = () => {
       }
     };
 
-    fetchTeamMembers();
+    fetchMembers();
   }, [selectedItem]);
 
   const handleCreateWorkspace = () => {
@@ -101,16 +101,16 @@ const Workspace = () => {
 
   const handleWorkspaceCreated = () => {
     setIsCreating(false);
-    fetchTeams();
+    fetchWorkspaceList();
   };
 
   const handleWorkspaceUpdated = () => {
     setIsEditing(false);
-    fetchTeams();
+    fetchWorkspaceList();
   };
 
   const handleWorkspaceDeleted = () => {
-    deleteTeam();
+    deleteWorkspace();
   };
 
   const handleCancelDelete = () => {
@@ -138,7 +138,7 @@ const Workspace = () => {
             handleDeleteButtonClick={handleDeleteButtonClick}
             selectedItem={selectedItem}
             setSelectedItem={setSelectedItem}
-            teamMemberList={teamMemberList}
+            memberList={memberList}
             page={page}
           />
           {items.length > 0 && (
@@ -156,7 +156,7 @@ const Workspace = () => {
                 title={'워크스페이스 삭제'} 
                 content={'해당 워크스페이스를 정말 삭제하시겠습니까?\n삭제된 워크스페이스는 복구할 수 없습니다.'}
               />
-              <TeamMemberTable teamMemberList={teamMemberList} page={page} />
+              <MemberTable memberList={memberList} page={page} />
             </>
           )}
         </>

@@ -19,6 +19,7 @@ const UpdatePassword = ({
     try {
       if (password !== newPassword) {
         setOpenSnackbar(true);
+        return;
       }
 
       const body = {
