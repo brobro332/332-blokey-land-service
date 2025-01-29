@@ -32,7 +32,15 @@ public class MemberDslRepositoryImpl implements MemberDslRepository {
     @Override
     public List<MemberResponseDto> readMemberList(MemberRequestDto.READ dto) {
         return factory
-            .select(new QMemberResponseDto(member.email, member.name, member.description, member.createdAt, member.modifiedAt))
+            .select(
+                new QMemberResponseDto(
+                    member.email,
+                    member.name,
+                    member.description,
+                    member.createdAt,
+                    member.modifiedAt
+                )
+            )
             .from(member)
             .where(emailEq(dto.getEmail()))
             .where(nameContains(dto.getName()))
@@ -43,14 +51,15 @@ public class MemberDslRepositoryImpl implements MemberDslRepository {
     public List<MemberResponseDto> readMemberListByTeam(TeamRequestDto.READ dto) {
         return factory
             .select(
-                    new QMemberResponseDto(
-                        member.email,
-                        member.name,
-                        member.description,
-                        member.createdAt,
-                        member.modifiedAt
-                    )
+                new QMemberResponseDto(
+                    member.email,
+                    member.name,
+                    member.description,
+                    member.createdAt,
+                    member.modifiedAt,
+                    team.leader
                 )
+            )
             .from(team)
             .join(memberTeam).on(team.id.eq(memberTeam.team.id))
             .join(member).on(member.email.eq(memberTeam.member.email))
