@@ -7,14 +7,14 @@ import kr.co.co_working.workspace.Workspace;
 import lombok.*;
 
 @Entity
-@Table(name = "tbl_member_team")
+@Table(name = "tbl_member_workspace")
 @Getter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberWorkspace extends CommonTime {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "member_team_id")
+    @Column(name = "member_workspace_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -22,7 +22,7 @@ public class MemberWorkspace extends CommonTime {
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "team_id")
+    @JoinColumn(name = "workspace_id")
     private Workspace workspace;
 
     @Builder
@@ -31,7 +31,7 @@ public class MemberWorkspace extends CommonTime {
         this.workspace = workspace;
     }
 
-    public void updateMemberTeam(Member member, Workspace workspace) {
+    public void updateMemberWorkspace(Member member, Workspace workspace) {
         this.member = member;
         this.workspace = workspace;
     }
