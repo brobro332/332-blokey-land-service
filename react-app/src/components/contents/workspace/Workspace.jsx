@@ -26,7 +26,7 @@ const Workspace = () => {
       });
       if (response.status === 200) {
         const teamList = response.data.data;
-  
+
         if (teamList.length > 0) {
           setItems(teamList);
           setSelectedItem(teamList[0]);
@@ -71,6 +71,7 @@ const Workspace = () => {
           );
           if (memberListObject.status === 200) {
             const memberList = memberListObject.data.data;
+
             setPage(memberList.length);
             setTeamMemberList(memberList);
           }
@@ -142,20 +143,24 @@ const Workspace = () => {
             teamMemberList={teamMemberList}
             page={page}
           />
-          <Card variant="outlined" sx={{ padding: 2, marginTop: 2, maxWidth: 600 }}>
-            <Typography variant="body2">
-              <Chip label="설명" color="primary" variant="outlined" />
-              {' '}{selectedItem.description}
-            </Typography>
-          </Card>
-          <ConfirmDialog 
-            open={isDialogOpen}
-            onConfirm={handleWorkspaceDeleted}
-            onClose={handleCancelDelete}
-            title={'워크스페이스 삭제'} 
-            content={'해당 워크스페이스를 정말 삭제하시겠습니까?\n삭제된 워크스페이스는 복구할 수 없습니다.'}
-          />
-          <TeamMemberTable teamMemberList={teamMemberList} page={page} />
+          {items.length > 0 && (
+            <>
+              <Card variant="outlined" sx={{ padding: 2, marginTop: 2, maxWidth: 600 }}>
+                <Typography variant="body2">
+                  <Chip label="설명" color="primary" variant="outlined" />
+                  {' '}{selectedItem?.description}
+                </Typography>
+              </Card>
+              <ConfirmDialog 
+                open={isDialogOpen}
+                onConfirm={handleWorkspaceDeleted}
+                onClose={handleCancelDelete}
+                title={'워크스페이스 삭제'} 
+                content={'해당 워크스페이스를 정말 삭제하시겠습니까?\n삭제된 워크스페이스는 복구할 수 없습니다.'}
+              />
+              <TeamMemberTable teamMemberList={teamMemberList} page={page} />
+            </>
+          )}
         </>
       )}
     </Box>

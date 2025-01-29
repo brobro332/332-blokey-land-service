@@ -3,6 +3,7 @@ import { Container, AppBar, Toolbar, Typography, Box, Drawer, List, ListItem, Li
 import AppsIcon from '@mui/icons-material/Apps';
 import CheckIcon from '@mui/icons-material/Check';
 import Workspace from '../contents/workspace/Workspace';
+import { useNavigate } from 'react-router-dom';
 
 const Main = () => {
   const [selectedMenu, setSelectedMenu] = useState('대시보드');
@@ -14,6 +15,8 @@ const Main = () => {
   useEffect(() => {
     setOpenSnackbar(true);
   }, []);
+
+  const navigate = useNavigate();
 
   const handleMenuClick = (menuName) => {
     setAnchorEl(null);
@@ -107,8 +110,8 @@ const Main = () => {
             }}>
             삼사미 프로젝트 매니저
             </Typography>
-              <IconButton color='inherit' onClick={handleAppsListOpen} sx={{ ml: 'auto' }}>
-            <AppsIcon />
+            <IconButton color='inherit' onClick={handleAppsListOpen} sx={{ ml: 'auto' }}>
+              <AppsIcon />
             </IconButton>
 
             {/* 드롭다운 메뉴 */}
@@ -126,7 +129,7 @@ const Main = () => {
               }}>
               <MenuItem onClick={() => handleMenuClick('프로필')}>프로필</MenuItem>
               <MenuItem onClick={() => handleMenuClick('워크스페이스')}>워크스페이스</MenuItem>
-              <MenuItem onClick={() => handleMenuClick('로그아웃')}>로그아웃</MenuItem>
+              <MenuItem onClick={() => navigate('/')}>로그아웃</MenuItem>
             </Menu>
           </Toolbar>
         </AppBar>

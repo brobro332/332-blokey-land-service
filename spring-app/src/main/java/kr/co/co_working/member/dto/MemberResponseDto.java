@@ -13,9 +13,9 @@ public class MemberResponseDto {
         private String email;
         private String name;
         private String description;
-        private Team team;
         private LocalDateTime createAt;
         private LocalDateTime modifiedAt;
+        private String leader;
 
         @QueryProjection
         public MemberResponseDto(String email, String name, String description, LocalDateTime createAt, LocalDateTime modifiedAt) {
@@ -24,5 +24,15 @@ public class MemberResponseDto {
                 this.description = description;
                 this.createAt = createAt;
                 this.modifiedAt = modifiedAt;
+        }
+
+        @QueryProjection
+        public MemberResponseDto(String email, String name, String description, LocalDateTime createAt, LocalDateTime modifiedAt, String leader) {
+                this.email = email;
+                this.name = name;
+                this.description = description;
+                this.createAt = createAt;
+                this.modifiedAt = modifiedAt;
+                this.leader = leader;
         }
 }
