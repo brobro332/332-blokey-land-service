@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Box, TextField, Button } from "@mui/material";
+import { Box, TextField, Button, Snackbar, Alert } from "@mui/material";
+import CheckIcon from '@mui/icons-material/Check';
 import axios from "axios";
 
 const CheckPassword = ({
@@ -8,7 +9,8 @@ const CheckPassword = ({
 }) => {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
   const isFormFilled = password.trim();
   
   const handleCheck = async () => {
@@ -34,6 +36,7 @@ const CheckPassword = ({
       }
     } catch (e) {
       console.error(e);
+      setOpenSnackbar(true);
     } finally {
       setIsLoading(false);
     }
@@ -65,6 +68,21 @@ const CheckPassword = ({
       <Button variant="contained" onClick={onCancel} color="inherit" fullWidth>
         취소
       </Button>
+      {/* 메시지 알림 */}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        onClose={() => setOpenSnackbar(false)}
+      >
+        <Alert
+          onClose={() => setOpenSnackbar(false)}
+          severity="error"
+          icon={<CheckIcon fontSize="inherit" />}
+        >
+          비밀번호가 일치하지 않습니다. 다시 입력해주세요.
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

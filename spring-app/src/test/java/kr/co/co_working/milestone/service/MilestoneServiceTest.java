@@ -8,8 +8,8 @@ import kr.co.co_working.milestone.dto.MilestoneResponseDto;
 import kr.co.co_working.milestone.repository.MilestoneRepository;
 import kr.co.co_working.project.dto.ProjectRequestDto;
 import kr.co.co_working.project.service.ProjectService;
-import kr.co.co_working.team.dto.TeamRequestDto;
-import kr.co.co_working.team.service.TeamService;
+import kr.co.co_working.workspace.dto.WorkspaceRequestDto;
+import kr.co.co_working.workspace.service.WorkspaceService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,7 +37,7 @@ class MilestoneServiceTest {
     MemberService memberService;
 
     @Autowired
-    TeamService teamService;
+    WorkspaceService workspaceService;
 
     @Autowired
     ProjectService projectService;
@@ -64,10 +64,10 @@ class MilestoneServiceTest {
         MemberRequestDto.CREATE memberDto = getCreateMemberDto();
         memberService.createMember(memberDto);
 
-        TeamRequestDto.CREATE teamDto = getCreateTeamDto(memberDto);
-        Long teamId = teamService.createTeam(teamDto);
+        WorkspaceRequestDto.CREATE workspaceDto = getCreateWorkspaceDto(memberDto);
+        Long workspaceId = workspaceService.createWorkspace(workspaceDto);
 
-        ProjectRequestDto.CREATE projectDto = getCreateProjectDto(teamId);
+        ProjectRequestDto.CREATE projectDto = getCreateProjectDto(workspaceId);
         Long projectId = projectService.createProject(projectDto);
 
         MilestoneRequestDto.CREATE milestoneDto = getCreateMilestoneDto(projectId);
@@ -100,10 +100,10 @@ class MilestoneServiceTest {
         MemberRequestDto.CREATE memberDto = getCreateMemberDto();
         memberService.createMember(memberDto);
 
-        TeamRequestDto.CREATE teamDto = getCreateTeamDto(memberDto);
-        Long teamId = teamService.createTeam(teamDto);
+        WorkspaceRequestDto.CREATE workspaceDto = getCreateWorkspaceDto(memberDto);
+        Long workspaceId = workspaceService.createWorkspace(workspaceDto);
 
-        ProjectRequestDto.CREATE projectDto = getCreateProjectDto(teamId);
+        ProjectRequestDto.CREATE projectDto = getCreateProjectDto(workspaceId);
         Long projectId = projectService.createProject(projectDto);
 
         MilestoneRequestDto.CREATE milestoneDto = getCreateMilestoneDto(projectId);
@@ -144,10 +144,10 @@ class MilestoneServiceTest {
         MemberRequestDto.CREATE memberDto = getCreateMemberDto();
         memberService.createMember(memberDto);
 
-        TeamRequestDto.CREATE teamDto = getCreateTeamDto(memberDto);
-        Long teamId = teamService.createTeam(teamDto);
+        WorkspaceRequestDto.CREATE workspaceDto = getCreateWorkspaceDto(memberDto);
+        Long workspaceId = workspaceService.createWorkspace(workspaceDto);
 
-        ProjectRequestDto.CREATE projectDto = getCreateProjectDto(teamId);
+        ProjectRequestDto.CREATE projectDto = getCreateProjectDto(workspaceId);
         Long projectId = projectService.createProject(projectDto);
 
         MilestoneRequestDto.CREATE milestoneDto = getCreateMilestoneDto(projectId);
@@ -200,27 +200,27 @@ class MilestoneServiceTest {
     }
 
     /**
-     * getCreateTeamDto : Team DTO 생성
+     * getCreateWorkspaceDto : Workspace DTO 생성
      * @param memberDto
      * @return
      */
-    private static TeamRequestDto.CREATE getCreateTeamDto(MemberRequestDto.CREATE memberDto) {
-        TeamRequestDto.CREATE teamDto = new TeamRequestDto.CREATE();
-        teamDto.setName("팀명 1");
-        teamDto.setDescription("팀 소개입니다.");
-        return teamDto;
+    private static WorkspaceRequestDto.CREATE getCreateWorkspaceDto(MemberRequestDto.CREATE memberDto) {
+        WorkspaceRequestDto.CREATE workspaceDto = new WorkspaceRequestDto.CREATE();
+        workspaceDto.setName("팀명 1");
+        workspaceDto.setDescription("팀 소개입니다.");
+        return workspaceDto;
     }
 
     /**
      * getCreateProjectDto : Project DTO 생성
-     * @param teamId
+     * @param workspaceId
      * @return
      */
-    private static ProjectRequestDto.CREATE getCreateProjectDto(Long teamId) {
+    private static ProjectRequestDto.CREATE getCreateProjectDto(Long workspaceId) {
         ProjectRequestDto.CREATE projectDto = new ProjectRequestDto.CREATE();
         projectDto.setName("프로젝트 A");
         projectDto.setDescription("프로젝트 관리 프로그램 만들기");
-        projectDto.setTeamId(teamId);
+        projectDto.setWorkspaceId(workspaceId);
         return projectDto;
     }
 
@@ -253,10 +253,10 @@ class MilestoneServiceTest {
         MemberRequestDto.CREATE memberDto = getCreateMemberDto();
         memberService.createMember(memberDto);
 
-        TeamRequestDto.CREATE teamDto = getCreateTeamDto(memberDto);
-        Long teamId = teamService.createTeam(teamDto);
+        WorkspaceRequestDto.CREATE workspaceDto = getCreateWorkspaceDto(memberDto);
+        Long workspaceId = workspaceService.createWorkspace(workspaceDto);
 
-        ProjectRequestDto.CREATE projectDto = getCreateProjectDto(teamId);
+        ProjectRequestDto.CREATE projectDto = getCreateProjectDto(workspaceId);
         Long projectId = projectService.createProject(projectDto);
 
         MilestoneRequestDto.CREATE milestoneDto = getCreateMilestoneDto(projectId);

@@ -1,14 +1,11 @@
-package kr.co.co_working.team.dto;
+package kr.co.co_working.workspace.dto;
 
-import kr.co.co_working.task.dto.TaskRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
-public class TeamRequestDto {
+public class WorkspaceRequestDto {
     @Getter
     @Setter
     public static class CREATE {

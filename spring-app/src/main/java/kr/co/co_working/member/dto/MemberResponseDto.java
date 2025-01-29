@@ -1,7 +1,6 @@
 package kr.co.co_working.member.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
-import kr.co.co_working.team.Team;
 import lombok.Getter;
 import lombok.Setter;
 

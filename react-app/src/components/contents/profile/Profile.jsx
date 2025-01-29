@@ -4,12 +4,17 @@ import axios from "axios";
 import EditProfile from "./EditProfile";
 import CheckPassword from "./CheckPassword";
 import UpdatePassword from "./UpdatePassword";
+import ConfirmDialog from '../../tags/ConfirmDialog';
+import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
   const [member, setMember] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isChecking, setIsChecking] = useState(false);
   const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const navigate = useNavigate();
 
   const fetchMember = async () => {
     try {
@@ -26,6 +31,22 @@ const Profile = () => {
     } catch (e) {
       console.error(e);
     }
+  };
+
+  const deleteMember = async () => {
+    try {
+      const resultObject = await axios.delete(
+        "http://localhost:8080/api/v1/member",
+        {
+          withCredentials: true
+        }
+      );
+      if (resultObject.status === 200) {
+        navigate('/');
+      }
+    } catch (e) {
+      console.error(e);
+    } 
   };
 
   const handleProfileEdited = () => {
@@ -46,6 +67,14 @@ const Profile = () => {
 
   const handleUpdatePassword = () => {
     setIsUpdatingPassword(false);
+  };
+
+  const handleMemberDeleted = () => {
+    deleteMember();
+  };
+
+  const handleCancelDelete = () => {
+    setIsDialogOpen(false);
   };
 
   const formatDate = (date) => {
@@ -100,11 +129,19 @@ const Profile = () => {
                   </Button>
                   <Button
                     variant="contained"
+                    onClick={()=>{setIsDialogOpen(true);}}
                     color="error"
                     sx={{ marginLeft: "10px" }}
                   >
                     회원 탈퇴
                   </Button>
+                  <ConfirmDialog 
+                    open={isDialogOpen}
+                    onConfirm={handleMemberDeleted}
+                    onClose={handleCancelDelete}
+                    title={'회원 탈퇴'} 
+                    content={'정말 회원 탈퇴하시겠습니까?\n30일 안에 재접속을 통해 복구 가능하며, 이후에 회원정보가 삭제됩니다.'}
+                  />
                   <Card variant="outlined" sx={{ padding: 2, marginTop: 2, width: '50%' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
                       <Box sx={{ flex: 1, marginRight: 2 }}>

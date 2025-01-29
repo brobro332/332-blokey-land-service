@@ -70,9 +70,6 @@ class MemberServiceTest {
     @Test
     public void readMemberList() throws Exception {
         /* given */
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-
         MemberRequestDto.CREATE createDto = getCreateDto();
         service.createMember(createDto);
         MemberRequestDto.READ readDto = new MemberRequestDto.READ("무개");

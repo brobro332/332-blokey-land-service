@@ -1,4 +1,4 @@
-package kr.co.co_working.team.dto;
+package kr.co.co_working.workspace.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class TeamResponseDto {
+public class WorkspaceResponseDto {
         private Long id;
         private String name;
         private String description;
@@ -18,7 +18,7 @@ public class TeamResponseDto {
         private String memberName;
 
         @QueryProjection
-        public TeamResponseDto(Long id, String name, String description, LocalDateTime createAt, LocalDateTime modifiedAt, String email, String memberName) {
+        public WorkspaceResponseDto(Long id, String name, String description, LocalDateTime createAt, LocalDateTime modifiedAt, String email, String memberName) {
                 this.id = id;
                 this.name = name;
                 this.description = description;

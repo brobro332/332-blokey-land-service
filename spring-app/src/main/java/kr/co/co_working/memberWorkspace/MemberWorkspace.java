@@ -1,9 +1,9 @@
-package kr.co.co_working.memberTeam;
+package kr.co.co_working.memberWorkspace;
 
 import jakarta.persistence.*;
 import kr.co.co_working.common.CommonTime;
 import kr.co.co_working.member.Member;
-import kr.co.co_working.team.Team;
+import kr.co.co_working.workspace.Workspace;
 import lombok.*;
 
 @Entity
@@ -11,7 +11,7 @@ import lombok.*;
 @Getter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MemberTeam extends CommonTime {
+public class MemberWorkspace extends CommonTime {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "member_team_id")
@@ -23,16 +23,16 @@ public class MemberTeam extends CommonTime {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
-    private Team team;
+    private Workspace workspace;
 
     @Builder
-    public MemberTeam(Member member, Team team) {
+    public MemberWorkspace(Member member, Workspace workspace) {
         this.member = member;
-        this.team = team;
+        this.workspace = workspace;
     }
 
-    public void updateMemberTeam(Member member, Team team) {
+    public void updateMemberTeam(Member member, Workspace workspace) {
         this.member = member;
-        this.team = team;
+        this.workspace = workspace;
     }
 }

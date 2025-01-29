@@ -180,7 +180,9 @@ const Main = () => {
         }}
         >
         {/* 메인 컨텐츠 */}
-          <Container sx={{ maxWidth: 'lg' }}>
+          <Container maxWidth={false} sx={{ 
+            pl: 2
+          }}>
             {renderContent()}
           </Container>
         </Box>

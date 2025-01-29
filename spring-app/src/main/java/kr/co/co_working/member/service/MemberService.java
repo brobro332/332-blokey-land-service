@@ -6,9 +6,8 @@ import kr.co.co_working.member.dto.MemberRequestDto;
 import kr.co.co_working.member.dto.MemberResponseDto;
 import kr.co.co_working.member.repository.MemberDslRepository;
 import kr.co.co_working.member.repository.MemberRepository;
-import kr.co.co_working.memberTeam.MemberTeam;
-import kr.co.co_working.memberTeam.repository.MemberTeamRepository;
-import kr.co.co_working.team.dto.TeamRequestDto;
+import kr.co.co_working.memberWorkspace.repository.MemberWorkspaceRepository;
+import kr.co.co_working.workspace.dto.WorkspaceRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -27,7 +26,7 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository repository;
     private final MemberDslRepository dslRepository;
-    private final MemberTeamRepository memberTeamRepository;
+    private final MemberWorkspaceRepository memberWorkspaceRepository;
     private final PasswordEncoder passwordEncoder;
 
     /**
@@ -94,9 +93,9 @@ public class MemberService {
      * @return
      * @throws Exception
      */
-    public List<MemberResponseDto> readMemberListByTeam(TeamRequestDto.READ dto) throws Exception {
+    public List<MemberResponseDto> readMemberListByTeam(WorkspaceRequestDto.READ dto) throws Exception {
         // QueryDSL 동적 쿼리 결과 반환
-        return dslRepository.readMemberListByTeam(dto);
+        return dslRepository.readMemberListByWorkspace(dto);
     }
 
     /**
@@ -173,15 +172,7 @@ public class MemberService {
         // 3. Member 객체 추출
         Member member = selectedMember.get();
 
-        // 4. MemberTeam 조회
-        List<MemberTeam> memberTeams = memberTeamRepository.findByMemberEmail(member.getEmail());
-
-        // 5. 조회한 Member 객체에 해당하는 MemberTeam 삭제
-        for (MemberTeam memberTeam : memberTeams) {
-            memberTeamRepository.delete(memberTeam);
-        }
-
-        // 6. Member 삭제
-        repository.delete(member);
+        // 4. Member 삭제
+        member.updateDelFlag("1");
     }
 }
