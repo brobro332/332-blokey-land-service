@@ -38,11 +38,8 @@ public class MemberService {
      */
     public String createMember(MemberRequestDto.CREATE dto) throws NoSuchElementException, Exception {
         // 1. Member 빌드
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-
         Member member = Member.builder()
-            .email(email)
+            .email(dto.getEmail())
             .password(passwordEncoder.encode(dto.getPassword()))
             .name(dto.getName())
             .description(StringUtil.nullStringToEmpty(dto.getDescription()))

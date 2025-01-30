@@ -1,10 +1,6 @@
 import React, { useState } from "react";
-<<<<<<< HEAD
-import { Box, TextField, Button } from "@mui/material";
-=======
 import { Box, TextField, Button, Snackbar, Alert } from "@mui/material";
 import CheckIcon from '@mui/icons-material/Check';
->>>>>>> 95a32e98b5742ff03b2b86db8ebc6fd36b33cd00
 import axios from "axios";
 
 const CheckPassword = ({
@@ -13,12 +9,8 @@ const CheckPassword = ({
 }) => {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-<<<<<<< HEAD
-  
-=======
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
->>>>>>> 95a32e98b5742ff03b2b86db8ebc6fd36b33cd00
   const isFormFilled = password.trim();
   
   const handleCheck = async () => {
@@ -44,10 +36,7 @@ const CheckPassword = ({
       }
     } catch (e) {
       console.error(e);
-<<<<<<< HEAD
-=======
       setOpenSnackbar(true);
->>>>>>> 95a32e98b5742ff03b2b86db8ebc6fd36b33cd00
     } finally {
       setIsLoading(false);
     }
@@ -79,8 +68,6 @@ const CheckPassword = ({
       <Button variant="contained" onClick={onCancel} color="inherit" fullWidth>
         취소
       </Button>
-<<<<<<< HEAD
-=======
       {/* 메시지 알림 */}
       <Snackbar
         open={openSnackbar}
@@ -96,7 +83,6 @@ const CheckPassword = ({
           비밀번호가 일치하지 않습니다. 다시 입력해주세요.
         </Alert>
       </Snackbar>
->>>>>>> 95a32e98b5742ff03b2b86db8ebc6fd36b33cd00
     </Box>
   );
 };

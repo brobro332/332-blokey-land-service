@@ -49,16 +49,13 @@ class MemberServiceTest {
     @Test
     public void createMember() throws Exception {
         /* given */
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-
         MemberRequestDto.CREATE dto = getCreateDto();
 
         /* when */
         service.createMember(dto);
 
         /* then */
-        Optional<Member> selectedMember = repository.findById(email);
+        Optional<Member> selectedMember = repository.findById(dto.getEmail());
         Member member = selectedMember.get();
 
         Assertions.assertEquals("test@korea.kr", member.getEmail());
@@ -139,6 +136,7 @@ class MemberServiceTest {
      */
     private static MemberRequestDto.CREATE getCreateDto() {
         MemberRequestDto.CREATE dto = new MemberRequestDto.CREATE();
+        dto.setEmail("test@korea.kr");
         dto.setPassword("1234");
         dto.setName("김아무개");
         dto.setDescription("test");

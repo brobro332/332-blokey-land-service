@@ -9,6 +9,7 @@ public class MemberRequestDto {
     @Getter
     @Setter
     public static class CREATE {
+        private String email;
         private String password;
         private String name;
         private String description;
