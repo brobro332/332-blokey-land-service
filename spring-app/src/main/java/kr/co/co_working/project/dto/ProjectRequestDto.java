@@ -10,18 +10,18 @@ public class ProjectRequestDto {
     public static class CREATE {
         private String name;
         private String description;
-        private Long teamId;
+        private Long workspaceId;
     }
 
     @Getter
     @Setter
     public static class READ {
         private String name;
-        private Long teamId;
+        private Long workspaceId;
 
-        public READ(String name, Long teamId) {
+        public READ(String name, Long workspaceId) {
             this.name = name;
-            this.teamId = teamId;
+            this.workspaceId = workspaceId;
         }
     }
 
@@ -30,13 +30,13 @@ public class ProjectRequestDto {
     public static class UPDATE {
         private String name;
         private String description;
-        private Long teamId;
+        private Long workspaceId;
 
         @Builder
-        public UPDATE(String name, String description, Long teamId) {
+        public UPDATE(String name, String description, Long workspaceId) {
             this.name = name;
             this.description = description;
-            this.teamId = teamId;
+            this.workspaceId = workspaceId;
         }
     }
 }

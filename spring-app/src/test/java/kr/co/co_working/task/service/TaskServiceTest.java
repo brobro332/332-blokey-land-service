@@ -10,8 +10,8 @@ import kr.co.co_working.task.dto.TaskRequestDto;
 import kr.co.co_working.task.dto.TaskResponseDto;
 import kr.co.co_working.task.repository.TaskRepository;
 import kr.co.co_working.task.Task;
-import kr.co.co_working.team.dto.TeamRequestDto;
-import kr.co.co_working.team.service.TeamService;
+import kr.co.co_working.workspace.dto.WorkspaceRequestDto;
+import kr.co.co_working.workspace.service.WorkspaceService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,7 +44,7 @@ class TaskServiceTest {
     ProjectService projectService;
 
     @Autowired
-    TeamService teamService;
+    WorkspaceService workspaceService;
 
     @Autowired
     MemberService memberService;
@@ -74,8 +74,8 @@ class TaskServiceTest {
         MemberRequestDto.CREATE memberDto = getCreateMemberDto();
         memberService.createMember(memberDto);
 
-        TeamRequestDto.CREATE teamDto = getCreateTeamDto(memberDto);
-        Long teamId = teamService.createTeam(teamDto);
+        WorkspaceRequestDto.CREATE teamDto = getCreateTeamDto(memberDto);
+        Long teamId = workspaceService.createWorkspace(teamDto);
 
         ProjectRequestDto.CREATE projectDto = getCreateProjectDto(teamId);
         Long projectId = projectService.createProject(projectDto);
@@ -111,8 +111,8 @@ class TaskServiceTest {
         MemberRequestDto.CREATE memberDto = getCreateMemberDto();
         memberService.createMember(memberDto);
 
-        TeamRequestDto.CREATE teamDto = getCreateTeamDto(memberDto);
-        Long teamId = teamService.createTeam(teamDto);
+        WorkspaceRequestDto.CREATE teamDto = getCreateTeamDto(memberDto);
+        Long teamId = workspaceService.createWorkspace(teamDto);
 
         ProjectRequestDto.CREATE projectDto = getCreateProjectDto(teamId);
         Long projectId = projectService.createProject(projectDto);
@@ -142,8 +142,8 @@ class TaskServiceTest {
         MemberRequestDto.CREATE memberDto = getCreateMemberDto();
         memberService.createMember(memberDto);
 
-        TeamRequestDto.CREATE teamDto = getCreateTeamDto(memberDto);
-        Long teamId = teamService.createTeam(teamDto);
+        WorkspaceRequestDto.CREATE teamDto = getCreateTeamDto(memberDto);
+        Long teamId = workspaceService.createWorkspace(teamDto);
 
         ProjectRequestDto.CREATE projectDto = getCreateProjectDto(teamId);
         Long projectId = projectService.createProject(projectDto);
@@ -201,8 +201,8 @@ class TaskServiceTest {
         MemberRequestDto.CREATE memberDto = getCreateMemberDto();
         memberService.createMember(memberDto);
 
-        TeamRequestDto.CREATE teamDto = getCreateTeamDto(memberDto);
-        Long teamId = teamService.createTeam(teamDto);
+        WorkspaceRequestDto.CREATE teamDto = getCreateTeamDto(memberDto);
+        Long teamId = workspaceService.createWorkspace(teamDto);
 
         ProjectRequestDto.CREATE projectDto = getCreateProjectDto(teamId);
         Long projectId = projectService.createProject(projectDto);
@@ -256,8 +256,8 @@ class TaskServiceTest {
      * @param memberDto
      * @return
      */
-    private static TeamRequestDto.CREATE getCreateTeamDto(MemberRequestDto.CREATE memberDto) {
-        TeamRequestDto.CREATE teamDto = new TeamRequestDto.CREATE();
+    private static WorkspaceRequestDto.CREATE getCreateTeamDto(MemberRequestDto.CREATE memberDto) {
+        WorkspaceRequestDto.CREATE teamDto = new WorkspaceRequestDto.CREATE();
         teamDto.setName("팀명 1");
         teamDto.setDescription("팀 소개입니다.");
         return teamDto;
@@ -289,7 +289,7 @@ class TaskServiceTest {
         ProjectRequestDto.CREATE projectDto = new ProjectRequestDto.CREATE();
         projectDto.setName("프로젝트 A");
         projectDto.setDescription("프로젝트 관리 프로그램 만들기");
-        projectDto.setTeamId(teamId);
+        projectDto.setWorkspaceId(teamId);
         return projectDto;
     }
 }

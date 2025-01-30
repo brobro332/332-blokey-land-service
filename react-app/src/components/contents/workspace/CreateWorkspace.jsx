@@ -33,7 +33,11 @@ const CreateWorkspace = ({
       };
 
       const result = await axios.post(
+<<<<<<< HEAD
         "http://localhost:8080/api/v1/team",
+=======
+        "http://localhost:8080/api/v1/workspace",
+>>>>>>> 95a32e98b5742ff03b2b86db8ebc6fd36b33cd00
         body,
         {
           headers: {
@@ -63,7 +67,11 @@ const CreateWorkspace = ({
       };
 
       const result = await axios.put(
+<<<<<<< HEAD
         "http://localhost:8080/api/v1/team/" + selectedItem.id,
+=======
+        "http://localhost:8080/api/v1/workspace/" + selectedItem.id,
+>>>>>>> 95a32e98b5742ff03b2b86db8ebc6fd36b33cd00
         body,
         {
           headers: {

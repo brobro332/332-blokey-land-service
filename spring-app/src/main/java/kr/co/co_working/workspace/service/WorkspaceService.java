@@ -1,16 +1,13 @@
-package kr.co.co_working.team.service;
+package kr.co.co_working.workspace.service;
 
 import kr.co.co_working.member.Member;
-import kr.co.co_working.member.dto.MemberRequestDto;
-import kr.co.co_working.member.dto.MemberResponseDto;
 import kr.co.co_working.member.repository.MemberRepository;
-import kr.co.co_working.member.service.MemberService;
-import kr.co.co_working.memberTeam.service.MemberTeamService;
-import kr.co.co_working.team.Team;
-import kr.co.co_working.team.dto.TeamRequestDto;
-import kr.co.co_working.team.dto.TeamResponseDto;
-import kr.co.co_working.team.repository.TeamDslRepository;
-import kr.co.co_working.team.repository.TeamRepository;
+import kr.co.co_working.memberWorkspace.service.MemberWorkspaceService;
+import kr.co.co_working.workspace.Workspace;
+import kr.co.co_working.workspace.dto.WorkspaceRequestDto;
+import kr.co.co_working.workspace.dto.WorkspaceResponseDto;
+import kr.co.co_working.workspace.repository.WorkspaceDslRepository;
+import kr.co.co_working.workspace.repository.WorkspaceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,23 +20,20 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class TeamService {
-    private final MemberTeamService memberTeamService;
-
-    private final TeamRepository repository;
-
+public class WorkspaceService {
+    private final MemberWorkspaceService memberWorkspaceService;
+    private final WorkspaceRepository repository;
     private final MemberRepository memberRepository;
-
-    private final TeamDslRepository dslRepository;
+    private final WorkspaceDslRepository dslRepository;
 
     /**
-     * createTeam : Team 등록
+     * createWorkspace : Workspace 등록
      * @param dto
      * @return
      * @throws NoSuchElementException
      * @throws Exception
      */
-    public Long createTeam(TeamRequestDto.CREATE dto) throws NoSuchElementException, Exception {
+    public Long createWorkspace(WorkspaceRequestDto.CREATE dto) throws NoSuchElementException, Exception {
         // 1. Member 조회
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
@@ -55,82 +49,82 @@ public class TeamService {
         Member member = selectedMember.get();
 
         // 4. Team 빌드
-        Team team = Team.builder()
+        Workspace workspace = Workspace.builder()
             .name(dto.getName())
             .description(dto.getDescription())
             .leader(email)
             .build();
 
         // 5. Team, MemberTeam 등록
-        repository.save(team);
-        memberTeamService.createMemberTeam(member, team);
+        repository.save(workspace);
+        memberWorkspaceService.createMemberWorkspace(member, workspace);
 
         // 6. ID 반환
-        return team.getId();
+        return workspace.getId();
     }
 
     /**
-     * readTeam : Team 조회
+     * readWorkspace : Workspace 조회
      * @param dto
      * @return
      * @throws Exception
      */
-    public List<TeamResponseDto> readTeam(TeamRequestDto.READ dto) throws Exception {
+    public List<WorkspaceResponseDto> readWorkspace(WorkspaceRequestDto.READ dto) throws Exception {
         // QueryDSL 동적 쿼리 결과 반환
-        return dslRepository.readTeamList(dto);
+        return dslRepository.readWorkspaceList(dto);
     }
 
     /**
-     * updateTeam : Team 수정
+     * updateWorkspace : Workspace 수정
      * @param dto
      * @return
      * @throws Exception
      */
     @Transactional
-    public void updateTeam(Long id, TeamRequestDto.UPDATE dto) throws NoSuchElementException, Exception {
+    public void updateWorkspace(Long id, WorkspaceRequestDto.UPDATE dto) throws NoSuchElementException, Exception {
         // 1. Team 조회
-        Optional<Team> selectedTeam = repository.findById(id);
+        Optional<Workspace> selectedWorkspace = repository.findById(id);
 
         // 2. 부재 시 예외 처리
-        if (selectedTeam.isEmpty()) {
+        if (selectedWorkspace.isEmpty()) {
             throw new NoSuchElementException("수정하려는 팀이 존재하지 않습니다. ID : " + id);
         }
 
         // 3. 존재 시 수정 처리
-        Team team = selectedTeam.get();
-        team.updateTeam(dto.getName(), dto.getDescription());
+        Workspace workspace = selectedWorkspace.get();
+        workspace.updateWorkspace(dto.getName(), dto.getDescription());
     }
 
     /**
-     * deleteTeam : Team 삭제
+     * deleteWorkspace : Workspace 삭제
      * @param id
      * @throws Exception
      */
     @Transactional
-    public void deleteTeam(Long id) throws NoSuchElementException, Exception {
+    public void deleteWorkspace(Long id) throws NoSuchElementException, Exception {
         // 1. Team 조회
-        Optional<Team> selectedTeam = repository.findById(id);
+        Optional<Workspace> selectedWorkspace = repository.findById(id);
 
         // 2. 부재 시 예외 처리
-        if (selectedTeam.isEmpty()) {
+        if (selectedWorkspace.isEmpty()) {
             throw new NoSuchElementException("삭제하려는 팀이 존재하지 않습니다. ID : " + id);
         }
 
         // 3. Team 추출
-        Team team = selectedTeam.get();
+        Workspace workspace = selectedWorkspace.get();
 
         // 4. 존재 시 삭제 처리
-        memberTeamService.deleteMemberTeamByTeamId(team);
-        repository.delete(team);
+        memberWorkspaceService.deleteMemberWorkspaceByWorkspaceId(workspace);
+        repository.delete(workspace);
     }
 
     @Transactional
-    public void addMemberToTeam(Long teamId, String email) throws NoSuchElementException, Exception {
-        // 1. Team 조회
-        Optional<Team> selectedTeam = repository.findById(teamId);
+    public void addMemberToWorkspace(Long teamId, String email) throws NoSuchElementException, Exception {
+        // 1. Workspace 조회
+        Optional<Workspace> selectedWorkspace = repository.findById(teamId);
 
         // 2. 부재 시 예외 처리
-        if (selectedTeam.isEmpty()) {
+        if (selectedWorkspace.isEmpty()) {
             throw new NoSuchElementException("해당 팀이 존재하지 않습니다. ID : " + teamId);
         }
 
@@ -144,19 +138,19 @@ public class TeamService {
 
         // 5. 객체 추출
         Member member = selectedMember.get();
-        Team team = selectedTeam.get();
+        Workspace workspace = selectedWorkspace.get();
 
-        // 6. MemberTeam 등록
-        memberTeamService.createMemberTeam(member, team);
+        // 6. MemberWorkspace 등록
+        memberWorkspaceService.createMemberWorkspace(member, workspace);
     }
 
     @Transactional
-    public void removeMemberFromTeam(String email, Long teamId) throws NoSuchElementException, Exception {
+    public void removeMemberFromWorkspace(String email, Long teamId) throws NoSuchElementException, Exception {
         // 1. Team 조회
-        Optional<Team> selectedTeam = repository.findById(teamId);
+        Optional<Workspace> selectedWorkspace = repository.findById(teamId);
 
         // 2. 부재 시 예외 처리
-        if (selectedTeam.isEmpty()) {
+        if (selectedWorkspace.isEmpty()) {
             throw new NoSuchElementException("해당 팀이 존재하지 않습니다. ID : " + teamId);
         }
 
@@ -170,9 +164,9 @@ public class TeamService {
 
         // 5. 객체 추출
         Member member = selectedMember.get();
-        Team team = selectedTeam.get();
+        Workspace workspace = selectedWorkspace.get();
 
         // 7. MemberTeam 삭제
-        memberTeamService.deleteMemberTeam(member, team);
+        memberWorkspaceService.deleteMemberWorkspace(member, workspace);
     }
 }

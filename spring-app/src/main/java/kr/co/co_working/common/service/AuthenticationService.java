@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
@@ -29,6 +30,7 @@ public class AuthenticationService {
      * @throws NoSuchElementException
      * @throws Exception
      */
+    @Transactional
     public boolean isValidMember(AuthenticationRequestDto.LOGIN dto) throws NoSuchElementException, Exception {
         boolean isValid = false;
 
@@ -37,6 +39,7 @@ public class AuthenticationService {
             Member member = optionalMember.get();
             if (passwordEncoder.matches(dto.getPassword(), member.getPassword())) {
                 isValid = true;
+                member.updateDelFlag("0");
             }
         } else {
             throw new NoSuchElementException("해당 멤버가 존재하지 않습니다.");

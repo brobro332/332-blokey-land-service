@@ -21,7 +21,7 @@ public class ProjectDslRepositoryImpl implements ProjectDslRepository {
      * SELECT project_id, project_name, project_description, project_createdAt, project_modifiedAt
      * FROM tbl_project
      * WHERE project_name LIKE ?
-     * AND team_id = ?;
+     * AND workspace_id = ?;
      *
      * @param dto
      * @return
@@ -32,7 +32,7 @@ public class ProjectDslRepositoryImpl implements ProjectDslRepository {
                 .select(new QProjectResponseDto(project.id, project.name, project.description, project.createdAt, project.modifiedAt))
                 .from(project)
                 .where(nameContains(dto.getName()))
-                .where(teamIdEq(dto.getTeamId()))
+                .where(workspaceIdEq(dto.getWorkspaceId()))
                 .fetch();
     }
 
@@ -40,7 +40,7 @@ public class ProjectDslRepositoryImpl implements ProjectDslRepository {
         return nameCond != null ? project.name.contains(nameCond) : null;
     }
 
-    private BooleanExpression teamIdEq(Long teamIdCond) {
-        return teamIdCond != null ? project.team.id.eq(teamIdCond) : null;
+    private BooleanExpression workspaceIdEq(Long workspaceIdCond) {
+        return workspaceIdCond != null ? project.workspace.id.eq(workspaceIdCond) : null;
     }
 }

@@ -3,8 +3,7 @@ package kr.co.co_working.member;
 import jakarta.persistence.*;
 import kr.co.co_working.common.CommonTime;
 import kr.co.co_working.memberTask.MemberTask;
-import kr.co.co_working.memberTeam.MemberTeam;
-import kr.co.co_working.task.Task;
+import kr.co.co_working.memberWorkspace.MemberWorkspace;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -29,9 +28,19 @@ public class Member extends CommonTime {
     @Column(name = "member_description", length = 200)
     private String description;
 
+    @Column(name = "member_del_flag", nullable = false, length = 1)
+    private String delFlag;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.delFlag == null) {
+            this.delFlag = "0";
+        }
+    }
+
     @ToString.Exclude
     @OneToMany(mappedBy = "member")
-    private List<MemberTeam> memberTeams = new ArrayList<>();
+    private List<MemberWorkspace> memberWorkspaces = new ArrayList<>();
 
     @ToString.Exclude
     @OneToMany(mappedBy = "member")
@@ -53,4 +62,6 @@ public class Member extends CommonTime {
     public void updatePassword(String password) {
         this.password = password;
     }
+
+    public void updateDelFlag(String delFlag) { this.delFlag = delFlag; }
 }
