@@ -3,6 +3,7 @@ import { Box, Card, Chip, Divider, Typography } from "@mui/material";
 import CreateWorkspace from "./CreateWorkspace";
 import SelectWorkspace from "./SelectWorkspace";
 import MemberTable from "./MemberTable";
+import AddMember from "./AddMember";
 import axios from "axios";
 import ConfirmDialog from "../../tags/ConfirmDialog";
 
@@ -13,6 +14,7 @@ const Workspace = () => {
   const [page, setPage] = useState(1);
   const [isCreating, setIsCreating] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const fetchWorkspaceList = async () => {
@@ -90,6 +92,10 @@ const Workspace = () => {
     setIsCreating(false);
   };
 
+  const handleAddMember = () => {
+    setIsAdding(true);
+  };
+
   const handleDeleteButtonClick = () => {
     setIsDialogOpen(true);
   };
@@ -131,32 +137,39 @@ const Workspace = () => {
         />
       ) : (
         <>
-          <SelectWorkspace
-            items={items}
-            onCreateWorkspace={handleCreateWorkspace}
-            onEditWorkspace={handleEditWorkspace}
-            handleDeleteButtonClick={handleDeleteButtonClick}
-            selectedItem={selectedItem}
-            setSelectedItem={setSelectedItem}
-            memberList={memberList}
-            page={page}
-          />
-          {items.length > 0 && (
+          {isAdding ? (
+            <AddMember />
+          ) : (
             <>
-              <Card variant="outlined" sx={{ padding: 2, marginTop: 2, maxWidth: 600 }}>
-                <Typography variant="body2">
-                  <Chip label="설명" color="primary" variant="outlined" />
-                  {' '}{selectedItem?.description}
-                </Typography>
-              </Card>
-              <ConfirmDialog 
-                open={isDialogOpen}
-                onConfirm={handleWorkspaceDeleted}
-                onClose={handleCancelDelete}
-                title={'워크스페이스 삭제'} 
-                content={'해당 워크스페이스를 정말 삭제하시겠습니까?\n삭제된 워크스페이스는 복구할 수 없습니다.'}
+              <SelectWorkspace
+                items={items}
+                onCreateWorkspace={handleCreateWorkspace}
+                onEditWorkspace={handleEditWorkspace}
+                onAddMember={handleAddMember}
+                handleDeleteButtonClick={handleDeleteButtonClick}
+                selectedItem={selectedItem}
+                setSelectedItem={setSelectedItem}
+                memberList={memberList}
+                page={page}
               />
-              <MemberTable memberList={memberList} page={page} />
+              {items.length > 0 && (
+                <>
+                  <Card variant="outlined" sx={{ padding: 2, marginTop: 2, maxWidth: 600 }}>
+                    <Typography variant="body2">
+                      <Chip label="설명" color="primary" variant="outlined" />
+                      {' '}{selectedItem?.description}
+                    </Typography>
+                  </Card>
+                  <ConfirmDialog 
+                    open={isDialogOpen}
+                    onConfirm={handleWorkspaceDeleted}
+                    onClose={handleCancelDelete}
+                    title={'워크스페이스 삭제'} 
+                    content={'해당 워크스페이스를 정말 삭제하시겠습니까?\n삭제된 워크스페이스는 복구할 수 없습니다.'}
+                  />
+                  <MemberTable memberList={memberList} page={page} />
+                </>
+              )}   
             </>
           )}
         </>

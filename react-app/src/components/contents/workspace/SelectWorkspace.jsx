@@ -13,6 +13,7 @@ const SelectWorkspace = ({
   items,
   onCreateWorkspace,
   onEditWorkspace,
+  onAddMember,
   handleDeleteButtonClick,
   selectedItem,
   setSelectedItem
@@ -51,7 +52,12 @@ const SelectWorkspace = ({
         >
           워크스페이스 편집
         </Button>
-        <Button variant="contained" color="primary" sx={{ marginLeft: "10px" }}>
+        <Button 
+          variant="contained" 
+          onClick={onAddMember}
+          color="primary" 
+          sx={{ marginLeft: "10px" }}
+        >
           멤버 추가
         </Button>
         <Button
