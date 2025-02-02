@@ -23,7 +23,7 @@ public class InvitationRequestDto {
         private String name;
         private LocalDateTime createdAtFrom;
         private LocalDateTime createdAtTo;
-        private Long teamId;
+        private Long workspaceId;
     }
 
     @Getter

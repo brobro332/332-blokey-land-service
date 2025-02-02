@@ -6,10 +6,7 @@ import kr.co.co_working.invitation.dto.InvitationResponseDto;
 import kr.co.co_working.invitation.service.InvitationService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.NoSuchElementException;
 
@@ -39,7 +36,7 @@ public class InvitationApiController {
      * @throws Exception
      */
     @GetMapping("/api/v1/invitation")
-    public ResponseDto<?> readInvitation(InvitationRequestDto.READ dto) throws NoSuchElementException, Exception {
+    public ResponseDto<?> readInvitation(@ModelAttribute InvitationRequestDto.READ dto) throws NoSuchElementException, Exception {
         return ResponseDto.ofSuccess("워크스페이스 가입요청 조회에 성공했습니다.", service.readInvitation(dto));
     }
 

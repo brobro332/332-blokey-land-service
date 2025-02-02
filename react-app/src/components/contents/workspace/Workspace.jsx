@@ -138,7 +138,9 @@ const Workspace = () => {
       ) : (
         <>
           {isAdding ? (
-            <AddMember />
+            <AddMember
+              onAddMember={selectedItem.id} 
+            />
           ) : (
             <>
               <SelectWorkspace
