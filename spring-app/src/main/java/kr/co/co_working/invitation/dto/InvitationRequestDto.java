@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 public class InvitationRequestDto {
     @Getter
     @Setter
@@ -11,6 +13,17 @@ public class InvitationRequestDto {
         private Long workspaceId;
         private String memberId;
         private String requesterType;
+    }
+
+    @Getter
+    @Setter
+    public static class READ {
+        private String division;
+        private String email;
+        private String name;
+        private LocalDateTime createdAtFrom;
+        private LocalDateTime createdAtTo;
+        private Long teamId;
     }
 
     @Getter

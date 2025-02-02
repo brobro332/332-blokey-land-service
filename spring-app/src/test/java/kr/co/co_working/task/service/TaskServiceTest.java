@@ -245,6 +245,7 @@ class TaskServiceTest {
      */
     private MemberRequestDto.CREATE getCreateMemberDto() throws Exception {
         MemberRequestDto.CREATE memberDto = new MemberRequestDto.CREATE();
+        memberDto.setEmail("test@korea.kr");
         memberDto.setPassword("1234");
         memberDto.setName("김아무개");
         memberDto.setDescription("test");

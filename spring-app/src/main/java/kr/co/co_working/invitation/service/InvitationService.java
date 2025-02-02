@@ -3,6 +3,8 @@ package kr.co.co_working.invitation.service;
 import kr.co.co_working.invitation.Invitation;
 import kr.co.co_working.invitation.RequesterType;
 import kr.co.co_working.invitation.dto.InvitationRequestDto;
+import kr.co.co_working.invitation.dto.InvitationResponseDto;
+import kr.co.co_working.invitation.repository.InvitationDslRepository;
 import kr.co.co_working.invitation.repository.InvitationRepository;
 import kr.co.co_working.member.Member;
 import kr.co.co_working.member.repository.MemberRepository;
@@ -11,12 +13,14 @@ import kr.co.co_working.workspace.repository.WorkspaceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
 public class InvitationService {
     private final InvitationRepository repository;
+    private final InvitationDslRepository dslRepository;
     private final WorkspaceRepository workspaceRepository;
     private final MemberRepository memberRepository;
 
@@ -46,6 +50,17 @@ public class InvitationService {
 
         // 4. 가입요청 등록
         return repository.save(invitation).getId();
+    }
+
+    /**
+     * readInvitation : 워크스페이스 가입요청 조회
+     * @param dto
+     * @return
+     * @throws NoSuchElementException
+     * @throws Exception
+     */
+    public List<InvitationResponseDto> readInvitation(InvitationRequestDto.READ dto) throws NoSuchElementException, Exception {
+        return dslRepository.readInvitationList(dto);
     }
 
     /**
