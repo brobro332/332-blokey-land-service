@@ -50,6 +50,7 @@ public class InvitationDslRepositoryImpl implements InvitationDslRepository {
                     .and(nameContains(dto.getName()))
                     .and(WorkspaceIdEq(dto.getTeamId()))
                     .and(member.delFlag.eq("0"))
+                    .and(invitation.requesterType.stringValue().eq(dto.getDivision()))
             )
             .fetch();
     }
