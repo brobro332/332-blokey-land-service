@@ -26,9 +26,6 @@ public class InvitationDslRepositoryImpl implements InvitationDslRepository {
 
     @Override
     public List<InvitationResponseDto> readInvitationList(InvitationRequestDto.READ dto) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-
         return factory
             .select(
                 new QInvitationResponseDto(
@@ -47,10 +44,11 @@ public class InvitationDslRepositoryImpl implements InvitationDslRepository {
             .join(memberWorkspace).on(invitation.member.email.eq(memberWorkspace.member.email))
             .join(member).on(memberWorkspace.member.email.eq(memberWorkspace.member.email))
             .where(
-                emailEq(email)
+                emailEq(dto.getEmail())
                     .and(nameContains(dto.getName()))
-                    .and(WorkspaceIdEq(dto.getTeamId()))
+                    .and(WorkspaceIdEq(dto.getWorkspaceId()))
                     .and(member.delFlag.eq("0"))
+                    .and(invitation.requesterType.stringValue().eq(dto.getDivision()))
             )
             .fetch();
     }
@@ -60,7 +58,7 @@ public class InvitationDslRepositoryImpl implements InvitationDslRepository {
     }
 
     private BooleanExpression WorkspaceIdEq(Long idCond) {
-        return idCond != null ? workspace.id.eq(idCond) : null;
+        return idCond != null ? memberWorkspace.workspace.id.eq(idCond) : null;
     }
 
     private BooleanExpression nameContains(String nameCond) {
