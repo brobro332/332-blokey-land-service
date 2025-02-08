@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface MemberDslRepository {
     List<MemberResponseDto> readMembers(MemberRequestDto.READ dto);
-    List<MemberResponseDto> readMembersInWorkspace(WorkspaceRequestDto.READ dto);
-    List<MemberResponseDto> readMembersNotInWorkspace(WorkspaceRequestDto.READ dto);
+    List<MemberResponseDto> readMemberListInWorkspace(WorkspaceRequestDto.READ dto);
+    List<MemberResponseDto> readMemberListNotInWorkspace(WorkspaceRequestDto.READ dto);
 }

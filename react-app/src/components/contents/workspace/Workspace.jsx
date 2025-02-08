@@ -61,7 +61,7 @@ const Workspace = () => {
       if (selectedItem !== null) {
         try {
           const memberListObject = await axios.get(
-            "http://localhost:8080/api/v1/workspace/memberList",
+            "http://localhost:8080/api/v1/workspace/members-in-workspace",
             {
               params: { id: selectedItem.id },
               withCredentials: true,
@@ -95,6 +95,10 @@ const Workspace = () => {
   const handleAddMember = () => {
     setIsAdding(true);
   };
+
+  const handleCancelAdd = () => {
+    setIsAdding(false);
+  }
 
   const handleDeleteButtonClick = () => {
     setIsDialogOpen(true);
@@ -139,7 +143,8 @@ const Workspace = () => {
         <>
           {isAdding ? (
             <AddMember
-              onAddMember={selectedItem.id} 
+              onCancel={handleCancelAdd}
+              selectedItem={selectedItem.id} 
             />
           ) : (
             <>

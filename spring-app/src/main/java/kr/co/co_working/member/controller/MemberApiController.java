@@ -28,7 +28,7 @@ public class MemberApiController {
     }
 
     /**
-     * readMemberList : Member 조회
+     * readMember : Member 조회
      * @return
      * @throws Exception
      */
@@ -38,36 +38,36 @@ public class MemberApiController {
     }
 
     /**
-     * readMembers : Members 조회
+     * readMemberList : MemberList 조회
      * @param dto
      * @return
      * @throws Exception
      */
-    @GetMapping("/api/v1/members")
-    public ResponseDto<?> readMembers(@RequestBody MemberRequestDto.READ dto) throws Exception {
-        return ResponseDto.ofSuccess("멤버목록 조회에 성공했습니다.", service.readMembers(dto));
+    @GetMapping("/api/v1/MemberList")
+    public ResponseDto<?> readMemberList(@RequestBody MemberRequestDto.READ dto) throws Exception {
+        return ResponseDto.ofSuccess("멤버목록 조회에 성공했습니다.", service.readMemberList(dto));
     }
 
     /**
-     * readMembersInWorkspace : 특정 Workspace 소속 Members 조회
+     * readMemberListInWorkspace : 특정 Workspace 소속 MemberList 조회
      * @param dto
      * @return
      * @throws Exception
      */
-    @GetMapping("/api/v1/workspace/members-in-workspace")
-    public ResponseDto<?> readMembersInWorkspace(@ModelAttribute WorkspaceRequestDto.READ dto) throws Exception {
-        return ResponseDto.ofSuccess("멤버목록 조회에 성공했습니다.", service.readMembersInWorkspace(dto));
+    @GetMapping("/api/v1/workspace/MemberList-in-workspace")
+    public ResponseDto<?> readMemberListInWorkspace(@ModelAttribute WorkspaceRequestDto.READ dto) throws Exception {
+        return ResponseDto.ofSuccess("멤버목록 조회에 성공했습니다.", service.readMemberListInWorkspace(dto));
     }
 
     /**
-     * readMembersNotInWorkspace : 특정 Workspace 미가입 Members 조회
+     * readMemberListNotInWorkspace : 특정 Workspace 미가입 MemberList 조회
      * @param dto
      * @return
      * @throws Exception
      */
-    @GetMapping("/api/v1/workspace/members-not-in-workspace")
-    public ResponseDto<?> readMembersNotInWorkspace(@ModelAttribute WorkspaceRequestDto.READ dto) throws Exception {
-        return ResponseDto.ofSuccess("멤버목록 조회에 성공했습니다.", service.readMembersNotInWorkspace(dto));
+    @GetMapping("/api/v1/workspace/MemberList-not-in-workspace")
+    public ResponseDto<?> readMemberListNotInWorkspace(@ModelAttribute WorkspaceRequestDto.READ dto) throws Exception {
+        return ResponseDto.ofSuccess("멤버목록 조회에 성공했습니다.", service.readMemberListNotInWorkspace(dto));
     }
 
     /**

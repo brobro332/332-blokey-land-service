@@ -55,7 +55,7 @@ public class MemberDslRepositoryImpl implements MemberDslRepository {
     }
 
     @Override
-    public List<MemberResponseDto> readMembersInWorkspace(WorkspaceRequestDto.READ dto) {
+    public List<MemberResponseDto> readMemberListInWorkspace(WorkspaceRequestDto.READ dto) {
         return factory
             .select(
                 new QMemberResponseDto(
@@ -75,7 +75,7 @@ public class MemberDslRepositoryImpl implements MemberDslRepository {
     }
 
     @Override
-    public List<MemberResponseDto> readMembersNotInWorkspace(WorkspaceRequestDto.READ dto) {
+    public List<MemberResponseDto> readMemberListNotInWorkspace(WorkspaceRequestDto.READ dto) {
         return factory
             .select(
                 new QMemberResponseDto(

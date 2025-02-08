@@ -75,23 +75,23 @@ public class MemberService {
     }
 
     /**
-     * readMembers : Members 조회
+     * readMemberList : MemberList 조회
      * @param dto
      * @return
      * @throws Exception
      */
-    public List<MemberResponseDto> readMembers(MemberRequestDto.READ dto) throws Exception {
+    public List<MemberResponseDto> readMemberList(MemberRequestDto.READ dto) throws Exception {
         return dslRepository.readMembers(dto);
     }
 
     /**
-     * readMembersInWorkspace : 특정 Workspace 소속 Members 조회
+     * readMemberListInWorkspace : 특정 Workspace 소속 MemberList 조회
      * @param dto
      * @return
      * @throws Exception
      */
-    public List<MemberResponseDto> readMembersInWorkspace(WorkspaceRequestDto.READ dto) throws Exception {
-        return dslRepository.readMembersInWorkspace(dto);
+    public List<MemberResponseDto> readMemberListInWorkspace(WorkspaceRequestDto.READ dto) throws Exception {
+        return dslRepository.readMemberListInWorkspace(dto);
     }
 
     /**
@@ -100,8 +100,8 @@ public class MemberService {
      * @return
      * @throws Exception
      */
-    public List<MemberResponseDto> readMembersNotInWorkspace(WorkspaceRequestDto.READ dto) throws Exception {
-        return dslRepository.readMembersNotInWorkspace(dto);
+    public List<MemberResponseDto> readMemberListNotInWorkspace(WorkspaceRequestDto.READ dto) throws Exception {
+        return dslRepository.readMemberListNotInWorkspace(dto);
     }
 
     /**
