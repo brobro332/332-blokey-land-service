@@ -3,7 +3,7 @@ import { Box, Card, Chip, Divider, Typography } from "@mui/material";
 import CreateWorkspace from "./CreateWorkspace";
 import SelectWorkspace from "./SelectWorkspace";
 import MemberTable from "./MemberTable";
-import AddMember from "./AddMember";
+import AddMember from "./invitation/AddMember";
 import axios from "axios";
 import ConfirmDialog from "../../tags/ConfirmDialog";
 

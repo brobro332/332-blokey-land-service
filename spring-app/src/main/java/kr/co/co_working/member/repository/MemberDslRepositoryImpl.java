@@ -1,6 +1,7 @@
 package kr.co.co_working.member.repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.co.co_working.member.dto.MemberRequestDto;
 import kr.co.co_working.member.dto.MemberResponseDto;
@@ -32,7 +33,7 @@ public class MemberDslRepositoryImpl implements MemberDslRepository {
      * @return
      */
     @Override
-    public List<MemberResponseDto> readMemberList(MemberRequestDto.READ dto) {
+    public List<MemberResponseDto> readMembers(MemberRequestDto.READ dto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
@@ -54,7 +55,7 @@ public class MemberDslRepositoryImpl implements MemberDslRepository {
     }
 
     @Override
-    public List<MemberResponseDto> readMemberListByWorkspace(WorkspaceRequestDto.READ dto) {
+    public List<MemberResponseDto> readMembersInWorkspace(WorkspaceRequestDto.READ dto) {
         return factory
             .select(
                 new QMemberResponseDto(
@@ -70,6 +71,29 @@ public class MemberDslRepositoryImpl implements MemberDslRepository {
             .join(memberWorkspace).on(workspace.id.eq(memberWorkspace.workspace.id))
             .join(member).on(member.email.eq(memberWorkspace.member.email))
             .where(WorkspaceIdEq(dto.getId()).and(member.delFlag.eq("0")))
+            .fetch();
+    }
+
+    @Override
+    public List<MemberResponseDto> readMembersNotInWorkspace(WorkspaceRequestDto.READ dto) {
+        return factory
+            .select(
+                new QMemberResponseDto(
+                    member.email,
+                    member.name,
+                    member.description,
+                    member.createdAt,
+                    member.modifiedAt
+                )
+            ).from(member)
+            .where(
+                member.email.notIn(
+                    JPAExpressions
+                        .select(memberWorkspace.member.email)
+                        .from(memberWorkspace)
+                        .where(memberWorkspace.workspace.id.eq(dto.getId()))
+                )
+            )
             .fetch();
     }
 

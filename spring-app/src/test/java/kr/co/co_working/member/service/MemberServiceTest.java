@@ -75,7 +75,7 @@ class MemberServiceTest {
         MemberRequestDto.READ readDto = new MemberRequestDto.READ("무개");
 
         /* when */
-        List<MemberResponseDto> members = service.readMemberList(readDto);
+        List<MemberResponseDto> members = service.readMembers(readDto);
 
         /* then */
         MemberResponseDto member = members.get(0);
@@ -125,7 +125,7 @@ class MemberServiceTest {
         
         /* then */
         MemberRequestDto.READ readDto = new MemberRequestDto.READ();
-        List<MemberResponseDto> members = service.readMemberList(readDto);
+        List<MemberResponseDto> members = service.readMembers(readDto);
 
         Assertions.assertEquals(0, members.size());
     }

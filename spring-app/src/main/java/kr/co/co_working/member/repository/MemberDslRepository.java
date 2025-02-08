@@ -7,6 +7,7 @@ import kr.co.co_working.workspace.dto.WorkspaceRequestDto;
 import java.util.List;
 
 public interface MemberDslRepository {
-    List<MemberResponseDto> readMemberList(MemberRequestDto.READ dto);
-    List<MemberResponseDto> readMemberListByWorkspace(WorkspaceRequestDto.READ dto);
+    List<MemberResponseDto> readMembers(MemberRequestDto.READ dto);
+    List<MemberResponseDto> readMembersInWorkspace(WorkspaceRequestDto.READ dto);
+    List<MemberResponseDto> readMembersNotInWorkspace(WorkspaceRequestDto.READ dto);
 }

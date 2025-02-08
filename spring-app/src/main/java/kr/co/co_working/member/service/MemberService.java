@@ -75,24 +75,33 @@ public class MemberService {
     }
 
     /**
-     * readMemberList : MemberList 조회
+     * readMembers : Members 조회
      * @param dto
      * @return
      * @throws Exception
      */
-    public List<MemberResponseDto> readMemberList(MemberRequestDto.READ dto) throws Exception {
-        return dslRepository.readMemberList(dto);
+    public List<MemberResponseDto> readMembers(MemberRequestDto.READ dto) throws Exception {
+        return dslRepository.readMembers(dto);
     }
 
     /**
-     * readMemberByTeam : 특정 Team 소속 MemberList 조회
+     * readMembersInWorkspace : 특정 Workspace 소속 Members 조회
      * @param dto
      * @return
      * @throws Exception
      */
-    public List<MemberResponseDto> readMemberListByTeam(WorkspaceRequestDto.READ dto) throws Exception {
-        // QueryDSL 동적 쿼리 결과 반환
-        return dslRepository.readMemberListByWorkspace(dto);
+    public List<MemberResponseDto> readMembersInWorkspace(WorkspaceRequestDto.READ dto) throws Exception {
+        return dslRepository.readMembersInWorkspace(dto);
+    }
+
+    /**
+     * readMembersNotInWorkspace : 특정 Workspace 미가입 Members 조회
+     * @param dto
+     * @return
+     * @throws Exception
+     */
+    public List<MemberResponseDto> readMembersNotInWorkspace(WorkspaceRequestDto.READ dto) throws Exception {
+        return dslRepository.readMembersNotInWorkspace(dto);
     }
 
     /**
