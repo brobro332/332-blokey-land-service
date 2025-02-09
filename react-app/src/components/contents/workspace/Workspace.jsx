@@ -61,7 +61,7 @@ const Workspace = () => {
       if (selectedItem !== null) {
         try {
           const memberListObject = await axios.get(
-            "http://localhost:8080/api/v1/workspace/memberList-in-workspace",
+            "http://localhost:8080/api/v1/member/memberList-in-workspace",
             {
               params: { id: selectedItem.id },
               withCredentials: true,

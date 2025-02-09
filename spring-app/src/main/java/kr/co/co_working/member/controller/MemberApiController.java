@@ -1,6 +1,7 @@
 package kr.co.co_working.member.controller;
 
 import kr.co.co_working.common.dto.ResponseDto;
+import kr.co.co_working.invitation.dto.InvitationRequestDto;
 import kr.co.co_working.member.dto.MemberRequestDto;
 import kr.co.co_working.member.service.MemberService;
 import kr.co.co_working.workspace.dto.WorkspaceRequestDto;
@@ -54,7 +55,7 @@ public class MemberApiController {
      * @return
      * @throws Exception
      */
-    @GetMapping("/api/v1/workspace/memberList-in-workspace")
+    @GetMapping("/api/v1/member/memberList-in-workspace")
     public ResponseDto<?> readMemberListInWorkspace(@ModelAttribute WorkspaceRequestDto.READ dto) throws Exception {
         return ResponseDto.ofSuccess("멤버목록 조회에 성공했습니다.", service.readMemberListInWorkspace(dto));
     }
@@ -65,7 +66,7 @@ public class MemberApiController {
      * @return
      * @throws Exception
      */
-    @GetMapping("/api/v1/workspace/memberList-not-in-workspace")
+    @GetMapping("/api/v1/member/memberList-not-in-workspace")
     public ResponseDto<?> readMemberListNotInWorkspace(@ModelAttribute WorkspaceRequestDto.READ dto) throws Exception {
         return ResponseDto.ofSuccess("멤버목록 조회에 성공했습니다.", service.readMemberListNotInWorkspace(dto));
     }

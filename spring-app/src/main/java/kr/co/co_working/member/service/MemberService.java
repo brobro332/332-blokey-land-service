@@ -1,6 +1,7 @@
 package kr.co.co_working.member.service;
 
 import ch.qos.logback.core.util.StringUtil;
+import kr.co.co_working.invitation.dto.InvitationRequestDto;
 import kr.co.co_working.member.Member;
 import kr.co.co_working.member.dto.MemberRequestDto;
 import kr.co.co_working.member.dto.MemberResponseDto;

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static kr.co.co_working.invitation.QInvitation.invitation;
 import static kr.co.co_working.member.QMember.member;
 import static kr.co.co_working.memberWorkspace.QMemberWorkspace.memberWorkspace;
 import static kr.co.co_working.workspace.QWorkspace.workspace;
@@ -23,15 +24,6 @@ import static kr.co.co_working.workspace.QWorkspace.workspace;
 public class MemberDslRepositoryImpl implements MemberDslRepository {
     private final JPAQueryFactory factory;
 
-    /**
-     * SELECT member_email, member_name, member_description, member_createdAt, member_modifiedAt
-     * FROM tbl_member
-     * WHERE member_email = ?
-     * AND member_name LIKE ?
-     *
-     * @param dto
-     * @return
-     */
     @Override
     public List<MemberResponseDto> readMembers(MemberRequestDto.READ dto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -83,9 +75,11 @@ public class MemberDslRepositoryImpl implements MemberDslRepository {
                     member.name,
                     member.description,
                     member.createdAt,
-                    member.modifiedAt
+                    member.modifiedAt,
+                    invitation.status
                 )
             ).from(member)
+            .join(invitation).on(invitation.member.eq(member))
             .where(
                 member.email.notIn(
                     JPAExpressions

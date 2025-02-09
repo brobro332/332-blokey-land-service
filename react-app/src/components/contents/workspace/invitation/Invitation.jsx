@@ -16,7 +16,7 @@ const Invitation = ({ selectedItem }) => {
     const fetchMemberListNotInWorkspace = async () => {
       try {
         const result = await axios.get(
-          "http://localhost:8080/api/v1/workspace/memberList-not-in-workspace",
+          "http://localhost:8080/api/v1/member/memberList-not-in-workspace",
           {
             params: { 
               email: email?.trim(),
