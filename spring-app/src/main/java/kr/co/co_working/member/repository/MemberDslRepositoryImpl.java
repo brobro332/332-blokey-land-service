@@ -94,11 +94,13 @@ public class MemberDslRepositoryImpl implements MemberDslRepository {
                         .where(memberWorkspace.workspace.id.eq(dto.getId()))
                 )
             )
+            .where(emailEq(dto.getEmail()))
+            .where(nameContains(dto.getName()))
             .fetch();
     }
 
     private BooleanExpression emailEq(String emailCond) {
-        return emailCond != null ? member.email.eq(emailCond) : null;
+        return emailCond != null && !emailCond.trim().isEmpty() ? member.email.eq(emailCond) : null;
     }
 
     private BooleanExpression WorkspaceIdEq(Long idCond) {
@@ -106,6 +108,6 @@ public class MemberDslRepositoryImpl implements MemberDslRepository {
     }
 
     private BooleanExpression nameContains(String nameCond) {
-        return nameCond != null ? member.name.contains(nameCond) : null;
+        return nameCond != null && !nameCond.trim().isEmpty() ? member.name.contains(nameCond) : null;
     }
 }

@@ -17,6 +17,8 @@ public class WorkspaceRequestDto {
     @Getter
     @Setter
     public static class READ {
+        private String email;
+        private String name;
         private Long id;
     }
 

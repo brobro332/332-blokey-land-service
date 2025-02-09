@@ -58,7 +58,7 @@ const SelectWorkspace = ({
           color="primary" 
           sx={{ marginLeft: "10px" }}
         >
-          멤버 추가
+          가입관리
         </Button>
         <Button
           variant="contained"

@@ -3,7 +3,7 @@ import { Box, Card, Chip, Divider, Typography } from "@mui/material";
 import CreateWorkspace from "./CreateWorkspace";
 import SelectWorkspace from "./SelectWorkspace";
 import MemberTable from "./MemberTable";
-import AddMember from "./invitation/AddMember";
+import ManageJoin from "./invitation/ManageJoin";
 import axios from "axios";
 import ConfirmDialog from "../../tags/ConfirmDialog";
 
@@ -61,7 +61,7 @@ const Workspace = () => {
       if (selectedItem !== null) {
         try {
           const memberListObject = await axios.get(
-            "http://localhost:8080/api/v1/workspace/members-in-workspace",
+            "http://localhost:8080/api/v1/workspace/memberList-in-workspace",
             {
               params: { id: selectedItem.id },
               withCredentials: true,
@@ -142,7 +142,7 @@ const Workspace = () => {
       ) : (
         <>
           {isAdding ? (
-            <AddMember
+            <ManageJoin
               onCancel={handleCancelAdd}
               selectedItem={selectedItem.id} 
             />
