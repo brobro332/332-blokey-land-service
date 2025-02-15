@@ -4,7 +4,7 @@ import AppsIcon from '@mui/icons-material/Apps';
 import CheckIcon from '@mui/icons-material/Check';
 import Workspace from '../contents/workspace/Workspace';
 import { useNavigate } from 'react-router-dom';
-import Profile from '../contents/profile/Profile';
+import MyPage from '../contents/myPage/MyPage';
 
 const Main = () => {
   const [selectedMenu, setSelectedMenu] = useState('대시보드');
@@ -66,13 +66,9 @@ const Main = () => {
         return (
           <Workspace />
         );
-      case '프로필':
+      case '마이페이지':
         return (
-          <Profile />
-        );
-      case '요청':
-        return (
-          <div></div>
+          <MyPage />
         );
       default:
         return (
@@ -129,8 +125,7 @@ const Main = () => {
                   vertical: 'top',
                   horizontal: 'right',
               }}>
-              <MenuItem onClick={() => handleMenuClick('요청')}>요청</MenuItem>
-              <MenuItem onClick={() => handleMenuClick('프로필')}>프로필</MenuItem>
+              <MenuItem onClick={() => handleMenuClick('마이페이지')}>마이페이지</MenuItem>
               <MenuItem onClick={() => handleMenuClick('워크스페이스')}>워크스페이스</MenuItem>
               <MenuItem onClick={() => navigate('/')}>로그아웃</MenuItem>
             </Menu>
