@@ -8,16 +8,13 @@ import kr.co.co_working.invitation.dto.InvitationRequestDto;
 import kr.co.co_working.invitation.dto.InvitationResponseDto;
 import kr.co.co_working.invitation.dto.QInvitationResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static kr.co.co_working.invitation.QInvitation.invitation;
 import static kr.co.co_working.member.QMember.member;
 import static kr.co.co_working.memberWorkspace.QMemberWorkspace.memberWorkspace;
-import static kr.co.co_working.workspace.QWorkspace.workspace;
-import static kr.co.co_working.invitation.QInvitation.invitation;
 
 @Repository
 @RequiredArgsConstructor

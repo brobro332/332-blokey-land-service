@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Box, Button, TextField, Table, TableContainer, Pagination, TableCell, TableBody, TableRow, TableHead, Paper } from "@mui/material";
 import axios from "axios";
 
@@ -12,33 +12,81 @@ const Invitation = ({ selectedItem }) => {
   const startIndex = (page - 1) * pageSize;
   const currentPageData = memberList.slice(startIndex, startIndex + pageSize);
 
-  useEffect(() => {
-    const fetchMemberListNotInWorkspace = async () => {
-      try {
-        const result = await axios.get(
-          "http://localhost:8080/api/v1/member/memberList-not-in-workspace",
-          {
-            params: { 
-              email: email?.trim(),
-              name: name?.trim(),
-              id: selectedItem,
-             },
-            withCredentials: true,
-          }
-        );
-        if (result.status === 200) {
-          const memberList = result.data.data;
-
-          setPage(1);
-          setMemberList(memberList);
+  const fetchMemberListNotInWorkspace = useCallback(async () => {
+    try {
+      const result = await axios.get(
+        "http://localhost:8080/api/v1/member/memberList-not-in-workspace",
+        {
+          params: { 
+            email: email?.trim(),
+            name: name?.trim(),
+            id: selectedItem,
+           },
+          withCredentials: true,
         }
-      } catch (e) {
-        console.error(e);
+      );
+      if (result.status === 200) {
+        const memberList = result.data.data;
+
+        setPage(1);
+        setMemberList(memberList);
       }
+    } catch (e) {
+      console.error(e);
     }
-    
-    fetchMemberListNotInWorkspace();
   }, [email, name, selectedItem]);
+
+  useEffect(() => {
+    fetchMemberListNotInWorkspace();
+  }, [fetchMemberListNotInWorkspace]);
+
+  const createInvitation = async (row) => {
+    try {
+      const result = await axios.post(
+        "http://localhost:8080/api/v1/invitation",
+        {
+          workspaceId: selectedItem,
+          memberId: row.email,
+          requesterType: 'WORKSPACE'
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8'
+          },
+          withCredentials: true
+        }
+      );
+
+      if (result.status === 200) {
+        fetchMemberListNotInWorkspace();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const deleteInvitation = async (row) => {
+    try {
+      const result = await axios.delete(
+        "http://localhost:8080/api/v1/invitation",
+        {
+          data: {
+            id: row.invitationId
+          },
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8'
+          },
+          withCredentials: true
+        }
+      );
+
+      if (result.status === 200) {
+        fetchMemberListNotInWorkspace();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const handlePageChange = (event, newPage) => {
     setPage(newPage);
@@ -88,12 +136,27 @@ const Invitation = ({ selectedItem }) => {
                   {member.description}
                 </TableCell>
                 <TableCell sx={{ paddingBottom: "5px", paddingTop: "5px" }}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                  >
-                    초대
-                  </Button>
+                  {member.status === null ? (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => createInvitation(member)}
+                    >
+                      초대
+                    </Button>
+                  ) : (
+                    member.status === 'PENDING' ? (
+                      <Button
+                        variant="contained"
+                        color="error"
+                        onClick={() => deleteInvitation(member)}
+                      >
+                        취소
+                      </Button>
+                    ) : (
+                      member.status === 'ACCEPTED' ? '가입완료' : '거절' 
+                    ) 
+                  )}
                 </TableCell>
               </TableRow>
               ))}

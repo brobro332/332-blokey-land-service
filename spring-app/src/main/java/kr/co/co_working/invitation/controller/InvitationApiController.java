@@ -25,7 +25,7 @@ public class InvitationApiController {
      * @throws Exception
      */
     @PostMapping("/api/v1/invitation")
-    public ResponseDto<?> createInvitation(InvitationRequestDto.CREATE dto) throws NoSuchElementException, Exception {
+    public ResponseDto<?> createInvitation(@RequestBody InvitationRequestDto.CREATE dto) throws NoSuchElementException, Exception {
         service.createInvitation(dto);
         return ResponseDto.ofSuccess("워크스페이스 가입요청 등록에 성공했습니다.");
     }
@@ -50,7 +50,7 @@ public class InvitationApiController {
      * @throws Exception
      */
     @DeleteMapping("/api/v1/invitation")
-    public ResponseDto<?> deleteInvitation(InvitationRequestDto.DELETE dto) throws NoSuchElementException, Exception  {
+    public ResponseDto<?> deleteInvitation(@RequestBody InvitationRequestDto.DELETE dto) throws NoSuchElementException, Exception  {
         service.deleteInvitation(dto);
         return ResponseDto.ofSuccess("워크스페이스 가입요청 삭제에 성공했습니다.");
     }

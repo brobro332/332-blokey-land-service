@@ -76,10 +76,11 @@ public class MemberDslRepositoryImpl implements MemberDslRepository {
                     member.description,
                     member.createdAt,
                     member.modifiedAt,
+                    invitation.id,
                     invitation.status
                 )
             ).from(member)
-            .join(invitation).on(invitation.member.eq(member))
+            .leftJoin(invitation).on(invitation.member.eq(member))
             .where(
                 member.email.notIn(
                     JPAExpressions

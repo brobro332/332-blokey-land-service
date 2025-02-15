@@ -17,6 +17,7 @@ public class MemberResponseDto {
         private LocalDateTime modifiedAt;
         private String leader;
         private InvitationStatus status;
+        private Long invitationId;
 
         @QueryProjection
         public MemberResponseDto(String email, String name, String description, LocalDateTime createdAt, LocalDateTime modifiedAt) {
@@ -28,12 +29,13 @@ public class MemberResponseDto {
         }
 
         @QueryProjection
-        public MemberResponseDto(String email, String name, String description, LocalDateTime createdAt, LocalDateTime modifiedAt, InvitationStatus status) {
+        public MemberResponseDto(String email, String name, String description, LocalDateTime createdAt, LocalDateTime modifiedAt, Long invitationId, InvitationStatus status) {
                 this.email = email;
                 this.name = name;
                 this.description = description;
                 this.createdAt = createdAt;
                 this.modifiedAt = modifiedAt;
+                this.invitationId = invitationId;
                 this.status = status;
         }
 
