@@ -14,7 +14,6 @@ import java.util.List;
 
 import static kr.co.co_working.invitation.QInvitation.invitation;
 import static kr.co.co_working.member.QMember.member;
-import static kr.co.co_working.memberWorkspace.QMemberWorkspace.memberWorkspace;
 
 @Repository
 @RequiredArgsConstructor
@@ -38,27 +37,30 @@ public class InvitationDslRepositoryImpl implements InvitationDslRepository {
                 )
             )
             .from(invitation)
-            .join(memberWorkspace).on(invitation.member.email.eq(memberWorkspace.member.email))
-            .join(member).on(memberWorkspace.member.email.eq(memberWorkspace.member.email))
+            .leftJoin(member).on(invitation.member.email.eq(member.email))
             .where(
-                emailEq(dto.getEmail())
-                    .and(nameContains(dto.getName()))
-                    .and(WorkspaceIdEq(dto.getWorkspaceId()))
-                    .and(member.delFlag.eq("0"))
-                    .and(invitation.requesterType.stringValue().eq(dto.getDivision()))
+                emailContains(dto.getEmail()),
+                nameContains(dto.getName()),
+                workspaceIdEq(dto.getWorkspaceId()),
+                member.delFlag.eq("0"),
+                requesterTypeEq(dto.getDivision())
             )
             .fetch();
     }
 
-    private BooleanExpression emailEq(String emailCond) {
-        return emailCond != null ? member.email.eq(emailCond) : null;
+    private BooleanExpression emailContains(String emailCond) {
+        return emailCond != null && !emailCond.trim().isEmpty() ? member.email.contains(emailCond) : null;
     }
 
-    private BooleanExpression WorkspaceIdEq(Long idCond) {
-        return idCond != null ? memberWorkspace.workspace.id.eq(idCond) : null;
+    private BooleanExpression workspaceIdEq(Long idCond) {
+        return idCond != null ? invitation.workspace.id.eq(idCond) : null;
+    }
+
+    private BooleanExpression requesterTypeEq(String requesterTypeCond) {
+        return requesterTypeCond != null && !requesterTypeCond.trim().isEmpty() ? invitation.requesterType.stringValue().eq(requesterTypeCond) : null;
     }
 
     private BooleanExpression nameContains(String nameCond) {
-        return nameCond != null ? member.name.contains(nameCond) : null;
+        return nameCond != null && !nameCond.trim().isEmpty() ? member.name.contains(nameCond) : null;
     }
 }

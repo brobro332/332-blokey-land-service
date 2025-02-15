@@ -96,7 +96,7 @@ const Invitation = ({ selectedItem }) => {
     <Box>
       <Box display="flex" gap={2} sx={{ marginBottom:"15px" }}>
         <TextField 
-          label="아이디" 
+          label="이메일" 
           variant="outlined" 
           size="small" 
           sx={{ flex: 1 }}

@@ -22,7 +22,7 @@ const ManageInvitation = ({ selectedItem }) => {
               email: email?.trim(),
               name: name?.trim(),
               workspaceId: selectedItem,
-              division: division?.trim()
+              division: division?.trim() === 'ALL' ? '' : division
              },
             withCredentials: true,
           }
@@ -63,7 +63,7 @@ const ManageInvitation = ({ selectedItem }) => {
         </Select>
         </FormControl>
         <TextField 
-        label="아이디" 
+        label="이메일" 
         variant="outlined" 
         size="small" 
         sx={{ flex: 1 }}
