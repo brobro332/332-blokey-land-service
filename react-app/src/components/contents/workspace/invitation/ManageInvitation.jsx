@@ -12,6 +12,10 @@ const ManageInvitation = ({ selectedItem }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedRow, setSelectedRow] = useState(null);
 
+  const pageSize = 10;
+  const startIndex = (page - 1) * pageSize;
+  const currentPageData = invitationList.slice(startIndex, startIndex + pageSize);
+
   useEffect(() => {
     const fetchInvitationList = async () => {
       try {
@@ -22,7 +26,8 @@ const ManageInvitation = ({ selectedItem }) => {
               email: email?.trim(),
               name: name?.trim(),
               workspaceId: selectedItem,
-              division: division?.trim() === 'ALL' ? '' : division
+              division: division?.trim() === 'ALL' ? '' : division,
+              menu: 'WORKSPACE'
              },
             withCredentials: true,
           }
@@ -30,7 +35,7 @@ const ManageInvitation = ({ selectedItem }) => {
         if (result.status === 200) {
           const invitationList = result.data.data;
 
-          setPage(invitationList.length);
+          setPage(1);
           setInvitationList(invitationList);
         }
       } catch (e) {
@@ -49,6 +54,10 @@ const ManageInvitation = ({ selectedItem }) => {
   const handleMenuClose = () => {
     setAnchorEl(null);
     setSelectedRow(null);
+  };
+
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
   };
 
   return (
@@ -92,7 +101,7 @@ const ManageInvitation = ({ selectedItem }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {invitationList.map((invitation) => (
+              {currentPageData.map((invitation) => (
               <TableRow key={invitation.id} sx={{ height: "30px" }}>
                 <TableCell sx={{ paddingBottom: "5px", paddingTop: "5px" }}>
                   {invitation.division}
@@ -147,7 +156,7 @@ const ManageInvitation = ({ selectedItem }) => {
               display: "flex",
               justifyContent: "center",
             }}
-            onChange={(event, value) => setPage(value)}
+            onChange={handlePageChange}
           />
         </TableContainer>
       </Box>

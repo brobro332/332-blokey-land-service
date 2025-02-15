@@ -3,7 +3,7 @@ import { Tabs, Tab, Box, Button } from "@mui/material";
 import ManageInvitation from "../workspace/invitation/ManageInvitation";
 import Invitation from "../workspace/invitation/Invitation";
 
-const ManageRequest = ({ onCancel, selectedItem }) => {
+const ManageRequest = ({ onCancel }) => {
   const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
@@ -25,10 +25,10 @@ const ManageRequest = ({ onCancel, selectedItem }) => {
       
       <Box sx={{ p: 2, mt: 2, border: "1px solid #ddd", borderRadius: 2 }}>
         {value === 0 && (
-          <ManageInvitation selectedItem={selectedItem}/>
+          <ManageInvitation/>
         )}
         {value === 1 && (
-          <Invitation selectedItem={selectedItem}/>
+          <Invitation/>
         )}
       </Box>
       <Button variant="contained" color="inherit" onClick={onCancel} sx={{marginTop : "15px"}}>

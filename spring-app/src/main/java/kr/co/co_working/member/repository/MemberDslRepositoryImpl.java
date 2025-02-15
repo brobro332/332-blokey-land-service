@@ -40,9 +40,11 @@ public class MemberDslRepositoryImpl implements MemberDslRepository {
                 )
             )
             .from(member)
-            .where(emailEq(email))
-            .where(nameContains(dto.getName()))
-            .where(member.delFlag.eq("0"))
+            .where(
+                emailEq(email),
+                nameContains(dto.getName()),
+                member.delFlag.eq("0")
+            )
             .fetch();
     }
 
@@ -62,7 +64,10 @@ public class MemberDslRepositoryImpl implements MemberDslRepository {
             .from(workspace)
             .join(memberWorkspace).on(workspace.id.eq(memberWorkspace.workspace.id))
             .join(member).on(member.email.eq(memberWorkspace.member.email))
-            .where(WorkspaceIdEq(dto.getId()).and(member.delFlag.eq("0")))
+            .where(
+                WorkspaceIdEq(dto.getId()),
+                member.delFlag.eq("0")
+            )
             .fetch();
     }
 

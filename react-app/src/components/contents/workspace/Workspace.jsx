@@ -70,7 +70,7 @@ const Workspace = () => {
           if (memberListObject.status === 200) {
             const memberList = memberListObject.data.data;
 
-            setPage(memberList.length);
+            setPage(1);
             setMemberList(memberList);
           }
         } catch (e) {
@@ -127,6 +127,10 @@ const Workspace = () => {
     setIsDialogOpen(false);
   };
 
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+  };
+
   return (
     <Box sx={{ padding: "20px" }}>
       <Typography variant="h6" sx={{ marginBottom : '10px' }}>워크스페이스</Typography>
@@ -174,7 +178,11 @@ const Workspace = () => {
                     title={'워크스페이스 삭제'} 
                     content={'해당 워크스페이스를 정말 삭제하시겠습니까?\n삭제된 워크스페이스는 복구할 수 없습니다.'}
                   />
-                  <MemberTable memberList={memberList} page={page} />
+                  <MemberTable 
+                    memberList={memberList} 
+                    page={page} 
+                    onPageChange={handlePageChange}
+                  />
                 </>
               )}   
             </>

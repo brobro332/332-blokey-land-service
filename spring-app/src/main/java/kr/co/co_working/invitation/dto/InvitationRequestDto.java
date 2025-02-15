@@ -24,6 +24,8 @@ public class InvitationRequestDto {
         private LocalDateTime createdAtFrom;
         private LocalDateTime createdAtTo;
         private Long workspaceId;
+        private String workspaceName;
+        private String menu;
     }
 
     @Getter

@@ -15,9 +15,13 @@ import {
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
-const MemberTable = ({ memberList, page }) => {
+const MemberTable = ({ memberList, page, onPageChange }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedRow, setSelectedRow] = useState(null);
+
+  const pageSize = 10;
+  const startIndex = (page - 1) * pageSize;
+  const currentPageData = memberList.slice(startIndex, startIndex + pageSize);
 
   const handleMenuOpen = (event, row) => {
     setAnchorEl(event.currentTarget);
@@ -42,7 +46,7 @@ const MemberTable = ({ memberList, page }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {memberList.map((member) => (
+            {currentPageData.map((member) => (
               <TableRow key={member.email} sx={{ height: "30px" }}>
                 <TableCell sx={{ paddingBottom: "5px", paddingTop: "5px" }}>
                   {member.leader === member.email ? "👑 " : ""}
@@ -96,6 +100,7 @@ const MemberTable = ({ memberList, page }) => {
             display: "flex",
             justifyContent: "center",
           }}
+          onChange={onPageChange}
         />
       </TableContainer>
     </Box>
