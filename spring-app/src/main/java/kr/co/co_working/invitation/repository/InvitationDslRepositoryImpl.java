@@ -46,6 +46,7 @@ public class InvitationDslRepositoryImpl implements InvitationDslRepository {
                     member.email,
                     member.name,
                     member.description,
+                    invitation.status.stringValue(),
                     invitation.createdAt,
                     invitation.modifiedAt
                 )

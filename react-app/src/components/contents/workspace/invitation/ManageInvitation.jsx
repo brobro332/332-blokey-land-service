@@ -94,9 +94,10 @@ const ManageInvitation = ({ selectedItem }) => {
             <TableHead>
               <TableRow>
                 <TableCell sx={{ width: "10%" }}>구분</TableCell>
-                <TableCell sx={{ width: "30%" }}>이메일</TableCell>
+                <TableCell sx={{ width: "20%" }}>이메일</TableCell>
                 <TableCell sx={{ width: "20%" }}>이름</TableCell>
                 <TableCell sx={{ width: "30%" }}>소개</TableCell>
+                <TableCell sx={{ width: "10%" }}>상태</TableCell>
                 <TableCell sx={{ width: "10%" }}>처리</TableCell>
               </TableRow>
             </TableHead>
@@ -114,6 +115,9 @@ const ManageInvitation = ({ selectedItem }) => {
                 </TableCell>
                 <TableCell sx={{ paddingBottom: "5px", paddingTop: "5px" }}>
                   {invitation.description}
+                </TableCell>
+                <TableCell sx={{ paddingBottom: "5px", paddingTop: "5px" }}>
+                  {invitation.status === 'PENDING' ?  '미응답' : invitation.status === 'ACCESS' ? '수락' : '거절' }
                 </TableCell>
                 <TableCell sx={{ paddingBottom: "5px", paddingTop: "5px" }}>
                   <IconButton
@@ -136,12 +140,25 @@ const ManageInvitation = ({ selectedItem }) => {
                       horizontal: "right",
                     }}
                   >
-                    <MenuItem onClick={() => console.log("Approve", invitation.name)}>
-                      수락
-                    </MenuItem>
-                    <MenuItem onClick={() => console.log("Reject", invitation.name)}>
-                      거절
-                    </MenuItem>
+                    {invitation.division === '발신' ? (
+                      <MenuItem onClick={() => console.log("Delete", invitation.name)}>
+                        삭제
+                      </MenuItem>
+                    ) : invitation.status === 'PENDING' ? (
+                      <>
+                        <MenuItem onClick={() => console.log("Approve", invitation.name)}>
+                          수락
+                        </MenuItem>
+                        <MenuItem onClick={() => console.log("Reject", invitation.name)}>
+                          거절
+                        </MenuItem>
+                      </>
+                    ) : (
+                      <MenuItem onClick={() => console.log("Delete", invitation.name)}>
+                        삭제
+                      </MenuItem>
+                    )
+                  }
                   </Menu>
                 </TableCell>
               </TableRow>

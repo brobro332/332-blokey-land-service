@@ -117,9 +117,9 @@ const Invitation = ({ selectedItem }) => {
           <Table sx={{ tableLayout: "fixed", width: "100%" }}>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ width: "30%" }}>이메일</TableCell>
+                <TableCell sx={{ width: "20%" }}>이메일</TableCell>
                 <TableCell sx={{ width: "20%" }}>이름</TableCell>
-                <TableCell sx={{ width: "40%" }}>소개</TableCell>
+                <TableCell sx={{ width: "30%" }}>소개</TableCell>
                 <TableCell sx={{ width: "10%" }}>처리</TableCell>
               </TableRow>
             </TableHead>
