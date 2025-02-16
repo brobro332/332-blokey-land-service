@@ -20,7 +20,7 @@ const ManageJoin = ({ onCancel, selectedItem }) => {
         scrollButtons="auto"
       >
         <Tab label="가입요청" />
-        <Tab label="초대" />
+        <Tab label="초대관리" />
       </Tabs>
       
       <Box sx={{ p: 2, mt: 2, border: "1px solid #ddd", borderRadius: 2 }}>

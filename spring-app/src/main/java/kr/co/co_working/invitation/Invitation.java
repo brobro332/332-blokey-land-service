@@ -48,4 +48,8 @@ public class Invitation extends CommonTime {
         this.requesterType = requesterType;
         this.status = status;
     }
+
+    public void updateInvitation(InvitationStatus status) {
+        this.status = status;
+    }
 }

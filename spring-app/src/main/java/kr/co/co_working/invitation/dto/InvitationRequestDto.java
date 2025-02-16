@@ -30,6 +30,15 @@ public class InvitationRequestDto {
 
     @Getter
     @Setter
+    public static class UPDATE {
+        private Long id;
+        private String status;
+        private String memberEmail;
+        private Long workspaceId;
+    }
+
+    @Getter
+    @Setter
     @NoArgsConstructor
     public static class DELETE {
         private Long id;

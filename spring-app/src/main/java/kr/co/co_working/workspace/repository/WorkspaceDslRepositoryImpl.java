@@ -25,18 +25,6 @@ import static kr.co.co_working.workspace.QWorkspace.workspace;
 public class WorkspaceDslRepositoryImpl implements WorkspaceDslRepository {
     private final JPAQueryFactory factory;
 
-    /**
-     * SELECT workspace_id, workspace_name, workspace_description, workspace_createdAt, workspace_modifiedAt, member_email, member_name
-     * FROM tbl_workspace t
-     * JOIN tbl_memberWorkspace mt
-     * ON t.workspace_id = mt.workspace_id
-     * JOIN tbl_member m
-     * ON mt.member_email = m.member_email
-     * WHERE email = ?;
-     *
-     * @param dto
-     * @return
-     */
     @Override
     public List<WorkspaceResponseDto> readWorkspaceList(WorkspaceRequestDto.READ dto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -85,10 +73,9 @@ public class WorkspaceDslRepositoryImpl implements WorkspaceDslRepository {
                         .select(memberWorkspace.workspace.id)
                         .from(memberWorkspace)
                         .where(memberWorkspace.member.email.eq(email))
-                )
-            )
-            .where(
-                nameContains(dto.getName())
+                ),
+                nameContains(dto.getName()),
+                invitation.member.email.eq(email)
             )
             .fetch();
     }

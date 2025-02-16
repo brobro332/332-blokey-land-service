@@ -23,7 +23,7 @@ public class InvitationApiController {
     @PostMapping("/api/v1/invitation")
     public ResponseDto<?> createInvitation(@RequestBody InvitationRequestDto.CREATE dto) throws NoSuchElementException, Exception {
         service.createInvitation(dto);
-        return ResponseDto.ofSuccess("워크스페이스 가입요청 등록에 성공했습니다.");
+        return ResponseDto.ofSuccess("가입요청 등록에 성공했습니다.");
     }
 
     /**
@@ -35,7 +35,20 @@ public class InvitationApiController {
      */
     @GetMapping("/api/v1/invitation")
     public ResponseDto<?> readInvitation(@ModelAttribute InvitationRequestDto.READ dto) throws NoSuchElementException, Exception {
-        return ResponseDto.ofSuccess("워크스페이스 가입요청 조회에 성공했습니다.", service.readInvitation(dto));
+        return ResponseDto.ofSuccess("가입요청 조회에 성공했습니다.", service.readInvitation(dto));
+    }
+
+    /**
+     * updateInvitation : Invitation 수정
+     * @param dto
+     * @return
+     * @throws NoSuchElementException
+     * @throws Exception
+     */
+    @PutMapping("/api/v1/invitation")
+    public ResponseDto<?> updateInvitation(@RequestBody InvitationRequestDto.UPDATE dto) throws NoSuchElementException, Exception {
+        service.updateInvitation(dto);
+        return ResponseDto.ofSuccess("가입요청 수정에 성공했습니다.");
     }
 
     /**
@@ -48,6 +61,6 @@ public class InvitationApiController {
     @DeleteMapping("/api/v1/invitation")
     public ResponseDto<?> deleteInvitation(@RequestBody InvitationRequestDto.DELETE dto) throws NoSuchElementException, Exception  {
         service.deleteInvitation(dto);
-        return ResponseDto.ofSuccess("워크스페이스 가입요청 삭제에 성공했습니다.");
+        return ResponseDto.ofSuccess("가입요청 삭제에 성공했습니다.");
     }
 }

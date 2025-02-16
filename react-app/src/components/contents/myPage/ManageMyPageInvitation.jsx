@@ -43,6 +43,31 @@ const ManageMyPageInvitation = () => {
     fetchInvitationList();
   }, [fetchInvitationList]);
 
+  const updateInvitation = async (row, flag) => {
+    try {
+      const result = await axios.put(
+        "http://localhost:8080/api/v1/invitation",
+        {
+          id: row.id,
+          status: flag,
+          workspaceId: row.workspaceId
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8'
+          },
+          withCredentials: true
+        }
+      );
+
+      if (result.status === 200) {
+        fetchInvitationList();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const deleteInvitation = async (row) => {
     try {
       const result = await axios.delete(
@@ -129,9 +154,9 @@ const ManageMyPageInvitation = () => {
                     switch (invitation.status) {
                       case 'PENDING':
                         return '미응답';
-                      case 'ACCESS':
+                      case 'ACCEPTED':
                         return '수락';
-                      case 'REJECT':
+                      case 'REJECTED':
                         return '거절';
                       default:
                         return '알 수 없음';
@@ -165,10 +190,10 @@ const ManageMyPageInvitation = () => {
                       </MenuItem>
                     ) : invitation.status === 'PENDING' ? (
                       <>
-                        <MenuItem onClick={() => console.log("Approve", invitation.name)}>
+                        <MenuItem onClick={() => updateInvitation(invitation, 'ACCEPTED')}>
                           수락
                         </MenuItem>
-                        <MenuItem onClick={() => console.log("Reject", invitation.name)}>
+                        <MenuItem onClick={() => updateInvitation(invitation, 'REJECTED')}>
                           거절
                         </MenuItem>
                       </>
