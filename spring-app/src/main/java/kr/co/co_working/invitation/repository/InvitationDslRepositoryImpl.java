@@ -37,8 +37,8 @@ public class InvitationDslRepositoryImpl implements InvitationDslRepository {
                 .select(
                     new QInvitationResponseDto(
                         new CaseBuilder()
-                            .when(invitation.requesterType.eq(RequesterType.valueOf("WORKSPACE"))).then("발신")
-                            .when(invitation.requesterType.eq(RequesterType.valueOf("MEMBER"))).then("수신")
+                            .when(invitation.requesterType.eq(RequesterType.valueOf("WORKSPACE"))).then("수신")
+                            .when(invitation.requesterType.eq(RequesterType.valueOf("MEMBER"))).then("발신")
                             .otherwise(""),
                         workspace.id,
                         workspace.name,

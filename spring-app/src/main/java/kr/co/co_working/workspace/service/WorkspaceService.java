@@ -64,14 +64,25 @@ public class WorkspaceService {
     }
 
     /**
-     * readWorkspace : Workspace 조회
+     * readWorkspaceList : WorkspaceList 조회
      * @param dto
      * @return
      * @throws Exception
      */
-    public List<WorkspaceResponseDto> readWorkspace(WorkspaceRequestDto.READ dto) throws Exception {
+    public List<WorkspaceResponseDto> readWorkspaceList(WorkspaceRequestDto.READ dto) throws Exception {
         // QueryDSL 동적 쿼리 결과 반환
         return dslRepository.readWorkspaceList(dto);
+    }
+
+    /**
+     * readWorkspaceListNotJoined : 미가입 WorkspaceList 조회
+     * @param dto
+     * @return
+     * @throws Exception
+     */
+    public List<WorkspaceResponseDto> readWorkspaceListNotJoined(WorkspaceRequestDto.READ dto) throws Exception {
+        // QueryDSL 동적 쿼리 결과 반환
+        return dslRepository.readWorkspaceListNotJoined(dto);
     }
 
     /**

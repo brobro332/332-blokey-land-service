@@ -34,9 +34,20 @@ public class WorkspaceApiController {
      * @return
      * @throws Exception
      */
-    @GetMapping("/api/v1/workspace")
+    @GetMapping("/api/v1/workspace/workspaceList")
     public ResponseDto<?> readWorkspace(@ModelAttribute WorkspaceRequestDto.READ dto) throws Exception {
-        return ResponseDto.ofSuccess("워크스페이스 조회에 성공했습니다.", service.readWorkspace(dto));
+        return ResponseDto.ofSuccess("워크스페이스 목록 조회에 성공했습니다.", service.readWorkspaceList(dto));
+    }
+
+    /**
+     * readWorkspaceListNotJoined : 미가입 WorkspaceList 조회
+     * @param dto
+     * @return
+     * @throws Exception
+     */
+    @GetMapping("/api/v1/workspace/workspaceList-not-joined")
+    public ResponseDto<?> readWorkspaceListNotJoined(@ModelAttribute WorkspaceRequestDto.READ dto) throws Exception {
+        return ResponseDto.ofSuccess("워크스페이스 목록 조회에 성공하였습니다.", service.readWorkspaceListNotJoined(dto));
     }
 
     /**

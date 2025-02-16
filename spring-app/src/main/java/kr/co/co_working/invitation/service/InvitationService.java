@@ -11,6 +11,8 @@ import kr.co.co_working.member.repository.MemberRepository;
 import kr.co.co_working.workspace.Workspace;
 import kr.co.co_working.workspace.repository.WorkspaceRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,17 +33,25 @@ public class InvitationService {
      * @throws Exception
      */
     public Long createInvitation(InvitationRequestDto.CREATE dto) throws NoSuchElementException, Exception {
-        // 1. 워크스페이스 존재 여부 확인
+        // 1. 토큰 이메일 추출
+        if (RequesterType.MEMBER.name().equals(dto.getRequesterType())) {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String email = authentication.getName();
+
+            dto.setMemberId(email);
+        }
+
+        // 2. 워크스페이스 존재 여부 확인
         Workspace workSpace = workspaceRepository.findById(dto.getWorkspaceId()).orElseThrow(
             () -> new NoSuchElementException("해당 워크스페이스가 존재하지 않습니다.")
         );
 
-        // 2. 멤버 존재 여부 확인
+        // 3. 멤버 존재 여부 확인
         Member member = memberRepository.findById(dto.getMemberId()).orElseThrow(
             () -> new NoSuchElementException("해당 멤버가 존재하지 않습니다.")
         );
 
-        // 3. 가입요청 생성
+        // 4. 가입요청 생성
         Invitation invitation = Invitation.builder()
             .workspace(workSpace)
             .member(member)

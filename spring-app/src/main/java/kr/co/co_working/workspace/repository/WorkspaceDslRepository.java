@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface WorkspaceDslRepository {
     List<WorkspaceResponseDto> readWorkspaceList(WorkspaceRequestDto.READ dto);
+    List<WorkspaceResponseDto> readWorkspaceListNotJoined(WorkspaceRequestDto.READ dto);
 }

@@ -3,41 +3,39 @@ import { Box, Button, TextField, Table, TableContainer, Pagination, TableCell, T
 import axios from "axios";
 
 const Request = () => {
-  const [email, setEmail] = useState('');
   const [name, setName] = useState('');
-  const [memberList, setMemberList] = useState([]); 
+  const [workspaceList, setWorkspaceList] = useState([]); 
   const [page, setPage] = useState(1);
 
   const pageSize = 10;
   const startIndex = (page - 1) * pageSize;
-  const currentPageData = memberList.slice(startIndex, startIndex + pageSize);
+  const currentPageData = workspaceList.slice(startIndex, startIndex + pageSize);
 
-  const fetchMemberListNotInWorkspace = useCallback(async () => {
+  const fetchWorkspaceListNotJoined = useCallback(async () => {
     try {
       const result = await axios.get(
-        "http://localhost:8080/api/v1/member/memberList-not-in-workspace",
+        "http://localhost:8080/api/v1/workspace/workspaceList-not-joined",
         {
           params: { 
-            email: email?.trim(),
             name: name?.trim(),
-           },
+          },
           withCredentials: true,
         }
       );
       if (result.status === 200) {
-        const memberList = result.data.data;
+        const workspaceList = result.data.data;
 
         setPage(1);
-        setMemberList(memberList);
+        setWorkspaceList(workspaceList);
       }
     } catch (e) {
       console.error(e);
     }
-  }, [email, name]);
+  }, [name]);
 
   useEffect(() => {
-    fetchMemberListNotInWorkspace();
-  }, [fetchMemberListNotInWorkspace]);
+    fetchWorkspaceListNotJoined();
+  }, [fetchWorkspaceListNotJoined]);
 
   const createInvitation = async (row) => {
     try {
@@ -45,8 +43,7 @@ const Request = () => {
         "http://localhost:8080/api/v1/invitation",
         {
           workspaceId: row.id,
-          memberId: row.email,
-          requesterType: 'MY_PAGE'
+          requesterType: 'MEMBER'
         },
         {
           headers: {
@@ -57,7 +54,7 @@ const Request = () => {
       );
 
       if (result.status === 200) {
-        fetchMemberListNotInWorkspace();
+        fetchWorkspaceListNotJoined();
       }
     } catch (e) {
       console.error(e);
@@ -80,7 +77,7 @@ const Request = () => {
       );
 
       if (result.status === 200) {
-        fetchMemberListNotInWorkspace();
+        fetchWorkspaceListNotJoined();
       }
     } catch (e) {
       console.error(e);
@@ -95,20 +92,12 @@ const Request = () => {
     <Box>
       <Box display="flex" gap={2} sx={{ marginBottom:"15px" }}>
         <TextField 
-          label="이메일" 
+          label="워크스페이스 이름" 
           variant="outlined" 
           size="small" 
           sx={{ flex: 1 }}
-          value={email}
-          onChange={(e) => setEmail(e.target.value)} 
-        />
-        <TextField 
-          label="이름" 
-          variant="outlined" 
-          size="small" 
-          sx={{ flex: 1 }} 
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => setName(e.target.value)} 
         />
       </Box>
       <Box>
@@ -116,44 +105,44 @@ const Request = () => {
           <Table sx={{ tableLayout: "fixed", width: "100%" }}>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ width: "20%" }}>이메일</TableCell>
-                <TableCell sx={{ width: "20%" }}>이름</TableCell>
-                <TableCell sx={{ width: "30%" }}>소개</TableCell>
+                <TableCell sx={{ width: "20%" }}>워크스페이스 이름</TableCell>
+                <TableCell sx={{ width: "30%" }}>리더</TableCell>
+                <TableCell sx={{ width: "40%" }}>소개</TableCell>
                 <TableCell sx={{ width: "10%" }}>처리</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-            {currentPageData.map((member) => (
-              <TableRow key={member.id} sx={{ height: "30px" }}>
+            {currentPageData.map((workspace) => (
+              <TableRow key={workspace.id} sx={{ height: "30px" }}>
                 <TableCell sx={{ paddingBottom: "5px", paddingTop: "5px" }}>
-                  {member.email}
+                  {workspace.name}
                 </TableCell>
                 <TableCell sx={{ paddingBottom: "5px", paddingTop: "5px" }}>
-                  {member.name}
+                  {workspace.leader}
                 </TableCell>
                 <TableCell sx={{ paddingBottom: "5px", paddingTop: "5px" }}>
-                  {member.description}
+                  {workspace.description}
                 </TableCell>
                 <TableCell sx={{ paddingBottom: "5px", paddingTop: "5px" }}>
-                  {member.status === null ? (
+                  {workspace.invitationStatus === null ? (
                     <Button
                       variant="contained"
                       color="primary"
-                      onClick={() => createInvitation(member)}
+                      onClick={() => createInvitation(workspace)}
                     >
-                      초대
+                      신청
                     </Button>
                   ) : (
-                    member.status === 'PENDING' ? (
+                    workspace.invitationStatus === 'PENDING' ? (
                       <Button
                         variant="contained"
                         color="error"
-                        onClick={() => deleteInvitation(member)}
+                        onClick={() => deleteInvitation(workspace)}
                       >
                         취소
                       </Button>
                     ) : (
-                      member.status === 'ACCEPTED' ? '가입완료' : '거절' 
+                      workspace.invitationStatus === 'ACCEPTED' ? '가입완료' : '거절' 
                     ) 
                   )}
                 </TableCell>
@@ -161,9 +150,9 @@ const Request = () => {
               ))}
             </TableBody>
           </Table>
-          {memberList && (
+          {workspaceList && (
             <Pagination
-              count={Math.ceil(memberList.length / pageSize)}
+              count={Math.ceil(workspaceList.length / pageSize)}
               page={page}
               color="primary"
               onChange={handlePageChange}
