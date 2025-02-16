@@ -3,10 +3,9 @@ import { FormControl, InputLabel, MenuItem, Select, TextField, Box, TableContain
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import axios from "axios";
 
-const ManageInvitation = ({ selectedItem }) => {
+const ManageMyPageInvitation = () => {
   const [page, setPage] = useState(0);
   const [division, setDivision] = useState('ALL');
-  const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [invitationList, setInvitationList] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -22,11 +21,9 @@ const ManageInvitation = ({ selectedItem }) => {
         "http://localhost:8080/api/v1/invitation",
         {
           params: { 
-            email: email?.trim(),
             name: name?.trim(),
-            workspaceId: selectedItem,
             division: division?.trim() === 'ALL' ? '' : division,
-            menu: 'WORKSPACE'
+            menu: 'MY_PAGE'
            },
           withCredentials: true,
         }
@@ -40,7 +37,7 @@ const ManageInvitation = ({ selectedItem }) => {
     } catch (e) {
       console.error(e);
     }
-  }, [division, email, name, selectedItem]);
+  }, [division, name]);
 
   useEffect(() => {
     fetchInvitationList();
@@ -95,20 +92,12 @@ const ManageInvitation = ({ selectedItem }) => {
         </Select>
         </FormControl>
         <TextField 
-        label="이메일" 
+        label="워크스페이스 이름" 
         variant="outlined" 
         size="small" 
         sx={{ flex: 1 }}
-        value={email}
-        onChange={(e) => setEmail(e.target.value)} 
-        />
-        <TextField 
-        label="이름" 
-        variant="outlined" 
-        size="small" 
-        sx={{ flex: 1 }} 
         value={name}
-        onChange={(e) => setName(e.target.value)}
+        onChange={(e) => setName(e.target.value)} 
         />
       </Box>
       <Box>
@@ -117,9 +106,8 @@ const ManageInvitation = ({ selectedItem }) => {
             <TableHead>
               <TableRow>
                 <TableCell sx={{ width: "10%" }}>구분</TableCell>
-                <TableCell sx={{ width: "20%" }}>이메일</TableCell>
-                <TableCell sx={{ width: "20%" }}>이름</TableCell>
-                <TableCell sx={{ width: "30%" }}>소개</TableCell>
+                <TableCell sx={{ width: "30%" }}>워크스페이스 이름</TableCell>
+                <TableCell sx={{ width: "40%" }}>소개</TableCell>
                 <TableCell sx={{ width: "10%" }}>상태</TableCell>
                 <TableCell sx={{ width: "10%" }}>처리</TableCell>
               </TableRow>
@@ -131,13 +119,10 @@ const ManageInvitation = ({ selectedItem }) => {
                   {invitation.division}
                 </TableCell>
                 <TableCell sx={{ paddingBottom: "5px", paddingTop: "5px" }}>
-                  {invitation.email}
+                  {invitation.workspaceName}
                 </TableCell>
                 <TableCell sx={{ paddingBottom: "5px", paddingTop: "5px" }}>
-                  {invitation.name}
-                </TableCell>
-                <TableCell sx={{ paddingBottom: "5px", paddingTop: "5px" }}>
-                  {invitation.description}
+                  {invitation.workspaceDescription}
                 </TableCell>
                 <TableCell sx={{ paddingBottom: "5px", paddingTop: "5px" }}>
                   {(() => {
@@ -215,4 +200,4 @@ const ManageInvitation = ({ selectedItem }) => {
   );
 };
 
-export default ManageInvitation;
+export default ManageMyPageInvitation;

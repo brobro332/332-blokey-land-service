@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Tabs, Tab, Box, Button } from "@mui/material";
-import ManageInvitation from "../workspace/invitation/ManageInvitation";
-import Invitation from "../workspace/invitation/Invitation";
+import ManageMyPageInvitation from "./ManageMyPageInvitation";
+import Request from "./Request";
 
 const ManageRequest = ({ onCancel }) => {
   const [value, setValue] = useState(0);
@@ -20,15 +20,15 @@ const ManageRequest = ({ onCancel }) => {
         scrollButtons="auto"
       >
         <Tab label="가입요청" />
-        <Tab label="신청" />
+        <Tab label="신청관리" />
       </Tabs>
       
       <Box sx={{ p: 2, mt: 2, border: "1px solid #ddd", borderRadius: 2 }}>
         {value === 0 && (
-          <ManageInvitation/>
+          <ManageMyPageInvitation/>
         )}
         {value === 1 && (
-          <Invitation/>
+          <Request/>
         )}
       </Box>
       <Button variant="contained" color="inherit" onClick={onCancel} sx={{marginTop : "15px"}}>
