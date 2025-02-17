@@ -82,7 +82,7 @@ public class MemberService {
      * @throws Exception
      */
     public List<MemberResponseDto> readMemberList(MemberRequestDto.READ dto) throws Exception {
-        return dslRepository.readMembers(dto);
+        return dslRepository.readMemberList(dto);
     }
 
     /**

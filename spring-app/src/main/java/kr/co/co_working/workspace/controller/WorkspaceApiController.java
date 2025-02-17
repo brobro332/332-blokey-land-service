@@ -88,7 +88,7 @@ public class WorkspaceApiController {
      * @throws NoSuchElementException
      * @throws Exception
      */
-    @DeleteMapping("/api/v1/workspace/{workspace_id}/{email}")
+    @PostMapping("/api/v1/workspace/{workspace_id}/{email}")
     public ResponseDto<?> addMemberToWorkspace(@PathVariable(name="workspace_id") Long teamId,
                                             @PathVariable(name="email") String email) throws NoSuchElementException, Exception {
         service.addMemberToWorkspace(teamId, email);
@@ -99,15 +99,15 @@ public class WorkspaceApiController {
     /**
      * removeMemberFromWorkspace : Workspace 데이터에서 Member 제외
      * @param email
-     * @param teamId
+     * @param workspaceId
      * @return
      * @throws NoSuchElementException
      * @throws Exception
      */
     @DeleteMapping("/api/v1/workspace/{email}/{workspace_id}")
     public ResponseDto<?> removeMemberFromWorkspace(@PathVariable(name="email") String email,
-                                               @PathVariable(name="workspace_id") Long teamId) throws NoSuchElementException, Exception {
-        service.removeMemberFromWorkspace(email, teamId);
+                                               @PathVariable(name="workspace_id") Long workspaceId) throws NoSuchElementException, Exception {
+        service.removeMemberFromWorkspace(email, workspaceId);
 
         return ResponseDto.ofSuccess("멤버 제외에 성공하였습니다.");
     }

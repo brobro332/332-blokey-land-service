@@ -20,15 +20,9 @@ public class MemberRequestDto {
     @Setter
     public static class READ {
         private String name;
-        private String teamId;
 
         public READ(String name) {
             this.name = name;
-        }
-
-        public READ(String name, String teamId) {
-            this.name = name;
-            this.teamId = teamId;
         }
     }
 

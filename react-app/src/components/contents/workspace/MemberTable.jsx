@@ -14,14 +14,56 @@ import {
   MenuItem,
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import axios from "axios";
 
-const MemberTable = ({ memberList, page, onPageChange }) => {
+const MemberTable = ({ memberList, page, selectedItem, onPageChange, onChange }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedRow, setSelectedRow] = useState(null);
 
   const pageSize = 10;
   const startIndex = (page - 1) * pageSize;
   const currentPageData = memberList.slice(startIndex, startIndex + pageSize);
+
+  const updateWorkspace = async (row) => {
+    try {
+      const result = await axios.put(
+        "http://localhost:8080/api/v1/workspace/" + selectedItem.id,
+        { leader: row.email },
+        {
+          headers: {
+            "Content-Type": "application/json; charset=UTF-8",
+          },
+          withCredentials: true
+        }
+      );
+
+      if (result.status === 200) {
+        onChange();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const removeMemberFromWorkspace = async (row) => {
+    try {
+      const result = await axios.delete(
+        "http://localhost:8080/api/v1/workspace/" + row.email + "/" + selectedItem.id,
+        {
+          headers: {
+            "Content-Type": "application/json; charset=UTF-8",
+          },
+          withCredentials: true
+        }
+      );
+
+      if (result.status === 200) {
+        onChange();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const handleMenuOpen = (event, row) => {
     setAnchorEl(event.currentTarget);
@@ -79,10 +121,10 @@ const MemberTable = ({ memberList, page, onPageChange }) => {
                       horizontal: "right",
                     }}
                   >
-                    <MenuItem onClick={() => console.log("Edit", member.name)}>
+                    <MenuItem onClick={() => updateWorkspace(member)}>
                       리더 지정
                     </MenuItem>
-                    <MenuItem onClick={() => console.log("Delete", member.name)}>
+                    <MenuItem onClick={() => removeMemberFromWorkspace(member)}>
                       추방
                     </MenuItem>
                   </Menu>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Box, Card, Chip, Divider, Typography } from "@mui/material";
 import CreateWorkspace from "./CreateWorkspace";
 import SelectWorkspace from "./SelectWorkspace";
@@ -56,31 +56,31 @@ const Workspace = () => {
     fetchWorkspaceList();
   }, []);
 
-  useEffect(() => {
-    const fetchMembers = async () => {
-      if (selectedItem !== null) {
-        try {
-          const memberListObject = await axios.get(
-            "http://localhost:8080/api/v1/member/memberList-in-workspace",
-            {
-              params: { id: selectedItem.id },
-              withCredentials: true,
-            }
-          );
-          if (memberListObject.status === 200) {
-            const memberList = memberListObject.data.data;
-
-            setPage(1);
-            setMemberList(memberList);
+  const fetchMembers = useCallback(async () => {
+    if (selectedItem !== null) {
+      try {
+        const memberListObject = await axios.get(
+          "http://localhost:8080/api/v1/member/memberList-in-workspace",
+          {
+            params: { id: selectedItem.id },
+            withCredentials: true,
           }
-        } catch (e) {
-          console.error(e);
-        }
-      }
-    };
+        );
+        if (memberListObject.status === 200) {
+          const memberList = memberListObject.data.data;
 
-    fetchMembers();
+          setPage(1);
+          setMemberList(memberList);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
   }, [selectedItem]);
+
+  useEffect(() => {
+    fetchMembers();
+  }, [fetchMembers]);
 
   const handleCreateWorkspace = () => {
     setIsCreating(true);
@@ -180,8 +180,10 @@ const Workspace = () => {
                   />
                   <MemberTable 
                     memberList={memberList} 
-                    page={page} 
+                    page={page}
+                    selectedItem={selectedItem} 
                     onPageChange={handlePageChange}
+                    onChange={fetchMembers}
                   />
                 </>
               )}   

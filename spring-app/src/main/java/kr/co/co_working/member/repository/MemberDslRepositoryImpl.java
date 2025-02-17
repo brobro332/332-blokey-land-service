@@ -25,7 +25,7 @@ public class MemberDslRepositoryImpl implements MemberDslRepository {
     private final JPAQueryFactory factory;
 
     @Override
-    public List<MemberResponseDto> readMembers(MemberRequestDto.READ dto) {
+    public List<MemberResponseDto> readMemberList(MemberRequestDto.READ dto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
@@ -81,11 +81,35 @@ public class MemberDslRepositoryImpl implements MemberDslRepository {
                     member.description,
                     member.createdAt,
                     member.modifiedAt,
-                    invitation.id,
-                    invitation.status
+                    (
+                        JPAExpressions
+                            .select(invitation.id)
+                            .from(invitation)
+                            .where(
+                                invitation.member.email.eq(member.email),
+                                invitation.workspace.id.eq(dto.getId())
+                            )
+                    ),
+                    (
+                        JPAExpressions
+                            .select(invitation.status)
+                            .from(invitation)
+                            .where(
+                                invitation.member.email.eq(member.email),
+                                invitation.workspace.id.eq(dto.getId())
+                            )
+                    ),
+                    (
+                        JPAExpressions
+                            .select(invitation.requesterType)
+                            .from(invitation)
+                            .where(
+                                invitation.member.email.eq(member.email),
+                                invitation.workspace.id.eq(dto.getId())
+                            )
+                    )
                 )
             ).from(member)
-            .leftJoin(invitation).on(invitation.member.eq(member))
             .where(
                 member.email.notIn(
                     JPAExpressions

@@ -92,7 +92,7 @@ class WorkspaceServiceTest {
         WorkspaceRequestDto.READ readDto = new WorkspaceRequestDto.READ();
 
         /* when */
-        List<WorkspaceResponseDto> Workspaces = service.readWorkspace(readDto);
+        List<WorkspaceResponseDto> Workspaces = service.readWorkspaceList(readDto);
         
         /* then */
         Assertions.assertEquals(1, Workspaces.size());

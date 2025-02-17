@@ -43,9 +43,16 @@ public class Workspace extends CommonTime {
         this.leader = leader;
     }
 
-    public void updateWorkspace(String name, String description) {
-        this.name = name;
-        this.description = description;
+    public void updateWorkspace(String name, String description, String leader) {
+        if (name != null) {
+            this.name = name;
+        }
+        if (description != null) {
+            this.description = description;
+        }
+        if (leader != null) {
+            this.leader = leader;
+        }
     }
 
     public void insertProject(Project project) {

@@ -103,7 +103,7 @@ public class WorkspaceService {
 
         // 3. 존재 시 수정 처리
         Workspace workspace = selectedWorkspace.get();
-        workspace.updateWorkspace(dto.getName(), dto.getDescription());
+        workspace.updateWorkspace(dto.getName(), dto.getDescription(), dto.getLeader());
     }
 
     /**

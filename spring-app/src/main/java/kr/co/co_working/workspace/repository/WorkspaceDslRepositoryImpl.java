@@ -62,11 +62,35 @@ public class WorkspaceDslRepositoryImpl implements WorkspaceDslRepository {
                     workspace.leader,
                     workspace.createdAt,
                     workspace.modifiedAt,
-                    invitation.id,
-                    invitation.status.stringValue()
+                    (
+                        JPAExpressions
+                            .select(invitation.id)
+                            .from(invitation)
+                            .where(
+                                invitation.workspace.id.eq(workspace.id),
+                                invitation.member.email.eq(email)
+                            )
+                    ),
+                    (
+                        JPAExpressions
+                            .select(invitation.status)
+                            .from(invitation)
+                            .where(
+                                invitation.workspace.id.eq(workspace.id),
+                                invitation.member.email.eq(email)
+                            )
+                    ),
+                    (
+                        JPAExpressions
+                            .select(invitation.requesterType)
+                            .from(invitation)
+                            .where(
+                                invitation.workspace.id.eq(workspace.id),
+                                invitation.member.email.eq(email)
+                            )
+                    )
                 )
             ).from(workspace)
-            .leftJoin(invitation).on(invitation.workspace.eq(workspace))
             .where(
                 workspace.id.notIn(
                     JPAExpressions
@@ -74,8 +98,7 @@ public class WorkspaceDslRepositoryImpl implements WorkspaceDslRepository {
                         .from(memberWorkspace)
                         .where(memberWorkspace.member.email.eq(email))
                 ),
-                nameContains(dto.getName()),
-                invitation.member.email.eq(email)
+                nameContains(dto.getName())
             )
             .fetch();
     }

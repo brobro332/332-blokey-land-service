@@ -28,11 +28,13 @@ public class WorkspaceRequestDto {
     public static class UPDATE {
         private String name;
         private String description;
+        private String leader;
 
         @Builder
-        public UPDATE(String name, String description) {
+        public UPDATE(String name, String description, String leader) {
             this.name = name;
             this.description = description;
+            this.leader = leader;
         }
     }
 }

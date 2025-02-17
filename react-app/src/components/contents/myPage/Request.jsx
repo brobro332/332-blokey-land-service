@@ -106,9 +106,9 @@ const Request = () => {
             <TableHead>
               <TableRow>
                 <TableCell sx={{ width: "20%" }}>워크스페이스 이름</TableCell>
-                <TableCell sx={{ width: "30%" }}>리더</TableCell>
+                <TableCell sx={{ width: "20%" }}>리더</TableCell>
                 <TableCell sx={{ width: "40%" }}>소개</TableCell>
-                <TableCell sx={{ width: "10%" }}>처리</TableCell>
+                <TableCell sx={{ width: "30%" }}>처리</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -134,13 +134,17 @@ const Request = () => {
                     </Button>
                   ) : (
                     workspace.invitationStatus === 'PENDING' ? (
-                      <Button
-                        variant="contained"
-                        color="error"
-                        onClick={() => deleteInvitation(workspace)}
-                      >
-                        취소
-                      </Button>
+                      workspace.requesterType === 'MEMBER' ? (
+                        <Button
+                          variant="contained"
+                          color="error"
+                          onClick={() => deleteInvitation(workspace)}
+                        >
+                          취소
+                        </Button>
+                      ) : (
+                        '워크스페이스 가입요청 존재'
+                      )
                     ) : (
                       workspace.invitationStatus === 'ACCEPTED' ? '가입완료' : '거절' 
                     ) 

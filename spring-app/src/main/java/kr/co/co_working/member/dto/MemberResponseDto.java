@@ -2,6 +2,7 @@ package kr.co.co_working.member.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
 import kr.co.co_working.invitation.InvitationStatus;
+import kr.co.co_working.invitation.RequesterType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +19,7 @@ public class MemberResponseDto {
         private String leader;
         private InvitationStatus status;
         private Long invitationId;
+        private RequesterType requesterType;
 
         @QueryProjection
         public MemberResponseDto(String email, String name, String description, LocalDateTime createdAt, LocalDateTime modifiedAt) {
@@ -29,7 +31,7 @@ public class MemberResponseDto {
         }
 
         @QueryProjection
-        public MemberResponseDto(String email, String name, String description, LocalDateTime createdAt, LocalDateTime modifiedAt, Long invitationId, InvitationStatus status) {
+        public MemberResponseDto(String email, String name, String description, LocalDateTime createdAt, LocalDateTime modifiedAt, Long invitationId, InvitationStatus status, RequesterType requesterType) {
                 this.email = email;
                 this.name = name;
                 this.description = description;
@@ -37,6 +39,7 @@ public class MemberResponseDto {
                 this.modifiedAt = modifiedAt;
                 this.invitationId = invitationId;
                 this.status = status;
+                this.requesterType = requesterType;
         }
 
         @QueryProjection
