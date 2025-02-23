@@ -13,16 +13,14 @@ const CheckPassword = ({
 
   const isFormFilled = password.trim();
   
-  const handleCheck = async () => {
+  const checkPassword = async () => {
     setIsLoading(true);
     try {
-      const body = {
-        password: password
-      };
-
       const result = await axios.post(
         "http://localhost:8080/api/v1/authorization",
-        body,
+        {
+          password: password
+        },
         {
           headers: {
             "Content-Type": "application/json; charset=UTF-8",
@@ -56,7 +54,7 @@ const CheckPassword = ({
       />
       <Button
         variant="contained"
-        onClick={handleCheck}
+        onClick={checkPassword}
         color="primary"
         sx={{ marginTop: "20px", marginBottom: "20px" }}
         disabled={!isFormFilled || isLoading}

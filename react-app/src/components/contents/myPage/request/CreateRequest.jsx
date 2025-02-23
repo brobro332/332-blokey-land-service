@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Box, Button, TextField, Table, TableContainer, Pagination, TableCell, TableBody, TableRow, TableHead, Paper } from "@mui/material";
 import axios from "axios";
 
-const Request = () => {
+const CreateRequest = () => {
   const [name, setName] = useState('');
   const [workspaceList, setWorkspaceList] = useState([]); 
   const [page, setPage] = useState(1);
@@ -11,7 +11,7 @@ const Request = () => {
   const startIndex = (page - 1) * pageSize;
   const currentPageData = workspaceList.slice(startIndex, startIndex + pageSize);
 
-  const fetchWorkspaceListNotJoined = useCallback(async () => {
+  const readWorkspaceListNotJoined = useCallback(async () => {
     try {
       const result = await axios.get(
         "http://localhost:8080/api/v1/workspace/workspaceList-not-joined",
@@ -34,8 +34,8 @@ const Request = () => {
   }, [name]);
 
   useEffect(() => {
-    fetchWorkspaceListNotJoined();
-  }, [fetchWorkspaceListNotJoined]);
+    readWorkspaceListNotJoined();
+  }, [readWorkspaceListNotJoined]);
 
   const createInvitation = async (row) => {
     try {
@@ -54,7 +54,7 @@ const Request = () => {
       );
 
       if (result.status === 200) {
-        fetchWorkspaceListNotJoined();
+        readWorkspaceListNotJoined();
       }
     } catch (e) {
       console.error(e);
@@ -77,7 +77,7 @@ const Request = () => {
       );
 
       if (result.status === 200) {
-        fetchWorkspaceListNotJoined();
+        readWorkspaceListNotJoined();
       }
     } catch (e) {
       console.error(e);
@@ -169,4 +169,4 @@ const Request = () => {
   );
 };
 
-export default Request;
+export default CreateRequest;

@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Container, AppBar, Toolbar, Typography, Box, Drawer, List, ListItem, ListItemText, CssBaseline, IconButton, Snackbar, Alert, MenuItem, Menu } from '@mui/material';
 import AppsIcon from '@mui/icons-material/Apps';
 import CheckIcon from '@mui/icons-material/Check';
-import Workspace from '../contents/workspace/Workspace';
+import WorkspaceMain from '../contents/workspace/WorkspaceMain';
 import { useNavigate } from 'react-router-dom';
-import MyPage from '../contents/myPage/MyPage';
+import MyPageMain from '../contents/myPage/MyPageMain';
 
 const Main = () => {
   const [selectedMenu, setSelectedMenu] = useState('대시보드');
@@ -64,11 +64,11 @@ const Main = () => {
         );
       case '워크스페이스':
         return (
-          <Workspace />
+          <WorkspaceMain />
         );
       case '마이페이지':
         return (
-          <MyPage />
+          <MyPageMain />
         );
       default:
         return (

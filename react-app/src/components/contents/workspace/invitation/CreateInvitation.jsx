@@ -12,7 +12,7 @@ const Invitation = ({ selectedItem }) => {
   const startIndex = (page - 1) * pageSize;
   const currentPageData = memberList.slice(startIndex, startIndex + pageSize);
 
-  const fetchMemberListNotInWorkspace = useCallback(async () => {
+  const readMemberListNotInWorkspace = useCallback(async () => {
     try {
       const result = await axios.get(
         "http://localhost:8080/api/v1/member/memberList-not-in-workspace",
@@ -37,8 +37,8 @@ const Invitation = ({ selectedItem }) => {
   }, [email, name, selectedItem]);
 
   useEffect(() => {
-    fetchMemberListNotInWorkspace();
-  }, [fetchMemberListNotInWorkspace]);
+    readMemberListNotInWorkspace();
+  }, [readMemberListNotInWorkspace]);
 
   const createInvitation = async (row) => {
     try {
@@ -58,7 +58,7 @@ const Invitation = ({ selectedItem }) => {
       );
 
       if (result.status === 200) {
-        fetchMemberListNotInWorkspace();
+        readMemberListNotInWorkspace();
       }
     } catch (e) {
       console.error(e);
@@ -81,7 +81,7 @@ const Invitation = ({ selectedItem }) => {
       );
 
       if (result.status === 200) {
-        fetchMemberListNotInWorkspace();
+        readMemberListNotInWorkspace();
       }
     } catch (e) {
       console.error(e);

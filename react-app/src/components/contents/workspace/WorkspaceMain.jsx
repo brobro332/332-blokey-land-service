@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Box, Card, Chip, Divider, Typography } from "@mui/material";
-import CreateWorkspace from "./CreateWorkspace";
-import SelectWorkspace from "./SelectWorkspace";
-import MemberTable from "./MemberTable";
+import CreateWorkspace from "./workspace/CreateWorkspace";
+import ReadWorkspace from "./workspace/ReadWorkspace";
+import MemberTable from "./workspace/MemberTable";
 import ManageJoin from "./invitation/ManageJoin";
 import axios from "axios";
 import ConfirmDialog from "../../tags/ConfirmDialog";
 
-const Workspace = () => {
+const WorkspaceMain = () => {
   const [items, setItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
   const [memberList, setMemberList] = useState([]);
@@ -152,7 +152,7 @@ const Workspace = () => {
             />
           ) : (
             <>
-              <SelectWorkspace
+              <ReadWorkspace
                 items={items}
                 onCreateWorkspace={handleCreateWorkspace}
                 onEditWorkspace={handleEditWorkspace}
@@ -195,4 +195,4 @@ const Workspace = () => {
   );
 };
 
-export default Workspace;
+export default WorkspaceMain;

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Tabs, Tab, Box, Button } from "@mui/material";
 import ManageInvitation from "./ManageInvitation";
-import Invitation from "./Invitation";
+import CreateInvitation from "./CreateInvitation";
 
 const ManageJoin = ({ onCancel, selectedItem }) => {
   const [value, setValue] = useState(0);
@@ -28,7 +28,7 @@ const ManageJoin = ({ onCancel, selectedItem }) => {
           <ManageInvitation selectedItem={selectedItem}/>
         )}
         {value === 1 && (
-          <Invitation selectedItem={selectedItem}/>
+          <CreateInvitation selectedItem={selectedItem}/>
         )}
       </Box>
       <Button variant="contained" color="inherit" onClick={onCancel} sx={{marginTop : "15px"}}>

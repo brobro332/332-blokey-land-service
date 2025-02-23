@@ -7,8 +7,5 @@ import java.util.List;
 
 public interface MemberWorkspaceRepository extends JpaRepository<MemberWorkspace, Long> {
     MemberWorkspace findByMemberEmailAndWorkspaceId(String email, Long workspaceId);
-
-    List<MemberWorkspace> findByMemberEmail(String email);
-
     List<MemberWorkspace> findByWorkspaceId(Long workspaceId);
 }

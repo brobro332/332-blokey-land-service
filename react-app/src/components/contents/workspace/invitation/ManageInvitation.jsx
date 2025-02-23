@@ -16,7 +16,7 @@ const ManageInvitation = ({ selectedItem }) => {
   const startIndex = (page - 1) * pageSize;
   const currentPageData = invitationList.slice(startIndex, startIndex + pageSize);
 
-  const fetchInvitationList = useCallback(async () => {
+  const readInvitation = useCallback(async () => {
     try {
       const result = await axios.get(
         "http://localhost:8080/api/v1/invitation",
@@ -43,8 +43,8 @@ const ManageInvitation = ({ selectedItem }) => {
   }, [division, email, name, selectedItem]);
 
   useEffect(() => {
-    fetchInvitationList();
-  }, [fetchInvitationList]);
+    readInvitation();
+  }, [readInvitation]);
 
   const updateInvitation = async (row, flag) => {
     try {
@@ -65,7 +65,7 @@ const ManageInvitation = ({ selectedItem }) => {
       );
 
       if (result.status === 200) {
-        fetchInvitationList();
+        readInvitation();
       }
     } catch (e) {
       console.error(e);
@@ -88,7 +88,7 @@ const ManageInvitation = ({ selectedItem }) => {
       );
 
       if (result.status === 200) {
-        fetchInvitationList();
+        readInvitation();
       }
     } catch (e) {
       console.error(e);

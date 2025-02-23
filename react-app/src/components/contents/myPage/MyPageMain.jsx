@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, Divider, Card, Chip, Button } from "@mui/material";
 import axios from "axios";
-import EditProfile from "./EditProfile";
-import CheckPassword from "./CheckPassword";
-import UpdatePassword from "./UpdatePassword";
+import UpdateMember from "./profile/UpdateMember";
+import CheckPassword from "./password/CheckPassword";
+import UpdatePassword from "./password/UpdatePassword";
 import ConfirmDialog from '../../tags/ConfirmDialog';
 import { useNavigate } from 'react-router-dom';
-import ManageRequest from './ManageRequest';
+import ManageRequest from './request/ManageRequest';
 
-const MyPage = () => {
+const MyPageMain = () => {
   const [member, setMember] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isChecking, setIsChecking] = useState(false);
@@ -99,7 +99,7 @@ const MyPage = () => {
       <Divider sx={{ marginBottom: '15px' }} />
       {isEditing ? (
         <>
-          <EditProfile 
+          <UpdateMember 
             member={member} 
             onCancel={handleCancel} 
             onProfileEdited={handleProfileEdited} 
@@ -207,4 +207,4 @@ const MyPage = () => {
   );
 };
 
-export default MyPage;
+export default MyPageMain;

@@ -3,7 +3,7 @@ import { FormControl, InputLabel, MenuItem, Select, TextField, Box, TableContain
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import axios from "axios";
 
-const ManageMyPageInvitation = () => {
+const ApproveRequest = () => {
   const [page, setPage] = useState(0);
   const [division, setDivision] = useState('ALL');
   const [name, setName] = useState('');
@@ -15,7 +15,7 @@ const ManageMyPageInvitation = () => {
   const startIndex = (page - 1) * pageSize;
   const currentPageData = invitationList.slice(startIndex, startIndex + pageSize);
 
-  const fetchInvitationList = useCallback(async () => {
+  const readInvitation = useCallback(async () => {
     try {
       const result = await axios.get(
         "http://localhost:8080/api/v1/invitation",
@@ -40,8 +40,8 @@ const ManageMyPageInvitation = () => {
   }, [division, name]);
 
   useEffect(() => {
-    fetchInvitationList();
-  }, [fetchInvitationList]);
+    readInvitation();
+  }, [readInvitation]);
 
   const updateInvitation = async (row, flag) => {
     try {
@@ -61,7 +61,7 @@ const ManageMyPageInvitation = () => {
       );
 
       if (result.status === 200) {
-        fetchInvitationList();
+        readInvitation();
       }
     } catch (e) {
       console.error(e);
@@ -84,7 +84,7 @@ const ManageMyPageInvitation = () => {
       );
 
       if (result.status === 200) {
-        fetchInvitationList();
+        readInvitation();
       }
     } catch (e) {
       console.error(e);
@@ -225,4 +225,4 @@ const ManageMyPageInvitation = () => {
   );
 };
 
-export default ManageMyPageInvitation;
+export default ApproveRequest;

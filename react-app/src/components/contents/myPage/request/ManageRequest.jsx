@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Tabs, Tab, Box, Button } from "@mui/material";
-import ManageMyPageInvitation from "./ManageMyPageInvitation";
-import Request from "./Request";
+import ApproveRequest from "./ApproveRequest";
+import CreateRequest from "./CreateRequest";
 
 const ManageRequest = ({ onCancel }) => {
   const [value, setValue] = useState(0);
@@ -25,10 +25,10 @@ const ManageRequest = ({ onCancel }) => {
       
       <Box sx={{ p: 2, mt: 2, border: "1px solid #ddd", borderRadius: 2 }}>
         {value === 0 && (
-          <ManageMyPageInvitation/>
+          <ApproveRequest/>
         )}
         {value === 1 && (
-          <Request/>
+          <CreateRequest/>
         )}
       </Box>
       <Button variant="contained" color="inherit" onClick={onCancel} sx={{marginTop : "15px"}}>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Box, TextField, Button } from "@mui/material";
 import axios from "axios";
 
-const EditProfile = ({
+const UpdateMember = ({
   member,
   onCancel,
   onProfileEdited
@@ -13,7 +13,7 @@ const EditProfile = ({
 
   const isFormFilled = name.trim() && description.trim();
 
-  const handleEdit = async () => {
+  const updateMember = async () => {
     setIsLoading(true);
     try {
       const body = {
@@ -64,7 +64,7 @@ const EditProfile = ({
       />
       <Button
         variant="contained"
-        onClick={handleEdit}
+        onClick={updateMember}
         color="primary"
         sx={{ marginTop: "20px", marginBottom: "20px" }}
         disabled={!isFormFilled || isLoading}
@@ -80,4 +80,4 @@ const EditProfile = ({
   );
 };
 
-export default EditProfile;
+export default UpdateMember;
