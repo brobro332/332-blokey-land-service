@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Box, TextField, Button, Snackbar, Alert } from "@mui/material";
 import CheckIcon from '@mui/icons-material/Check';
 import axios from "axios";
+import config from "../../../../config";
 
 const UpdatePassword = ({
   onCancel,
@@ -27,7 +28,7 @@ const UpdatePassword = ({
       };
 
       const result = await axios.put(
-        "http://localhost:8080/api/v1/member/password",
+        `http://${config.API_BASE_URL}/api/v1/member/password"`,
         body,
         {
           headers: {

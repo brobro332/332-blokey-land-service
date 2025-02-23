@@ -7,6 +7,7 @@ import UpdatePassword from "./password/UpdatePassword";
 import ConfirmDialog from '../../tags/ConfirmDialog';
 import { useNavigate } from 'react-router-dom';
 import ManageRequest from './request/ManageRequest';
+import config from '../../../config';
 
 const MyPageMain = () => {
   const [member, setMember] = useState(null);
@@ -20,7 +21,7 @@ const MyPageMain = () => {
 
   const readMember = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/v1/member", {
+      const response = await axios.get(`http://${config.API_BASE_URL}/api/v1/member`, {
         withCredentials: true,
       });
       if (response.status === 200) {
@@ -38,7 +39,7 @@ const MyPageMain = () => {
   const deleteMember = async () => {
     try {
       const resultObject = await axios.delete(
-        "http://localhost:8080/api/v1/member",
+        `http://${config.API_BASE_URL}/api/v1/member`,
         {
           withCredentials: true
         }

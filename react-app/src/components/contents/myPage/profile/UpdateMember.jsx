@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Box, TextField, Button } from "@mui/material";
 import axios from "axios";
+import config from "../../../../config";
 
 const UpdateMember = ({
   member,
@@ -17,7 +18,7 @@ const UpdateMember = ({
     setIsLoading(true);
     try {
       const result = await axios.put(
-        "http://localhost:8080/api/v1/member",
+        `http://${config.API_BASE_URL}/api/v1/member`,
         {
           name: name,
           description: description

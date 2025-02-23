@@ -3,6 +3,7 @@ import { Box, Typography, TextField, Button, Link, Snackbar, Alert } from '@mui/
 import CheckIcon from '@mui/icons-material/Check';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import config from '../../config';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -14,7 +15,7 @@ const LoginForm = () => {
   const handleLogin = async () => {
     try {
       const result = await axios.post(
-        "http://localhost:8080/api/v1/authentication",
+        `http://${config.API_BASE_URL}/api/v1/authentication`,
         { 
           email: email,
           password: password
@@ -26,6 +27,7 @@ const LoginForm = () => {
           withCredentials: true
         }
       );
+      
       if (result.status === 200) {
         navigate('/main');
       } else {

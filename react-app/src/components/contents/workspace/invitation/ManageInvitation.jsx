@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { FormControl, InputLabel, MenuItem, Select, TextField, Box, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Pagination, Paper, IconButton, Menu } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import axios from "axios";
+import config from "../../../../config";
 
 const ManageInvitation = ({ selectedWorkspace }) => {
   const [page, setPage] = useState(0);
@@ -19,7 +20,7 @@ const ManageInvitation = ({ selectedWorkspace }) => {
   const readInvitation = useCallback(async () => {
     try {
       const result = await axios.get(
-        "http://localhost:8080/api/v1/invitation",
+        `http://${config.API_BASE_URL}/api/v1/invitation`,
         {
           params: { 
             memberEmail: memberEmail?.trim(),

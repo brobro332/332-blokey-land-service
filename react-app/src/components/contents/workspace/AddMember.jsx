@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Tabs, Tab, Box, Typography, MenuItem, Button, FormControl, InputLabel, Select, TextField, Table, TableContainer, Pagination, TableCell, TableBody, TableRow, TableHead, Paper } from "@mui/material";
 import axios from "axios";
+import config from "../../../config";
 
 const AddMember = ({ onAddMember }) => {
   const [value, setValue] = useState(0);
@@ -14,7 +15,7 @@ const AddMember = ({ onAddMember }) => {
     const readInvitation = async () => {
       try {
         const result = await axios.get(
-          "http://localhost:8080/api/v1/invitation",
+          `http://${config.API_BASE_URL}/api/v1/invitation`,
           {
             params: { 
               email: email?.trim(),

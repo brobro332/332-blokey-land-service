@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, TextField, Button } from "@mui/material";
 import axios from "axios";
+import config from "../../../../config";
 
 const CreateWorkspace = ({
   onCancel,
@@ -28,7 +29,7 @@ const CreateWorkspace = ({
     setIsLoading(true);
     try {
       const result = await axios.post(
-        "http://localhost:8080/api/v1/workspace",
+        `http://${config.API_BASE_URL}/api/v1/workspace`,
         {
           name: workspaceName,
           description: workspaceDescription
@@ -55,7 +56,7 @@ const CreateWorkspace = ({
     setIsLoading(true);
     try {
       const result = await axios.put(
-        "http://localhost:8080/api/v1/workspace/" + workspace.id,
+        `http://${config.API_BASE_URL}/api/v1/workspace/` + workspace.id,
         {
           id: workspace.id,
           name: workspaceName,

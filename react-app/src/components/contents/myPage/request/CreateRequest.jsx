@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Box, Button, TextField, Table, TableContainer, Pagination, TableCell, TableBody, TableRow, TableHead, Paper } from "@mui/material";
 import axios from "axios";
+import config from "../../../../config";
 
 const CreateRequest = () => {
   const [workspaceName, setWorkspaceName] = useState('');
@@ -64,7 +65,7 @@ const CreateRequest = () => {
   const deleteInvitation = async (row) => {
     try {
       const result = await axios.delete(
-        "http://localhost:8080/api/v1/invitation",
+        `http://${config.API_BASE_URL}/api/v1/invitation`,
         {
           data: {
             id: row.invitationId

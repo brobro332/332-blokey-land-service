@@ -3,6 +3,7 @@ import { Box, Typography, TextField, Button, Snackbar, Alert } from '@mui/materi
 import CheckIcon from '@mui/icons-material/Check';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import config from '../../config';
 
 const JoinForm = () => {
   const [email, setEmail] = useState('');
@@ -34,7 +35,7 @@ const JoinForm = () => {
 
     try {
       const result = await axios.post(
-        'http://localhost:8080/api/v1/member',
+        `http://${config.API_BASE_URL}/api/v1/member`,
         body,
         {
           headers: {

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Box, TextField, Button, Snackbar, Alert } from "@mui/material";
 import CheckIcon from '@mui/icons-material/Check';
 import axios from "axios";
+import config from "../../../../config.js";
 
 const CheckPassword = ({
   onCancel,
@@ -17,7 +18,7 @@ const CheckPassword = ({
     setIsLoading(true);
     try {
       const result = await axios.post(
-        "http://localhost:8080/api/v1/authorization",
+        `http://${config.API_BASE_URL}:8080/api/v1/authorization`,
         {
           password: password
         },
