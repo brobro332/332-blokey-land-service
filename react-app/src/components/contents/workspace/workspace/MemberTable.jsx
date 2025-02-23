@@ -16,7 +16,7 @@ import {
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import axios from "axios";
 
-const MemberTable = ({ memberList, page, selectedItem, onPageChange, onChange }) => {
+const MemberTable = ({ memberList, page, workspace, onPageChange, onChange }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedRow, setSelectedRow] = useState(null);
 
@@ -27,7 +27,7 @@ const MemberTable = ({ memberList, page, selectedItem, onPageChange, onChange })
   const updateWorkspace = async (row) => {
     try {
       const result = await axios.put(
-        "http://localhost:8080/api/v1/workspace/" + selectedItem.id,
+        "http://localhost:8080/api/v1/workspace/" + workspace.id,
         { leader: row.email },
         {
           headers: {
@@ -48,7 +48,7 @@ const MemberTable = ({ memberList, page, selectedItem, onPageChange, onChange })
   const removeMemberFromWorkspace = async (row) => {
     try {
       const result = await axios.delete(
-        "http://localhost:8080/api/v1/workspace/" + row.email + "/" + selectedItem.id,
+        "http://localhost:8080/api/v1/workspace/" + row.email + "/" + workspace.id,
         {
           headers: {
             "Content-Type": "application/json; charset=UTF-8",

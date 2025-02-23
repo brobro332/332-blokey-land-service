@@ -18,7 +18,7 @@ const MyPageMain = () => {
 
   const navigate = useNavigate();
 
-  const fetchMember = async () => {
+  const readMember = async () => {
     try {
       const response = await axios.get("http://localhost:8080/api/v1/member", {
         withCredentials: true,
@@ -53,7 +53,7 @@ const MyPageMain = () => {
 
   const handleProfileEdited = () => {
     setIsEditing(false);
-    fetchMember();
+    readMember();
   };
 
   const handleCancel = () => {
@@ -90,7 +90,7 @@ const MyPageMain = () => {
   };
 
   useEffect(() => {
-    fetchMember();
+    readMember();
   }, []);
 
   return (

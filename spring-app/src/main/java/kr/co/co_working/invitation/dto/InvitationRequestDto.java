@@ -10,31 +10,31 @@ public class InvitationRequestDto {
     @Getter
     @Setter
     public static class CREATE {
+        private String memberEmail;
         private Long workspaceId;
-        private String memberId;
         private String requesterType;
     }
 
     @Getter
     @Setter
     public static class READ {
-        private String division;
-        private String email;
-        private String name;
-        private LocalDateTime createdAtFrom;
-        private LocalDateTime createdAtTo;
+        private String memberEmail;
+        private String memberName;
         private Long workspaceId;
         private String workspaceName;
+        private String division;
         private String menu;
+        private LocalDateTime createdAtFrom;
+        private LocalDateTime createdAtTo;
     }
 
     @Getter
     @Setter
     public static class UPDATE {
-        private Long id;
-        private String status;
         private String memberEmail;
         private Long workspaceId;
+        private Long id;
+        private String status;
     }
 
     @Getter

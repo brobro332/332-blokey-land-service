@@ -15,8 +15,8 @@ const ReadWorkspace = ({
   onEditWorkspace,
   onAddMember,
   handleDeleteButtonClick,
-  selectedItem,
-  setSelectedItem
+  workspace,
+  setWorkspace
 }) => (
   <Box>
     {items.length > 0 ? (
@@ -27,11 +27,11 @@ const ReadWorkspace = ({
             labelId="select-workspace"
             id="select-workspace"
             size="small"
-            value={selectedItem.id}
+            value={workspace.id}
             label="워크스페이스 선택"
             onChange={(e) => {
-              const selected = items.find((item) => item.id === e.target.value);
-              setSelectedItem(selected);
+              const selectedWorkspace = items.find((item) => item.id === e.target.value);
+              setWorkspace(selectedWorkspace);
             }}
           >
             {items.map((item) => (

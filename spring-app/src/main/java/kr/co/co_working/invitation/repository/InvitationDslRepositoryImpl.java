@@ -79,10 +79,10 @@ public class InvitationDslRepositoryImpl implements InvitationDslRepository {
                         .leftJoin(member)
                         .on(invitation.member.email.eq(member.email))
                         .where(
-                            nameContains(dto.getName()),
+                            nameContains(dto.getMemberName()),
                             member.delFlag.eq("0"),
                             requesterTypeEq(dto.getDivision()),
-                            emailContains(dto.getEmail()),
+                            emailContains(dto.getMemberEmail()),
                             workspaceIdEq(dto.getWorkspaceId())
                         )
                         .fetch();

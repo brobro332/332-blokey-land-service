@@ -116,11 +116,9 @@ public class MemberDslRepositoryImpl implements MemberDslRepository {
                         .select(memberWorkspace.member.email)
                         .from(memberWorkspace)
                         .where(memberWorkspace.workspace.id.eq(dto.getId()))
-                )
-            )
-            .where(
-                emailContains(dto.getEmail()),
-                nameContains(dto.getName())
+                ),
+                emailContains(dto.getMemberEmail()),
+                nameContains(dto.getMemberName())
             )
             .fetch();
     }

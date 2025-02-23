@@ -43,7 +43,7 @@ public class InvitationService {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String email = authentication.getName();
 
-            dto.setMemberId(email);
+            dto.setMemberEmail(email);
         }
 
         // 2. Workspace 존재 여부 확인
@@ -52,7 +52,7 @@ public class InvitationService {
         );
 
         // 3. Member 존재 여부 확인
-        Member member = memberRepository.findById(dto.getMemberId()).orElseThrow(
+        Member member = memberRepository.findById(dto.getMemberEmail()).orElseThrow(
             () -> new NoSuchElementException("해당 멤버가 존재하지 않습니다.")
         );
 

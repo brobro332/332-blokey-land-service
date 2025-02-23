@@ -3,7 +3,7 @@ import { Box, Button, TextField, Table, TableContainer, Pagination, TableCell, T
 import axios from "axios";
 
 const CreateRequest = () => {
-  const [name, setName] = useState('');
+  const [workspaceName, setWorkspaceName] = useState('');
   const [workspaceList, setWorkspaceList] = useState([]); 
   const [page, setPage] = useState(1);
 
@@ -17,7 +17,7 @@ const CreateRequest = () => {
         "http://localhost:8080/api/v1/workspace/workspaceList-not-joined",
         {
           params: { 
-            name: name?.trim(),
+            workspaceName: workspaceName?.trim(),
           },
           withCredentials: true,
         }
@@ -31,7 +31,7 @@ const CreateRequest = () => {
     } catch (e) {
       console.error(e);
     }
-  }, [name]);
+  }, [workspaceName]);
 
   useEffect(() => {
     readWorkspaceListNotJoined();
@@ -96,8 +96,8 @@ const CreateRequest = () => {
           variant="outlined" 
           size="small" 
           sx={{ flex: 1 }}
-          value={name}
-          onChange={(e) => setName(e.target.value)} 
+          value={workspaceName}
+          onChange={(e) => setWorkspaceName(e.target.value)} 
         />
       </Box>
       <Box>

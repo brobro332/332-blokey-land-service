@@ -1,0 +1,122 @@
+import React, { useEffect, useState } from "react";
+import { Box, TextField, Button } from "@mui/material";
+import axios from "axios";
+
+const CreateWorkspace = ({
+  onCancel,
+  onWorkspaceCreated,
+  onWorkspaceUpdated,
+  workspace,
+  isEditing,
+}) => {
+  const [workspaceName, setWorkspaceName] = useState(workspace ? workspace.name : "");
+  const [workspaceDescription, setWorkspaceDescription] = useState(
+    workspace ? workspace.description : ""
+  );
+  const [isLoading, setIsLoading] = useState(false);
+
+  const isFormFilled = name.trim() && description.trim();
+
+  useEffect(() => {
+    if (!isEditing) {
+      setWorkspaceName('');
+      setWorkspaceDescription('');
+    }
+  }, [isEditing]);
+
+  const createWorkspace = async () => {
+    setIsLoading(true);
+    try {
+      const result = await axios.post(
+        "http://localhost:8080/api/v1/workspace",
+        {
+          workspaceName: workspaceName,
+          workspaceDescription: workspaceDescription
+        },
+        {
+          headers: {
+            "Content-Type": "application/json; charset=UTF-8",
+          },
+          withCredentials: true,
+        }
+      );
+
+      if (result.status === 200) {
+        onWorkspaceCreated();
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleUpdate = async () => {
+    setIsLoading(true);
+    try {
+      const result = await axios.put(
+        "http://localhost:8080/api/v1/workspace/" + selectedItem.id,
+        {
+          id: workspace.id,
+          workspaceName: workspaceName,
+          workspaceDescription: workspaceDescription
+        },
+        {
+          headers: {
+            "Content-Type": "application/json; charset=UTF-8",
+          },
+          withCredentials: true,
+        }
+      );
+
+      if (result.status === 200) {
+        onWorkspaceUpdated();
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <Box>
+      <TextField
+        label="워크스페이스 이름"
+        variant="standard"
+        margin="normal"
+        size="small"
+        fullWidth
+        value={workspaceName}
+        onChange={(e) => setWorkspaceName(e.target.value)}
+      />
+      <TextField
+        label="워크스페이스 설명"
+        variant="standard"
+        margin="normal"
+        size="small"
+        fullWidth
+        value={workspaceDescription}
+        onChange={(e) => setWorkspaceDescription(e.target.value)}
+      />
+      <Button
+        variant="contained"
+        onClick={isEditing ? handleUpdate : handleCreate}
+        color="primary"
+        sx={{ marginTop: "20px", marginBottom: "20px" }}
+        disabled={!isFormFilled || isLoading}
+        fullWidth
+        loading={isLoading}
+      >
+        {isEditing
+          ? "수정"
+          : "생성"}
+      </Button>
+      <Button variant="contained" onClick={onCancel} color="inherit" fullWidth>
+        취소
+      </Button>
+    </Box>
+  );
+};
+
+export default CreateWorkspace;

@@ -6,7 +6,7 @@ import axios from "axios";
 const ApproveRequest = () => {
   const [page, setPage] = useState(0);
   const [division, setDivision] = useState('ALL');
-  const [name, setName] = useState('');
+  const [workspaceName, setWorkspaceName] = useState('');
   const [invitationList, setInvitationList] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedRow, setSelectedRow] = useState(null);
@@ -21,7 +21,7 @@ const ApproveRequest = () => {
         "http://localhost:8080/api/v1/invitation",
         {
           params: { 
-            name: name?.trim(),
+            workspaceName: workspaceName?.trim(),
             division: division?.trim() === 'ALL' ? '' : division,
             menu: 'MY_PAGE'
            },
@@ -37,7 +37,7 @@ const ApproveRequest = () => {
     } catch (e) {
       console.error(e);
     }
-  }, [division, name]);
+  }, [division, workspaceName]);
 
   useEffect(() => {
     readInvitation();
@@ -121,8 +121,8 @@ const ApproveRequest = () => {
         variant="outlined" 
         size="small" 
         sx={{ flex: 1 }}
-        value={name}
-        onChange={(e) => setName(e.target.value)} 
+        value={workspaceName}
+        onChange={(e) => setWorkspaceName(e.target.value)} 
         />
       </Box>
       <Box>

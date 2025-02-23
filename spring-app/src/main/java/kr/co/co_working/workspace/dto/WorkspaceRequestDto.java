@@ -17,9 +17,10 @@ public class WorkspaceRequestDto {
     @Getter
     @Setter
     public static class READ {
-        private String email;
-        private String name;
+        private String memberEmail;
+        private String memberName;
         private Long id;
+        private String name;
     }
 
     @NoArgsConstructor

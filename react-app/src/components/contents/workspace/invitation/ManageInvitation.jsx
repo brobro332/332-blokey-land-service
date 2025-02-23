@@ -3,11 +3,11 @@ import { FormControl, InputLabel, MenuItem, Select, TextField, Box, TableContain
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import axios from "axios";
 
-const ManageInvitation = ({ selectedItem }) => {
+const ManageInvitation = ({ selectedWorkspace }) => {
   const [page, setPage] = useState(0);
   const [division, setDivision] = useState('ALL');
-  const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
+  const [memberEmail, setMemberEmail] = useState('');
+  const [memberName, setMemberName] = useState('');
   const [invitationList, setInvitationList] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedRow, setSelectedRow] = useState(null);
@@ -22,9 +22,9 @@ const ManageInvitation = ({ selectedItem }) => {
         "http://localhost:8080/api/v1/invitation",
         {
           params: { 
-            email: email?.trim(),
-            name: name?.trim(),
-            workspaceId: selectedItem,
+            memberEmail: memberEmail?.trim(),
+            memberName: memberName?.trim(),
+            workspaceId: selectedWorkspace,
             division: division?.trim() === 'ALL' ? '' : division,
             menu: 'WORKSPACE'
            },
@@ -40,7 +40,7 @@ const ManageInvitation = ({ selectedItem }) => {
     } catch (e) {
       console.error(e);
     }
-  }, [division, email, name, selectedItem]);
+  }, [division, memberEmail, memberName, selectedWorkspace]);
 
   useEffect(() => {
     readInvitation();
@@ -51,10 +51,10 @@ const ManageInvitation = ({ selectedItem }) => {
       const result = await axios.put(
         "http://localhost:8080/api/v1/invitation",
         {
+          memberEmail: row.email,
+          workspaceId: selectedWorkspace,
           id: row.id,
-          status: flag,
-          workspaceId: selectedItem,
-          memberEmail: row.email
+          status: flag
         },
         {
           headers: {
@@ -125,16 +125,16 @@ const ManageInvitation = ({ selectedItem }) => {
         variant="outlined" 
         size="small" 
         sx={{ flex: 1 }}
-        value={email}
-        onChange={(e) => setEmail(e.target.value)} 
+        value={memberEmail}
+        onChange={(e) => setMemberEmail(e.target.value)} 
         />
         <TextField 
         label="이름" 
         variant="outlined" 
         size="small" 
         sx={{ flex: 1 }} 
-        value={name}
-        onChange={(e) => setName(e.target.value)}
+        value={memberName}
+        onChange={(e) => setMemberName(e.target.value)}
         />
       </Box>
       <Box>

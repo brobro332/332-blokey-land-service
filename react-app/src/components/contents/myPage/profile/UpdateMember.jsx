@@ -16,14 +16,12 @@ const UpdateMember = ({
   const updateMember = async () => {
     setIsLoading(true);
     try {
-      const body = {
-        name: name,
-        description: description,
-      };
-
       const result = await axios.put(
         "http://localhost:8080/api/v1/member",
-        body,
+        {
+          name: name,
+          description: description
+        },
         {
           headers: {
             "Content-Type": "application/json; charset=UTF-8",

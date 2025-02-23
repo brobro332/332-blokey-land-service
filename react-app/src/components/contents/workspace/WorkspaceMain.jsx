@@ -8,8 +8,8 @@ import axios from "axios";
 import ConfirmDialog from "../../tags/ConfirmDialog";
 
 const WorkspaceMain = () => {
-  const [items, setItems] = useState([]);
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [workspaceList, setWorkspaceList] = useState([]);
+  const [selectedWorkspace, setSelectedWorkspace] = useState(null);
   const [memberList, setMemberList] = useState([]);
   const [page, setPage] = useState(1);
   const [isCreating, setIsCreating] = useState(false);
@@ -17,7 +17,7 @@ const WorkspaceMain = () => {
   const [isAdding, setIsAdding] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const fetchWorkspaceList = async () => {
+  const readWorkspaceList = async () => {
     try {
       const response = await axios.get("http://localhost:8080/api/v1/workspace/workspaceList", {
         withCredentials: true,
@@ -26,8 +26,8 @@ const WorkspaceMain = () => {
         const workspaceList = response.data.data;
 
         if (workspaceList.length > 0) {
-          setItems(workspaceList);
-          setSelectedItem(workspaceList[0]);
+          setWorkspaceList(workspaceList);
+          setSelectedWorkspace(workspaceList[0]);
         }
       }
     } catch (e) {
@@ -38,13 +38,13 @@ const WorkspaceMain = () => {
   const deleteWorkspace = async () => {
     try {
       const resultObject = await axios.delete(
-        "http://localhost:8080/api/v1/workspace/" + selectedItem.id,
+        "http://localhost:8080/api/v1/workspace/" + selectedWorkspace.id,
         {
           withCredentials: true
         }
       );
       if (resultObject.status === 200) {
-        fetchWorkspaceList();
+        readWorkspaceList();
         setIsDialogOpen(false);
       }
     } catch (e) {
@@ -53,21 +53,21 @@ const WorkspaceMain = () => {
   };
 
   useEffect(() => {
-    fetchWorkspaceList();
+    readWorkspaceList();
   }, []);
 
-  const fetchMembers = useCallback(async () => {
-    if (selectedItem !== null) {
+  const readMemberListInWorkspace = useCallback(async () => {
+    if (selectedWorkspace !== null) {
       try {
-        const memberListObject = await axios.get(
+        const result = await axios.get(
           "http://localhost:8080/api/v1/member/memberList-in-workspace",
           {
-            params: { id: selectedItem.id },
+            params: { id: selectedWorkspace.id },
             withCredentials: true,
           }
         );
-        if (memberListObject.status === 200) {
-          const memberList = memberListObject.data.data;
+        if (result.status === 200) {
+          const memberList = result.data.data;
 
           setPage(1);
           setMemberList(memberList);
@@ -76,11 +76,11 @@ const WorkspaceMain = () => {
         console.error(e);
       }
     }
-  }, [selectedItem]);
+  }, [selectedWorkspace]);
 
   useEffect(() => {
-    fetchMembers();
-  }, [fetchMembers]);
+    readMemberListInWorkspace();
+  }, [readMemberListInWorkspace]);
 
   const handleCreateWorkspace = () => {
     setIsCreating(true);
@@ -111,12 +111,12 @@ const WorkspaceMain = () => {
 
   const handleWorkspaceCreated = () => {
     setIsCreating(false);
-    fetchWorkspaceList();
+    readWorkspaceList();
   };
 
   const handleWorkspaceUpdated = () => {
     setIsEditing(false);
-    fetchWorkspaceList();
+    readWorkspaceList();
   };
 
   const handleWorkspaceDeleted = () => {
@@ -140,7 +140,7 @@ const WorkspaceMain = () => {
           onCancel={handleCancel}
           onWorkspaceCreated={handleWorkspaceCreated}
           onWorkspaceUpdated={handleWorkspaceUpdated}
-          selectedItem={selectedItem}
+          workspace={selectedWorkspace}
           isEditing={isEditing}
         />
       ) : (
@@ -148,27 +148,27 @@ const WorkspaceMain = () => {
           {isAdding ? (
             <ManageJoin
               onCancel={handleCancelAdd}
-              selectedItem={selectedItem.id} 
+              workspace={selectedWorkspace.id} 
             />
           ) : (
             <>
               <ReadWorkspace
-                items={items}
+                items={workspaceList}
                 onCreateWorkspace={handleCreateWorkspace}
                 onEditWorkspace={handleEditWorkspace}
                 onAddMember={handleAddMember}
                 handleDeleteButtonClick={handleDeleteButtonClick}
-                selectedItem={selectedItem}
-                setSelectedItem={setSelectedItem}
+                workspace={selectedWorkspace}
+                setSelectedWorkspace={setSelectedWorkspace}
                 memberList={memberList}
                 page={page}
               />
-              {items.length > 0 && (
+              {workspaceList.length > 0 && (
                 <>
                   <Card variant="outlined" sx={{ padding: 2, marginTop: 2, maxWidth: 600 }}>
                     <Typography variant="body2">
                       <Chip label="설명" color="primary" variant="outlined" />
-                      {' '}{selectedItem?.description}
+                      {' '}{selectedWorkspace?.description}
                     </Typography>
                   </Card>
                   <ConfirmDialog 
@@ -181,9 +181,9 @@ const WorkspaceMain = () => {
                   <MemberTable 
                     memberList={memberList} 
                     page={page}
-                    selectedItem={selectedItem} 
+                    workspace={selectedWorkspace} 
                     onPageChange={handlePageChange}
-                    onChange={fetchMembers}
+                    onChange={readMemberListInWorkspace}
                   />
                 </>
               )}   

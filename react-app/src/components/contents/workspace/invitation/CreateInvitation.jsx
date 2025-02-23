@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Box, Button, TextField, Table, TableContainer, Pagination, TableCell, TableBody, TableRow, TableHead, Paper } from "@mui/material";
 import axios from "axios";
 
-const Invitation = ({ selectedItem }) => {
+const CreateInvitation = ({ selectedWorkspace }) => {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [memberList, setMemberList] = useState([]); 
@@ -20,7 +20,7 @@ const Invitation = ({ selectedItem }) => {
           params: { 
             email: email?.trim(),
             name: name?.trim(),
-            id: selectedItem,
+            workspaceId: selectedWorkspace,
            },
           withCredentials: true,
         }
@@ -34,7 +34,7 @@ const Invitation = ({ selectedItem }) => {
     } catch (e) {
       console.error(e);
     }
-  }, [email, name, selectedItem]);
+  }, [email, name, selectedWorkspace]);
 
   useEffect(() => {
     readMemberListNotInWorkspace();
@@ -45,8 +45,8 @@ const Invitation = ({ selectedItem }) => {
       const result = await axios.post(
         "http://localhost:8080/api/v1/invitation",
         {
-          workspaceId: selectedItem,
-          memberId: row.email,
+          memberEmail: row.email,
+          workspaceId: selectedWorkspace,
           requesterType: 'WORKSPACE'
         },
         {
@@ -177,4 +177,4 @@ const Invitation = ({ selectedItem }) => {
   );
 };
 
-export default Invitation;
+export default CreateInvitation;

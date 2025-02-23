@@ -6,21 +6,21 @@ const CreateWorkspace = ({
   onCancel,
   onWorkspaceCreated,
   onWorkspaceUpdated,
-  selectedItem,
+  workspace,
   isEditing,
 }) => {
-  const [name, setName] = useState(selectedItem ? selectedItem.name : "");
-  const [description, setDescription] = useState(
-    selectedItem ? selectedItem.description : ""
+  const [workspaceName, setWorkspaceName] = useState(workspace ? workspace.name : "");
+  const [workspaceDescription, setWorkspaceDescription] = useState(
+    workspace ? workspace.description : ""
   );
   const [isLoading, setIsLoading] = useState(false);
 
- const isFormFilled = name.trim() && description.trim();
+ const isFormFilled = workspaceName.trim() && workspaceDescription.trim();
 
   useEffect(() => {
     if (!isEditing) {
-      setName('');
-      setDescription('');
+      setWorkspaceName('');
+      setWorkspaceDescription('');
     }
   }, [isEditing]);
 
@@ -30,8 +30,8 @@ const CreateWorkspace = ({
       const result = await axios.post(
         "http://localhost:8080/api/v1/workspace",
         {
-          name: name,
-          description: description
+          name: workspaceName,
+          description: workspaceDescription
         },
         {
           headers: {
@@ -55,11 +55,11 @@ const CreateWorkspace = ({
     setIsLoading(true);
     try {
       const result = await axios.put(
-        "http://localhost:8080/api/v1/workspace/" + selectedItem.id,
+        "http://localhost:8080/api/v1/workspace/" + workspace.id,
         {
-          id: selectedItem.id,
-          name: name,
-          description: description
+          id: workspace.id,
+          name: workspaceName,
+          description: workspaceDescription
         },
         {
           headers: {
@@ -87,8 +87,8 @@ const CreateWorkspace = ({
         margin="normal"
         size="small"
         fullWidth
-        value={name}
-        onChange={(e) => setName(e.target.value)}
+        value={workspaceName}
+        onChange={(e) => setWorkspaceName(e.target.value)}
       />
       <TextField
         label="워크스페이스 설명"
@@ -96,8 +96,8 @@ const CreateWorkspace = ({
         margin="normal"
         size="small"
         fullWidth
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
+        value={workspaceDescription}
+        onChange={(e) => setWorkspaceDescription(e.target.value)}
       />
       <Button
         variant="contained"
