@@ -159,7 +159,7 @@ const WorkspaceMain = () => {
                 onAddMember={handleAddMember}
                 handleDeleteButtonClick={handleDeleteButtonClick}
                 workspace={selectedWorkspace}
-                setSelectedWorkspace={setSelectedWorkspace}
+                setWorkspace={setSelectedWorkspace}
                 memberList={memberList}
                 page={page}
               />
