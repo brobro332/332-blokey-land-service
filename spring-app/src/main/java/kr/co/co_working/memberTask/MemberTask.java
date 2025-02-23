@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import kr.co.co_working.common.CommonTime;
 import kr.co.co_working.member.Member;
 import kr.co.co_working.task.Task;
-import kr.co.co_working.team.Team;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

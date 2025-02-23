@@ -5,13 +5,20 @@ import kr.co.co_working.member.dto.MemberRequestDto;
 import kr.co.co_working.member.dto.MemberResponseDto;
 import kr.co.co_working.member.repository.MemberRepository;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +32,19 @@ class MemberServiceTest {
     MemberRepository repository;
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @BeforeEach
+    void setUp() {
+        String email = "test@korea.kr";
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+            email, null, Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
+        );
+
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        securityContext.setAuthentication(authentication);
+
+        SecurityContextHolder.setContext(securityContext);
+    }
 
     @Test
     public void createMember() throws Exception {
@@ -47,9 +67,12 @@ class MemberServiceTest {
     @Test
     public void readMemberList() throws Exception {
         /* given */
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
         MemberRequestDto.CREATE createDto = getCreateDto();
         service.createMember(createDto);
-        MemberRequestDto.READ readDto = new MemberRequestDto.READ("test@korea.kr", "무개");
+        MemberRequestDto.READ readDto = new MemberRequestDto.READ("무개");
 
         /* when */
         List<MemberResponseDto> members = service.readMemberList(readDto);
@@ -65,12 +88,14 @@ class MemberServiceTest {
     @Test
     public void updateMember() throws Exception {
         /* given */
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
         MemberRequestDto.CREATE createMemberDto = getCreateDto();
         service.createMember(createMemberDto);
 
         /* when */
         MemberRequestDto.UPDATE updateDto = MemberRequestDto.UPDATE.builder()
-                .email("test@korea.kr")
                 .name("박아무개")
                 .description("수정입니다.")
                 .build();
@@ -79,7 +104,7 @@ class MemberServiceTest {
         service.updateMember(updateDto);
 
         /* then */
-        Optional<Member> selectedMember = repository.findById(createMemberDto.getEmail());
+        Optional<Member> selectedMember = repository.findById(email);
         Member member = selectedMember.get();
 
         Assertions.assertEquals("박아무개", member.getName());
@@ -89,14 +114,14 @@ class MemberServiceTest {
     @Test
     public void deleteMember() throws Exception {
         /* given */
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
         MemberRequestDto.CREATE createDto = getCreateDto();
         service.createMember(createDto);
 
-        MemberRequestDto.DELETE deleteDto = new MemberRequestDto.DELETE();
-        deleteDto.setEmail(createDto.getEmail());
-
         /* when */
-        service.deleteMember(deleteDto);
+        service.deleteMember();
         
         /* then */
         MemberRequestDto.READ readDto = new MemberRequestDto.READ();

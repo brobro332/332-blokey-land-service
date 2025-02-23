@@ -5,8 +5,8 @@ import kr.co.co_working.project.dto.ProjectRequestDto;
 import kr.co.co_working.project.dto.ProjectResponseDto;
 import kr.co.co_working.project.repository.ProjectDslRepository;
 import kr.co.co_working.project.repository.ProjectRepository;
-import kr.co.co_working.team.Team;
-import kr.co.co_working.team.repository.TeamRepository;
+import kr.co.co_working.workspace.Workspace;
+import kr.co.co_working.workspace.repository.WorkspaceRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ import java.util.Optional;
 @Slf4j
 public class ProjectService {
     private final ProjectRepository repository;
-    private final TeamRepository teamRepository;
+    private final WorkspaceRepository workspaceRepository;
     private final ProjectDslRepository dslRepository;
 
     /**
@@ -31,7 +31,7 @@ public class ProjectService {
      */
     public Long createProject(ProjectRequestDto.CREATE dto) throws Exception {
         // 1. Team 조회
-        Optional<Team> selectedTeam = teamRepository.findById(dto.getTeamId());
+        Optional<Workspace> selectedTeam = workspaceRepository.findById(dto.getWorkspaceId());
 
         // 2. 부재 시 예외 처리
         if (selectedTeam.isEmpty()) {
@@ -42,7 +42,7 @@ public class ProjectService {
         Project project = Project.builder()
             .name(dto.getName())
             .description(dto.getDescription())
-            .team(selectedTeam.get())
+            .workspace(selectedTeam.get())
             .build();
 
         // 4. 등록
