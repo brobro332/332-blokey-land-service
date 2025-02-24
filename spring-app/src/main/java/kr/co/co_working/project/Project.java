@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import kr.co.co_working.common.CommonTime;
 import kr.co.co_working.milestone.Milestone;
 import kr.co.co_working.task.Task;
-import kr.co.co_working.team.Team;
+import kr.co.co_working.workspace.Workspace;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,14 +36,14 @@ public class Project extends CommonTime {
     private List<Milestone> milestones = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "team_id")
-    private Team team;
+    @JoinColumn(name = "workspace_id")
+    private Workspace workspace;
 
     @Builder
-    public Project(String name, String description, Team team) {
+    public Project(String name, String description, Workspace workspace) {
         this.name = name;
         this.description = description;
-        this.team = team;
+        this.workspace = workspace;
     }
 
     public void updateProject(String name, String description) {

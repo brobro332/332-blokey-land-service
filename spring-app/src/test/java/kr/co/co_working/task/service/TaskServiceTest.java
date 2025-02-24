@@ -10,17 +10,24 @@ import kr.co.co_working.task.dto.TaskRequestDto;
 import kr.co.co_working.task.dto.TaskResponseDto;
 import kr.co.co_working.task.repository.TaskRepository;
 import kr.co.co_working.task.Task;
-import kr.co.co_working.team.dto.TeamRequestDto;
-import kr.co.co_working.team.service.TeamService;
+import kr.co.co_working.workspace.dto.WorkspaceRequestDto;
+import kr.co.co_working.workspace.service.WorkspaceService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @SpringBootTest
@@ -37,7 +44,7 @@ class TaskServiceTest {
     ProjectService projectService;
 
     @Autowired
-    TeamService teamService;
+    WorkspaceService workspaceService;
 
     @Autowired
     MemberService memberService;
@@ -45,19 +52,35 @@ class TaskServiceTest {
     @Autowired
     ProjectRepository projectRepository;
 
+    @BeforeEach
+    void setUp() {
+        String email = "test@korea.kr";
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+            email, null, Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
+        );
+
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        securityContext.setAuthentication(authentication);
+
+        SecurityContextHolder.setContext(securityContext);
+    }
+
     @Test
     public void createTask() throws Exception {
         /* given */
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
         MemberRequestDto.CREATE memberDto = getCreateMemberDto();
         memberService.createMember(memberDto);
 
-        TeamRequestDto.CREATE teamDto = getCreateTeamDto(memberDto);
-        Long teamId = teamService.createTeam(teamDto);
+        WorkspaceRequestDto.CREATE teamDto = getCreateTeamDto(memberDto);
+        Long teamId = workspaceService.createWorkspace(teamDto);
 
         ProjectRequestDto.CREATE projectDto = getCreateProjectDto(teamId);
         Long projectId = projectService.createProject(projectDto);
 
-        TaskRequestDto.CREATE taskDto = getCreateTaskDto(projectId, memberDto.getEmail());
+        TaskRequestDto.CREATE taskDto = getCreateTaskDto(projectId, email);
 
         /* when */
         Long taskId = taskService.createTask(taskDto);
@@ -82,16 +105,19 @@ class TaskServiceTest {
     @Test
     public void readTaskList() throws Exception {
         /* given */
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
         MemberRequestDto.CREATE memberDto = getCreateMemberDto();
         memberService.createMember(memberDto);
 
-        TeamRequestDto.CREATE teamDto = getCreateTeamDto(memberDto);
-        Long teamId = teamService.createTeam(teamDto);
+        WorkspaceRequestDto.CREATE teamDto = getCreateTeamDto(memberDto);
+        Long teamId = workspaceService.createWorkspace(teamDto);
 
         ProjectRequestDto.CREATE projectDto = getCreateProjectDto(teamId);
         Long projectId = projectService.createProject(projectDto);
 
-        TaskRequestDto.CREATE taskDto = getCreateTaskDto(projectId, memberDto.getEmail());
+        TaskRequestDto.CREATE taskDto = getCreateTaskDto(projectId, email);
         taskService.createTask(taskDto);
 
         /* when */
@@ -110,11 +136,14 @@ class TaskServiceTest {
     @Test
     public void updateTask() throws Exception {
         /* given */
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
         MemberRequestDto.CREATE memberDto = getCreateMemberDto();
         memberService.createMember(memberDto);
 
-        TeamRequestDto.CREATE teamDto = getCreateTeamDto(memberDto);
-        Long teamId = teamService.createTeam(teamDto);
+        WorkspaceRequestDto.CREATE teamDto = getCreateTeamDto(memberDto);
+        Long teamId = workspaceService.createWorkspace(teamDto);
 
         ProjectRequestDto.CREATE projectDto = getCreateProjectDto(teamId);
         Long projectId = projectService.createProject(projectDto);
@@ -122,7 +151,6 @@ class TaskServiceTest {
         List<Long> taskIdList = new ArrayList<>();
         for (int i = 1; i <= 2; i++) {
             TaskRequestDto.CREATE taskDto = new TaskRequestDto.CREATE();
-            taskDto.setEmail(memberDto.getEmail());
             taskDto.setName("테스트 " + i);
             taskDto.setType("텍스트 " + i);
             taskDto.setDescription("금주 프로젝트 개발 건에 대한 테스트 " + i);
@@ -167,11 +195,14 @@ class TaskServiceTest {
     @Test
     public void deleteTask() throws Exception {
         /* given */
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
         MemberRequestDto.CREATE memberDto = getCreateMemberDto();
         memberService.createMember(memberDto);
 
-        TeamRequestDto.CREATE teamDto = getCreateTeamDto(memberDto);
-        Long teamId = teamService.createTeam(teamDto);
+        WorkspaceRequestDto.CREATE teamDto = getCreateTeamDto(memberDto);
+        Long teamId = workspaceService.createWorkspace(teamDto);
 
         ProjectRequestDto.CREATE projectDto = getCreateProjectDto(teamId);
         Long projectId = projectService.createProject(projectDto);
@@ -179,7 +210,6 @@ class TaskServiceTest {
         List<Long> taskIdList = new ArrayList<>();
         for (int i = 1; i <= 2; i++) {
             TaskRequestDto.CREATE taskDto = new TaskRequestDto.CREATE();
-            taskDto.setEmail(memberDto.getEmail());
             taskDto.setName("테스트 " + i);
             taskDto.setType("텍스트 " + i);
             taskDto.setDescription("금주 프로젝트 개발 건에 대한 테스트 " + i);
@@ -227,11 +257,10 @@ class TaskServiceTest {
      * @param memberDto
      * @return
      */
-    private static TeamRequestDto.CREATE getCreateTeamDto(MemberRequestDto.CREATE memberDto) {
-        TeamRequestDto.CREATE teamDto = new TeamRequestDto.CREATE();
+    private static WorkspaceRequestDto.CREATE getCreateTeamDto(MemberRequestDto.CREATE memberDto) {
+        WorkspaceRequestDto.CREATE teamDto = new WorkspaceRequestDto.CREATE();
         teamDto.setName("팀명 1");
         teamDto.setDescription("팀 소개입니다.");
-        teamDto.setEmail(memberDto.getEmail());
         return teamDto;
     }
 
@@ -243,7 +272,6 @@ class TaskServiceTest {
      */
     private static TaskRequestDto.CREATE getCreateTaskDto(Long projectId, String email) {
         TaskRequestDto.CREATE taskDto = new TaskRequestDto.CREATE();
-        taskDto.setEmail(email);
         taskDto.setName("테스트테스트테스트테스트테스트테스트테스");
         taskDto.setType("텍스트");
         taskDto.setDescription("금주 프로젝트 개발 건에 대한 테스트");
@@ -262,7 +290,7 @@ class TaskServiceTest {
         ProjectRequestDto.CREATE projectDto = new ProjectRequestDto.CREATE();
         projectDto.setName("프로젝트 A");
         projectDto.setDescription("프로젝트 관리 프로그램 만들기");
-        projectDto.setTeamId(teamId);
+        projectDto.setWorkspaceId(teamId);
         return projectDto;
     }
 }

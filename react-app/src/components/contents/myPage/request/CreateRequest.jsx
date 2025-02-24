@@ -42,7 +42,7 @@ const CreateRequest = () => {
     try {
       const result = await axios.post(
         `http://${config.API_BASE_URL}/api/v1/invitation`,
-        {
+      {
           workspaceId: row.id,
           requesterType: 'MEMBER'
         },

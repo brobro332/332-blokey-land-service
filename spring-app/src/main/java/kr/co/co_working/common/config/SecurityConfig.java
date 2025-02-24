@@ -28,9 +28,8 @@ public class SecurityConfig {
 
     static {
         AUTH_IGNORE_LIST.add(new Endpoint("/", HttpMethod.GET));
-        AUTH_IGNORE_LIST.add(new Endpoint("/policy-form", HttpMethod.GET));
         AUTH_IGNORE_LIST.add(new Endpoint("/join-form", HttpMethod.GET));
-        AUTH_IGNORE_LIST.add(new Endpoint("/join-complete-form", HttpMethod.GET));
+        AUTH_IGNORE_LIST.add(new Endpoint("/welcome", HttpMethod.GET));
         AUTH_IGNORE_LIST.add(new Endpoint("/api/v1/member", HttpMethod.POST));
         AUTH_IGNORE_LIST.add(new Endpoint("/api/v1/authentication", HttpMethod.POST));
     }

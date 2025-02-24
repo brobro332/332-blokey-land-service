@@ -12,7 +12,6 @@ public class TaskRequestDto {
     @Setter
     public static class CREATE {
         private Long projectId;
-        private String email;
         private String name;
         private String type;
         private String description;
