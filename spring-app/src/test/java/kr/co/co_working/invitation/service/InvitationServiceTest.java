@@ -67,7 +67,7 @@ class InvitationServiceTest {
 
         InvitationRequestDto.CREATE invitationCreateDto = new InvitationRequestDto.CREATE();
         invitationCreateDto.setWorkspaceId(workspaceId);
-        invitationCreateDto.setMemberId(email);
+        invitationCreateDto.setMemberEmail(email);
         invitationCreateDto.setRequesterType("WORKSPACE");
 
         /* when */
@@ -95,8 +95,8 @@ class InvitationServiceTest {
         service.createInvitation(invitationCreateDto);
 
         InvitationRequestDto.READ invitationReadDto = new InvitationRequestDto.READ();
-        invitationReadDto.setEmail("test");
-        invitationReadDto.setName("김");
+        invitationReadDto.setMemberEmail("test");
+        invitationReadDto.setMemberName("김");
         invitationReadDto.setDivision("WORKSPACE");
         List<InvitationResponseDto> invitations = service.readInvitation(invitationReadDto);
 
@@ -115,12 +115,12 @@ class InvitationServiceTest {
 
         InvitationRequestDto.CREATE invitationCreateDto1 = new InvitationRequestDto.CREATE();
         invitationCreateDto1.setWorkspaceId(workspaceId);
-        invitationCreateDto1.setMemberId(email);
+        invitationCreateDto1.setMemberEmail(email);
         invitationCreateDto1.setRequesterType("WORKSPACE");
 
         InvitationRequestDto.CREATE invitationCreateDto2 = new InvitationRequestDto.CREATE();
         invitationCreateDto2.setWorkspaceId(workspaceId);
-        invitationCreateDto2.setMemberId(email);
+        invitationCreateDto2.setMemberEmail(email);
         invitationCreateDto2.setRequesterType("MEMBER");
 
         /* when */
@@ -168,7 +168,7 @@ class InvitationServiceTest {
      */
     private static InvitationRequestDto.CREATE getCreateInvitationDto(String email, Long workspaceId) {
         InvitationRequestDto.CREATE dto = new InvitationRequestDto.CREATE();
-        dto.setMemberId(email);
+        dto.setMemberEmail(email);
         dto.setWorkspaceId(workspaceId);
         dto.setRequesterType(RequesterType.WORKSPACE.name());
         return dto;
