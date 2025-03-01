@@ -91,7 +91,7 @@ public class MemberService {
      * @return
      * @throws Exception
      */
-    public List<MemberResponseDto> readMemberListInWorkspace(WorkspaceRequestDto.READ dto) throws Exception {
+    public List<MemberResponseDto> readMemberListInWorkspace(MemberRequestDto.READ dto) throws Exception {
         return dslRepository.readMemberListInWorkspace(dto);
     }
 
@@ -101,7 +101,7 @@ public class MemberService {
      * @return
      * @throws Exception
      */
-    public List<MemberResponseDto> readMemberListNotInWorkspace(WorkspaceRequestDto.READ dto) throws Exception {
+    public List<MemberResponseDto> readMemberListNotInWorkspace(MemberRequestDto.READ dto) throws Exception {
         return dslRepository.readMemberListNotInWorkspace(dto);
     }
 

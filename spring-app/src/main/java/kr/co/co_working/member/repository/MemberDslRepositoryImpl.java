@@ -6,7 +6,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.co.co_working.member.dto.MemberRequestDto;
 import kr.co.co_working.member.dto.MemberResponseDto;
 import kr.co.co_working.member.dto.QMemberResponseDto;
-import kr.co.co_working.workspace.dto.WorkspaceRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -49,7 +48,7 @@ public class MemberDslRepositoryImpl implements MemberDslRepository {
     }
 
     @Override
-    public List<MemberResponseDto> readMemberListInWorkspace(WorkspaceRequestDto.READ dto) {
+    public List<MemberResponseDto> readMemberListInWorkspace(MemberRequestDto.READ dto) {
         return factory
             .select(
                 new QMemberResponseDto(
@@ -65,14 +64,14 @@ public class MemberDslRepositoryImpl implements MemberDslRepository {
             .join(memberWorkspace).on(workspace.id.eq(memberWorkspace.workspace.id))
             .join(member).on(member.email.eq(memberWorkspace.member.email))
             .where(
-                WorkspaceIdEq(dto.getId()),
+                WorkspaceIdEq(dto.getWorkspaceId()),
                 member.delFlag.eq("0")
             )
             .fetch();
     }
 
     @Override
-    public List<MemberResponseDto> readMemberListNotInWorkspace(WorkspaceRequestDto.READ dto) {
+    public List<MemberResponseDto> readMemberListNotInWorkspace(MemberRequestDto.READ dto) {
         return factory
             .select(
                 new QMemberResponseDto(
@@ -87,7 +86,7 @@ public class MemberDslRepositoryImpl implements MemberDslRepository {
                             .from(invitation)
                             .where(
                                 invitation.member.email.eq(member.email),
-                                invitation.workspace.id.eq(dto.getId())
+                                invitation.workspace.id.eq(dto.getWorkspaceId())
                             )
                     ),
                     (
@@ -96,7 +95,7 @@ public class MemberDslRepositoryImpl implements MemberDslRepository {
                             .from(invitation)
                             .where(
                                 invitation.member.email.eq(member.email),
-                                invitation.workspace.id.eq(dto.getId())
+                                invitation.workspace.id.eq(dto.getWorkspaceId())
                             )
                     ),
                     (
@@ -105,7 +104,7 @@ public class MemberDslRepositoryImpl implements MemberDslRepository {
                             .from(invitation)
                             .where(
                                 invitation.member.email.eq(member.email),
-                                invitation.workspace.id.eq(dto.getId())
+                                invitation.workspace.id.eq(dto.getWorkspaceId())
                             )
                     )
                 )
@@ -115,10 +114,10 @@ public class MemberDslRepositoryImpl implements MemberDslRepository {
                     JPAExpressions
                         .select(memberWorkspace.member.email)
                         .from(memberWorkspace)
-                        .where(memberWorkspace.workspace.id.eq(dto.getId()))
+                        .where(memberWorkspace.workspace.id.eq(dto.getWorkspaceId()))
                 ),
-                emailContains(dto.getMemberEmail()),
-                nameContains(dto.getMemberName())
+                emailContains(dto.getEmail()),
+                nameContains(dto.getName())
             )
             .fetch();
     }

@@ -15,15 +15,12 @@ public class MemberRequestDto {
         private String description;
     }
 
-    @NoArgsConstructor
     @Getter
     @Setter
     public static class READ {
+        private String email;
         private String name;
-
-        public READ(String name) {
-            this.name = name;
-        }
+        private Long workspaceId;
     }
 
     @NoArgsConstructor

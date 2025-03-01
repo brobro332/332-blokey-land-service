@@ -3,7 +3,7 @@ import { Box, Button, TextField, Table, TableContainer, Pagination, TableCell, T
 import axios from "axios";
 import config from "../../../../config";
 
-const CreateInvitation = ({ selectedWorkspace }) => {
+const CreateInvitation = ({ workspace }) => {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [memberList, setMemberList] = useState([]); 
@@ -21,7 +21,7 @@ const CreateInvitation = ({ selectedWorkspace }) => {
           params: { 
             email: email?.trim(),
             name: name?.trim(),
-            workspaceId: selectedWorkspace,
+            workspaceId: workspace,
            },
           withCredentials: true,
         }
@@ -35,7 +35,7 @@ const CreateInvitation = ({ selectedWorkspace }) => {
     } catch (e) {
       console.error(e);
     }
-  }, [email, name, selectedWorkspace]);
+  }, [email, name, workspace]);
 
   useEffect(() => {
     readMemberListNotInWorkspace();
@@ -47,7 +47,7 @@ const CreateInvitation = ({ selectedWorkspace }) => {
         `http://${config.API_BASE_URL}/api/v1/invitation`,
         {
           memberEmail: row.email,
-          workspaceId: selectedWorkspace,
+          workspaceId: workspace,
           requesterType: 'WORKSPACE'
         },
         {

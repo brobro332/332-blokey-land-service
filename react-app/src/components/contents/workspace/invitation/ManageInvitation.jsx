@@ -50,7 +50,7 @@ const ManageInvitation = ({ selectedWorkspace }) => {
   const updateInvitation = async (row, flag) => {
     try {
       const result = await axios.put(
-        "http://localhost:8080/api/v1/invitation",
+        `http://${config.API_BASE_URL}/api/v1/invitation`,
         {
           memberEmail: row.email,
           workspaceId: selectedWorkspace,
@@ -76,7 +76,7 @@ const ManageInvitation = ({ selectedWorkspace }) => {
   const deleteInvitation = async (row) => {
     try {
       const result = await axios.delete(
-        "http://localhost:8080/api/v1/invitation",
+        `http://${config.API_BASE_URL}/api/v1/invitation`,
         {
           data: {
             id: row.id

@@ -56,7 +56,7 @@ public class MemberApiController {
      * @throws Exception
      */
     @GetMapping("/api/v1/member/memberList-in-workspace")
-    public ResponseDto<?> readMemberListInWorkspace(@ModelAttribute WorkspaceRequestDto.READ dto) throws Exception {
+    public ResponseDto<?> readMemberListInWorkspace(@ModelAttribute MemberRequestDto.READ dto) throws Exception {
         return ResponseDto.ofSuccess("멤버목록 조회에 성공했습니다.", service.readMemberListInWorkspace(dto));
     }
 
@@ -67,7 +67,7 @@ public class MemberApiController {
      * @throws Exception
      */
     @GetMapping("/api/v1/member/memberList-not-in-workspace")
-    public ResponseDto<?> readMemberListNotInWorkspace(@ModelAttribute WorkspaceRequestDto.READ dto) throws Exception {
+    public ResponseDto<?> readMemberListNotInWorkspace(@ModelAttribute MemberRequestDto.READ dto) throws Exception {
         return ResponseDto.ofSuccess("멤버목록 조회에 성공했습니다.", service.readMemberListNotInWorkspace(dto));
     }
 
