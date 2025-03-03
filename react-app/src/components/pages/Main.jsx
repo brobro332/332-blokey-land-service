@@ -5,6 +5,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import WorkspaceMain from '../contents/workspace/WorkspaceMain';
 import { useNavigate } from 'react-router-dom';
 import MyPageMain from '../contents/myPage/MyPageMain';
+import ProjectMain from '../contents/project/ProjectMain';
 
 const Main = () => {
   const [selectedMenu, setSelectedMenu] = useState('대시보드');
@@ -50,10 +51,7 @@ const Main = () => {
         );
       case '프로젝트':
         return (
-          <div>
-            <Typography variant="h5">프로젝트</Typography>
-            <Typography variant="body1">여기는 프로젝트 페이지입니다.</Typography>
-          </div>
+          <ProjectMain/>
         );
       case '스프린트':
         return (

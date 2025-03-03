@@ -20,7 +20,7 @@ const WorkspaceMain = () => {
 
   const readWorkspaceList = async () => {
     try {
-      const response = await axios.get(`http://${config.API_BASE_URL}/api/v1/workspace/workspaceList`, {
+      const response = await axios.get(`${config.API_BASE_URL}/api/v1/workspace/workspaceList`, {
         withCredentials: true,
       });
       if (response.status === 200) {
@@ -39,7 +39,7 @@ const WorkspaceMain = () => {
   const deleteWorkspace = async () => {
     try {
       const resultObject = await axios.delete(
-        `http://${config.API_BASE_URL}/api/v1/workspace/` + selectedWorkspace.id,
+        `${config.API_BASE_URL}/api/v1/workspace/` + selectedWorkspace.id,
         {
           withCredentials: true
         }
@@ -61,7 +61,7 @@ const WorkspaceMain = () => {
     if (selectedWorkspace !== null) {
       try {
         const result = await axios.get(
-          `http://${config.API_BASE_URL}/api/v1/member/memberList-in-workspace`,
+          `${config.API_BASE_URL}/api/v1/member/memberList-in-workspace`,
           {
             params: { id: selectedWorkspace.id },
             withCredentials: true,
@@ -154,7 +154,7 @@ const WorkspaceMain = () => {
           ) : (
             <>
               <ReadWorkspace
-                items={workspaceList}
+                workspaceList={workspaceList}
                 onCreateWorkspace={handleCreateWorkspace}
                 onEditWorkspace={handleEditWorkspace}
                 onAddMember={handleAddMember}

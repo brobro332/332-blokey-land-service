@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 
 const ReadWorkspace = ({
-  items,
+  workspaceList,
   onCreateWorkspace,
   onEditWorkspace,
   onAddMember,
@@ -19,7 +19,7 @@ const ReadWorkspace = ({
   setWorkspace
 }) => (
   <Box>
-    {items.length > 0 ? (
+    {workspaceList.length > 0 ? (
       <div>
         <FormControl sx={{ width: "30%" }}>
           <InputLabel id="select-workspace">워크스페이스 선택</InputLabel>
@@ -30,13 +30,13 @@ const ReadWorkspace = ({
             value={workspace.id}
             label="워크스페이스 선택"
             onChange={(e) => {
-              const selectedWorkspace = items.find((item) => item.id === e.target.value);
+              const selectedWorkspace = workspaceList.find((workspace) => workspace.id === e.target.value);
               setWorkspace(selectedWorkspace);
             }}
           >
-            {items.map((item) => (
-              <MenuItem key={item.id} value={item.id}>
-                {item.name}
+            {workspaceList.map((workspace) => (
+              <MenuItem key={workspace.id} value={workspace.id}>
+                {workspace.name}
               </MenuItem>
             ))}
           </Select>
