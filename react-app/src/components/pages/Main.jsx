@@ -48,11 +48,11 @@ const Main = () => {
             <Typography variant="body1">여기는 타임라인 페이지입니다.</Typography>
           </div>
         );
-      case '태스크':
+      case '프로젝트':
         return (
           <div>
-            <Typography variant="h5">태스크</Typography>
-            <Typography variant="body1">여기는 태스크 페이지입니다.</Typography>
+            <Typography variant="h5">프로젝트</Typography>
+            <Typography variant="body1">여기는 프로젝트 페이지입니다.</Typography>
           </div>
         );
       case '스프린트':
@@ -156,8 +156,8 @@ const Main = () => {
             <ListItem button='true' onClick={() => handleMenuClick('타임라인')}>
               <ListItemText primary='타임라인' />
             </ListItem>
-            <ListItem button='true' onClick={() => handleMenuClick('태스크')}>
-              <ListItemText primary='태스크' />
+            <ListItem button='true' onClick={() => handleMenuClick('프로젝트')}>
+              <ListItemText primary='프로젝트' />
             </ListItem>
             <ListItem button='true' onClick={() => handleMenuClick('스프린트')}>
               <ListItemText primary='스프린트' />
