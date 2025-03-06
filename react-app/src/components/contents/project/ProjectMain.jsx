@@ -6,6 +6,10 @@ import config from "../../../config";
 const ProjectMain = () => {
   const [workspaceList, setWorkspaceList] = useState([]);
   const [selectedWorkspace, setSelectedWorkspace] = useState(null);
+  const [page, setPage] = useState(1);
+  const [isCreating, setIsCreating] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const readWorkspaceList = async () => {
     try {
@@ -28,6 +32,11 @@ const ProjectMain = () => {
   useEffect(() => {
     readWorkspaceList();
   }, []);  
+
+  const handleCancel = () => {
+    setIsCreating(false);
+    setIsEditing(false);
+  };
 
   return (
     <Box sx={{ padding: "20px" }}>
