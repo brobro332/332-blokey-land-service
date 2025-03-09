@@ -63,7 +63,7 @@ const WorkspaceMain = () => {
         const result = await axios.get(
           `${config.API_BASE_URL}/api/v1/member/memberList-in-workspace`,
           {
-            params: { id: selectedWorkspace.id },
+            params: { workspaceId: selectedWorkspace.id },
             withCredentials: true,
           }
         );
