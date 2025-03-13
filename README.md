@@ -1,4 +1,4 @@
-# 🌿 java-co-working
+# 🌿 332-project-management-web-service
 
 ### **🐶 개요**
 개발자 프로젝트 관리를 위한 웹 사이트
