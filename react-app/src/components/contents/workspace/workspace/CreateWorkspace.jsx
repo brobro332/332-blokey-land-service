@@ -29,7 +29,7 @@ const CreateWorkspace = ({
     setIsLoading(true);
     try {
       const result = await axios.post(
-        `${config.API_BASE_URL}/api/v1/workspace`,
+        `${config.API_BASE_URL}:${config.API_PORT}/api/v1/workspace`,
         {
           name: workspaceName,
           description: workspaceDescription
@@ -56,7 +56,7 @@ const CreateWorkspace = ({
     setIsLoading(true);
     try {
       const result = await axios.put(
-        `${config.API_BASE_URL}/api/v1/workspace/` + workspace.id,
+        `${config.API_BASE_URL}:${config.API_PORT}/api/v1/workspace/` + workspace.id,
         {
           id: workspace.id,
           name: workspaceName,

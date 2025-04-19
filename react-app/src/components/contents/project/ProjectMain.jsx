@@ -13,7 +13,7 @@ const ProjectMain = () => {
 
   const readWorkspaceList = async () => {
     try {
-      const response = await axios.get(`${config.API_BASE_URL}/api/v1/workspace/workspaceList`, {
+      const response = await axios.get(`${config.API_BASE_URL}:${config.API_PORT}/api/v1/workspace/workspaceList`, {
         withCredentials: true,
       });
       if (response.status === 200) {
@@ -31,7 +31,7 @@ const ProjectMain = () => {
 
   const readProjectList = useCallback(async () => {
     try {
-      const response = await axios.get(`${config.API_BASE_URL}/api/v1/project/projectList`, 
+      const response = await axios.get(`${config.API_BASE_URL}:${config.API_PORT}/api/v1/project/projectList`, 
         {
           params: { workspaceId: workspace.id },
           withCredentials: true,
