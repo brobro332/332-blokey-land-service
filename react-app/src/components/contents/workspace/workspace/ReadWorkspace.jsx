@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Box,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Button,
-  Link
-} from "@mui/material";
+import { Box, Button, Link } from "@mui/material";
 
 const ReadWorkspace = ({
   workspaceList,
@@ -15,32 +7,10 @@ const ReadWorkspace = ({
   onEditWorkspace,
   onAddMember,
   handleDeleteButtonClick,
-  workspace,
-  setWorkspace
 }) => (
   <Box>
     {workspaceList.length > 0 ? (
       <div>
-        <FormControl sx={{ width: "30%" }}>
-          <InputLabel id="select-workspace">워크스페이스 선택</InputLabel>
-          <Select
-            labelId="select-workspace"
-            id="select-workspace"
-            size="small"
-            value={workspace.id}
-            label="워크스페이스 선택"
-            onChange={(e) => {
-              const selectedWorkspace = workspaceList.find((workspace) => workspace.id === e.target.value);
-              setWorkspace(selectedWorkspace);
-            }}
-          >
-            {workspaceList.map((workspace) => (
-              <MenuItem key={workspace.id} value={workspace.id}>
-                {workspace.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>{" "}
         <Button variant="contained" color="primary" onClick={onCreateWorkspace}>
           워크스페이스 생성
         </Button>
