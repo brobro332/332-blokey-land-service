@@ -186,23 +186,25 @@ const Main = () => {
               borderRadius: 1
             }}>
               <InputLabel id="select-workspace">워크스페이스 선택</InputLabel>
-              <Select
-                labelId="select-workspace"
-                id="select-workspace"
-                size="small"
-                value={workspace?.id}
-                label="워크스페이스 선택"
-                onChange={(e) => {
-                  const selectedWorkspace = workspaceList.find((workspace) => workspace.id === e.target.value);
-                  dispatch(setWorkspace(selectedWorkspace));
-                }}
-              >
-                {workspaceList.map((workspace) => (
-                  <MenuItem key={workspace.id} value={workspace.id}>
-                    {workspace.name}
-                  </MenuItem>
-                ))}
-              </Select>
+              {workspace && (
+                <Select
+                  labelId="select-workspace"
+                  id="select-workspace"
+                  size="small"
+                  value={workspace?.id}
+                  label="워크스페이스 선택"
+                  onChange={(e) => {
+                    const selectedWorkspace = workspaceList.find((workspace) => workspace.id === e.target.value);
+                    dispatch(setWorkspace(selectedWorkspace));
+                  }}
+                >
+                  {workspaceList.map((workspace) => (
+                    <MenuItem key={workspace.id} value={workspace.id}>
+                      {workspace.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              )}
             </FormControl>
             <IconButton
               size="large"
@@ -224,9 +226,11 @@ const Main = () => {
             <ListItem button='true' onClick={() => handleMenuClick('타임라인')}>
               <ListItemText primary='타임라인' />
             </ListItem>
-            <ListItem button='true' onClick={() => handleMenuClick('프로젝트')}>
-              <ListItemText primary='프로젝트' />
-            </ListItem>
+            {workspaceList.length > 0 && (
+              <ListItem button='true' onClick={() => handleMenuClick('프로젝트')}>
+                <ListItemText primary='프로젝트' />
+              </ListItem>
+            )}
             <ListItem button='true' onClick={() => handleMenuClick('스프린트')}>
               <ListItemText primary='스프린트' />
             </ListItem>

@@ -3,15 +3,19 @@ import { Box, Divider, FormControl, InputLabel, MenuItem, Select, Typography } f
 import axios from "axios";
 import config from "../../../config";
 import { Link } from "react-router-dom";
+import { setWorkspaceList, setWorkspace } from '../../../features/workspace/workspaceSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const ProjectMain = () => {
-  const [workspaceList, setWorkspaceList] = useState([]);
-  const [workspace, setWorkspace] = useState(null);
   const [projectList, setProjectList] = useState([]);
   const [project, setProject] = useState(null);
   const [isCreating, setIsCreating] = useState(false);
+  
+  const dispatch = useDispatch();
+  const workspaceList = useSelector((state) => state.workspace.workspaceList);
+  const workspace = useSelector((state) => state.workspace.workspace);
 
-  const readWorkspaceList = async () => {
+  const readWorkspaceList = useCallback(async () => {
     try {
       const response = await axios.get(`${config.API_BASE_URL}:${config.API_PORT}/api/v1/workspace/workspaceList`, {
         withCredentials: true,
@@ -20,14 +24,14 @@ const ProjectMain = () => {
         const workspaceList = response.data.data;
 
         if (workspaceList.length > 0) {
-          setWorkspaceList(workspaceList);
-          setWorkspace(workspaceList[0]);
+          dispatch(setWorkspaceList(workspaceList));
+          dispatch(setWorkspace(workspaceList[0]));
         }
       }
     } catch (e) {
       console.error(e);
     }
-  };
+  }, [dispatch]);
 
   const readProjectList = useCallback(async () => {
     try {
@@ -59,36 +63,10 @@ const ProjectMain = () => {
     setIsCreating(true);
   };
 
-  const handleCancel = () => {
-    setIsCreating(false);
-  };
-
   return (
     <Box sx={{ padding: "20px" }}>
       <Typography variant="h6" sx={{ marginBottom : '10px' }}>프로젝트</Typography>
       <Divider sx={{ marginBottom : '15px' }}/>
-      {workspaceList.length > 0 && (
-        <FormControl sx={{ width: "30%" }}>
-          <InputLabel id="select-workspace">워크스페이스 선택</InputLabel>
-          <Select
-            labelId="select-workspace"
-            id="select-workspace"
-            size="small"
-            value={workspace?.id}
-            label="워크스페이스 선택"
-            onChange={(e) => {
-              const selectedWorkspace = workspaceList.find((workspace) => workspace.id === e.target.value);
-              setWorkspace(selectedWorkspace);
-            }}
-          >
-            {workspaceList.map((workspace) => (
-              <MenuItem key={workspace.id} value={workspace.id}>
-                {workspace.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      )}{" "}
       {workspace != null && projectList.length > 0 ? (
         <FormControl sx={{ width: "30%" }}>
           <InputLabel id="select-project">프로젝트 선택</InputLabel>
