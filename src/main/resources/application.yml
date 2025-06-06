@@ -1,0 +1,16 @@
+server:
+  port: ${PORT}
+  address: ${ADDRESS}
+
+spring:
+  data:
+    postgresql:
+      username: ${DATA_POSTGRESQL_USERNAME}
+      password: ${DATA_POSTGRESQL_PASSWORD}
+      authentication-database: ${DATA_POSTGRESQL_AUTHENTICATION_DATABASE}
+      database: ${DATA_POSTGRESQL_DATABASE}
+      uri: ${DATA_POSTGRESQL_URI}
+logging:
+  level:
+    org.springframework.web.socket: DEBUG
+    org.springframework.messaging.simp: DEBUG
