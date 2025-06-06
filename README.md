@@ -1,39 +1,19 @@
-# 🌿 332-project-management-service
+# 🏰 332-blokey-land-service
+![Image](https://github.com/user-attachments/assets/dc8a872b-6585-4461-a5dc-8b765d3b35ad)
 
 ### **🐶 개요**
-개발자 프로젝트 관리를 위한 웹 사이트
+- 프로젝트를 생성하고 진행 상황을 체계적으로 관리할 수 있으며, 프로젝트와 팀원을 역할 및 기술 기준으로 연결해주는 서비스입니다.
 
 ### ⏱ **개발 기간**
-- 2024-07-27 ~
+- 2025-06-26 ~
 
 ### 🛠 **프로젝트 환경**
-- 언어: `Java 17`
-- 프레임워크 : `Spring boot 3.3.2`
-- 데이터베이스: `Oracle 11g XE`
+- 언어: `Java 21`
+- 프레임워크 : `Spring boot 3.5.0`
+- 데이터베이스: `PostgreSQL`, `Elasticsearch`
 - IDE: `IntelliJ`
 - CSR : `React`
 - 빌드 도구: `Gradle`
 - ORM: `JPA`
 - 동적쿼리 라이브러리: `QueryDSL`
 - 배포: `OCI`
-
-```bash
-java-co-working
-├── Common
-│   ├── WebConfig
-│   ├── QueryDSL
-│   └── CommonException
-├── Project
-│   └── Project CRUD API
-├── Task
-│   └── Task CRUD API
-├── Team
-│   └── Team CRUD API
-├── Member
-│   └── Member CRUD API
-└── Milestone
-    └── Milestone CRUD API
-``` 
-
-### ⛓ **ERD**
-![java-co-work-crop](https://github.com/user-attachments/assets/c43d7ee1-87f1-4cfa-8851-dac95b5570c9)
