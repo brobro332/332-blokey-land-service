@@ -5,11 +5,11 @@ server:
 spring:
   data:
     postgresql:
-      username: ${DATA_POSTGRESQL_USERNAME}
-      password: ${DATA_POSTGRESQL_PASSWORD}
-      authentication-database: ${DATA_POSTGRESQL_AUTHENTICATION_DATABASE}
-      database: ${DATA_POSTGRESQL_DATABASE}
-      uri: ${DATA_POSTGRESQL_URI}
+      username: ${DATA_POSTGRES_USERNAME}
+      password: ${DATA_POSTGRES_PASSWORD}
+      authentication-database: ${DATA_POSTGRES_AUTHENTICATION_DB}
+      database: ${DATA_POSTGRES_DB}
+      uri: ${DATA_POSTGRES_URI}
 logging:
   level:
     org.springframework.web.socket: DEBUG
