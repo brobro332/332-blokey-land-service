@@ -3,14 +3,18 @@ server:
   address: ${ADDRESS}
 
 spring:
-  data:
-    postgresql:
-      username: ${DATA_POSTGRESQL_USERNAME}
-      password: ${DATA_POSTGRESQL_PASSWORD}
-      authentication-database: ${DATA_POSTGRESQL_AUTHENTICATION_DATABASE}
-      database: ${DATA_POSTGRESQL_DATABASE}
-      uri: ${DATA_POSTGRESQL_URI}
+  datasource:
+    url: ${DATA_POSTGRES_URI}
+    username: ${DATA_POSTGRES_USERNAME}
+    password: ${DATA_POSTGRES_PASSWORD}
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        ddl-auto: update
+
 logging:
   level:
-    org.springframework.web.socket: DEBUG
-    org.springframework.messaging.simp: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
