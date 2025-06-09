@@ -2,9 +2,8 @@ package xyz.samsami.blokey_land.project.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import xyz.samsami.blokey_land.common.domain.CommonTimestamp;
+import xyz.samsami.blokey_land.common.domain.CommonDateTime;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -12,7 +11,7 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class Project extends CommonTimestamp {
+public class Project extends CommonDateTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,10 +24,6 @@ public class Project extends CommonTimestamp {
 
     @Column(name = "owner_id", nullable = false)
     private UUID ownerId;
-
-    private LocalDate startDate;
-
-    private LocalDate endDate;
 
     /* TODO: 멤버 도메인 개발
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -50,10 +45,6 @@ public class Project extends CommonTimestamp {
     public void updateDescription(String description) { if (description != null) this.description = description; }
 
     public void updateOwnerId(UUID ownerId) { if (ownerId != null) this.ownerId = ownerId; }
-
-    public void updateStartDate(LocalDate startDate) { if (startDate != null) this.startDate = startDate; }
-
-    public void updateEndDate(LocalDate endDate) { if (endDate != null) this.endDate = endDate; }
 
     /* TODO: 멤버 필드 업데이트 메서드
     public void updateMembers(List<Member> members) {
