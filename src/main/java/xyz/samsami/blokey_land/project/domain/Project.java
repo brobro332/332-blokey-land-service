@@ -3,8 +3,11 @@ package xyz.samsami.blokey_land.project.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import xyz.samsami.blokey_land.common.domain.CommonDateTime;
+import xyz.samsami.blokey_land.task.domain.Task;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -30,10 +33,8 @@ public class Project extends CommonDateTime {
     private List<Member> members = new ArrayList<>();
     */
     
-    /* TODO: 태스크 도메인 개발
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks = new ArrayList<>();
-    */
 
     /* TODO: 마일스톤 도메인 개발
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -51,13 +52,11 @@ public class Project extends CommonDateTime {
     }
     */
 
-    /* TODO: 태스크 필드 업데이트 메서드
     public void updateTasks(List<Task> tasks) {
         this.tasks.clear();
-        tasks.forEach(task -> this.tasks.add(task));
+        this.tasks.addAll(tasks);
     }
-    */
-    
+
     /* TODO: 마일스톤 필드 업데이트 메서드
     public void updateMilestones(List<Milestone> milestones) {
         this.milestones.clear();

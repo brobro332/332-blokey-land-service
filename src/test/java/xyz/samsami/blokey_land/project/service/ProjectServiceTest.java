@@ -169,7 +169,7 @@ class ProjectServiceTest {
     }
 
     @Test
-    void updateProjectByProjectId_input_true() {
+    void updateProjectByProjectId_validInput_true() {
         // given
         Long projectId = 1L;
         UUID userId1 = UUID.randomUUID();
