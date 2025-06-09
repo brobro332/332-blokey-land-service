@@ -36,7 +36,7 @@ public class UserService {
     }
 
     public UserRespDto readUserByUserId(UUID userId) {
-        User user = helperService.existsUserByUserId(userId);
+        User user = helperService.findUserByUserId(userId);
 
         return UserMapper.toRespDto(user);
     }
@@ -46,7 +46,7 @@ public class UserService {
         if (!StringUtil.isNullOrEmpty(dto.getPassword())) helperService.updatePasswordOnAuthenticationServer(userId, dto);
 
         if (StringUtil.anyNotNullOrEmpty(dto.getNickname(), dto.getBio())) {
-            User user = helperService.existsUserByUserId(userId);
+            User user = helperService.findUserByUserId(userId);
 
             user.updateNickname(dto.getNickname());
             user.updateBio(dto.getBio());
@@ -56,7 +56,7 @@ public class UserService {
     @Transactional
     public void deleteUserByUserId(UUID userId) {
         helperService.deleteUserOnAuthenticationServer(userId);
-        User user = helperService.existsUserByUserId(userId);
+        User user = helperService.findUserByUserId(userId);
 
         repository.delete(user);
     }

@@ -84,7 +84,7 @@ public class UserHelperService {
             .block();
     }
 
-    public User existsUserByUserId(UUID userId) {
+    public User findUserByUserId(UUID userId) {
         return repository.findOptionalById(userId).orElseThrow(() ->
             new CommonException(ExceptionType.NOT_FOUND, null)
         );
