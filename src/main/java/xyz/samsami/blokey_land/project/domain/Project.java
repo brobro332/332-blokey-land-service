@@ -1,21 +1,20 @@
 package xyz.samsami.blokey_land.project.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import xyz.samsami.blokey_land.common.domain.CommonTimestamp;
+import lombok.*;
+import xyz.samsami.blokey_land.common.domain.CommonDateTime;
+import xyz.samsami.blokey_land.task.domain.Task;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
-public class Project extends CommonTimestamp {
+public class Project extends CommonDateTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,19 +28,13 @@ public class Project extends CommonTimestamp {
     @Column(name = "owner_id", nullable = false)
     private UUID ownerId;
 
-    private LocalDate startDate;
-
-    private LocalDate endDate;
-
     /* TODO: 멤버 도메인 개발
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Member> members = new ArrayList<>();
     */
     
-    /* TODO: 태스크 도메인 개발
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks = new ArrayList<>();
-    */
 
     /* TODO: 마일스톤 도메인 개발
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -49,14 +42,8 @@ public class Project extends CommonTimestamp {
     */
 
     public void updateTitle(String title) { if (title != null) this.title = title; }
-
     public void updateDescription(String description) { if (description != null) this.description = description; }
-
     public void updateOwnerId(UUID ownerId) { if (ownerId != null) this.ownerId = ownerId; }
-
-    public void updateStartDate(LocalDate startDate) { if (startDate != null) this.startDate = startDate; }
-
-    public void updateEndDate(LocalDate endDate) { if (endDate != null) this.endDate = endDate; }
 
     /* TODO: 멤버 필드 업데이트 메서드
     public void updateMembers(List<Member> members) {
@@ -65,17 +52,33 @@ public class Project extends CommonTimestamp {
     }
     */
 
-    /* TODO: 태스크 필드 업데이트 메서드
     public void updateTasks(List<Task> tasks) {
         this.tasks.clear();
-        tasks.forEach(task -> this.tasks.add(task));
+        this.tasks.addAll(tasks);
     }
-    */
-    
+
     /* TODO: 마일스톤 필드 업데이트 메서드
     public void updateMilestones(List<Milestone> milestones) {
         this.milestones.clear();
         milestones.forEach(milestone -> this.milestones.add(milestone));
     }
     */
+
+    @Builder
+    public Project(
+        LocalDate estimatedStartDate,
+        LocalDate estimatedEndDate,
+        LocalDate actualStartDate,
+        LocalDate actualEndDate,
+        Long id,
+        String title,
+        String description,
+        UUID ownerId
+    ) {
+        super(estimatedStartDate, estimatedEndDate, actualStartDate, actualEndDate);
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.ownerId = ownerId;
+    }
 }

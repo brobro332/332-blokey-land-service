@@ -27,22 +27,16 @@ public class ProjectService {
     public void createProject(ProjectReqCreateDto dto) {
         User user = userService.findUserByUserId(dto.getOwnerId());
 
-        if (user != null) {
-            Project project = ProjectMapper.toEntity(dto);
-
-            repository.save(project);
-        }
+        if (user != null) repository.save(ProjectMapper.toEntity(dto));
     }
 
     public Page<ProjectRespDto> readProjects(Pageable pageable) {
-        return repository.findPageAll(pageable)
+        return repository.findAll(pageable)
             .map(ProjectMapper::toRespDto);
     }
 
     public ProjectRespDto readProjectByProjectId(Long projectId) {
-        Project project = findProjectByProjectId(projectId);
-
-        return ProjectMapper.toRespDto(project);
+        return ProjectMapper.toRespDto(findProjectByProjectId(projectId));
     }
 
     @Transactional
@@ -52,19 +46,19 @@ public class ProjectService {
         project.updateTitle(dto.getTitle());
         project.updateDescription(dto.getDescription());
         project.updateOwnerId(dto.getOwnerId());
-        project.updateStartDate(dto.getStartDate());
-        project.updateEndDate(dto.getEndDate());
+        project.updateEstimatedStartDate(dto.getEstimatedStartDate());
+        project.updateEstimatedEndDate(dto.getEstimatedEndDate());
+        project.updateActualStartDate(dto.getActualStartDate());
+        project.updateActualEndDate(dto.getActualEndDate());
     }
 
     @Transactional
     public void deleteProjectByProjectId(Long projectId) {
-        Project project = findProjectByProjectId(projectId);
-
-        repository.delete(project);
+        repository.delete(findProjectByProjectId(projectId));
     }
 
     public Project findProjectByProjectId(Long projectId) {
-        return repository.findOptionalById(projectId).orElseThrow(() ->
+        return repository.findById(projectId).orElseThrow(() ->
             new CommonException(ExceptionType.NOT_FOUND, null)
         );
     }

@@ -40,9 +40,6 @@ class ProjectServiceTest {
     @Mock
     ProjectRepository repository;
 
-    @Mock
-    Project project;
-
     @Test
     void createProject_validInput_true() {
         // given
@@ -52,8 +49,10 @@ class ProjectServiceTest {
             .title("BLOKEY-LAND PROJECT")
             .description("GitHub 기반 프로젝트 관리 및 팀원 매칭 서비스입니다.")
             .ownerId(userId)
-            .startDate(LocalDate.now())
-            .endDate(LocalDate.now().plusDays(2))
+            .estimatedStartDate(LocalDate.now())
+            .estimatedEndDate(LocalDate.now().plusDays(2))
+            .actualStartDate(LocalDate.now().plusDays(3))
+            .actualEndDate(LocalDate.now().plusDays(4))
             .build();
 
         User user = User.builder()
@@ -75,8 +74,10 @@ class ProjectServiceTest {
         assertEquals(dto.getTitle(), capturedProject.getTitle());
         assertEquals(dto.getDescription(), capturedProject.getDescription());
         assertEquals(dto.getOwnerId(), capturedProject.getOwnerId());
-        assertEquals(dto.getStartDate(), capturedProject.getStartDate());
-        assertEquals(dto.getEndDate(), capturedProject.getEndDate());
+        assertEquals(dto.getEstimatedStartDate(), capturedProject.getEstimatedStartDate());
+        assertEquals(dto.getEstimatedEndDate(), capturedProject.getEstimatedEndDate());
+        assertEquals(dto.getActualStartDate(), capturedProject.getActualStartDate());
+        assertEquals(dto.getActualEndDate(), capturedProject.getActualEndDate());
     }
 
     @Test
@@ -92,22 +93,26 @@ class ProjectServiceTest {
             .title("BLOKEY-LAND PROJECT")
             .description("GitHub 기반 프로젝트 관리 및 팀원 매칭 서비스입니다.")
             .ownerId(userId1)
-            .startDate(LocalDate.now())
-            .endDate(LocalDate.now().plusDays(2))
+            .estimatedStartDate(LocalDate.now())
+            .estimatedEndDate(LocalDate.now().plusDays(2))
+            .actualStartDate(LocalDate.now().plusDays(3))
+            .actualEndDate(LocalDate.now().plusDays(4))
             .build();
         Project project2 = Project.builder()
             .id(2L)
             .title("CINE-FINDER PROJECT")
             .description("사용자 입력에 따른 영화 상영정보 제공 서비스입니다.")
             .ownerId(userId2)
-            .startDate(LocalDate.now().plusDays(2))
-            .endDate(LocalDate.now().plusDays(5))
+            .estimatedStartDate(LocalDate.now().plusDays(2))
+            .estimatedEndDate(LocalDate.now().plusDays(3))
+            .actualStartDate(LocalDate.now().plusDays(4))
+            .actualEndDate(LocalDate.now().plusDays(5))
             .build();
 
         List<Project> projects = List.of(project1, project2);
         Page<Project> page = new PageImpl<>(projects, pageable, projects.size());
 
-        when(repository.findPageAll(pageable)).thenReturn(page);
+        when(repository.findAll(pageable)).thenReturn(page);
 
         // when
         Page<ProjectRespDto> result = service.readProjects(pageable);
@@ -122,11 +127,13 @@ class ProjectServiceTest {
             assertEquals(project.getTitle(), dto.getTitle());
             assertEquals(project.getDescription(), dto.getDescription());
             assertEquals(project.getOwnerId(), dto.getOwnerId());
-            assertEquals(project.getStartDate(), dto.getStartDate());
-            assertEquals(project.getEndDate(), dto.getEndDate());
+            assertEquals(project.getEstimatedStartDate(), dto.getEstimatedStartDate());
+            assertEquals(project.getEstimatedEndDate(), dto.getEstimatedEndDate());
+            assertEquals(project.getActualStartDate(), dto.getActualStartDate());
+            assertEquals(project.getActualEndDate(), dto.getActualEndDate());
         }
 
-        verify(repository, times(1)).findPageAll(pageable);
+        verify(repository, times(1)).findAll(pageable);
     }
 
     @Test
@@ -139,11 +146,13 @@ class ProjectServiceTest {
             .title("BLOKEY-LAND PROJECT")
             .description("GitHub 기반 프로젝트 관리 및 팀원 매칭 서비스입니다.")
             .ownerId(UUID.randomUUID())
-            .startDate(LocalDate.now())
-            .endDate(LocalDate.now().plusDays(2))
+            .estimatedStartDate(LocalDate.now())
+            .estimatedEndDate(LocalDate.now().plusDays(2))
+            .actualStartDate(LocalDate.now().plusDays(3))
+            .actualEndDate(LocalDate.now().plusDays(4))
             .build();
 
-        when(repository.findOptionalById(projectId)).thenReturn(Optional.of(project));
+        when(repository.findById(projectId)).thenReturn(Optional.of(project));
 
         // when
         ProjectRespDto result = service.readProjectByProjectId(projectId);
@@ -151,14 +160,16 @@ class ProjectServiceTest {
         assertEquals(project.getTitle(), result.getTitle());
         assertEquals(project.getDescription(), result.getDescription());
         assertEquals(project.getOwnerId(), result.getOwnerId());
-        assertEquals(project.getStartDate(), result.getStartDate());
-        assertEquals(project.getEndDate(), result.getEndDate());
+        assertEquals(project.getEstimatedStartDate(), result.getEstimatedStartDate());
+        assertEquals(project.getEstimatedEndDate(), result.getEstimatedEndDate());
+        assertEquals(project.getActualStartDate(), result.getActualStartDate());
+        assertEquals(project.getActualEndDate(), result.getActualEndDate());
 
-        verify(repository, times(1)).findOptionalById(projectId);
+        verify(repository, times(1)).findById(projectId);
     }
 
     @Test
-    void updateProjectByProjectId_input_true() {
+    void updateProjectByProjectId_validInput_true() {
         // given
         Long projectId = 1L;
         UUID userId1 = UUID.randomUUID();
@@ -168,19 +179,23 @@ class ProjectServiceTest {
             .title("BLOKEY-LAND PROJECT")
             .description("GitHub 기반 프로젝트 관리 및 팀원 매칭 서비스입니다.")
             .ownerId(userId1)
-            .startDate(LocalDate.now())
-            .endDate(LocalDate.now().plusDays(2))
+            .estimatedStartDate(LocalDate.now())
+            .estimatedEndDate(LocalDate.now().plusDays(2))
+            .actualStartDate(LocalDate.now().plusDays(3))
+            .actualEndDate(LocalDate.now().plusDays(4))
             .build();
 
-        when(repository.findOptionalById(projectId)).thenReturn(Optional.of(project));
+        when(repository.findById(projectId)).thenReturn(Optional.of(project));
 
         UUID userId2 = UUID.randomUUID();
         ProjectReqUpdateDto dto = ProjectReqUpdateDto.builder()
             .title("CINE-FINDER PROJECT")
             .description("사용자 입력에 따른 영화 상영정보 제공 서비스입니다.")
             .ownerId(userId2)
-            .startDate(LocalDate.of(2024, 2, 1))
-            .endDate(LocalDate.of(2024, 11, 30))
+            .estimatedStartDate(LocalDate.now().plusDays(2))
+            .estimatedEndDate(LocalDate.now().plusDays(3))
+            .actualStartDate(LocalDate.now().plusDays(4))
+            .actualEndDate(LocalDate.now().plusDays(5))
             .build();
 
         // when
@@ -191,8 +206,10 @@ class ProjectServiceTest {
         assertEquals(dto.getTitle(), result.getTitle());
         assertEquals(dto.getDescription(), result.getDescription());
         assertEquals(dto.getOwnerId(), result.getOwnerId());
-        assertEquals(dto.getStartDate(), result.getStartDate());
-        assertEquals(dto.getEndDate(), result.getEndDate());
+        assertEquals(dto.getEstimatedStartDate(), result.getEstimatedStartDate());
+        assertEquals(dto.getEstimatedEndDate(), result.getEstimatedEndDate());
+        assertEquals(dto.getActualStartDate(), result.getActualStartDate());
+        assertEquals(dto.getActualEndDate(), result.getActualEndDate());
     }
 
     @Test
@@ -204,11 +221,13 @@ class ProjectServiceTest {
             .title("BLOKEY-LAND PROJECT")
             .description("GitHub 기반 프로젝트 관리 및 팀원 매칭 서비스입니다.")
             .ownerId(UUID.randomUUID())
-            .startDate(LocalDate.now())
-            .endDate(LocalDate.now().plusDays(2))
+            .estimatedStartDate(LocalDate.now())
+            .estimatedEndDate(LocalDate.now().plusDays(2))
+            .actualStartDate(LocalDate.now().plusDays(3))
+            .actualEndDate(LocalDate.now().plusDays(4))
             .build();
 
-        when(repository.findOptionalById(projectId)).thenReturn(Optional.of(project));
+        when(repository.findById(projectId)).thenReturn(Optional.of(project));
 
         // when
         service.deleteProjectByProjectId(projectId);
@@ -222,7 +241,7 @@ class ProjectServiceTest {
         // given
         Long projectId = 999L;
 
-        when(repository.findOptionalById(projectId)).thenReturn(Optional.empty());
+        when(repository.findById(projectId)).thenReturn(Optional.empty());
 
         // when & then
         CommonException e = assertThrows(CommonException.class, () ->

@@ -27,20 +27,16 @@ public class UserService {
     @Transactional
     public void createUser(UserReqCreateDto dto) {
         UUID userId = helperService.createUserOnAuthenticationServer(dto);
-        User user = UserMapper.toEntity(dto, userId);
-
-        repository.save(user);
+        repository.save(UserMapper.toEntity(dto, userId));
     }
 
     public Page<UserRespDto> readUsers(Pageable pageable) {
-        return repository.findPageAll(pageable)
+        return repository.findAll(pageable)
             .map(UserMapper::toRespDto);
     }
 
     public UserRespDto readUserByUserId(UUID userId) {
-        User user = findUserByUserId(userId);
-
-        return UserMapper.toRespDto(user);
+        return UserMapper.toRespDto(findUserByUserId(userId));
     }
 
     @Transactional
@@ -58,13 +54,11 @@ public class UserService {
     @Transactional
     public void deleteUserByUserId(UUID userId) {
         helperService.deleteUserOnAuthenticationServer(userId);
-        User user = findUserByUserId(userId);
-
-        repository.delete(user);
+        repository.delete(findUserByUserId(userId));
     }
 
     public User findUserByUserId(UUID userId) {
-        return repository.findOptionalById(userId).orElseThrow(() ->
+        return repository.findById(userId).orElseThrow(() ->
             new CommonException(ExceptionType.NOT_FOUND, null)
         );
     }

@@ -72,7 +72,7 @@ class UserServiceTest {
         List<User> users = List.of(user1, user2);
         Page<User> page = new PageImpl<>(users, pageable, users.size());
 
-        when(repository.findPageAll(pageable)).thenReturn(page);
+        when(repository.findAll(pageable)).thenReturn(page);
 
         // when
         Page<UserRespDto> result = service.readUsers(pageable);
@@ -87,7 +87,7 @@ class UserServiceTest {
             assertEquals(user.getNickname(), dto.getNickname());
         }
 
-        verify(repository, times(1)).findPageAll(pageable);
+        verify(repository, times(1)).findAll(pageable);
     }
 
     @Test
@@ -96,7 +96,7 @@ class UserServiceTest {
         UUID userId = UUID.randomUUID();
         User user = new User(userId, "짱구", "감자머리입니다.");
 
-        when(repository.findOptionalById(userId)).thenReturn(Optional.of(user));
+        when(repository.findById(userId)).thenReturn(Optional.of(user));
 
         // when
         UserRespDto result = service.readUserByUserId(userId);
@@ -106,7 +106,7 @@ class UserServiceTest {
         assertEquals(user.getNickname(), result.getNickname());
         assertEquals(user.getBio(), result.getBio());
 
-        verify(repository, times(1)).findOptionalById(userId);
+        verify(repository, times(1)).findById(userId);
     }
 
     @Test
@@ -124,7 +124,7 @@ class UserServiceTest {
 
         // then
         verify(helperService).updatePasswordOnAuthenticationServer(userId, dto);
-        verify(repository, never()).findOptionalById(any());
+        verify(repository, never()).findById(any());
     }
 
     @Test
@@ -138,7 +138,7 @@ class UserServiceTest {
 
         User user = mock(User.class);
 
-        when(repository.findOptionalById(userId)).thenReturn(Optional.of(user));
+        when(repository.findById(userId)).thenReturn(Optional.of(user));
 
         // when
         service.updateUserByUserId(userId, dto);
@@ -160,7 +160,7 @@ class UserServiceTest {
 
         // then
         verify(helperService, never()).updatePasswordOnAuthenticationServer(any(), any());
-        verify(repository, never()).findOptionalById(any());
+        verify(repository, never()).findById(any());
     }
 
     @Test
@@ -172,7 +172,7 @@ class UserServiceTest {
             .bio("자기소개입니다.")
             .build();
 
-        when(repository.findOptionalById(userId)).thenReturn(Optional.empty());
+        when(repository.findById(userId)).thenReturn(Optional.empty());
 
         // when & then
         CommonException e = assertThrows(CommonException.class, () ->
@@ -189,14 +189,14 @@ class UserServiceTest {
         User user = new User(userId, "짱구", "감자머리입니다.");
 
         doNothing().when(helperService).deleteUserOnAuthenticationServer(userId);
-        when(repository.findOptionalById(userId)).thenReturn(Optional.of(user));
+        when(repository.findById(userId)).thenReturn(Optional.of(user));
 
         // when
         service.deleteUserByUserId(userId);
 
         // then
         verify(helperService).deleteUserOnAuthenticationServer(userId);
-        verify(repository).findOptionalById(userId);
+        verify(repository).findById(userId);
         verify(repository).delete(user);
     }
 
@@ -206,7 +206,7 @@ class UserServiceTest {
         UUID userId = UUID.randomUUID();
 
         doNothing().when(helperService).deleteUserOnAuthenticationServer(userId);
-        when(repository.findOptionalById(userId)).thenReturn(Optional.empty());
+        when(repository.findById(userId)).thenReturn(Optional.empty());
 
         // when & then
         CommonException e = assertThrows(CommonException.class, () -> {
@@ -216,7 +216,7 @@ class UserServiceTest {
         assertEquals(ExceptionType.NOT_FOUND, e.getException());
 
         verify(helperService).deleteUserOnAuthenticationServer(userId);
-        verify(repository).findOptionalById(userId);
+        verify(repository).findById(userId);
         verify(repository, never()).delete(any());
     }
 }

@@ -1,9 +1,11 @@
-package xyz.samsami.blokey_land.project.dto;
+package xyz.samsami.blokey_land.task.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import xyz.samsami.blokey_land.task.type.PriorityType;
+import xyz.samsami.blokey_land.task.type.StatusType;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -12,10 +14,13 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ProjectReqUpdateDto {
+public class TaskReqUpdateDto {
     private String title;
     private String description;
-    private UUID ownerId;
+    private UUID assignee;
+    private Integer progress;
+    private StatusType status;
+    private PriorityType priority;
     private LocalDate estimatedStartDate;
     private LocalDate estimatedEndDate;
     private LocalDate actualStartDate;

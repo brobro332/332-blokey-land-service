@@ -13,9 +13,12 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class ProjectRespDto {
+    private Long id;
     private String title;
     private String description;
     private UUID ownerId;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private LocalDate estimatedStartDate;
+    private LocalDate estimatedEndDate;
+    private LocalDate actualStartDate;
+    private LocalDate actualEndDate;
 }
