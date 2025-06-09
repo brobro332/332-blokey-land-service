@@ -1,10 +1,7 @@
 package xyz.samsami.blokey_land.project.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import xyz.samsami.blokey_land.common.domain.CommonTimestamp;
 
 import java.time.LocalDate;
@@ -12,7 +9,7 @@ import java.util.UUID;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 public class Project extends CommonTimestamp {
