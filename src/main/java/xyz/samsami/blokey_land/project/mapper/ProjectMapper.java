@@ -10,8 +10,10 @@ public class ProjectMapper {
             .title(dto.getTitle())
             .description(dto.getDescription())
             .ownerId(dto.getOwnerId())
-            .startDate(dto.getStartDate())
-            .endDate(dto.getEndDate())
+            .estimatedStartDate(dto.getEstimatedStartDate())
+            .estimatedEndDate(dto.getEstimatedEndDate())
+            .actualStartDate(dto.getActualStartDate())
+            .actualEndDate(dto.getActualEndDate())
             .build();
     }
 
@@ -20,8 +22,10 @@ public class ProjectMapper {
             .title(project.getTitle())
             .description(project.getDescription())
             .ownerId(project.getOwnerId())
-            .startDate(project.getStartDate())
-            .endDate(project.getEndDate())
+            .estimatedStartDate(project.getEstimatedStartDate())
+            .estimatedEndDate(project.getEstimatedEndDate())
+            .actualStartDate(project.getActualStartDate())
+            .actualEndDate(project.getActualEndDate())
             .build();
     }
 }

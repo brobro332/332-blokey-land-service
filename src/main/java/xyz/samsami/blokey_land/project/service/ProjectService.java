@@ -35,7 +35,7 @@ public class ProjectService {
     }
 
     public Page<ProjectRespDto> readProjects(Pageable pageable) {
-        return repository.findPageAll(pageable)
+        return repository.findAll(pageable)
             .map(ProjectMapper::toRespDto);
     }
 
@@ -52,8 +52,10 @@ public class ProjectService {
         project.updateTitle(dto.getTitle());
         project.updateDescription(dto.getDescription());
         project.updateOwnerId(dto.getOwnerId());
-        project.updateStartDate(dto.getStartDate());
-        project.updateEndDate(dto.getEndDate());
+        project.updateEstimatedStartDate(dto.getEstimatedStartDate());
+        project.updateEstimatedEndDate(dto.getEstimatedEndDate());
+        project.updateActualStartDate(dto.getActualStartDate());
+        project.updateActualEndDate(dto.getActualEndDate());
     }
 
     @Transactional
@@ -64,7 +66,7 @@ public class ProjectService {
     }
 
     public Project findProjectByProjectId(Long projectId) {
-        return repository.findOptionalById(projectId).orElseThrow(() ->
+        return repository.findById(projectId).orElseThrow(() ->
             new CommonException(ExceptionType.NOT_FOUND, null)
         );
     }

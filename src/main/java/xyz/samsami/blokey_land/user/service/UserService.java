@@ -33,7 +33,7 @@ public class UserService {
     }
 
     public Page<UserRespDto> readUsers(Pageable pageable) {
-        return repository.findPageAll(pageable)
+        return repository.findAll(pageable)
             .map(UserMapper::toRespDto);
     }
 
@@ -64,7 +64,7 @@ public class UserService {
     }
 
     public User findUserByUserId(UUID userId) {
-        return repository.findOptionalById(userId).orElseThrow(() ->
+        return repository.findById(userId).orElseThrow(() ->
             new CommonException(ExceptionType.NOT_FOUND, null)
         );
     }

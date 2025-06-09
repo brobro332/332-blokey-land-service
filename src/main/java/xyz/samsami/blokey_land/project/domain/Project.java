@@ -4,13 +4,13 @@ import jakarta.persistence.*;
 import lombok.*;
 import xyz.samsami.blokey_land.common.domain.CommonDateTime;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
 public class Project extends CommonDateTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,9 +41,7 @@ public class Project extends CommonDateTime {
     */
 
     public void updateTitle(String title) { if (title != null) this.title = title; }
-
     public void updateDescription(String description) { if (description != null) this.description = description; }
-
     public void updateOwnerId(UUID ownerId) { if (ownerId != null) this.ownerId = ownerId; }
 
     /* TODO: 멤버 필드 업데이트 메서드
@@ -66,4 +64,22 @@ public class Project extends CommonDateTime {
         milestones.forEach(milestone -> this.milestones.add(milestone));
     }
     */
+
+    @Builder
+    public Project(
+        LocalDate estimatedStartDate,
+        LocalDate estimatedEndDate,
+        LocalDate actualStartDate,
+        LocalDate actualEndDate,
+        Long id,
+        String title,
+        String description,
+        UUID ownerId
+    ) {
+        super(estimatedStartDate, estimatedEndDate, actualStartDate, actualEndDate);
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.ownerId = ownerId;
+    }
 }
