@@ -5,7 +5,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -23,7 +22,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -46,18 +46,19 @@ class UserServiceTest {
             .bio("자기소개입니다.")
             .build();
 
+        when(helperService.createUserOnAuthenticationServer(dto)).thenReturn(userId);
+
         // when
-        Mockito.when(helperService.createUserOnAuthenticationServer(dto)).thenReturn(userId);
         service.createUser(dto);
 
         // then
         ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
         verify(repository, times(1)).save(captor.capture());
-        User captoredUser = captor.getValue();
+        User capturedUser = captor.getValue();
 
-        assertEquals(userId, captoredUser.getId());
-        assertEquals(dto.getNickname(), captoredUser.getNickname());
-        assertEquals(dto.getBio(), captoredUser.getBio());
+        assertEquals(userId, capturedUser.getId());
+        assertEquals(dto.getNickname(), capturedUser.getNickname());
+        assertEquals(dto.getBio(), capturedUser.getBio());
     }
 
     @Test
@@ -136,6 +137,7 @@ class UserServiceTest {
             .build();
 
         User user = mock(User.class);
+
         when(repository.findOptionalById(userId)).thenReturn(Optional.of(user));
 
         // when

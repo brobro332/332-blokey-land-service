@@ -38,9 +38,7 @@ public class UserService {
     }
 
     public UserRespDto readUserByUserId(UUID userId) {
-        User user = repository.findOptionalById(userId).orElseThrow(() ->
-            new CommonException(ExceptionType.NOT_FOUND, null)
-        );
+        User user = findUserByUserId(userId);
 
         return UserMapper.toRespDto(user);
     }
@@ -50,9 +48,7 @@ public class UserService {
         if (!StringUtil.isNullOrEmpty(dto.getPassword())) helperService.updatePasswordOnAuthenticationServer(userId, dto);
 
         if (StringUtil.anyNotNullOrEmpty(dto.getNickname(), dto.getBio())) {
-            User user = repository.findOptionalById(userId).orElseThrow(() ->
-                new CommonException(ExceptionType.NOT_FOUND, null)
-            );
+            User user = findUserByUserId(userId);
 
             user.updateNickname(dto.getNickname());
             user.updateBio(dto.getBio());
@@ -62,11 +58,14 @@ public class UserService {
     @Transactional
     public void deleteUserByUserId(UUID userId) {
         helperService.deleteUserOnAuthenticationServer(userId);
-
-        User user = repository.findOptionalById(userId).orElseThrow(() ->
-            new CommonException(ExceptionType.NOT_FOUND, null)
-        );
+        User user = findUserByUserId(userId);
 
         repository.delete(user);
+    }
+
+    public User findUserByUserId(UUID userId) {
+        return repository.findOptionalById(userId).orElseThrow(() ->
+            new CommonException(ExceptionType.NOT_FOUND, null)
+        );
     }
 }

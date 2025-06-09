@@ -7,8 +7,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import xyz.samsami.blokey_land.common.exception.CommonException;
 import xyz.samsami.blokey_land.common.type.ExceptionType;
+import xyz.samsami.blokey_land.user.domain.User;
 import xyz.samsami.blokey_land.user.dto.UserReqCreateDto;
 import xyz.samsami.blokey_land.user.dto.UserReqUpdateDto;
+import xyz.samsami.blokey_land.user.repository.UserRepository;
 
 import java.util.Map;
 import java.util.UUID;
@@ -17,6 +19,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class UserHelperService {
+    private final UserRepository repository;
     private final WebClient authenticationWebClient;
 
     public UUID createUserOnAuthenticationServer(UserReqCreateDto dto) {
