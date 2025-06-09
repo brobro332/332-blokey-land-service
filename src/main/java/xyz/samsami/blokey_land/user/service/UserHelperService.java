@@ -83,10 +83,4 @@ public class UserHelperService {
             .toBodilessEntity()
             .block();
     }
-
-    public User findUserByUserId(UUID userId) {
-        return repository.findOptionalById(userId).orElseThrow(() ->
-            new CommonException(ExceptionType.NOT_FOUND, null)
-        );
-    }
 }

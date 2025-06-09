@@ -5,6 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import xyz.samsami.blokey_land.common.exception.CommonException;
+import xyz.samsami.blokey_land.common.type.ExceptionType;
 import xyz.samsami.blokey_land.common.util.StringUtil;
 import xyz.samsami.blokey_land.user.domain.User;
 import xyz.samsami.blokey_land.user.dto.UserReqCreateDto;
@@ -36,7 +38,7 @@ public class UserService {
     }
 
     public UserRespDto readUserByUserId(UUID userId) {
-        User user = helperService.findUserByUserId(userId);
+        User user = findUserByUserId(userId);
 
         return UserMapper.toRespDto(user);
     }
@@ -46,7 +48,7 @@ public class UserService {
         if (!StringUtil.isNullOrEmpty(dto.getPassword())) helperService.updatePasswordOnAuthenticationServer(userId, dto);
 
         if (StringUtil.anyNotNullOrEmpty(dto.getNickname(), dto.getBio())) {
-            User user = helperService.findUserByUserId(userId);
+            User user = findUserByUserId(userId);
 
             user.updateNickname(dto.getNickname());
             user.updateBio(dto.getBio());
@@ -56,8 +58,14 @@ public class UserService {
     @Transactional
     public void deleteUserByUserId(UUID userId) {
         helperService.deleteUserOnAuthenticationServer(userId);
-        User user = helperService.findUserByUserId(userId);
+        User user = findUserByUserId(userId);
 
         repository.delete(user);
+    }
+
+    public User findUserByUserId(UUID userId) {
+        return repository.findOptionalById(userId).orElseThrow(() ->
+                new CommonException(ExceptionType.NOT_FOUND, null)
+        );
     }
 }
