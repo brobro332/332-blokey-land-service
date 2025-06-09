@@ -13,6 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class ProjectRespDto {
+    private Long id;
     private String title;
     private String description;
     private UUID ownerId;

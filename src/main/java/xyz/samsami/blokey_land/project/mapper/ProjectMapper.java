@@ -19,6 +19,7 @@ public class ProjectMapper {
 
     public static ProjectRespDto toRespDto(Project project) {
         return ProjectRespDto.builder()
+            .id(project.getId())
             .title(project.getTitle())
             .description(project.getDescription())
             .ownerId(project.getOwnerId())

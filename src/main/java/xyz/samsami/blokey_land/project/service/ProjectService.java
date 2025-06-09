@@ -27,11 +27,7 @@ public class ProjectService {
     public void createProject(ProjectReqCreateDto dto) {
         User user = userService.findUserByUserId(dto.getOwnerId());
 
-        if (user != null) {
-            Project project = ProjectMapper.toEntity(dto);
-
-            repository.save(project);
-        }
+        if (user != null) repository.save(ProjectMapper.toEntity(dto));
     }
 
     public Page<ProjectRespDto> readProjects(Pageable pageable) {
@@ -40,9 +36,7 @@ public class ProjectService {
     }
 
     public ProjectRespDto readProjectByProjectId(Long projectId) {
-        Project project = findProjectByProjectId(projectId);
-
-        return ProjectMapper.toRespDto(project);
+        return ProjectMapper.toRespDto(findProjectByProjectId(projectId));
     }
 
     @Transactional
@@ -60,9 +54,7 @@ public class ProjectService {
 
     @Transactional
     public void deleteProjectByProjectId(Long projectId) {
-        Project project = findProjectByProjectId(projectId);
-
-        repository.delete(project);
+        repository.delete(findProjectByProjectId(projectId));
     }
 
     public Project findProjectByProjectId(Long projectId) {
