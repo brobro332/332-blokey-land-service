@@ -3,6 +3,7 @@ package xyz.samsami.blokey_land.project.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import xyz.samsami.blokey_land.common.domain.CommonDateTime;
+import xyz.samsami.blokey_land.member.domain.Member;
 import xyz.samsami.blokey_land.task.domain.Task;
 
 import java.time.LocalDate;
@@ -28,11 +29,9 @@ public class Project extends CommonDateTime {
     @Column(name = "owner_id", nullable = false)
     private UUID ownerId;
 
-    /* TODO: 멤버 도메인 개발
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Member> members = new ArrayList<>();
-    */
-    
+
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks = new ArrayList<>();
 
@@ -44,13 +43,9 @@ public class Project extends CommonDateTime {
     public void updateTitle(String title) { if (title != null) this.title = title; }
     public void updateDescription(String description) { if (description != null) this.description = description; }
     public void updateOwnerId(UUID ownerId) { if (ownerId != null) this.ownerId = ownerId; }
+    public void addMember(Member member) { this.members.add(member); }
+    public void removeMember(Member member) { this.members.remove(member); }
 
-    /* TODO: 멤버 필드 업데이트 메서드
-    public void updateMembers(List<Member> members) {
-        this.members.clear();
-        members.forEach(member -> this.members.add(member));
-    }
-    */
 
     public void updateTasks(List<Task> tasks) {
         this.tasks.clear();
