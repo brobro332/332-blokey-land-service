@@ -16,7 +16,7 @@ import xyz.samsami.blokey_land.task.dto.TaskReqUpdateDto;
 import xyz.samsami.blokey_land.task.dto.TaskRespDto;
 import xyz.samsami.blokey_land.task.repository.TaskRepository;
 import xyz.samsami.blokey_land.task.type.PriorityType;
-import xyz.samsami.blokey_land.task.type.StatusType;
+import xyz.samsami.blokey_land.task.type.TaskStatusType;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -60,7 +60,7 @@ class TaskServiceTest {
             .description("CRUD API 개발")
             .assignee(UUID.randomUUID())
             .progress(90)
-            .status(StatusType.IN_PROGRESS)
+            .status(TaskStatusType.IN_PROGRESS)
             .priority(PriorityType.LOW)
             .projectId(projectId)
             .build();
@@ -109,7 +109,7 @@ class TaskServiceTest {
             .description("CRUD API 개발")
             .assignee(UUID.randomUUID())
             .progress(90)
-            .status(StatusType.IN_PROGRESS)
+            .status(TaskStatusType.IN_PROGRESS)
             .priority(PriorityType.LOW)
             .project(project)
             .build();
@@ -157,7 +157,7 @@ class TaskServiceTest {
             .description("CRUD API 개발")
             .assignee(UUID.randomUUID())
             .progress(90)
-            .status(StatusType.IN_PROGRESS)
+            .status(TaskStatusType.IN_PROGRESS)
             .priority(PriorityType.LOW)
             .project(project)
             .build();
@@ -169,7 +169,7 @@ class TaskServiceTest {
             .description("패키지 구조 생성")
             .assignee(UUID.randomUUID())
             .progress(50)
-            .status(StatusType.TODO)
+            .status(TaskStatusType.TODO)
             .priority(PriorityType.LOW)
             .build();
 
@@ -214,7 +214,7 @@ class TaskServiceTest {
             .description("CRUD API 개발")
             .assignee(UUID.randomUUID())
             .progress(90)
-            .status(StatusType.IN_PROGRESS)
+            .status(TaskStatusType.IN_PROGRESS)
             .priority(PriorityType.LOW)
             .project(project)
             .build();

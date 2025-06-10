@@ -5,7 +5,7 @@ import lombok.*;
 import xyz.samsami.blokey_land.common.domain.CommonDateTime;
 import xyz.samsami.blokey_land.project.domain.Project;
 import xyz.samsami.blokey_land.task.type.PriorityType;
-import xyz.samsami.blokey_land.task.type.StatusType;
+import xyz.samsami.blokey_land.task.type.TaskStatusType;
 
 import java.util.UUID;
 
@@ -32,7 +32,7 @@ public class Task extends CommonDateTime {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private StatusType status;
+    private TaskStatusType status;
 
     @Column
     @Enumerated(EnumType.STRING)
@@ -46,6 +46,6 @@ public class Task extends CommonDateTime {
     public void updateDescription(String description) { if (description != null) this.description = description; }
     public void updateAssignee(UUID assignee) { if (assignee != null) this.assignee = assignee; }
     public void updateProgress(Integer progress) { if (progress != null) this.progress = progress; }
-    public void updateStatus(StatusType status) { if (status != null) this.status = status;}
+    public void updateStatus(TaskStatusType status) { if (status != null) this.status = status;}
     public void updatePriority(PriorityType priority) { if (priority != null) this.priority = priority; }
 }
