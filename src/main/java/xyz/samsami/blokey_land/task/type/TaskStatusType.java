@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum StatusType {
+public enum TaskStatusType {
     TODO("시작전"),
     IN_PROGRESS("진행중"),
     REVIEW("검토중"),

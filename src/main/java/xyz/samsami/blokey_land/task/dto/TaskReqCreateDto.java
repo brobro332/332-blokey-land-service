@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import xyz.samsami.blokey_land.task.type.PriorityType;
-import xyz.samsami.blokey_land.task.type.StatusType;
+import xyz.samsami.blokey_land.task.type.TaskStatusType;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -20,7 +20,7 @@ public class TaskReqCreateDto {
     private String description;
     private UUID assignee;
     private Integer progress;
-    private StatusType status;
+    private TaskStatusType status;
     private PriorityType priority;
     private LocalDate estimatedStartDate;
     private LocalDate estimatedEndDate;
