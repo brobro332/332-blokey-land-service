@@ -53,8 +53,15 @@ public class ProjectService {
     }
 
     @Transactional
-    public void deleteProjectByProjectId(Long projectId) {
-        repository.delete(findProjectByProjectId(projectId));
+    public void softDeleteProjectByProjectId(Long projectId) {
+        Project project = findProjectByProjectId(projectId);
+        if (project != null) project.updateDeleted(true);
+    }
+
+    @Transactional
+    public void restoreProjectByProjectId(Long projectId) {
+        Project project = findProjectByProjectId(projectId);
+        if (project != null) project.updateDeleted(false);
     }
 
     public Project findProjectByProjectId(Long projectId) {

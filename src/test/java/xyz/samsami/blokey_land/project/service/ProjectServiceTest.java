@@ -213,7 +213,7 @@ class ProjectServiceTest {
     }
 
     @Test
-    void deleteProjectByProjectId_validInput_true() {
+    void softDeleteProjectByProjectId_validInput_true() {
         // given
         Long projectId = 1L;
         Project project = Project.builder()
@@ -230,14 +230,14 @@ class ProjectServiceTest {
         when(repository.findById(projectId)).thenReturn(Optional.of(project));
 
         // when
-        service.deleteProjectByProjectId(projectId);
+        service.softDeleteProjectByProjectId(projectId);
 
         // then
-        verify(repository, times(1)).delete(project);
+        assertEquals(true, project.getDeleted());
     }
 
     @Test
-    void deleteProjectByProjectId_invalidInput_false() {
+    void softDeleteProjectByProjectId_invalidInput_false() {
         // given
         Long projectId = 999L;
 
@@ -245,9 +245,34 @@ class ProjectServiceTest {
 
         // when & then
         CommonException e = assertThrows(CommonException.class, () ->
-            service.deleteProjectByProjectId(projectId)
+            service.softDeleteProjectByProjectId(projectId)
         );
 
         assertEquals(ExceptionType.NOT_FOUND, e.getException());
+    }
+
+    @Test
+    void restoreProjectByProjectId_validInput_true() {
+        // given
+        Long projectId = 1L;
+        Project project = Project.builder()
+            .id(projectId)
+            .title("BLOKEY-LAND PROJECT")
+            .description("GitHub 기반 프로젝트 관리 및 팀원 매칭 서비스입니다.")
+            .ownerId(UUID.randomUUID())
+            .deleted(true)
+            .estimatedStartDate(LocalDate.now())
+            .estimatedEndDate(LocalDate.now().plusDays(2))
+            .actualStartDate(LocalDate.now().plusDays(3))
+            .actualEndDate(LocalDate.now().plusDays(4))
+            .build();
+
+        when(repository.findById(projectId)).thenReturn(Optional.of(project));
+
+        // when
+        service.restoreProjectByProjectId(projectId);
+
+        // then
+        assertEquals(false, project.getDeleted());
     }
 }

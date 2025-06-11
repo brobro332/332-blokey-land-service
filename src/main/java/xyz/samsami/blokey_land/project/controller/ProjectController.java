@@ -49,7 +49,13 @@ public class ProjectController {
 
     @DeleteMapping("/{projectId}")
     public CommonRespDto<Void> deleteProjectByProjectId(@PathVariable Long projectId) {
-        service.deleteProjectByProjectId(projectId);
+        service.softDeleteProjectByProjectId(projectId);
         return CommonRespDto.of(ResultType.SUCCESS, "프로젝트 삭제 완료", null);
+    }
+
+    @PatchMapping("/{projectId}")
+    public CommonRespDto<Void> restoreProjectByProjectId(@PathVariable Long projectId) {
+        service.restoreProjectByProjectId(projectId);
+        return CommonRespDto.of(ResultType.SUCCESS, "프로젝트 복구 완료", null);
     }
 }

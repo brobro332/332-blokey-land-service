@@ -2,6 +2,7 @@ package xyz.samsami.blokey_land.project.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import xyz.samsami.blokey_land.common.domain.CommonDateTime;
 
 import java.time.LocalDate;
@@ -25,21 +26,14 @@ public class Project extends CommonDateTime {
     @Column(name = "owner_id", nullable = false)
     private UUID ownerId;
 
-    /* TODO: 마일스톤 도메인 개발
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Milestone> milestones = new ArrayList<>();
-    */
+    @Column(nullable = false)
+    @ColumnDefault("false")
+    private Boolean deleted = false;
 
     public void updateTitle(String title) { if (title != null) this.title = title; }
     public void updateDescription(String description) { if (description != null) this.description = description; }
     public void updateOwnerId(UUID ownerId) { if (ownerId != null) this.ownerId = ownerId; }
-
-    /* TODO: 마일스톤 필드 업데이트 메서드
-    public void updateMilestones(List<Milestone> milestones) {
-        this.milestones.clear();
-        milestones.forEach(milestone -> this.milestones.add(milestone));
-    }
-    */
+    public void updateDeleted(Boolean deleted) { if (deleted != null) this.deleted = deleted; }
 
     @Builder
     public Project(
@@ -50,12 +44,14 @@ public class Project extends CommonDateTime {
         Long id,
         String title,
         String description,
-        UUID ownerId
+        UUID ownerId,
+        Boolean deleted
     ) {
         super(estimatedStartDate, estimatedEndDate, actualStartDate, actualEndDate);
         this.id = id;
         this.title = title;
         this.description = description;
         this.ownerId = ownerId;
+        this.deleted = deleted;
     }
 }
