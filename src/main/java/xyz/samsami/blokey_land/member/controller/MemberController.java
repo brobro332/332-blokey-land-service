@@ -41,14 +41,14 @@ public class MemberController implements MemberApi {
     }
 
     @Override
-    public CommonRespDto<Page<MemberRespDto>> readMembersByUserId(
-        @PathVariable UUID userId,
+    public CommonRespDto<Page<MemberRespDto>> readMembersByBlokeyId(
+        @PathVariable UUID blokeyId,
         @PageableDefault(
-                sort = "memberId", direction = Sort.Direction.DESC
+            sort = "memberId", direction = Sort.Direction.DESC
         ) Pageable pageable
     ) {
-        Page<MemberRespDto> page = service.readMemberByUserId(userId, pageable);
-        return CommonRespDto.of(ResultType.SUCCESS, "멤버 목록 조회 완료", null);
+        Page<MemberRespDto> page = service.readMemberByBlokeyId(blokeyId, pageable);
+        return CommonRespDto.of(ResultType.SUCCESS, "멤버 목록 조회 완료", page);
     }
 
     @Override

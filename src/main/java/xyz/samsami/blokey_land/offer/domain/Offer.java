@@ -2,11 +2,11 @@ package xyz.samsami.blokey_land.offer.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import xyz.samsami.blokey_land.blokey.domain.Blokey;
 import xyz.samsami.blokey_land.common.domain.CommonTimestamp;
 import xyz.samsami.blokey_land.project.domain.Project;
 import xyz.samsami.blokey_land.offer.type.OfferStatusType;
 import xyz.samsami.blokey_land.offer.type.OfferType;
-import xyz.samsami.blokey_land.user.domain.User;
 
 @Entity
 @Getter
@@ -23,8 +23,8 @@ public class Offer extends CommonTimestamp {
     private Project project;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "blokey_id")
+    private Blokey blokey;
 
     @Enumerated(EnumType.STRING)
     private OfferType offerer;

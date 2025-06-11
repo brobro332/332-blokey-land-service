@@ -1,4 +1,4 @@
-package xyz.samsami.blokey_land.user.dto;
+package xyz.samsami.blokey_land.blokey.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserRespDto {
+public class BlokeyRespDto {
     private UUID id;
     private String nickname;
     private String bio;

@@ -12,7 +12,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        ddl-auto: update
+    hibernate:
+      ddl-auto: update
 
 logging:
   level:

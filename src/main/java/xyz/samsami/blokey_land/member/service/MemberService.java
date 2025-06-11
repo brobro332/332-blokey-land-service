@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import xyz.samsami.blokey_land.blokey.domain.Blokey;
 import xyz.samsami.blokey_land.common.exception.CommonException;
 import xyz.samsami.blokey_land.common.type.ExceptionType;
 import xyz.samsami.blokey_land.member.domain.Member;
@@ -16,8 +17,7 @@ import xyz.samsami.blokey_land.member.mapper.MemberMapper;
 import xyz.samsami.blokey_land.member.repository.MemberRepository;
 import xyz.samsami.blokey_land.project.domain.Project;
 import xyz.samsami.blokey_land.project.service.ProjectService;
-import xyz.samsami.blokey_land.user.domain.User;
-import xyz.samsami.blokey_land.user.service.UserService;
+import xyz.samsami.blokey_land.blokey.service.BlokeyService;
 
 import java.util.UUID;
 
@@ -26,16 +26,16 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class MemberService {
     private final ProjectService projectService;
-    private final UserService userService;
+    private final BlokeyService blokeyService;
     private final MemberRepository repository;
 
     @Transactional
     public void createMember(Long projectId, MemberReqCreateDto dto) {
         Project project = projectService.findProjectByProjectId(projectId);
-        User user = userService.findUserByUserId(dto.getUserId());
+        Blokey blokey = blokeyService.findBlokeyByBlokeyId(dto.getBlokeyId());
 
-        if (project != null && user != null) {
-            Member member = MemberMapper.toEntity(project, user, dto);
+        if (project != null && blokey != null) {
+            Member member = MemberMapper.toEntity(project, blokey, dto);
             repository.save(member);
         }
     }
@@ -44,8 +44,8 @@ public class MemberService {
         return repository.findDtoByProjectId(projectId, pageable);
     }
 
-    public Page<MemberRespDto> readMemberByUserId(UUID userId, Pageable pageable) {
-        return repository.findDtoByUserId(userId, pageable);
+    public Page<MemberRespDto> readMemberByBlokeyId(UUID blokeyId, Pageable pageable) {
+        return repository.findDtoByBlokeyId(blokeyId, pageable);
     }
 
     @Transactional
@@ -57,10 +57,10 @@ public class MemberService {
     @Transactional
     public void deleteMember(Long projectId, MemberReqDeleteDto dto) {
         Project project = projectService.findProjectByProjectId(projectId);
-        User user = userService.findUserByUserId(dto.getUserId());
+        Blokey blokey = blokeyService.findBlokeyByBlokeyId(dto.getBlokeyId());
 
-        if (project != null && user != null) {
-            Member member = findMemberByProjectAndUser(project, user);
+        if (project != null && blokey != null) {
+            Member member = findMemberByProjectAndBlokey(project, blokey);
             repository.delete(member);
         }
     }
@@ -71,8 +71,8 @@ public class MemberService {
         );
     }
 
-    public Member findMemberByProjectAndUser(Project project, User user) {
-        return repository.findByProjectAndUser(project, user).orElseThrow(() ->
+    public Member findMemberByProjectAndBlokey(Project project, Blokey blokey) {
+        return repository.findByProjectAndBlokey(project, blokey).orElseThrow(() ->
             new CommonException(ExceptionType.NOT_FOUND, null)
         );
     }

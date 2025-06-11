@@ -32,9 +32,9 @@ public interface MemberApi {
     );
 
     @Operation(summary = "유저별 멤버 목록 조회", description = "사용자 도메인에서 멤버 목록을 조회합니다.")
-    @GetMapping("/users/{userId}/members")
-    CommonRespDto<Page<MemberRespDto>> readMembersByUserId(
-        @PathVariable UUID userId,
+    @GetMapping("/blokeys/{blokeyId}/members")
+    CommonRespDto<Page<MemberRespDto>> readMembersByBlokeyId(
+        @PathVariable UUID blokeyId,
         @Parameter(hidden = true) Pageable pageable
     );
 

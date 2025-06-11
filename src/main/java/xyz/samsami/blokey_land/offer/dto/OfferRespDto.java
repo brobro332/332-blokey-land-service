@@ -13,7 +13,7 @@ import java.util.UUID;
 public class OfferRespDto {
     private Long offerId;
     private Long projectId;
-    private UUID userId;
+    private UUID blokeyId;
     private OfferType offerer;
     private OfferStatusType status;
 }

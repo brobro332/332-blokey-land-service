@@ -17,8 +17,8 @@ import xyz.samsami.blokey_land.project.dto.ProjectReqCreateDto;
 import xyz.samsami.blokey_land.project.dto.ProjectReqUpdateDto;
 import xyz.samsami.blokey_land.project.dto.ProjectRespDto;
 import xyz.samsami.blokey_land.project.repository.ProjectRepository;
-import xyz.samsami.blokey_land.user.domain.User;
-import xyz.samsami.blokey_land.user.service.UserService;
+import xyz.samsami.blokey_land.blokey.domain.Blokey;
+import xyz.samsami.blokey_land.blokey.service.BlokeyService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -35,7 +35,7 @@ class ProjectServiceTest {
     ProjectService service;
 
     @Mock
-    UserService userService;
+    BlokeyService blokeyService;
 
     @Mock
     ProjectRepository repository;
@@ -43,25 +43,25 @@ class ProjectServiceTest {
     @Test
     void createProject_validInput_true() {
         // given
-        UUID userId = UUID.randomUUID();
+        UUID blokeyId = UUID.randomUUID();
 
         ProjectReqCreateDto dto = ProjectReqCreateDto.builder()
             .title("BLOKEY-LAND PROJECT")
             .description("GitHub 기반 프로젝트 관리 및 팀원 매칭 서비스입니다.")
-            .ownerId(userId)
+            .ownerId(blokeyId)
             .estimatedStartDate(LocalDate.now())
             .estimatedEndDate(LocalDate.now().plusDays(2))
             .actualStartDate(LocalDate.now().plusDays(3))
             .actualEndDate(LocalDate.now().plusDays(4))
             .build();
 
-        User user = User.builder()
-            .id(userId)
+        Blokey blokey = Blokey.builder()
+            .id(blokeyId)
             .nickname("짱구")
             .bio("감자머리입니다.")
             .build();
 
-        when(userService.findUserByUserId(userId)).thenReturn(user);
+        when(blokeyService.findBlokeyByBlokeyId(blokeyId)).thenReturn(blokey);
 
         // when
         service.createProject(dto);
@@ -85,14 +85,14 @@ class ProjectServiceTest {
         // given
         Pageable pageable = PageRequest.of(0, 10);
 
-        UUID userId1 = UUID.randomUUID();
-        UUID userId2 = UUID.randomUUID();
+        UUID blokeyId1 = UUID.randomUUID();
+        UUID blokeyId2 = UUID.randomUUID();
 
         Project project1 = Project.builder()
             .id(1L)
             .title("BLOKEY-LAND PROJECT")
             .description("GitHub 기반 프로젝트 관리 및 팀원 매칭 서비스입니다.")
-            .ownerId(userId1)
+            .ownerId(blokeyId1)
             .estimatedStartDate(LocalDate.now())
             .estimatedEndDate(LocalDate.now().plusDays(2))
             .actualStartDate(LocalDate.now().plusDays(3))
@@ -102,7 +102,7 @@ class ProjectServiceTest {
             .id(2L)
             .title("CINE-FINDER PROJECT")
             .description("사용자 입력에 따른 영화 상영정보 제공 서비스입니다.")
-            .ownerId(userId2)
+            .ownerId(blokeyId2)
             .estimatedStartDate(LocalDate.now().plusDays(2))
             .estimatedEndDate(LocalDate.now().plusDays(3))
             .actualStartDate(LocalDate.now().plusDays(4))
@@ -172,13 +172,13 @@ class ProjectServiceTest {
     void updateProjectByProjectId_validInput_true() {
         // given
         Long projectId = 1L;
-        UUID userId1 = UUID.randomUUID();
+        UUID blokeyId1 = UUID.randomUUID();
 
         Project project = Project.builder()
             .id(projectId)
             .title("BLOKEY-LAND PROJECT")
             .description("GitHub 기반 프로젝트 관리 및 팀원 매칭 서비스입니다.")
-            .ownerId(userId1)
+            .ownerId(blokeyId1)
             .estimatedStartDate(LocalDate.now())
             .estimatedEndDate(LocalDate.now().plusDays(2))
             .actualStartDate(LocalDate.now().plusDays(3))
@@ -187,11 +187,11 @@ class ProjectServiceTest {
 
         when(repository.findById(projectId)).thenReturn(Optional.of(project));
 
-        UUID userId2 = UUID.randomUUID();
+        UUID blokeyId2 = UUID.randomUUID();
         ProjectReqUpdateDto dto = ProjectReqUpdateDto.builder()
             .title("CINE-FINDER PROJECT")
             .description("사용자 입력에 따른 영화 상영정보 제공 서비스입니다.")
-            .ownerId(userId2)
+            .ownerId(blokeyId2)
             .estimatedStartDate(LocalDate.now().plusDays(2))
             .estimatedEndDate(LocalDate.now().plusDays(3))
             .actualStartDate(LocalDate.now().plusDays(4))

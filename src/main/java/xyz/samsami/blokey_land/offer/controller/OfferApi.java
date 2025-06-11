@@ -22,7 +22,7 @@ public interface OfferApi {
     @PostMapping
     CommonRespDto<Void> createOffer(
         @RequestParam Long projectId,
-        @RequestParam UUID userId,
+        @RequestParam UUID blokeyId,
         @RequestBody OfferReqCreateDto dto
     );
 

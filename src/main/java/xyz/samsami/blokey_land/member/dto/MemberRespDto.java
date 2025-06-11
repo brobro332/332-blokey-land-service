@@ -16,5 +16,5 @@ public class MemberRespDto {
     private Long memberId;
     private RoleType role;
     private Long projectId;
-    private UUID userId;
+    private UUID blokeyId;
 }

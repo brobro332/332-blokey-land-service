@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import xyz.samsami.blokey_land.member.domain.Member;
 import xyz.samsami.blokey_land.member.dto.MemberRespDto;
 import xyz.samsami.blokey_land.project.domain.Project;
-import xyz.samsami.blokey_land.user.domain.User;
+import xyz.samsami.blokey_land.blokey.domain.Blokey;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -20,11 +20,11 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
                 m.id,
                 m.role,
                 p.id,
-                u.id
+                b.id
             )
             FROM Member m
             JOIN m.project p
-            JOIN m.user u
+            JOIN m.blokey b
             WHERE p.id = :projectId
         """,
         countQuery = """
@@ -42,21 +42,21 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
                 m.id,
                 m.role,
                 p.id,
-                u.id
+                b.id
             )
             FROM Member m
             JOIN m.project p
-            JOIN m.user u
-            WHERE p.id = :userId
+            JOIN m.blokey b
+            WHERE p.id = :blokeyId
         """,
             countQuery = """
             SELECT count(m)
             FROM Member m
             JOIN m.project p
-            WHERE p.id = :userId
+            WHERE p.id = :blokeyId
         """
     )
-    Page<MemberRespDto> findDtoByUserId(@Param("userId") UUID userId, Pageable pageable);
+    Page<MemberRespDto> findDtoByBlokeyId(@Param("blokeyId") UUID blokeyId, Pageable pageable);
 
-    Optional<Member> findByProjectAndUser(Project project, User user);
+    Optional<Member> findByProjectAndBlokey(Project project, Blokey blokey);
 }

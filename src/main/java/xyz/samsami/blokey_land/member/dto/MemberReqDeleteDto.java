@@ -12,5 +12,5 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class MemberReqDeleteDto {
-    private UUID userId;
+    private UUID blokeyId;
 }
