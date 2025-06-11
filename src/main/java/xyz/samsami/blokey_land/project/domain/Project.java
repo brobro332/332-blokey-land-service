@@ -2,13 +2,10 @@ package xyz.samsami.blokey_land.project.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import xyz.samsami.blokey_land.common.domain.CommonDateTime;
-import xyz.samsami.blokey_land.member.domain.Member;
-import xyz.samsami.blokey_land.task.domain.Task;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -29,35 +26,14 @@ public class Project extends CommonDateTime {
     @Column(name = "owner_id", nullable = false)
     private UUID ownerId;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Member> members = new ArrayList<>();
-
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Task> tasks = new ArrayList<>();
-
-    /* TODO: 마일스톤 도메인 개발
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Milestone> milestones = new ArrayList<>();
-    */
+    @Column(nullable = false)
+    @ColumnDefault("false")
+    private Boolean deleted = false;
 
     public void updateTitle(String title) { if (title != null) this.title = title; }
     public void updateDescription(String description) { if (description != null) this.description = description; }
     public void updateOwnerId(UUID ownerId) { if (ownerId != null) this.ownerId = ownerId; }
-    public void addMember(Member member) { this.members.add(member); }
-    public void removeMember(Member member) { this.members.remove(member); }
-
-
-    public void updateTasks(List<Task> tasks) {
-        this.tasks.clear();
-        this.tasks.addAll(tasks);
-    }
-
-    /* TODO: 마일스톤 필드 업데이트 메서드
-    public void updateMilestones(List<Milestone> milestones) {
-        this.milestones.clear();
-        milestones.forEach(milestone -> this.milestones.add(milestone));
-    }
-    */
+    public void updateDeleted(Boolean deleted) { if (deleted != null) this.deleted = deleted; }
 
     @Builder
     public Project(
@@ -68,12 +44,14 @@ public class Project extends CommonDateTime {
         Long id,
         String title,
         String description,
-        UUID ownerId
+        UUID ownerId,
+        Boolean deleted
     ) {
         super(estimatedStartDate, estimatedEndDate, actualStartDate, actualEndDate);
         this.id = id;
         this.title = title;
         this.description = description;
         this.ownerId = ownerId;
+        this.deleted = deleted;
     }
 }
