@@ -1,4 +1,4 @@
-package xyz.samsami.blokey_land.user.service;
+package xyz.samsami.blokey_land.blokey.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatusCode;
@@ -7,8 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import xyz.samsami.blokey_land.common.exception.CommonException;
 import xyz.samsami.blokey_land.common.type.ExceptionType;
-import xyz.samsami.blokey_land.user.dto.UserReqCreateDto;
-import xyz.samsami.blokey_land.user.dto.UserReqUpdateDto;
+import xyz.samsami.blokey_land.blokey.dto.BlokeyReqCreateDto;
+import xyz.samsami.blokey_land.blokey.dto.BlokeyReqUpdateDto;
 
 import java.util.Map;
 import java.util.UUID;
@@ -16,12 +16,12 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-class UserHelperService {
+class BlokeyHelperService {
     private final WebClient authenticationWebClient;
 
-    UUID createUserOnAuthenticationServer(UserReqCreateDto dto) {
+    UUID createBlokeyOnAuthenticationServer(BlokeyReqCreateDto dto) {
         return authenticationWebClient.post()
-            .uri("/users")
+            .uri("/blokeys")
             .bodyValue(dto)
             .retrieve()
             .onStatus(
@@ -40,9 +40,9 @@ class UserHelperService {
             .block();
     }
 
-    void updatePasswordOnAuthenticationServer(UUID userId, UserReqUpdateDto dto) {
+    void updatePasswordOnAuthenticationServer(UUID blokeyId, BlokeyReqUpdateDto dto) {
         authenticationWebClient.patch()
-            .uri("/users/{userId}/password", userId)
+            .uri("/blokeys/{blokeyId}/password", blokeyId)
             .bodyValue(Map.of("password", dto.getPassword()))
             .retrieve()
             .onStatus(
@@ -61,9 +61,9 @@ class UserHelperService {
             .block();
     }
 
-    void deleteUserOnAuthenticationServer(UUID userId) {
+    void deleteBlokeyOnAuthenticationServer(UUID blokeyId) {
         authenticationWebClient.delete()
-            .uri("/users/{userId}", userId)
+            .uri("/blokeys/{blokeyId}", blokeyId)
             .retrieve()
             .onStatus(
                 HttpStatusCode::is4xxClientError,

@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import xyz.samsami.blokey_land.blokey.domain.Blokey;
 import xyz.samsami.blokey_land.member.domain.Member;
 import xyz.samsami.blokey_land.member.dto.MemberReqCreateDto;
 import xyz.samsami.blokey_land.member.dto.MemberReqDeleteDto;
@@ -18,8 +19,7 @@ import xyz.samsami.blokey_land.member.repository.MemberRepository;
 import xyz.samsami.blokey_land.member.type.RoleType;
 import xyz.samsami.blokey_land.project.domain.Project;
 import xyz.samsami.blokey_land.project.service.ProjectService;
-import xyz.samsami.blokey_land.user.domain.User;
-import xyz.samsami.blokey_land.user.service.UserService;
+import xyz.samsami.blokey_land.blokey.service.BlokeyService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -37,7 +37,7 @@ class MemberServiceTest {
     private ProjectService projectService;
 
     @Mock
-    private UserService userService;
+    private BlokeyService blokeyService;
 
     @Mock
     private MemberRepository repository;
@@ -46,25 +46,25 @@ class MemberServiceTest {
     void createMember_validInput_true() {
         // given
         Long projectId = 1L;
-        UUID userId = UUID.randomUUID();
+        UUID blokeyId = UUID.randomUUID();
         Project project = Project.builder()
             .id(1L)
             .title("BLOKEY-LAND PROJECT")
             .description("GitHub 기반 프로젝트 관리 및 팀원 매칭 서비스입니다.")
-            .ownerId(userId)
+            .ownerId(blokeyId)
             .estimatedStartDate(LocalDate.now())
             .estimatedEndDate(LocalDate.now().plusDays(2))
             .actualStartDate(LocalDate.now().plusDays(3))
             .actualEndDate(LocalDate.now().plusDays(4))
             .build();
-        User user = new User(userId, "짱구", "감자머리입니다.");
+        Blokey blokey = new Blokey(blokeyId, "짱구", "감자머리입니다.");
 
         MemberReqCreateDto dto = MemberReqCreateDto.builder()
-            .userId(userId)
+            .blokeyId(blokeyId)
             .build();
 
         when(projectService.findProjectByProjectId(projectId)).thenReturn(project);
-        when(userService.findUserByUserId(userId)).thenReturn(user);
+        when(blokeyService.findBlokeyByBlokeyId(blokeyId)).thenReturn(blokey);
 
         // when
         service.createMember(projectId, dto);
@@ -76,14 +76,14 @@ class MemberServiceTest {
     @Test
     void createMember_invalidInput_false() {
         Long projectId = 1L;
-        UUID userId = UUID.randomUUID();
+        UUID blokeyId = UUID.randomUUID();
 
         MemberReqCreateDto dto = MemberReqCreateDto.builder()
-            .userId(userId)
+            .blokeyId(blokeyId)
             .build();
 
         when(projectService.findProjectByProjectId(projectId)).thenReturn(null);
-        when(userService.findUserByUserId(userId)).thenReturn(null);
+        when(blokeyService.findBlokeyByBlokeyId(blokeyId)).thenReturn(null);
 
         service.createMember(projectId, dto);
 
@@ -112,24 +112,24 @@ class MemberServiceTest {
     }
 
     @Test
-    void readMemberByUserId_validInput_true() {
+    void readMemberByBlokeyId_validInput_true() {
         // given
-        UUID userId = UUID.randomUUID();
+        UUID blokeyId = UUID.randomUUID();
         Pageable pageable = PageRequest.of(0, 10);
         List<MemberRespDto> list = List.of(
-            new MemberRespDto(2L, RoleType.LEADER, 1L, userId)
+            new MemberRespDto(2L, RoleType.LEADER, 1L, blokeyId)
         );
         Page<MemberRespDto> expectedPage = new PageImpl<>(list, pageable, list.size());
 
-        when(repository.findDtoByUserId(userId, pageable)).thenReturn(expectedPage);
+        when(repository.findDtoByBlokeyId(blokeyId, pageable)).thenReturn(expectedPage);
 
         // when
-        Page<MemberRespDto> result = service.readMemberByUserId(userId, pageable);
+        Page<MemberRespDto> result = service.readMemberByBlokeyId(blokeyId, pageable);
 
         // then
         assertEquals(1, result.getContent().size());
-        assertEquals(userId, result.getContent().getFirst().getUserId());
-        verify(repository).findDtoByUserId(userId, pageable);
+        assertEquals(blokeyId, result.getContent().getFirst().getBlokeyId());
+        verify(repository).findDtoByBlokeyId(blokeyId, pageable);
     }
 
     @Test
@@ -155,28 +155,28 @@ class MemberServiceTest {
     @Test
     void deleteMember_validInput_true() {
         // given
-        UUID userId = UUID.randomUUID();
+        UUID blokeyId = UUID.randomUUID();
         MemberReqDeleteDto dto = MemberReqDeleteDto.builder()
-            .userId(userId)
+            .blokeyId(blokeyId)
             .build();
         Member member = mock(Member.class);
         Project project = Project.builder()
             .id(1L)
             .title("BLOKEY-LAND PROJECT")
             .description("GitHub 기반 프로젝트 관리 및 팀원 매칭 서비스입니다.")
-            .ownerId(userId)
+            .ownerId(blokeyId)
             .estimatedStartDate(LocalDate.now())
             .estimatedEndDate(LocalDate.now().plusDays(2))
             .actualStartDate(LocalDate.now().plusDays(3))
             .actualEndDate(LocalDate.now().plusDays(4))
             .build();
-        User user = new User(userId, "짱구", "감자머리입니다.");
+        Blokey blokey = new Blokey(blokeyId, "짱구", "감자머리입니다.");
 
         when(projectService.findProjectByProjectId(1L)).thenReturn(project);
-        when(userService.findUserByUserId(userId)).thenReturn(user);
+        when(blokeyService.findBlokeyByBlokeyId(blokeyId)).thenReturn(blokey);
 
         MemberService spyService = spy(service);
-        doReturn(member).when(spyService).findMemberByProjectAndUser(project, user);
+        doReturn(member).when(spyService).findMemberByProjectAndBlokey(project, blokey);
 
         // when
         spyService.deleteMember(1L, dto);

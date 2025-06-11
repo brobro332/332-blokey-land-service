@@ -12,14 +12,14 @@ public interface MilestoneRepository extends JpaRepository<Milestone, Long> {
     @Query("""
         SELECT new xyz.samsami.blokey_land.milestone.dto.MilestoneRespDto(
             m.id,
-            p.id,
             m.title,
             m.description,
-            m.dueDate
+            m.dueDate,
+            p.id
         )
         FROM Milestone m
         JOIN m.project p
         WHERE p.id = :projectId
     """)
-    Page<MilestoneRespDto> findByProjectId(@Param("projectId") Long projectId, Pageable pageable);
+    Page<MilestoneRespDto> findByProject(@Param("projectId") Long projectId, Pageable pageable);
 }

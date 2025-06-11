@@ -18,8 +18,8 @@ import xyz.samsami.blokey_land.offer.repository.OfferRepository;
 import xyz.samsami.blokey_land.offer.type.OfferStatusType;
 import xyz.samsami.blokey_land.project.domain.Project;
 import xyz.samsami.blokey_land.project.service.ProjectService;
-import xyz.samsami.blokey_land.user.domain.User;
-import xyz.samsami.blokey_land.user.service.UserService;
+import xyz.samsami.blokey_land.blokey.domain.Blokey;
+import xyz.samsami.blokey_land.blokey.service.BlokeyService;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -36,7 +36,7 @@ class OfferServiceTest {
     private ProjectService projectService;
 
     @Mock
-    private UserService userService;
+    private BlokeyService blokeyService;
 
     @Mock
     private OfferRepository repository;
@@ -45,19 +45,19 @@ class OfferServiceTest {
     void createOffer_validInput_true() {
         // given
         Long projectId = 1L;
-        UUID userId = UUID.randomUUID();
+        UUID blokeyId = UUID.randomUUID();
         OfferReqCreateDto dto = new OfferReqCreateDto();
 
         Project project = mock(Project.class);
-        User user = mock(User.class);
+        Blokey blokey = mock(Blokey.class);
         Offer offer = mock(Offer.class);
 
         when(projectService.findProjectByProjectId(projectId)).thenReturn(project);
-        when(userService.findUserByUserId(userId)).thenReturn(user);
+        when(blokeyService.findBlokeyByBlokeyId(blokeyId)).thenReturn(blokey);
         when(repository.save(any(Offer.class))).thenReturn(offer);
 
         // when
-        service.createOffer(projectId, userId, dto);
+        service.createOffer(projectId, blokeyId, dto);
 
         // then
         verify(repository).save(any(Offer.class));
@@ -83,16 +83,16 @@ class OfferServiceTest {
     }
 
     @Test
-    void readOffers_byUserId_success() {
+    void readOffers_byBlokeyId_success() {
         // given
-        UUID userId = UUID.randomUUID();
+        UUID blokeyId = UUID.randomUUID();
         OfferReqReadDto dto = OfferReqReadDto.builder()
-            .userId(userId)
+            .blokeyId(blokeyId)
             .build();
         Pageable pageable = PageRequest.of(0, 10);
         Page<OfferRespDto> page = Page.empty();
 
-        when(repository.findDtoByUserId(userId, pageable)).thenReturn(page);
+        when(repository.findDtoByBlokeyId(blokeyId, pageable)).thenReturn(page);
 
         // when
         Page<OfferRespDto> result = service.readOffers(dto, pageable);

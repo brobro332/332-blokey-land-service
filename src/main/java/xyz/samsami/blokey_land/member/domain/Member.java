@@ -5,7 +5,7 @@ import lombok.*;
 import xyz.samsami.blokey_land.common.domain.CommonTimestamp;
 import xyz.samsami.blokey_land.member.type.RoleType;
 import xyz.samsami.blokey_land.project.domain.Project;
-import xyz.samsami.blokey_land.user.domain.User;
+import xyz.samsami.blokey_land.blokey.domain.Blokey;
 
 @Entity
 @Getter
@@ -26,8 +26,8 @@ public class Member extends CommonTimestamp {
     private Project project;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "blokey_id")
+    private Blokey blokey;
 
     public void updateRole(RoleType role) { if (role != null) this.role = role; }
 }

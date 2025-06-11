@@ -13,6 +13,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class MemberReqCreateDto {
-    private UUID userId;
+    private UUID blokeyId;
     private RoleType role;
 }

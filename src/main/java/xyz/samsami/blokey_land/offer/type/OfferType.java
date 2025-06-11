@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum OfferType {
     PROJECT("프로젝트"),
-    USER("사용자");
+    BLOKEY("사용자");
 
     private final String description;
 }

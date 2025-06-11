@@ -12,6 +12,6 @@ import xyz.samsami.blokey_land.offer.type.OfferType;
 @AllArgsConstructor
 @Builder
 public class OfferReqCreateDto {
-    private OfferType proposer;
+    private OfferType offerer;
     private OfferStatusType status;
 }

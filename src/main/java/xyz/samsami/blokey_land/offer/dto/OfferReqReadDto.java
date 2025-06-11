@@ -13,5 +13,5 @@ import java.util.UUID;
 @Builder
 public class OfferReqReadDto {
     private Long projectId;
-    private UUID userId;
+    private UUID blokeyId;
 }

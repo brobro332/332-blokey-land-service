@@ -15,13 +15,14 @@ public interface OfferRepository extends JpaRepository<Offer, Long> {
             value = """
             SELECT new xyz.samsami.blokey_land.offer.dto.OfferRespDto(
                 o.id,
-                o.role,
                 p.id,
-                u.id
+                u.id,
+                o.offerer,
+                o.status
             )
             FROM Offer o
             JOIN o.project p
-            JOIN o.user u
+            JOIN o.blokey u
             WHERE p.id = :projectId
         """,
             countQuery = """
@@ -37,21 +38,22 @@ public interface OfferRepository extends JpaRepository<Offer, Long> {
             value = """
             SELECT new xyz.samsami.blokey_land.offer.dto.OfferRespDto(
                 o.id,
-                o.role,
                 p.id,
-                u.id
+                b.id,
+                o.offerer,
+                o.status
             )
             FROM Offer o
             JOIN o.project p
-            JOIN o.user u
-            WHERE u.id = :userId
+            JOIN o.blokey b
+            WHERE b.id = :blokeyId
         """,
             countQuery = """
             SELECT count(o)
             FROM Offer o
-            JOIN o.project p
-            WHERE u.id = :userId
+            JOIN o.blokey b
+            WHERE b.id = :blokeyId
         """
     )
-    Page<OfferRespDto> findDtoByUserId(@Param("userId") UUID userId, Pageable pageable);
+    Page<OfferRespDto> findDtoByBlokeyId(@Param("blokeyId") UUID blokeyId, Pageable pageable);
 }

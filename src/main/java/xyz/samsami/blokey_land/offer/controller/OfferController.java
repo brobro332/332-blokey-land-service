@@ -5,7 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import xyz.samsami.blokey_land.common.dto.CommonRespDto;
 import xyz.samsami.blokey_land.common.type.ResultType;
 import xyz.samsami.blokey_land.offer.dto.OfferReqCreateDto;
@@ -18,21 +21,20 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/proposals")
-public class OfferController {
+public class OfferController implements OfferApi {
     private final OfferService service;
 
-    @PostMapping
+    @Override
     public CommonRespDto<Void> createOffer(
         @RequestParam Long projectId,
-        @RequestParam UUID userId,
+        @RequestParam UUID blokeyId,
         @RequestBody OfferReqCreateDto dto
     ) {
-        service.createOffer(projectId, userId, dto);
+        service.createOffer(projectId, blokeyId, dto);
         return CommonRespDto.of(ResultType.SUCCESS, "제안 등록 완료", null);
     }
 
-    @GetMapping
+    @Override
     public CommonRespDto<Page<OfferRespDto>> readOffers(
         OfferReqReadDto dto,
         @PageableDefault(
@@ -43,13 +45,13 @@ public class OfferController {
         return CommonRespDto.of(ResultType.SUCCESS, "제안 목록 조회 완료", page);
     }
 
-    @PatchMapping("/{offerId}")
+    @Override
     public CommonRespDto<Void> updateOffer(@PathVariable Long offerId, @RequestBody OfferReqUpdateDto dto) {
         service.updateOffer(offerId, dto);
         return CommonRespDto.of(ResultType.SUCCESS, "제안 정보 수정 완료", null);
     }
 
-    @DeleteMapping("/{offerId}")
+    @Override
     public CommonRespDto<Void> deleteOffer(@PathVariable Long offerId) {
         service.deleteOffer(offerId);
         return CommonRespDto.of(ResultType.SUCCESS, "제안 삭제 완료", null);

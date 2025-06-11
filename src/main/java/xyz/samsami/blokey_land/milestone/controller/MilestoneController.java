@@ -5,7 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import xyz.samsami.blokey_land.common.dto.CommonRespDto;
 import xyz.samsami.blokey_land.common.type.ResultType;
 import xyz.samsami.blokey_land.milestone.dto.MilestoneReqCreateDto;
@@ -15,17 +18,16 @@ import xyz.samsami.blokey_land.milestone.service.MilestoneService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
-public class MilestoneController {
+public class MilestoneController implements MilestoneApi {
     private final MilestoneService service;
 
-    @PostMapping("/projects/{projectId}/milestones")
+    @Override
     public CommonRespDto<Void> createMilestone(@PathVariable Long projectId, @RequestBody MilestoneReqCreateDto dto) {
         service.createMilestone(projectId, dto);
         return CommonRespDto.of(ResultType.SUCCESS, "마일스톤 등록 완료", null);
     }
 
-    @GetMapping("/projects/{projectId}/milestones")
+    @Override
     public CommonRespDto<Page<MilestoneRespDto>> readMilestones(
         @PathVariable Long projectId,
         @PageableDefault(
@@ -36,19 +38,19 @@ public class MilestoneController {
         return CommonRespDto.of(ResultType.SUCCESS, "마일스톤 목록 조회 완료", page);
     }
 
-    @PatchMapping("/milestones/{milestoneId}")
+    @Override
     public CommonRespDto<Void> updateMilestoneByMilestoneId(@PathVariable Long milestoneId, @RequestBody MilestoneReqUpdateDto dto) {
         service.updateMilestoneByMilestoneId(milestoneId, dto);
         return CommonRespDto.of(ResultType.SUCCESS, "마일스톤 정보 수정 완료", null);
     }
 
-    @DeleteMapping("/milestones/{milestoneId}")
+    @Override
     public CommonRespDto<Void> deleteMilestoneByMilestoneId(@PathVariable Long milestoneId) {
         service.deleteMilestoneByMilestoneId(milestoneId);
         return CommonRespDto.of(ResultType.SUCCESS, "마일스톤 삭제 완료", null);
     }
 
-    @PatchMapping("/tasks/{taskId}/milestone")
+    @Override
     public CommonRespDto<Void> setMilestoneToTask(
         @PathVariable Long taskId,
         @RequestParam(required = false) Long milestoneId

@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import xyz.samsami.blokey_land.blokey.domain.Blokey;
 import xyz.samsami.blokey_land.common.exception.CommonException;
 import xyz.samsami.blokey_land.common.type.ExceptionType;
 import xyz.samsami.blokey_land.project.domain.Project;
@@ -13,21 +14,20 @@ import xyz.samsami.blokey_land.project.dto.ProjectReqUpdateDto;
 import xyz.samsami.blokey_land.project.dto.ProjectRespDto;
 import xyz.samsami.blokey_land.project.mapper.ProjectMapper;
 import xyz.samsami.blokey_land.project.repository.ProjectRepository;
-import xyz.samsami.blokey_land.user.domain.User;
-import xyz.samsami.blokey_land.user.service.UserService;
+import xyz.samsami.blokey_land.blokey.service.BlokeyService;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ProjectService {
-    private final UserService userService;
+    private final BlokeyService blokeyService;
     private final ProjectRepository repository;
 
     @Transactional
     public void createProject(ProjectReqCreateDto dto) {
-        User user = userService.findUserByUserId(dto.getOwnerId());
+        Blokey blokey = blokeyService.findBlokeyByBlokeyId(dto.getOwnerId());
 
-        if (user != null) repository.save(ProjectMapper.toEntity(dto));
+        if (blokey != null) repository.save(ProjectMapper.toEntity(dto));
     }
 
     public Page<ProjectRespDto> readProjects(Pageable pageable) {

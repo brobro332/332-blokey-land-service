@@ -1,4 +1,4 @@
-package xyz.samsami.blokey_land.user.dto;
+package xyz.samsami.blokey_land.blokey.dto;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @ToString
-public class UserReqUpdateDto {
+public class BlokeyReqUpdateDto {
     private String password;
     private String nickname;
     private String bio;

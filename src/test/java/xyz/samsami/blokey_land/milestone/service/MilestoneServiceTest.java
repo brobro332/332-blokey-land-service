@@ -78,7 +78,7 @@ class MilestoneServiceTest {
         );
         Page<MilestoneRespDto> page = new PageImpl<>(list, pageable, list.size());
 
-        when(repository.findByProjectId(projectId, pageable)).thenReturn(page);
+        when(repository.findByProject(projectId, pageable)).thenReturn(page);
 
         // when
         Page<MilestoneRespDto> result = service.readMilestonesByProjectId(projectId, pageable);
