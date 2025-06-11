@@ -5,7 +5,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import xyz.samsami.blokey_land.common.dto.CommonRespDto;
 import xyz.samsami.blokey_land.common.type.ResultType;
 import xyz.samsami.blokey_land.member.dto.MemberReqCreateDto;
@@ -18,17 +20,16 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
-public class MemberController {
+public class MemberController implements MemberApi {
     private final MemberService service;
 
-    @PostMapping("/projects/{projectId}/members")
+    @Override
     public CommonRespDto<Void> createMember(@PathVariable Long projectId, @RequestBody MemberReqCreateDto dto) {
         service.createMember(projectId, dto);
         return CommonRespDto.of(ResultType.SUCCESS, "멤버 등록 완료", null);
     }
 
-    @GetMapping("/projects/{projectId}/members")
+    @Override
     public CommonRespDto<Page<MemberRespDto>> readMembersByProjectId(
         @PathVariable Long projectId,
         @PageableDefault(
@@ -39,7 +40,7 @@ public class MemberController {
         return CommonRespDto.of(ResultType.SUCCESS, "멤버 목록 조회 완료", page);
     }
 
-    @GetMapping("/users/{userId}/members")
+    @Override
     public CommonRespDto<Page<MemberRespDto>> readMembersByUserId(
         @PathVariable UUID userId,
         @PageableDefault(
@@ -50,13 +51,13 @@ public class MemberController {
         return CommonRespDto.of(ResultType.SUCCESS, "멤버 목록 조회 완료", null);
     }
 
-    @PatchMapping("/members/{memberId}")
+    @Override
     public CommonRespDto<Void> updateMembersByMemberId(@PathVariable Long memberId, @RequestBody MemberReqUpdateDto dto) {
         service.updateMemberByMemberId(memberId, dto);
         return CommonRespDto.of(ResultType.SUCCESS, "멤버 정보 수정 완료", null);
     }
 
-    @DeleteMapping("/projects/{projectId}/members")
+    @Override
     public CommonRespDto<Void> deleteMember(@PathVariable Long projectId, @RequestBody MemberReqDeleteDto dto) {
         service.deleteMember(projectId, dto);
         return CommonRespDto.of(ResultType.SUCCESS, "멤버 정보 삭제 완료", null);
