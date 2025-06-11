@@ -37,7 +37,6 @@ public class MemberService {
         if (project != null && user != null) {
             Member member = MemberMapper.toEntity(project, user, dto);
             repository.save(member);
-            project.addMember(member);
         }
     }
 
@@ -63,7 +62,6 @@ public class MemberService {
         if (project != null && user != null) {
             Member member = findMemberByProjectAndUser(project, user);
             repository.delete(member);
-            project.removeMember(member);
         }
     }
 
