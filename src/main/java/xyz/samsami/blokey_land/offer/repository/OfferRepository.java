@@ -15,9 +15,10 @@ public interface OfferRepository extends JpaRepository<Offer, Long> {
             value = """
             SELECT new xyz.samsami.blokey_land.offer.dto.OfferRespDto(
                 o.id,
-                o.role,
                 p.id,
-                u.id
+                u.id,
+                o.offerer,
+                o.status
             )
             FROM Offer o
             JOIN o.project p
@@ -37,9 +38,10 @@ public interface OfferRepository extends JpaRepository<Offer, Long> {
             value = """
             SELECT new xyz.samsami.blokey_land.offer.dto.OfferRespDto(
                 o.id,
-                o.role,
                 p.id,
-                u.id
+                u.id,
+                o.offerer,
+                o.status
             )
             FROM Offer o
             JOIN o.project p
@@ -49,7 +51,7 @@ public interface OfferRepository extends JpaRepository<Offer, Long> {
             countQuery = """
             SELECT count(o)
             FROM Offer o
-            JOIN o.project p
+            JOIN o.user u
             WHERE u.id = :userId
         """
     )

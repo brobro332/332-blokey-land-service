@@ -27,7 +27,7 @@ public class Offer extends CommonTimestamp {
     private User user;
 
     @Enumerated(EnumType.STRING)
-    private OfferType proposer;
+    private OfferType offerer;
 
     @Enumerated(EnumType.STRING)
     private OfferStatusType status;

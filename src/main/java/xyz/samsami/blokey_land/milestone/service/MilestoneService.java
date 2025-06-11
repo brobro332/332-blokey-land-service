@@ -33,7 +33,7 @@ public class MilestoneService {
     }
 
     public Page<MilestoneRespDto> readMilestonesByProjectId(Long projectId, Pageable pageable) {
-        return repository.findByProjectId(projectId, pageable);
+        return repository.findByProject(projectId, pageable);
     }
 
     @Transactional

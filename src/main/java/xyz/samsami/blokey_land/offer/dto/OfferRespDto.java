@@ -14,6 +14,6 @@ public class OfferRespDto {
     private Long offerId;
     private Long projectId;
     private UUID userId;
-    private OfferType proposer;
+    private OfferType offerer;
     private OfferStatusType status;
 }

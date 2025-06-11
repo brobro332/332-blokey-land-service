@@ -10,7 +10,7 @@ public class OfferMapper {
         return Offer.builder()
             .project(project)
             .user(user)
-            .proposer(dto.getProposer())
+            .offerer(dto.getOfferer())
             .status(dto.getStatus())
             .build();
     }
