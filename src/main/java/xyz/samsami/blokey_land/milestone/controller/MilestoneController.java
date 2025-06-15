@@ -31,7 +31,7 @@ public class MilestoneController implements MilestoneApi {
     public CommonRespDto<Page<MilestoneRespDto>> readMilestones(
         @PathVariable Long projectId,
         @PageableDefault(
-            sort = "milestoneId", direction = Sort.Direction.DESC
+            sort = "id", direction = Sort.Direction.DESC
         ) Pageable pageable
     ) {
         Page<MilestoneRespDto> page = service.readMilestonesByProjectId(projectId, pageable);

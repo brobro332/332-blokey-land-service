@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import xyz.samsami.blokey_land.offer.domain.Offer;
 import xyz.samsami.blokey_land.offer.dto.OfferRespDto;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface OfferRepository extends JpaRepository<Offer, Long> {

@@ -26,7 +26,7 @@ public class Blokey extends CommonTimestamp {
 
     @Column(nullable = false)
     @ColumnDefault("false")
-    private Boolean deleted = false;
+    private boolean deleted = false;
 
     public void updateNickname(String nickname) { if (nickname != null) this.nickname = nickname; }
     public void updateBio(String bio) { if (bio != null) this.bio = bio; }

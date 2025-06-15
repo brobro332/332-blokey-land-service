@@ -9,15 +9,11 @@ import xyz.samsami.blokey_land.blokey.domain.Blokey;
 import xyz.samsami.blokey_land.common.exception.CommonException;
 import xyz.samsami.blokey_land.common.type.ExceptionType;
 import xyz.samsami.blokey_land.member.domain.Member;
-import xyz.samsami.blokey_land.member.dto.MemberReqCreateDto;
-import xyz.samsami.blokey_land.member.dto.MemberReqDeleteDto;
 import xyz.samsami.blokey_land.member.dto.MemberReqUpdateDto;
 import xyz.samsami.blokey_land.member.dto.MemberRespDto;
 import xyz.samsami.blokey_land.member.mapper.MemberMapper;
 import xyz.samsami.blokey_land.member.repository.MemberRepository;
 import xyz.samsami.blokey_land.project.domain.Project;
-import xyz.samsami.blokey_land.project.service.ProjectService;
-import xyz.samsami.blokey_land.blokey.service.BlokeyService;
 
 import java.util.UUID;
 
@@ -25,17 +21,12 @@ import java.util.UUID;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberService {
-    private final ProjectService projectService;
-    private final BlokeyService blokeyService;
     private final MemberRepository repository;
 
     @Transactional
-    public void createMember(Long projectId, MemberReqCreateDto dto) {
-        Project project = projectService.findProjectByProjectId(projectId);
-        Blokey blokey = blokeyService.findBlokeyByBlokeyId(dto.getBlokeyId());
-
+    public void createMember(Project project, Blokey blokey) {
         if (project != null && blokey != null) {
-            Member member = MemberMapper.toEntity(project, blokey, dto);
+            Member member = MemberMapper.toEntity(project, blokey);
             repository.save(member);
         }
     }
@@ -55,24 +46,13 @@ public class MemberService {
     }
 
     @Transactional
-    public void deleteMember(Long projectId, MemberReqDeleteDto dto) {
-        Project project = projectService.findProjectByProjectId(projectId);
-        Blokey blokey = blokeyService.findBlokeyByBlokeyId(dto.getBlokeyId());
-
-        if (project != null && blokey != null) {
-            Member member = findMemberByProjectAndBlokey(project, blokey);
-            repository.delete(member);
-        }
+    public void deleteMember(Long memberId) {
+        Member member = findMemberByMemberId(memberId);
+        if (memberId != null) repository.delete(member);
     }
 
     public Member findMemberByMemberId(Long memberId) {
         return repository.findById(memberId).orElseThrow(() ->
-            new CommonException(ExceptionType.NOT_FOUND, null)
-        );
-    }
-
-    public Member findMemberByProjectAndBlokey(Project project, Blokey blokey) {
-        return repository.findByProjectAndBlokey(project, blokey).orElseThrow(() ->
             new CommonException(ExceptionType.NOT_FOUND, null)
         );
     }

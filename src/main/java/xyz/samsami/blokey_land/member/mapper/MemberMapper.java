@@ -2,13 +2,13 @@ package xyz.samsami.blokey_land.member.mapper;
 
 import xyz.samsami.blokey_land.blokey.domain.Blokey;
 import xyz.samsami.blokey_land.member.domain.Member;
-import xyz.samsami.blokey_land.member.dto.MemberReqCreateDto;
+import xyz.samsami.blokey_land.member.type.RoleType;
 import xyz.samsami.blokey_land.project.domain.Project;
 
 public class MemberMapper {
-    public static Member toEntity(Project project, Blokey blokey, MemberReqCreateDto dto) {
+    public static Member toEntity(Project project, Blokey blokey) {
         return Member.builder()
-            .role(dto.getRole())
+            .role(RoleType.LEADER)
             .project(project)
             .blokey(blokey)
             .build();

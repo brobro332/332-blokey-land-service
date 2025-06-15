@@ -17,7 +17,7 @@ public class ProjectRespDto {
     private String title;
     private String description;
     private UUID ownerId;
-    private Boolean deleted;
+    private boolean deleted;
     private LocalDate estimatedStartDate;
     private LocalDate estimatedEndDate;
     private LocalDate actualStartDate;

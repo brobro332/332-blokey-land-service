@@ -10,16 +10,14 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import xyz.samsami.blokey_land.blokey.domain.Blokey;
+import xyz.samsami.blokey_land.blokey.service.BlokeyService;
 import xyz.samsami.blokey_land.member.domain.Member;
-import xyz.samsami.blokey_land.member.dto.MemberReqCreateDto;
-import xyz.samsami.blokey_land.member.dto.MemberReqDeleteDto;
 import xyz.samsami.blokey_land.member.dto.MemberReqUpdateDto;
 import xyz.samsami.blokey_land.member.dto.MemberRespDto;
 import xyz.samsami.blokey_land.member.repository.MemberRepository;
 import xyz.samsami.blokey_land.member.type.RoleType;
 import xyz.samsami.blokey_land.project.domain.Project;
 import xyz.samsami.blokey_land.project.service.ProjectService;
-import xyz.samsami.blokey_land.blokey.service.BlokeyService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -59,35 +57,11 @@ class MemberServiceTest {
             .build();
         Blokey blokey = new Blokey(blokeyId, "짱구", "감자머리입니다.", false);
 
-        MemberReqCreateDto dto = MemberReqCreateDto.builder()
-            .blokeyId(blokeyId)
-            .build();
-
-        when(projectService.findProjectByProjectId(projectId)).thenReturn(project);
-        when(blokeyService.findBlokeyByBlokeyId(blokeyId)).thenReturn(blokey);
-
         // when
-        service.createMember(projectId, dto);
+        service.createMember(project, blokey);
 
         // then
         verify(repository).save(any(Member.class));
-    }
-
-    @Test
-    void createMember_invalidInput_false() {
-        Long projectId = 1L;
-        UUID blokeyId = UUID.randomUUID();
-
-        MemberReqCreateDto dto = MemberReqCreateDto.builder()
-            .blokeyId(blokeyId)
-            .build();
-
-        when(projectService.findProjectByProjectId(projectId)).thenReturn(null);
-        when(blokeyService.findBlokeyByBlokeyId(blokeyId)).thenReturn(null);
-
-        service.createMember(projectId, dto);
-
-        verify(repository, never()).save(any());
     }
 
     @Test
@@ -155,31 +129,14 @@ class MemberServiceTest {
     @Test
     void deleteMember_validInput_true() {
         // given
-        UUID blokeyId = UUID.randomUUID();
-        MemberReqDeleteDto dto = MemberReqDeleteDto.builder()
-            .blokeyId(blokeyId)
-            .build();
+        Long memberId = 1L;
         Member member = mock(Member.class);
-        Project project = Project.builder()
-            .id(1L)
-            .title("BLOKEY-LAND PROJECT")
-            .description("GitHub 기반 프로젝트 관리 및 팀원 매칭 서비스입니다.")
-            .ownerId(blokeyId)
-            .estimatedStartDate(LocalDate.now())
-            .estimatedEndDate(LocalDate.now().plusDays(2))
-            .actualStartDate(LocalDate.now().plusDays(3))
-            .actualEndDate(LocalDate.now().plusDays(4))
-            .build();
-        Blokey blokey = new Blokey(blokeyId, "짱구", "감자머리입니다.", false);
-
-        when(projectService.findProjectByProjectId(1L)).thenReturn(project);
-        when(blokeyService.findBlokeyByBlokeyId(blokeyId)).thenReturn(blokey);
 
         MemberService spyService = spy(service);
-        doReturn(member).when(spyService).findMemberByProjectAndBlokey(project, blokey);
+        doReturn(member).when(spyService).findMemberByMemberId(memberId);
 
         // when
-        spyService.deleteMember(1L, dto);
+        spyService.deleteMember(1L);
 
         // then
         verify(repository).delete(member);

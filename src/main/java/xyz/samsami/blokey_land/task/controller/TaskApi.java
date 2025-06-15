@@ -1,6 +1,7 @@
 package xyz.samsami.blokey_land.task.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 import xyz.samsami.blokey_land.common.dto.CommonRespDto;
 import xyz.samsami.blokey_land.task.dto.TaskReqCreateDto;
@@ -8,6 +9,7 @@ import xyz.samsami.blokey_land.task.dto.TaskReqUpdateDto;
 import xyz.samsami.blokey_land.task.dto.TaskRespDto;
 
 @RequestMapping("/api/tasks")
+@Tag(name = "Task API", description = "태스크 관련 API")
 public interface TaskApi {
     @Operation(summary = "태스크 생성", description = "태스크를 생성합니다.")
     @PostMapping

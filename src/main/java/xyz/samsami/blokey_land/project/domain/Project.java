@@ -28,7 +28,7 @@ public class Project extends CommonDateTime {
 
     @Column(nullable = false)
     @ColumnDefault("false")
-    private Boolean deleted = false;
+    private boolean deleted = false;
 
     public void updateTitle(String title) { if (title != null) this.title = title; }
     public void updateDescription(String description) { if (description != null) this.description = description; }
@@ -44,14 +44,12 @@ public class Project extends CommonDateTime {
         Long id,
         String title,
         String description,
-        UUID ownerId,
-        Boolean deleted
+        UUID ownerId
     ) {
         super(estimatedStartDate, estimatedEndDate, actualStartDate, actualEndDate);
         this.id = id;
         this.title = title;
         this.description = description;
         this.ownerId = ownerId;
-        this.deleted = deleted;
     }
 }

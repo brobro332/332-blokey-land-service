@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import xyz.samsami.blokey_land.common.exception.CommonException;
+import xyz.samsami.blokey_land.member.service.MemberService;
+import xyz.samsami.blokey_land.member.type.RoleType;
 import xyz.samsami.blokey_land.offer.domain.Offer;
 import xyz.samsami.blokey_land.offer.dto.OfferReqCreateDto;
 import xyz.samsami.blokey_land.offer.dto.OfferReqReadDto;
@@ -34,6 +36,9 @@ class OfferServiceTest {
 
     @Mock
     private ProjectService projectService;
+
+    @Mock
+    private MemberService memberService;
 
     @Mock
     private BlokeyService blokeyService;
@@ -114,14 +119,21 @@ class OfferServiceTest {
     }
 
     @Test
-    void updateOffer_validInput_true() {
+    void updateOffer_statusAccepted_success() {
         // given
         Long offerId = 1L;
-        OfferReqUpdateDto dto = OfferReqUpdateDto.builder()
-            .status(OfferStatusType.ACCEPTED)
-            .build();
+        Long projectId = 10L;
+        UUID blokeyId = UUID.randomUUID();
+
+        OfferReqUpdateDto dto = new OfferReqUpdateDto(OfferStatusType.ACCEPTED);
+
+        Project project = Project.builder().id(projectId).build();
+        Blokey blokey = Blokey.builder().id(blokeyId).build();
 
         Offer offer = mock(Offer.class);
+        when(offer.getProject()).thenReturn(project);
+        when(offer.getBlokey()).thenReturn(blokey);
+
         when(repository.findById(offerId)).thenReturn(Optional.of(offer));
 
         // when
@@ -129,6 +141,7 @@ class OfferServiceTest {
 
         // then
         verify(offer).updateStatus(OfferStatusType.ACCEPTED);
+        verify(memberService).createMember(project, blokey);
     }
 
     @Test

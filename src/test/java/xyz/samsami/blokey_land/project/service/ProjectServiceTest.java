@@ -10,23 +10,23 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import xyz.samsami.blokey_land.blokey.domain.Blokey;
+import xyz.samsami.blokey_land.blokey.service.BlokeyService;
 import xyz.samsami.blokey_land.common.exception.CommonException;
 import xyz.samsami.blokey_land.common.type.ExceptionType;
+import xyz.samsami.blokey_land.member.service.MemberService;
 import xyz.samsami.blokey_land.project.domain.Project;
 import xyz.samsami.blokey_land.project.dto.ProjectReqCreateDto;
 import xyz.samsami.blokey_land.project.dto.ProjectReqUpdateDto;
 import xyz.samsami.blokey_land.project.dto.ProjectRespDto;
 import xyz.samsami.blokey_land.project.repository.ProjectRepository;
-import xyz.samsami.blokey_land.blokey.domain.Blokey;
-import xyz.samsami.blokey_land.blokey.service.BlokeyService;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,13 +35,16 @@ class ProjectServiceTest {
     ProjectService service;
 
     @Mock
+    MemberService memberService;
+
+    @Mock
     BlokeyService blokeyService;
 
     @Mock
     ProjectRepository repository;
 
     @Test
-    void createProject_validInput_true() {
+    void createProject_validInput_success() {
         // given
         UUID blokeyId = UUID.randomUUID();
 
@@ -56,20 +59,32 @@ class ProjectServiceTest {
             .build();
 
         Blokey blokey = Blokey.builder()
-            .id(blokeyId)
-            .nickname("짱구")
-            .bio("감자머리입니다.")
-            .build();
+                .id(blokeyId)
+                .nickname("짱구")
+                .bio("감자머리입니다.")
+                .build();
 
         when(blokeyService.findBlokeyByBlokeyId(blokeyId)).thenReturn(blokey);
+
+        Project project = Project.builder()
+            .id(1L)
+            .title("BLOKEY-LAND PROJECT")
+            .description("GitHub 기반 프로젝트 관리 및 팀원 매칭 서비스입니다.")
+            .ownerId(blokeyId)
+            .estimatedStartDate(LocalDate.now())
+            .estimatedEndDate(LocalDate.now().plusDays(2))
+            .actualStartDate(LocalDate.now().plusDays(3))
+            .actualEndDate(LocalDate.now().plusDays(4))
+            .build();
+        when(repository.save(any(Project.class))).thenReturn(project);
 
         // when
         service.createProject(dto);
 
         // then
-        ArgumentCaptor<Project> captor = ArgumentCaptor.forClass(Project.class);
-        verify(repository, times(1)).save(captor.capture());
-        Project capturedProject = captor.getValue();
+        ArgumentCaptor<Project> projectCaptor = ArgumentCaptor.forClass(Project.class);
+        verify(repository, times(1)).save(projectCaptor.capture());
+        Project capturedProject = projectCaptor.getValue();
 
         assertEquals(dto.getTitle(), capturedProject.getTitle());
         assertEquals(dto.getDescription(), capturedProject.getDescription());
@@ -78,6 +93,8 @@ class ProjectServiceTest {
         assertEquals(dto.getEstimatedEndDate(), capturedProject.getEstimatedEndDate());
         assertEquals(dto.getActualStartDate(), capturedProject.getActualStartDate());
         assertEquals(dto.getActualEndDate(), capturedProject.getActualEndDate());
+
+        verify(memberService, times(1)).createMember(project, blokey);
     }
 
     @Test
@@ -233,7 +250,7 @@ class ProjectServiceTest {
         service.softDeleteProjectByProjectId(projectId);
 
         // then
-        assertEquals(true, project.getDeleted());
+        assertTrue(project.isDeleted());
     }
 
     @Test
@@ -260,7 +277,6 @@ class ProjectServiceTest {
             .title("BLOKEY-LAND PROJECT")
             .description("GitHub 기반 프로젝트 관리 및 팀원 매칭 서비스입니다.")
             .ownerId(UUID.randomUUID())
-            .deleted(true)
             .estimatedStartDate(LocalDate.now())
             .estimatedEndDate(LocalDate.now().plusDays(2))
             .actualStartDate(LocalDate.now().plusDays(3))
@@ -273,6 +289,6 @@ class ProjectServiceTest {
         service.restoreProjectByProjectId(projectId);
 
         // then
-        assertEquals(false, project.getDeleted());
+        assertFalse(project.isDeleted());
     }
 }

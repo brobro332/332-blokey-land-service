@@ -47,16 +47,14 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
             FROM Member m
             JOIN m.project p
             JOIN m.blokey b
-            WHERE p.id = :blokeyId
+            WHERE b.id = :blokeyId
         """,
             countQuery = """
             SELECT count(m)
             FROM Member m
-            JOIN m.project p
-            WHERE p.id = :blokeyId
+            JOIN m.blokey b
+            WHERE b.id = :blokeyId
         """
     )
     Page<MemberRespDto> findDtoByBlokeyId(@Param("blokeyId") UUID blokeyId, Pageable pageable);
-
-    Optional<Member> findByProjectAndBlokey(Project project, Blokey blokey);
 }

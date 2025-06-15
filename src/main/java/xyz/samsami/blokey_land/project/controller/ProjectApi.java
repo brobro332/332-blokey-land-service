@@ -2,6 +2,7 @@ package xyz.samsami.blokey_land.project.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -13,6 +14,7 @@ import xyz.samsami.blokey_land.project.dto.ProjectReqUpdateDto;
 import xyz.samsami.blokey_land.project.dto.ProjectRespDto;
 
 @RequestMapping("/api/projects")
+@Tag(name = "Project API", description = "프로젝트 관련 API")
 public interface ProjectApi {
     @Operation(summary = "프로젝트 생성", description = "프로젝트를 생성합니다.")
     @PostMapping
