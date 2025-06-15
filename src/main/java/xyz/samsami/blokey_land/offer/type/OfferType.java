@@ -1,13 +1,13 @@
-package xyz.samsami.blokey_land.common.type;
+package xyz.samsami.blokey_land.offer.type;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum ResultType {
-    SUCCESS("성공"),
-    FAIL("실패");
+public enum OfferType {
+    PROJECT("프로젝트"),
+    BLOKEY("사용자");
 
     private final String description;
 }
