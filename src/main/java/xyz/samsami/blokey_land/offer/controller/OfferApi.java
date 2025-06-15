@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import xyz.samsami.blokey_land.common.dto.CommonRespDto;
@@ -29,8 +30,8 @@ public interface OfferApi {
     @Operation(summary = "제안 목록 조회", description = "제안 목록을 조회합니다.")
     @GetMapping
     CommonRespDto<Page<OfferRespDto>> readOffers(
-        @Parameter OfferReqReadDto dto,
-        @Parameter(hidden = true) @PageableDefault(sort = "offerId", direction = org.springframework.data.domain.Sort.Direction.DESC) Pageable pageable
+        @RequestBody OfferReqReadDto dto,
+        @Parameter(hidden = true) @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable
     );
 
     @Operation(summary = "제안 수정", description = "제안 정보를 수정합니다.")

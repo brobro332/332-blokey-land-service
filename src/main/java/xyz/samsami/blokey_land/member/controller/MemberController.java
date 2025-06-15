@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import xyz.samsami.blokey_land.common.dto.CommonRespDto;
 import xyz.samsami.blokey_land.common.type.ResultType;
-import xyz.samsami.blokey_land.member.dto.MemberReqCreateDto;
-import xyz.samsami.blokey_land.member.dto.MemberReqDeleteDto;
 import xyz.samsami.blokey_land.member.dto.MemberReqUpdateDto;
 import xyz.samsami.blokey_land.member.dto.MemberRespDto;
 import xyz.samsami.blokey_land.member.service.MemberService;
@@ -24,16 +22,10 @@ public class MemberController implements MemberApi {
     private final MemberService service;
 
     @Override
-    public CommonRespDto<Void> createMember(@PathVariable Long projectId, @RequestBody MemberReqCreateDto dto) {
-        service.createMember(projectId, dto);
-        return CommonRespDto.of(ResultType.SUCCESS, "멤버 등록 완료", null);
-    }
-
-    @Override
     public CommonRespDto<Page<MemberRespDto>> readMembersByProjectId(
         @PathVariable Long projectId,
         @PageableDefault(
-            sort = "memberId", direction = Sort.Direction.DESC
+            sort = "id", direction = Sort.Direction.DESC
         ) Pageable pageable
     ) {
         Page<MemberRespDto> page = service.readMemberByProjectId(projectId, pageable);
@@ -44,7 +36,7 @@ public class MemberController implements MemberApi {
     public CommonRespDto<Page<MemberRespDto>> readMembersByBlokeyId(
         @PathVariable UUID blokeyId,
         @PageableDefault(
-            sort = "memberId", direction = Sort.Direction.DESC
+            sort = "id", direction = Sort.Direction.DESC
         ) Pageable pageable
     ) {
         Page<MemberRespDto> page = service.readMemberByBlokeyId(blokeyId, pageable);
@@ -58,8 +50,8 @@ public class MemberController implements MemberApi {
     }
 
     @Override
-    public CommonRespDto<Void> deleteMember(@PathVariable Long projectId, @RequestBody MemberReqDeleteDto dto) {
-        service.deleteMember(projectId, dto);
-        return CommonRespDto.of(ResultType.SUCCESS, "멤버 정보 삭제 완료", null);
+    public CommonRespDto<Void> deleteMember(@PathVariable Long memberId) {
+        service.deleteMember(memberId);
+        return CommonRespDto.of(ResultType.SUCCESS, "멤버 삭제 완료", null);
     }
 }

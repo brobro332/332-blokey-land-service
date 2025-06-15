@@ -36,9 +36,9 @@ public class OfferController implements OfferApi {
 
     @Override
     public CommonRespDto<Page<OfferRespDto>> readOffers(
-        OfferReqReadDto dto,
+        @RequestBody OfferReqReadDto dto,
         @PageableDefault(
-            sort = "offerId", direction = Sort.Direction.DESC
+            sort = "id", direction = Sort.Direction.DESC
         ) Pageable pageable
     ) {
         Page<OfferRespDto> page = service.readOffers(dto, pageable);

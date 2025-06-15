@@ -27,6 +27,7 @@ public class ProjectMapper {
             .estimatedEndDate(project.getEstimatedEndDate())
             .actualStartDate(project.getActualStartDate())
             .actualEndDate(project.getActualEndDate())
+            .deleted(project.isDeleted())
             .build();
     }
 }

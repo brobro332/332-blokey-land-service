@@ -29,7 +29,7 @@ public class ProjectController implements ProjectApi {
     @Override
     public CommonRespDto<Page<ProjectRespDto>> readProjects(
         @PageableDefault(
-            sort = "projectId", direction = Sort.Direction.DESC
+            sort = "id", direction = Sort.Direction.DESC
         ) Pageable pageable
     ) {
         Page<ProjectRespDto> page = service.readProjects(pageable);
