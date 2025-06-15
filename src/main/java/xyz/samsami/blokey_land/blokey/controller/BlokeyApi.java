@@ -2,6 +2,7 @@ package xyz.samsami.blokey_land.blokey.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -15,6 +16,7 @@ import xyz.samsami.blokey_land.blokey.dto.BlokeyRespDto;
 import java.util.UUID;
 
 @RequestMapping("/api/blokeys")
+@Tag(name = "Blokey API", description = "사용자 관련 API")
 public interface BlokeyApi {
     @Operation(summary = "사용자 생성", description = "새로운 사용자를 생성합니다.")
     @PostMapping
@@ -35,7 +37,11 @@ public interface BlokeyApi {
     @PatchMapping("/{blokeyId}")
     CommonRespDto<Void> updateBlokeyByBlokeyId(@PathVariable UUID blokeyId, @RequestBody BlokeyReqUpdateDto dto);
 
-    @Operation(summary = "사용자 삭제", description = "사용자를 삭제합니다.")
+    @Operation(summary = "사용자 삭제", description = "사용자를 임시 삭제합니다.")
     @DeleteMapping("/{blokeyId}")
-    CommonRespDto<Void> deleteBlokeyByBlokeyId(@PathVariable UUID blokeyId);
+    CommonRespDto<Void> softDeleteBlokeyByBlokeyId(@PathVariable UUID blokeyId);
+
+    @Operation(summary = "사용자 복구", description = "임시 삭제된 사용자를 복구합니다.")
+    @PatchMapping("/{blokeyId}:restore")
+    CommonRespDto<Void> restoreBlokeyByBlokeyId(@PathVariable UUID blokeyId);
 }

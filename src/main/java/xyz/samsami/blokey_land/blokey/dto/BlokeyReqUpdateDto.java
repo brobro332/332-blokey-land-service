@@ -8,7 +8,6 @@ import lombok.*;
 @Builder
 @ToString
 public class BlokeyReqUpdateDto {
-    private String password;
     private String nickname;
     private String bio;
 }

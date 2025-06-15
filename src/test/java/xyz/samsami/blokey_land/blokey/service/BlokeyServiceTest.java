@@ -11,12 +11,15 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import xyz.samsami.blokey_land.blokey.domain.Blokey;
+import xyz.samsami.blokey_land.blokey.vo.AccountVo;
+import xyz.samsami.blokey_land.common.dto.CommonRespDto;
 import xyz.samsami.blokey_land.common.exception.CommonException;
 import xyz.samsami.blokey_land.common.type.ExceptionType;
 import xyz.samsami.blokey_land.blokey.dto.BlokeyReqCreateDto;
 import xyz.samsami.blokey_land.blokey.dto.BlokeyReqUpdateDto;
 import xyz.samsami.blokey_land.blokey.dto.BlokeyRespDto;
 import xyz.samsami.blokey_land.blokey.repository.BlokeyRepository;
+import xyz.samsami.blokey_land.common.type.ResultType;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,13 +43,14 @@ class BlokeyServiceTest {
     @Test
     void createBlokey_validInput_true() {
         // given
-        UUID blokeyId = UUID.randomUUID();
+        AccountVo vo = new AccountVo(UUID.randomUUID(), List.of());
+        CommonRespDto<AccountVo> response = CommonRespDto.of(ResultType.SUCCESS, "계정 등록 완료", vo);
         BlokeyReqCreateDto dto = BlokeyReqCreateDto.builder()
             .nickname("닉네임")
             .bio("자기소개입니다.")
             .build();
 
-        when(helperService.createBlokeyOnAuthenticationServer(dto)).thenReturn(blokeyId);
+        when(helperService.createBlokeyOnAuthenticationServer(dto)).thenReturn(response);
 
         // when
         service.createBlokey(dto);
@@ -56,7 +60,7 @@ class BlokeyServiceTest {
         verify(repository, times(1)).save(captor.capture());
         Blokey capturedBlokey = captor.getValue();
 
-        assertEquals(blokeyId, capturedBlokey.getId());
+        assertEquals(vo.accountId(), capturedBlokey.getId());
         assertEquals(dto.getNickname(), capturedBlokey.getNickname());
         assertEquals(dto.getBio(), capturedBlokey.getBio());
     }
@@ -66,8 +70,8 @@ class BlokeyServiceTest {
         // given
         Pageable pageable = PageRequest.of(0, 10);
 
-        Blokey blokey1 = new Blokey(UUID.randomUUID(), "짱구", "감자머리입니다.");
-        Blokey blokey2 = new Blokey(UUID.randomUUID(), "철수", "삐침머리입니다.");
+        Blokey blokey1 = new Blokey(UUID.randomUUID(), "짱구", "감자머리입니다.", false);
+        Blokey blokey2 = new Blokey(UUID.randomUUID(), "철수", "삐침머리입니다.", false);
 
         List<Blokey> blokeys = List.of(blokey1, blokey2);
         Page<Blokey> page = new PageImpl<>(blokeys, pageable, blokeys.size());
@@ -94,7 +98,7 @@ class BlokeyServiceTest {
     void readBlokeyByBlokeyId_validInput_true() {
         // given
         UUID blokeyId = UUID.randomUUID();
-        Blokey blokey = new Blokey(blokeyId, "짱구", "감자머리입니다.");
+        Blokey blokey = new Blokey(blokeyId, "짱구", "감자머리입니다.", false);
 
         when(repository.findById(blokeyId)).thenReturn(Optional.of(blokey));
 
@@ -107,24 +111,6 @@ class BlokeyServiceTest {
         assertEquals(blokey.getBio(), result.getBio());
 
         verify(repository, times(1)).findById(blokeyId);
-    }
-
-    @Test
-    void updateBlokeyByBlokeyId_onlyPasswordGiven_true() {
-        // given
-        UUID blokeyId = UUID.randomUUID();
-        BlokeyReqUpdateDto dto = BlokeyReqUpdateDto.builder()
-            .password("password")
-            .build();
-
-        doNothing().when(helperService).updatePasswordOnAuthenticationServer(any(), any());
-
-        // when
-        service.updateBlokeyByBlokeyId(blokeyId, dto);
-
-        // then
-        verify(helperService).updatePasswordOnAuthenticationServer(blokeyId, dto);
-        verify(repository, never()).findById(any());
     }
 
     @Test
@@ -146,7 +132,6 @@ class BlokeyServiceTest {
         // then
         verify(blokey).updateNickname("닉네임");
         verify(blokey).updateBio("자기소개입니다.");
-        verify(helperService, never()).updatePasswordOnAuthenticationServer(any(), any());
     }
 
     @Test
@@ -159,7 +144,6 @@ class BlokeyServiceTest {
         service.updateBlokeyByBlokeyId(blokeyId, dto);
 
         // then
-        verify(helperService, never()).updatePasswordOnAuthenticationServer(any(), any());
         verify(repository, never()).findById(any());
     }
 
@@ -186,18 +170,15 @@ class BlokeyServiceTest {
     void deleteBlokeyByBlokeyId_validInput_true() {
         // given
         UUID blokeyId = UUID.randomUUID();
-        Blokey blokey = new Blokey(blokeyId, "짱구", "감자머리입니다.");
+        Blokey blokey = new Blokey(blokeyId, "짱구", "감자머리입니다.", false);
 
-        doNothing().when(helperService).deleteBlokeyOnAuthenticationServer(blokeyId);
         when(repository.findById(blokeyId)).thenReturn(Optional.of(blokey));
 
         // when
-        service.deleteBlokeyByBlokeyId(blokeyId);
+        service.softDeleteBlokeyByBlokeyId(blokeyId);
 
         // then
-        verify(helperService).deleteBlokeyOnAuthenticationServer(blokeyId);
         verify(repository).findById(blokeyId);
-        verify(repository).delete(blokey);
     }
 
     @Test
@@ -205,18 +186,15 @@ class BlokeyServiceTest {
         // given
         UUID blokeyId = UUID.randomUUID();
 
-        doNothing().when(helperService).deleteBlokeyOnAuthenticationServer(blokeyId);
         when(repository.findById(blokeyId)).thenReturn(Optional.empty());
 
         // when & then
         CommonException e = assertThrows(CommonException.class, () -> {
-            service.deleteBlokeyByBlokeyId(blokeyId);
+            service.softDeleteBlokeyByBlokeyId(blokeyId);
         });
 
         assertEquals(ExceptionType.NOT_FOUND, e.getException());
 
-        verify(helperService).deleteBlokeyOnAuthenticationServer(blokeyId);
         verify(repository).findById(blokeyId);
-        verify(repository, never()).delete(any());
     }
 }

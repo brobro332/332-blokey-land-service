@@ -57,7 +57,7 @@ class MemberServiceTest {
             .actualStartDate(LocalDate.now().plusDays(3))
             .actualEndDate(LocalDate.now().plusDays(4))
             .build();
-        Blokey blokey = new Blokey(blokeyId, "짱구", "감자머리입니다.");
+        Blokey blokey = new Blokey(blokeyId, "짱구", "감자머리입니다.", false);
 
         MemberReqCreateDto dto = MemberReqCreateDto.builder()
             .blokeyId(blokeyId)
@@ -170,7 +170,7 @@ class MemberServiceTest {
             .actualStartDate(LocalDate.now().plusDays(3))
             .actualEndDate(LocalDate.now().plusDays(4))
             .build();
-        Blokey blokey = new Blokey(blokeyId, "짱구", "감자머리입니다.");
+        Blokey blokey = new Blokey(blokeyId, "짱구", "감자머리입니다.", false);
 
         when(projectService.findProjectByProjectId(1L)).thenReturn(project);
         when(blokeyService.findBlokeyByBlokeyId(blokeyId)).thenReturn(blokey);

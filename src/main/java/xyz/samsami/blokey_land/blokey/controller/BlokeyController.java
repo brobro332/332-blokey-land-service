@@ -50,8 +50,14 @@ public class BlokeyController implements BlokeyApi {
     }
 
     @Override
-    public CommonRespDto<Void> deleteBlokeyByBlokeyId(@PathVariable UUID blokeyId) {
-        service.deleteBlokeyByBlokeyId(blokeyId);
+    public CommonRespDto<Void> softDeleteBlokeyByBlokeyId(@PathVariable UUID blokeyId) {
+        service.softDeleteBlokeyByBlokeyId(blokeyId);
         return CommonRespDto.of(ResultType.SUCCESS, "사용자 삭제 완료", null);
+    }
+
+    @Override
+    public CommonRespDto<Void> restoreBlokeyByBlokeyId(@PathVariable UUID blokeyId) {
+        service.restoreBlokeyByBlokeyId(blokeyId);
+        return CommonRespDto.of(ResultType.SUCCESS, "사용자 복구 완료", null);
     }
 }
