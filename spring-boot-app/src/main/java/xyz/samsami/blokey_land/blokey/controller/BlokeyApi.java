@@ -8,10 +8,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
-import xyz.samsami.blokey_land.common.dto.CommonRespDto;
 import xyz.samsami.blokey_land.blokey.dto.BlokeyReqCreateDto;
 import xyz.samsami.blokey_land.blokey.dto.BlokeyReqUpdateDto;
 import xyz.samsami.blokey_land.blokey.dto.BlokeyRespDto;
+import xyz.samsami.blokey_land.common.dto.CommonRespDto;
 
 import java.util.UUID;
 
@@ -37,11 +37,7 @@ public interface BlokeyApi {
     @PatchMapping("/{blokeyId}")
     CommonRespDto<Void> updateBlokeyByBlokeyId(@PathVariable UUID blokeyId, @RequestBody BlokeyReqUpdateDto dto);
 
-    @Operation(summary = "사용자 삭제", description = "사용자를 임시 삭제합니다.")
+    @Operation(summary = "사용자 삭제", description = "사용자를 삭제합니다.")
     @DeleteMapping("/{blokeyId}")
-    CommonRespDto<Void> softDeleteBlokeyByBlokeyId(@PathVariable UUID blokeyId);
-
-    @Operation(summary = "사용자 복구", description = "임시 삭제된 사용자를 복구합니다.")
-    @PatchMapping("/{blokeyId}:restore")
-    CommonRespDto<Void> restoreBlokeyByBlokeyId(@PathVariable UUID blokeyId);
+    CommonRespDto<Void> deleteBlokeyByBlokeyId(@PathVariable UUID blokeyId);
 }

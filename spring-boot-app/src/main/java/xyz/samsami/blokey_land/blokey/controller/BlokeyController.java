@@ -8,12 +8,12 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import xyz.samsami.blokey_land.common.dto.CommonRespDto;
-import xyz.samsami.blokey_land.common.type.ResultType;
 import xyz.samsami.blokey_land.blokey.dto.BlokeyReqCreateDto;
 import xyz.samsami.blokey_land.blokey.dto.BlokeyReqUpdateDto;
 import xyz.samsami.blokey_land.blokey.dto.BlokeyRespDto;
 import xyz.samsami.blokey_land.blokey.service.BlokeyService;
+import xyz.samsami.blokey_land.common.dto.CommonRespDto;
+import xyz.samsami.blokey_land.common.type.ResultType;
 
 import java.util.UUID;
 
@@ -50,14 +50,8 @@ public class BlokeyController implements BlokeyApi {
     }
 
     @Override
-    public CommonRespDto<Void> softDeleteBlokeyByBlokeyId(@PathVariable UUID blokeyId) {
-        service.softDeleteBlokeyByBlokeyId(blokeyId);
+    public CommonRespDto<Void> deleteBlokeyByBlokeyId(@PathVariable UUID blokeyId) {
+        service.deleteBlokeyByBlokeyId(blokeyId);
         return CommonRespDto.of(ResultType.SUCCESS, "사용자 삭제 완료", null);
-    }
-
-    @Override
-    public CommonRespDto<Void> restoreBlokeyByBlokeyId(@PathVariable UUID blokeyId) {
-        service.restoreBlokeyByBlokeyId(blokeyId);
-        return CommonRespDto.of(ResultType.SUCCESS, "사용자 복구 완료", null);
     }
 }

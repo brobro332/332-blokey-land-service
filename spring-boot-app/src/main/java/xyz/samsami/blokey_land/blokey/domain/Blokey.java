@@ -18,17 +18,12 @@ public class Blokey extends CommonTimestamp {
     @Id
     private UUID id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String nickname;
 
     @Column(length = 1000)
     private String bio;
 
-    @Column(nullable = false)
-    @ColumnDefault("false")
-    private boolean deleted = false;
-
     public void updateNickname(String nickname) { if (nickname != null) this.nickname = nickname; }
     public void updateBio(String bio) { if (bio != null) this.bio = bio; }
-    public void updateDeleted(Boolean deleted) { if (deleted != null) this.deleted = deleted; }
 }

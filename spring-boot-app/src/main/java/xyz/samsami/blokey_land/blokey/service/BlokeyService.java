@@ -11,8 +11,6 @@ import xyz.samsami.blokey_land.blokey.dto.BlokeyReqUpdateDto;
 import xyz.samsami.blokey_land.blokey.dto.BlokeyRespDto;
 import xyz.samsami.blokey_land.blokey.mapper.BlokeyMapper;
 import xyz.samsami.blokey_land.blokey.repository.BlokeyRepository;
-import xyz.samsami.blokey_land.blokey.vo.AccountVo;
-import xyz.samsami.blokey_land.common.dto.CommonRespDto;
 import xyz.samsami.blokey_land.common.exception.CommonException;
 import xyz.samsami.blokey_land.common.type.ExceptionType;
 import xyz.samsami.blokey_land.common.util.StringUtil;
@@ -23,13 +21,11 @@ import java.util.UUID;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class BlokeyService {
-    private final BlokeyHelperService helperService;
     private final BlokeyRepository repository;
 
     @Transactional
     public void createBlokey(BlokeyReqCreateDto dto) {
-        CommonRespDto<AccountVo> response = helperService.createBlokeyOnAuthenticationServer(dto);
-        repository.save(BlokeyMapper.toEntity(dto, response.getData().accountId()));
+        repository.save(BlokeyMapper.toEntity(dto));
     }
 
     public Page<BlokeyRespDto> readBlokeys(Pageable pageable) {
@@ -51,15 +47,9 @@ public class BlokeyService {
     }
 
     @Transactional
-    public void softDeleteBlokeyByBlokeyId(UUID blokeyId) {
+    public void deleteBlokeyByBlokeyId(UUID blokeyId) {
         Blokey blokey = findBlokeyByBlokeyId(blokeyId);
-        if (blokey != null) blokey.updateDeleted(true);
-    }
-
-    @Transactional
-    public void restoreBlokeyByBlokeyId(UUID blokeyId) {
-        Blokey blokey = findBlokeyByBlokeyId(blokeyId);
-        if (blokey != null) blokey.updateDeleted(false);
+        if (blokey != null) repository.delete(blokey);
     }
 
     public Blokey findBlokeyByBlokeyId(UUID blokeyId) {

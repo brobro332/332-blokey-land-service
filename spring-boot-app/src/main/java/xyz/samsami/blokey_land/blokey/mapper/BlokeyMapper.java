@@ -4,8 +4,6 @@ import xyz.samsami.blokey_land.blokey.domain.Blokey;
 import xyz.samsami.blokey_land.blokey.dto.BlokeyReqCreateDto;
 import xyz.samsami.blokey_land.blokey.dto.BlokeyRespDto;
 
-import java.util.UUID;
-
 public class BlokeyMapper {
     public static BlokeyRespDto toRespDto(Blokey blokey) {
         return BlokeyRespDto.builder()
@@ -15,9 +13,9 @@ public class BlokeyMapper {
             .build();
     }
 
-    public static Blokey toEntity(BlokeyReqCreateDto dto, UUID id) {
+    public static Blokey toEntity(BlokeyReqCreateDto dto) {
         return Blokey.builder()
-            .id(id)
+            .id(dto.getId())
             .nickname(dto.getNickname())
             .bio(dto.getBio())
             .build();

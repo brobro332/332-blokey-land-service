@@ -1,9 +1,9 @@
 services:
-  backend:
+  blokey-land:
     build:
       context: ../
       dockerfile: Dockerfile
-    container_name: backend
+    container_name: blokey-land
     restart: always
     ports:
       - "${PORT}:${PORT}"
