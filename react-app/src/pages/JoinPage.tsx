@@ -22,7 +22,7 @@ const JoinPage = () => {
 
   const handleJoin = async () => {
     try {
-      await apiAxios("/accounts", {
+      await apiAxios("/api/accounts", {
         method: "POST",
         data: {
           email,

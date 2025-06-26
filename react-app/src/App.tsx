@@ -29,7 +29,7 @@ const App = () => {
   const [checking, setChecking] = useState(true);
 
   useEffect(() => {
-    apiAxios("/accounts/session")
+    apiAxios("/api/accounts/session")
       .then(() => setIsAuthenticated(true))
       .catch(() => setIsAuthenticated(false))
       .finally(() => setChecking(false));

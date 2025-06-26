@@ -20,7 +20,6 @@ const LoginPage = () => {
 
   const navigate = useNavigate();
 
-  // 페이지 로드 시 localStorage에서 저장된 이메일 불러오기
   useEffect(() => {
     const savedEmail = localStorage.getItem("savedEmail");
     if (savedEmail) {
@@ -31,13 +30,12 @@ const LoginPage = () => {
 
   const handleLogin = async () => {
     try {
-      await apiAxios("/accounts/session", {
+      await apiAxios("/api/accounts/session", {
         method: "POST",
         data: { email, password },
         withCredentials: true,
       });
 
-      // 로그인 성공 시 아이디 저장 여부에 따라 처리
       if (rememberMe) {
         localStorage.setItem("savedEmail", email);
       } else {
