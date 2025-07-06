@@ -5,10 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import xyz.samsami.blokey_land.common.dto.CommonRespDto;
 import xyz.samsami.blokey_land.common.type.ResultType;
 import xyz.samsami.blokey_land.offer.dto.OfferReqCreateDto;
@@ -25,18 +22,16 @@ public class OfferController implements OfferApi {
     private final OfferService service;
 
     @Override
-    public CommonRespDto<Void> createOffer(
-        @RequestParam Long projectId,
-        @RequestParam UUID blokeyId,
+        public CommonRespDto<OfferRespDto> createOffer(
         @RequestBody OfferReqCreateDto dto
     ) {
-        service.createOffer(projectId, blokeyId, dto);
-        return CommonRespDto.of(ResultType.SUCCESS, "제안 등록 완료", null);
+        OfferRespDto response = service.createOffer(dto);
+        return CommonRespDto.of(ResultType.SUCCESS, "제안 등록 완료", response);
     }
 
     @Override
     public CommonRespDto<Page<OfferRespDto>> readOffers(
-        @RequestBody OfferReqReadDto dto,
+        @ModelAttribute OfferReqReadDto dto,
         @PageableDefault(
             sort = "id", direction = Sort.Direction.DESC
         ) Pageable pageable

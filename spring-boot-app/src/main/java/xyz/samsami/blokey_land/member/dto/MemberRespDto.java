@@ -6,15 +6,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import xyz.samsami.blokey_land.member.type.RoleType;
 
-import java.util.UUID;
-
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class MemberRespDto {
-    private Long memberId;
-    private RoleType role;
+    private Long id;
     private Long projectId;
-    private UUID blokeyId;
+    private RoleType role;
+    private String nickname;
+    private String bio;
 }

@@ -25,6 +25,7 @@ public interface BlokeyApi {
     @Operation(summary = "사용자 목록 조회", description = "사용자 목록을 조회합니다.")
     @GetMapping
     CommonRespDto<Page<BlokeyRespDto>> readBlokeys(
+        @RequestParam(required = false) Long excludeProjectId,
         @Parameter(hidden = true)
         @PageableDefault(sort = "nickname", direction = Sort.Direction.ASC) Pageable pageable
     );
@@ -32,6 +33,10 @@ public interface BlokeyApi {
     @Operation(summary = "사용자 단건 조회", description = "사용자 상세 정보를 조회합니다.")
     @GetMapping("/{blokeyId}")
     CommonRespDto<BlokeyRespDto> readBlokeyByBlokeyId(@PathVariable UUID blokeyId);
+
+    @Operation(summary = "사용자 본인 정보 조회", description = "본인의 사용자 상세 정보를 조회합니다.")
+    @GetMapping("/me")
+    CommonRespDto<BlokeyRespDto> readBlokeyBySession(@RequestHeader("X-Account-Id") String blokeyId);
 
     @Operation(summary = "사용자 수정", description = "사용자 정보를 수정합니다.")
     @PatchMapping("/{blokeyId}")

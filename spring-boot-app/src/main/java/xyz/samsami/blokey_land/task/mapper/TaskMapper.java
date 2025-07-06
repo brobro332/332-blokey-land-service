@@ -15,18 +15,27 @@ public class TaskMapper {
             .status(dto.getStatus())
             .priority(dto.getPriority())
             .project(project)
+            .estimatedStartDate(dto.getEstimatedStartDate())
+            .estimatedEndDate(dto.getEstimatedEndDate())
+            .actualStartDate(dto.getActualStartDate())
+            .actualEndDate(dto.getActualEndDate())
             .build();
     }
 
     public static TaskRespDto toRespDto(Task task) {
         return TaskRespDto.builder()
             .id(task.getId())
+            .projectId(task.getProject().getId())
             .title(task.getTitle())
             .description(task.getDescription())
             .assignee(task.getAssignee())
             .progress(task.getProgress())
             .status(task.getStatus())
             .priority(task.getPriority())
+            .estimatedStartDate(task.getEstimatedStartDate())
+            .estimatedEndDate(task.getEstimatedEndDate())
+            .actualStartDate(task.getActualStartDate())
+            .actualEndDate(task.getActualEndDate())
             .build();
     }
 }

@@ -6,9 +6,9 @@ import xyz.samsami.blokey_land.member.type.RoleType;
 import xyz.samsami.blokey_land.project.domain.Project;
 
 public class MemberMapper {
-    public static Member toEntity(Project project, Blokey blokey) {
+    public static Member toEntity(Project project, Blokey blokey, RoleType role) {
         return Member.builder()
-            .role(RoleType.LEADER)
+            .role(role)
             .project(project)
             .blokey(blokey)
             .build();

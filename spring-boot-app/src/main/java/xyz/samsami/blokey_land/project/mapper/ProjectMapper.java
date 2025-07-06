@@ -9,7 +9,9 @@ public class ProjectMapper {
         return Project.builder()
             .title(dto.getTitle())
             .description(dto.getDescription())
-            .ownerId(dto.getOwnerId())
+            .imageUrl(dto.getImageUrl())
+            .status(dto.getStatus())
+            .isPrivate(dto.isPrivate())
             .estimatedStartDate(dto.getEstimatedStartDate())
             .estimatedEndDate(dto.getEstimatedEndDate())
             .actualStartDate(dto.getActualStartDate())
@@ -22,12 +24,29 @@ public class ProjectMapper {
             .id(project.getId())
             .title(project.getTitle())
             .description(project.getDescription())
-            .ownerId(project.getOwnerId())
+            .imageUrl(project.getImageUrl())
+            .status(project.getStatus())
+            .isPrivate(project.isPrivate())
             .estimatedStartDate(project.getEstimatedStartDate())
             .estimatedEndDate(project.getEstimatedEndDate())
             .actualStartDate(project.getActualStartDate())
             .actualEndDate(project.getActualEndDate())
-            .deleted(project.isDeleted())
+            .build();
+    }
+
+    public static ProjectRespDto toRespDtoWithIsLeader(Project project, boolean isLeader) {
+        return ProjectRespDto.builder()
+            .id(project.getId())
+            .title(project.getTitle())
+            .description(project.getDescription())
+            .imageUrl(project.getImageUrl())
+            .status(project.getStatus())
+            .isPrivate(project.isPrivate())
+            .isLeader(isLeader)
+            .estimatedStartDate(project.getEstimatedStartDate())
+            .estimatedEndDate(project.getEstimatedEndDate())
+            .actualStartDate(project.getActualStartDate())
+            .actualEndDate(project.getActualEndDate())
             .build();
     }
 }

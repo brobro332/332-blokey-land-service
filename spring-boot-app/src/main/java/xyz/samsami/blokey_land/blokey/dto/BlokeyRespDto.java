@@ -15,4 +15,5 @@ public class BlokeyRespDto {
     private UUID id;
     private String nickname;
     private String bio;
+    private boolean hasPendingOffer;
 }

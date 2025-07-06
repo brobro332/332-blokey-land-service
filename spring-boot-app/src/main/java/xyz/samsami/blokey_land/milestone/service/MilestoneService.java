@@ -1,22 +1,24 @@
 package xyz.samsami.blokey_land.milestone.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import xyz.samsami.blokey_land.common.exception.CommonException;
 import xyz.samsami.blokey_land.common.type.ExceptionType;
 import xyz.samsami.blokey_land.milestone.domain.Milestone;
 import xyz.samsami.blokey_land.milestone.dto.MilestoneReqCreateDto;
+import xyz.samsami.blokey_land.milestone.dto.MilestoneReqReadDto;
 import xyz.samsami.blokey_land.milestone.dto.MilestoneReqUpdateDto;
 import xyz.samsami.blokey_land.milestone.dto.MilestoneRespDto;
 import xyz.samsami.blokey_land.milestone.mapper.MilestoneMapper;
+import xyz.samsami.blokey_land.milestone.repository.MilestoneDslRepository;
 import xyz.samsami.blokey_land.milestone.repository.MilestoneRepository;
 import xyz.samsami.blokey_land.project.domain.Project;
 import xyz.samsami.blokey_land.project.service.ProjectService;
 import xyz.samsami.blokey_land.task.domain.Task;
 import xyz.samsami.blokey_land.task.service.TaskService;
+
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -25,6 +27,7 @@ public class MilestoneService {
     private final ProjectService projectService;
     private final TaskService taskService;
     private final MilestoneRepository repository;
+    private final MilestoneDslRepository dslRepository;
 
     @Transactional
     public void createMilestone(Long projectId, MilestoneReqCreateDto dto) {
@@ -32,8 +35,12 @@ public class MilestoneService {
         if (project != null) repository.save(MilestoneMapper.toEntity(dto, project));
     }
 
-    public Page<MilestoneRespDto> readMilestonesByProjectId(Long projectId, Pageable pageable) {
-        return repository.findByProject(projectId, pageable);
+    public List<MilestoneRespDto> readMilestones(MilestoneReqReadDto dto) {
+        return dslRepository.readMilestones(dto);
+    }
+
+    public List<MilestoneRespDto> readMilestonesByProjectId(Long projectId) {
+        return repository.findDtoByProject(projectId);
     }
 
     @Transactional

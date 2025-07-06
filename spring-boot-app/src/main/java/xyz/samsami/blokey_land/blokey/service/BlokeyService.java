@@ -28,9 +28,8 @@ public class BlokeyService {
         repository.save(BlokeyMapper.toEntity(dto));
     }
 
-    public Page<BlokeyRespDto> readBlokeys(Pageable pageable) {
-        return repository.findAll(pageable)
-            .map(BlokeyMapper::toRespDto);
+    public Page<BlokeyRespDto> readBlokeys(Long excludeProjectId, Pageable pageable) {
+        return repository.findByNotInProject(excludeProjectId, pageable);
     }
 
     public BlokeyRespDto readBlokeyByBlokeyId(UUID blokeyId) {

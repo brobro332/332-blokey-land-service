@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import xyz.samsami.blokey_land.common.domain.CommonDateTime;
+import xyz.samsami.blokey_land.project.type.ProjectStatusType;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -23,17 +24,22 @@ public class Project extends CommonDateTime {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "owner_id", nullable = false)
-    private UUID ownerId;
+    @Column
+    private String imageUrl;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private ProjectStatusType status;
 
     @Column(nullable = false)
     @ColumnDefault("false")
-    private boolean deleted = false;
+    private boolean isPrivate;
 
     public void updateTitle(String title) { if (title != null) this.title = title; }
     public void updateDescription(String description) { if (description != null) this.description = description; }
-    public void updateOwnerId(UUID ownerId) { if (ownerId != null) this.ownerId = ownerId; }
-    public void updateDeleted(Boolean deleted) { if (deleted != null) this.deleted = deleted; }
+    public void updateImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    public void updateStatus(ProjectStatusType status) { if (status != null) this.status = status; }
+    public void updateIsPrivate(Boolean isPrivate) { if (isPrivate != null) this.isPrivate = isPrivate; }
 
     @Builder
     public Project(
@@ -44,12 +50,16 @@ public class Project extends CommonDateTime {
         Long id,
         String title,
         String description,
-        UUID ownerId
+        String imageUrl,
+        ProjectStatusType status,
+        boolean isPrivate
     ) {
         super(estimatedStartDate, estimatedEndDate, actualStartDate, actualEndDate);
         this.id = id;
         this.title = title;
         this.description = description;
-        this.ownerId = ownerId;
+        this.imageUrl = imageUrl;
+        this.status = status;
+        this.isPrivate = isPrivate;
     }
 }

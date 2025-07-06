@@ -18,9 +18,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
         value = """
             SELECT new xyz.samsami.blokey_land.member.dto.MemberRespDto(
                 m.id,
-                m.role,
                 p.id,
-                b.id
+                m.role,
+                b.nickname,
+                b.bio
             )
             FROM Member m
             JOIN m.project p
@@ -40,9 +41,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
             value = """
             SELECT new xyz.samsami.blokey_land.member.dto.MemberRespDto(
                 m.id,
-                m.role,
                 p.id,
-                b.id
+                m.role,
+                b.nickname,
+                b.bio
             )
             FROM Member m
             JOIN m.project p

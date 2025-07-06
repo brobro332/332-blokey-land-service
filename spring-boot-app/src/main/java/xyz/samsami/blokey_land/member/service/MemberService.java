@@ -13,6 +13,7 @@ import xyz.samsami.blokey_land.member.dto.MemberReqUpdateDto;
 import xyz.samsami.blokey_land.member.dto.MemberRespDto;
 import xyz.samsami.blokey_land.member.mapper.MemberMapper;
 import xyz.samsami.blokey_land.member.repository.MemberRepository;
+import xyz.samsami.blokey_land.member.type.RoleType;
 import xyz.samsami.blokey_land.project.domain.Project;
 
 import java.util.UUID;
@@ -24,9 +25,9 @@ public class MemberService {
     private final MemberRepository repository;
 
     @Transactional
-    public void createMember(Project project, Blokey blokey) {
+    public void createMember(Project project, Blokey blokey, RoleType role) {
         if (project != null && blokey != null) {
-            Member member = MemberMapper.toEntity(project, blokey);
+            Member member = MemberMapper.toEntity(project, blokey, role);
             repository.save(member);
         }
     }

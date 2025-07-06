@@ -10,6 +10,7 @@ import xyz.samsami.blokey_land.blokey.service.BlokeyService;
 import xyz.samsami.blokey_land.common.exception.CommonException;
 import xyz.samsami.blokey_land.common.type.ExceptionType;
 import xyz.samsami.blokey_land.member.service.MemberService;
+import xyz.samsami.blokey_land.member.type.RoleType;
 import xyz.samsami.blokey_land.offer.domain.Offer;
 import xyz.samsami.blokey_land.offer.dto.OfferReqCreateDto;
 import xyz.samsami.blokey_land.offer.dto.OfferReqReadDto;
@@ -18,6 +19,7 @@ import xyz.samsami.blokey_land.offer.dto.OfferRespDto;
 import xyz.samsami.blokey_land.offer.mapper.OfferMapper;
 import xyz.samsami.blokey_land.offer.repository.OfferRepository;
 import xyz.samsami.blokey_land.offer.type.OfferStatusType;
+import xyz.samsami.blokey_land.offer.type.OfferType;
 import xyz.samsami.blokey_land.project.domain.Project;
 import xyz.samsami.blokey_land.project.service.ProjectService;
 
@@ -33,18 +35,21 @@ public class OfferService {
     private final OfferRepository repository;
 
     @Transactional
-    public void createOffer(Long projectId, UUID blokeyId, OfferReqCreateDto dto) {
-        Project project = projectService.findProjectByProjectId(projectId);
-        Blokey blokey = blokeyService.findBlokeyByBlokeyId(blokeyId);
-        if (project != null && blokey != null) repository.save(OfferMapper.toEntity(dto, project, blokey));
+    public OfferRespDto createOffer(OfferReqCreateDto dto) {
+        Project project = projectService.findProjectByProjectId(dto.getProjectId());
+        Blokey blokey = blokeyService.findBlokeyByBlokeyId(dto.getBlokeyId());
+        if (project != null && blokey != null) return OfferMapper.toRespDto(repository.save(OfferMapper.toEntity(dto, project, blokey)));
+
+        return null;
     }
 
     public Page<OfferRespDto> readOffers(OfferReqReadDto dto, Pageable pageable) {
         Long projectId = dto.getProjectId();
         UUID blokeyId = dto.getBlokeyId();
+        OfferType offerer = dto.getOfferer();
 
-        if (projectId != null) return repository.findDtoByProjectId(projectId, pageable);
-        if (blokeyId != null) return repository.findDtoByBlokeyId(blokeyId, pageable);
+        if (projectId != null) return repository.findDtoByProjectId(projectId, offerer, pageable);
+        if (blokeyId != null) return repository.findDtoByBlokeyId(blokeyId, offerer, pageable);
 
         throw new CommonException(ExceptionType.BAD_REQUEST, null);
     }
@@ -56,7 +61,7 @@ public class OfferService {
             OfferStatusType status = dto.getStatus();
             offer.updateStatus(status);
 
-            if (OfferStatusType.ACCEPTED.equals(status)) memberService.createMember(offer.getProject(), offer.getBlokey());
+            if (OfferStatusType.ACCEPTED.equals(status)) memberService.createMember(offer.getProject(), offer.getBlokey(), RoleType.MEMBER);
         }
     }
 

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import xyz.samsami.blokey_land.project.type.ProjectStatusType;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -15,7 +16,9 @@ import java.util.UUID;
 public class ProjectReqUpdateDto {
     private String title;
     private String description;
-    private UUID ownerId;
+    private String imageUrl;
+    private ProjectStatusType status;
+    private boolean isPrivate;
     private LocalDate estimatedStartDate;
     private LocalDate estimatedEndDate;
     private LocalDate actualStartDate;

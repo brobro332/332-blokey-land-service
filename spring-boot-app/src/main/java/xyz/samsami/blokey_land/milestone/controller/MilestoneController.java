@@ -1,20 +1,16 @@
 package xyz.samsami.blokey_land.milestone.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import xyz.samsami.blokey_land.common.dto.CommonRespDto;
 import xyz.samsami.blokey_land.common.type.ResultType;
 import xyz.samsami.blokey_land.milestone.dto.MilestoneReqCreateDto;
+import xyz.samsami.blokey_land.milestone.dto.MilestoneReqReadDto;
 import xyz.samsami.blokey_land.milestone.dto.MilestoneReqUpdateDto;
 import xyz.samsami.blokey_land.milestone.dto.MilestoneRespDto;
 import xyz.samsami.blokey_land.milestone.service.MilestoneService;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,14 +24,19 @@ public class MilestoneController implements MilestoneApi {
     }
 
     @Override
-    public CommonRespDto<Page<MilestoneRespDto>> readMilestones(
-        @PathVariable Long projectId,
-        @PageableDefault(
-            sort = "id", direction = Sort.Direction.DESC
-        ) Pageable pageable
+    public CommonRespDto<List<MilestoneRespDto>> readMilestones(
+        @ModelAttribute MilestoneReqReadDto dto
     ) {
-        Page<MilestoneRespDto> page = service.readMilestonesByProjectId(projectId, pageable);
-        return CommonRespDto.of(ResultType.SUCCESS, "마일스톤 목록 조회 완료", page);
+        List<MilestoneRespDto> list = service.readMilestones(dto);
+        return CommonRespDto.of(ResultType.SUCCESS, "마일스톤 목록 조회 완료", list);
+    }
+
+    @Override
+    public CommonRespDto<List<MilestoneRespDto>> readMilestonesByProjectId(
+        @PathVariable Long projectId
+    ) {
+        List<MilestoneRespDto> list = service.readMilestonesByProjectId(projectId);
+        return CommonRespDto.of(ResultType.SUCCESS, "마일스톤 목록 조회 완료", list);
     }
 
     @Override

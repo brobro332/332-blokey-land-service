@@ -1,20 +1,19 @@
 package xyz.samsami.blokey_land.milestone.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MilestoneRespDto {
-    private Long id;
+public class MilestoneReqReadDto {
     private String title;
     private String description;
-    private LocalDate dueDate;
+    private Integer month;
+    private LocalDate dueDateFrom;
+    private LocalDate dueDateTo;
     private Long projectId;
 }

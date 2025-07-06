@@ -16,13 +16,13 @@ import java.util.UUID;
 @Builder
 public class TaskRespDto {
     private Long id;
+    private Long projectId;
     private String title;
     private String description;
     private UUID assignee;
     private Integer progress;
     private TaskStatusType status;
     private PriorityType priority;
-    private Long projectId;
     private LocalDate estimatedStartDate;
     private LocalDate estimatedEndDate;
     private LocalDate actualStartDate;

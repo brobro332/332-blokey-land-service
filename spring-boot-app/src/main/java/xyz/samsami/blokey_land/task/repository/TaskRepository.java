@@ -7,6 +7,8 @@ import org.springframework.data.repository.query.Param;
 import xyz.samsami.blokey_land.milestone.domain.Milestone;
 import xyz.samsami.blokey_land.task.domain.Task;
 
+import java.util.List;
+
 public interface TaskRepository extends JpaRepository<Task, Long> {
     @Modifying
     @Query("""
@@ -15,4 +17,11 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
         WHERE t.milestone = :milestone
     """)
     void clearMilestoneFromTasks(@Param("milestone") Milestone milestone);
+
+    @Query("""
+        SELECT t
+        FROM Task t
+        WHERE t.project.id = :projectId
+    """)
+    List<Task> findAllByProjectId(@Param("projectId") Long projectId);
 }

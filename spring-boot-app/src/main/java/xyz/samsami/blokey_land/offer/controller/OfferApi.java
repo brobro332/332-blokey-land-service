@@ -21,16 +21,14 @@ import java.util.UUID;
 public interface OfferApi {
     @Operation(summary = "제안 등록", description = "제안을 등록합니다.")
     @PostMapping
-    CommonRespDto<Void> createOffer(
-        @RequestParam Long projectId,
-        @RequestParam UUID blokeyId,
+    CommonRespDto<OfferRespDto> createOffer(
         @RequestBody OfferReqCreateDto dto
     );
 
     @Operation(summary = "제안 목록 조회", description = "제안 목록을 조회합니다.")
     @GetMapping
     CommonRespDto<Page<OfferRespDto>> readOffers(
-        @RequestBody OfferReqReadDto dto,
+        @ModelAttribute OfferReqReadDto dto,
         @Parameter(hidden = true) @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable
     );
 
