@@ -1,55 +1,47 @@
-import { useState, useEffect } from "react";
-import logo from "../assets/logo.png";
+import { useState } from "react";
+import logo from "../../../assets/image/logo.png";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import intro1 from "../assets/intro-1.png";
-import intro2 from "../assets/intro-1.png";
-import intro3 from "../assets/intro-1.png";
-import { apiAxios } from "../utils/Api";
+import intro1 from "../../../assets/image/intro-4.png";
+import intro2 from "../../../assets/image/intro-5.png";
+import intro3 from "../../../assets/image/intro-6.png";
+import { apiAxios } from "../../../utils/tsx/Api";
 import { useNavigate } from "react-router-dom";
 
 const images = [intro1, intro2, intro3];
 
-const LoginPage = () => {
+const JoinPage = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
+  const [nickname, setNickname] = useState("");
+  const [bio, setBio] = useState("");
 
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const savedEmail = localStorage.getItem("savedEmail");
-    if (savedEmail) {
-      setEmail(savedEmail);
-      setRememberMe(true);
-    }
-  }, []);
-
-  const handleLogin = async () => {
+  /**
+   * @description 회원가입
+   */
+  const joinAccount = async () => {
     try {
-      await apiAxios("/api/accounts/session", {
+      await apiAxios("/api/accounts", {
         method: "POST",
-        data: { email, password },
+        data: {
+          email,
+          password,
+          nickname,
+          bio,
+          type: "BLOKEY_LAND",
+        },
         withCredentials: true,
       });
 
-      if (rememberMe) {
-        localStorage.setItem("savedEmail", email);
-      } else {
-        localStorage.removeItem("savedEmail");
-      }
-
-      navigate("/main");
+      alert("회원가입이 완료되었습니다!");
+      navigate("/login");
     } catch (err) {
-      alert("로그인에 실패했습니다.");
+      alert("회원가입에 실패했습니다.");
     }
-  };
-
-  const handleJoinClick = () => {
-    navigate("/join");
   };
 
   return (
@@ -75,31 +67,33 @@ const LoginPage = () => {
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
             />
-
-            <div className="flex items-center justify-between text-sm">
-              <label className="flex items-center cursor-pointer select-none">
-                <input
-                  type="checkbox"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  className="mr-2"
-                />
-                아이디 저장
-              </label>
-            </div>
+            <input
+              type="text"
+              placeholder="닉네임"
+              value={nickname}
+              onChange={(e) => setNickname(e.target.value)}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
+            />
+            <textarea
+              placeholder="한 줄 소개"
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-green-400"
+              rows={3}
+            />
 
             <div className="flex space-x-4 mt-4">
               <button
-                onClick={handleLogin}
-                className="w-full py-3 rounded-lg bg-gradient-to-r from-orange-400 to-green-500 text-white font-semibold hover:opacity-90"
-              >
-                로그인
-              </button>
-              <button
-                onClick={handleJoinClick}
-                className="w-full py-3 rounded-lg border border-orange-400 text-orange-500 font-semibold hover:bg-orange-50"
+                onClick={joinAccount}
+                className="w-full py-3 rounded-lg bg-gradient-to-r from-green-400 to-orange-500 text-white font-semibold hover:opacity-90"
               >
                 회원가입
+              </button>
+              <button
+                onClick={() => navigate("/login")}
+                className="w-full py-3 rounded-lg border border-orange-400 text-orange-500 font-semibold hover:bg-orange-50"
+              >
+                뒤로가기
               </button>
             </div>
           </div>
@@ -117,7 +111,7 @@ const LoginPage = () => {
             {images.map((src, idx) => (
               <SwiperSlide key={idx}>
                 <div
-                  className="h-full w-full bg-cover bg-center flex flex-col items-center justify-center text-white"
+                  className="h-full w-full bg-cover bg-center flex items-center justify-center text-white"
                   style={{ backgroundImage: `url(${src})` }}
                 />
               </SwiperSlide>
@@ -129,4 +123,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default JoinPage;
