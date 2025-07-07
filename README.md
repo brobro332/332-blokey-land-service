@@ -6,7 +6,7 @@
 
 ### ✅ **개요**
 - 프로젝트, 태스크, 마일스톤을 통합적으로 관리할 수 있는 서비스입니다.
-- 다양한 방식으로 데이터를 시각화하여 프로젝트 현황을 쉽게 파악할 수 있습니다.
+- 데이터를 시각화하여 프로젝트 현황을 쉽게 파악할 수 있습니다.
 
 ### ⏱ **개발 기간**
 - `v1.0.0` 2025-06-06 ~ 2025-06-15 : 서비스 구조 설계 및 초기 기능 구현
@@ -23,7 +23,7 @@
 - 동적쿼리 라이브러리: `QueryDSL`
 - `DevOps`: `Docker`, `Docker-compose`
 
-### 📃 **매뉴얼**
+### 📃 **개발 환경 구축 매뉴얼**
 ```bash
 # 프로젝트 개발 버전 실행에 있어 Docker, Docker-compose, CLI 환경, 웹 브라우저가 필요합니다.
 
@@ -38,8 +38,8 @@ cd 332-sentinel-server         # 인증 서버 내 루트 경로로 이동
 docker-compose up -d --build   # docker-compose 이미지 빌드 및 실행
 
 # Blokey-Land 서비스 실행
-cd 332-sentinel-server/docker  # Blokey-Land 서비스 내 /docker 디렉터리로 이동
-docker-compose up -d --build
+cd 332-blokey-land-service/docker  # Blokey-Land 서비스 내 /docker 디렉터리로 이동
+docker-compose up -d --build       # docker-compose 이미지 빌드 및 실행
 
 # http://localhost 접속
 ```
