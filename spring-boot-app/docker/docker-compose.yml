@@ -1,9 +1,9 @@
 services:
-  spring-boot-app:
+  blokey-land:
     build:
-      context: ../spring-boot-app
+      context: ../
       dockerfile: Dockerfile
-    container_name: spring-boot-app
+    container_name: blokey-land
     restart: always
     ports:
       - "${PORT}:${PORT}"
@@ -13,21 +13,6 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${DATA_POSTGRES_PASSWORD}
     depends_on:
       - postgres
-    networks:
-      - network-sentinel
-    env_file:
-      - .env
-
-  nginx:
-    build:
-      context: ../react-app
-      dockerfile: Dockerfile
-    container_name: nginx
-    restart: always
-    ports:
-      - "${NGINX_EXTERNAL_PORT}:${NGINX_INTERNAL_PORT}"
-    depends_on:
-      - spring-boot-app
     networks:
       - network-sentinel
     env_file:
