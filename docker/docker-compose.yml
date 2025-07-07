@@ -1,0 +1,58 @@
+services:
+  spring-boot-app:
+    build:
+      context: ../spring-boot-app
+      dockerfile: Dockerfile
+    container_name: spring-boot-app
+    restart: always
+    ports:
+      - "${PORT}:${PORT}"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${DATA_POSTGRES_DB}
+      SPRING_DATASOURCE_USERNAME: ${DATA_POSTGRES_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DATA_POSTGRES_PASSWORD}
+    depends_on:
+      - postgres
+    networks:
+      - network-sentinel
+    env_file:
+      - .env
+
+  nginx:
+    build:
+      context: ../react-app
+      dockerfile: Dockerfile
+    container_name: nginx
+    restart: always
+    ports:
+      - "${NGINX_EXTERNAL_PORT}:${NGINX_INTERNAL_PORT}"
+    depends_on:
+      - spring-boot-app
+    networks:
+      - network-sentinel
+    env_file:
+      - .env
+
+  postgres:
+    image: postgres:14
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${DATA_POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${DATA_POSTGRES_PASSWORD}
+      POSTGRES_DB: ${DATA_POSTGRES_DB}
+    ports:
+      - "${POSTGRES_EXTERNAL_PORT}:${POSTGRES_INTERNAL_PORT}"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - network-sentinel
+    env_file:
+      - .env
+
+volumes:
+  pgdata:
+
+networks:
+  network-sentinel:
+    external: true
