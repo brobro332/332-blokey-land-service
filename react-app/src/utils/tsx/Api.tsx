@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { loadingController } from "../ts/loadingController";
 
-const API_BASE_URL = "http://localhost:8080";
+const API_BASE_URL = "";
 
 export const apiAxios = async <T = any,>(
   path: string,
