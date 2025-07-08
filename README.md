@@ -41,8 +41,8 @@ git clone "https://github.com/brobro332/332-blokey-land-service.git"
 #    .env 파일은 하단의 환경변수 파일 섹션을 참고해 작성합니다.
 
 # 4. 인증 서버 실행
-cd 332-sentinel-server         # 인증 서버 내 루트 경로로 이동
-docker-compose up -d --build   # docker-compose 이미지 빌드 및 실행
+cd 332-sentinel-server             # 인증 서버 내 루트 경로로 이동
+docker-compose up -d --build       # docker-compose 이미지 빌드 및 실행
 
 # 5. Blokey-Land 서비스 실행
 cd 332-blokey-land-service/docker  # Blokey-Land 서비스 내 /docker 디렉터리로 이동
@@ -104,7 +104,7 @@ JWT_SECRET_KEY                       # JWT 시크릿 키 (Git 등 외부에 노�
 # SERVER
 PORT                                 # Blokey-Land 서비스 포트 번호
 ADDRESS                              # Blokey-Land 서비스 바인딩 IP
-FILE_UPLOAD_DIR=uploads/             # 첨부파일 업로드 시 저장 디렉터리 경로
+FILE_UPLOAD_DIR                      # 첨부파일 업로드 시 저장 디렉터리 경로
 
 # NGINX
 NGINX_EXTERNAL_PORT                  # Nginx 외부 포트
