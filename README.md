@@ -122,6 +122,5 @@ POSTGRES_INTERNAL_PORT               # PostgreSQL 내부 포트
 
 ### 🚀 **`Swagger`**
 - 각 프로젝트의 포트 번호 환경변수 값을 `URL` 에 포함해주세요.
-
 - 인증 서버 : `http://localhost:${PORT}/webjars/swagger-ui/index.html`
 - Blokey-Land 서비스 : `http://localhost:${PORT}/swagger-ui/index.html`
