@@ -42,7 +42,7 @@ public class OfferController implements OfferApi {
 
     @Override
     public CommonRespDto<Void> updateOffer(@PathVariable Long offerId, @RequestBody OfferReqUpdateDto dto) {
-        service.updateOffer(offerId, dto);
+        service.updateOfferByOfferId(offerId, dto);
         return CommonRespDto.of(ResultType.SUCCESS, "제안 정보 수정 완료", null);
     }
 
