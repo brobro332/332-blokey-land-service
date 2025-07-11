@@ -70,7 +70,7 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("존재하는 ID가 주어졌을 때 Member가 반환되어야 한다")
+    @DisplayName("존재하는 ID가 주어졌을 때 Member가 반환되어야 한다.")
     void givenValidMemberId_whenFindMemberByMemberId_thenReturnMember() {
         // given
         Member member = mock(Member.class);
@@ -86,7 +86,7 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("존재하지 않는 ID가 주어졌을 때 예외가 발생해야 한다")
+    @DisplayName("존재하지 않는 ID가 주어졌을 때 예외가 발생해야 한다.")
     void givenInvalidMemberId_whenFindMemberByMemberId_thenThrowException() {
         // given
         Long memberId = 1L;
@@ -97,7 +97,7 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("유효한 파라미터가 주어지면 Member 역할이 수정되어야 한다")
+    @DisplayName("유효한 파라미터가 주어지면 Member 역할이 수정되어야 한다.")
     void givenValidParameter_whenUpdateMemberByMemberId_thenRoleUpdated() {
         // given
         Member member = mock(Member.class);
@@ -116,7 +116,7 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("유효한 멤버 ID가 주어지면 Member가 삭제되어야 한다")
+    @DisplayName("유효한 멤버 ID가 주어지면 Member가 삭제되어야 한다.")
     void givenValidMemberId_whenDeleteMemberByMemberId_thenDeleteCalled() {
         // given
         Member member = mock(Member.class);
