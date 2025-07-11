@@ -18,7 +18,7 @@ public class ProjectReqUpdateDto {
     private String description;
     private String imageUrl;
     private ProjectStatusType status;
-    private boolean isPrivate;
+    private Boolean isPrivate;
     private LocalDate estimatedStartDate;
     private LocalDate estimatedEndDate;
     private LocalDate actualStartDate;

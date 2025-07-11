@@ -22,11 +22,8 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class BlokeyServiceTest {
-    @InjectMocks
-    private BlokeyService blokeyService;
-
-    @Mock
-    private BlokeyRepository blokeyRepository;
+    @InjectMocks private BlokeyService blokeyService;
+    @Mock private BlokeyRepository blokeyRepository;
 
     @DisplayName("Blokey를 생성할 때 모든 필수 값이 저장돼야 한다.")
     @Test
@@ -90,7 +87,7 @@ class BlokeyServiceTest {
         });
     }
 
-    @DisplayName("존재하는 ID로 Blokey를 조회하면 DTO로 변환하여 반환해야 한다")
+    @DisplayName("존재하는 ID로 Blokey를 조회하면 DTO로 변환하여 반환해야 한다.")
     @Test
     void givenValidId_whenReadBlokeyByBlokeyId_thenReturnDto() {
         // given
@@ -110,7 +107,7 @@ class BlokeyServiceTest {
     }
 
     @Test
-    @DisplayName("닉네임 또는 소개가 있으면 상태 변경 메서드가 호출된다.")
+    @DisplayName("닉네임 또는 소개가 있으면 상태 변경 메서드가 호출되어야 한다.")
     void updateBlokey_whenUpdateBlokeyByBlokeyId_thenCallStateChangingMethod() {
         // given
         UUID id = UUID.randomUUID();
@@ -129,7 +126,7 @@ class BlokeyServiceTest {
     }
 
     @Test
-    @DisplayName("존재하는 Blokey 삭제 시 delete 메서드 호출")
+    @DisplayName("존재하는 Blokey 삭제 시 delete 메서드 호출되어야 한다.")
     void deleteBlokey_whenDeleteBlokeyByBlokeyId_thenCallRepositoryDeleteMethod() {
         // given
         UUID id = UUID.randomUUID();
