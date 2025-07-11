@@ -31,8 +31,8 @@ class ProjectServiceTest {
     @Mock private MemberService memberService;
     @Mock private ProjectRepository repository;
 
-    private Blokey blokey;
     private UUID blokeyId;
+    private Blokey blokey;
 
     @BeforeEach
     void setUp() {

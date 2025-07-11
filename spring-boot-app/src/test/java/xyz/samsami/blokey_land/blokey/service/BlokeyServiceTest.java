@@ -22,8 +22,8 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class BlokeyServiceTest {
-    @InjectMocks private BlokeyService blokeyService;
-    @Mock private BlokeyRepository blokeyRepository;
+    @InjectMocks private BlokeyService service;
+    @Mock private BlokeyRepository repository;
 
     @DisplayName("Blokey를 생성할 때 모든 필수 값이 저장돼야 한다.")
     @Test
@@ -42,10 +42,10 @@ class BlokeyServiceTest {
         ArgumentCaptor<Blokey> captor = ArgumentCaptor.forClass(Blokey.class);
 
         // when
-        blokeyService.createBlokey(dto);
+        service.createBlokey(dto);
 
         // then
-        verify(blokeyRepository).save(captor.capture());
+        verify(repository).save(captor.capture());
         Blokey saved = captor.getValue();
 
         assertEquals(id, saved.getId());
@@ -60,17 +60,17 @@ class BlokeyServiceTest {
         UUID id = UUID.randomUUID();
         Blokey blokey = new Blokey(id, "nickname", "bio");
 
-        when(blokeyRepository.findById(id)).thenReturn(Optional.of(blokey));
+        when(repository.findById(id)).thenReturn(Optional.of(blokey));
 
         // when
-        Blokey found = blokeyService.findBlokeyByBlokeyId(id);
+        Blokey found = service.findBlokeyByBlokeyId(id);
 
         // then
         assertEquals(blokey.getId(), found.getId());
         assertEquals(blokey.getNickname(), found.getNickname());
         assertEquals(blokey.getBio(), found.getBio());
 
-        verify(blokeyRepository).findById(id);
+        verify(repository).findById(id);
     }
 
     @DisplayName("존재하지 않는 ID로 조회 시 예외가 발생해야 한다.")
@@ -79,11 +79,11 @@ class BlokeyServiceTest {
         // given
         UUID nonExistingId = UUID.randomUUID();
 
-        when(blokeyRepository.findById(nonExistingId)).thenReturn(Optional.empty());
+        when(repository.findById(nonExistingId)).thenReturn(Optional.empty());
 
         // when & then
         assertThrows(CommonException.class, () -> {
-            blokeyService.findBlokeyByBlokeyId(nonExistingId);
+            service.findBlokeyByBlokeyId(nonExistingId);
         });
     }
 
@@ -94,10 +94,10 @@ class BlokeyServiceTest {
         UUID id = UUID.randomUUID();
         Blokey blokey = new Blokey(id, "nickname", "bio");
 
-        when(blokeyRepository.findById(id)).thenReturn(Optional.of(blokey));
+        when(repository.findById(id)).thenReturn(Optional.of(blokey));
 
         // when
-        BlokeyRespDto dto = blokeyService.readBlokeyByBlokeyId(id);
+        BlokeyRespDto dto = service.readBlokeyByBlokeyId(id);
 
         // then
         assertEquals(id, dto.getId());
@@ -114,13 +114,13 @@ class BlokeyServiceTest {
         BlokeyReqUpdateDto dto = new BlokeyReqUpdateDto("newNickname", "newBio");
         Blokey blokey = mock(Blokey.class);
 
-        when(blokeyRepository.findById(id)).thenReturn(Optional.of(blokey));
+        when(repository.findById(id)).thenReturn(Optional.of(blokey));
 
         // when
-        blokeyService.updateBlokeyByBlokeyId(id, dto);
+        service.updateBlokeyByBlokeyId(id, dto);
 
         // then
-        verify(blokeyRepository).findById(id);
+        verify(repository).findById(id);
         verify(blokey).updateNickname("newNickname");
         verify(blokey).updateBio("newBio");
     }
@@ -132,12 +132,12 @@ class BlokeyServiceTest {
         UUID id = UUID.randomUUID();
         Blokey blokey = mock(Blokey.class);
 
-        when(blokeyRepository.findById(id)).thenReturn(Optional.of(blokey));
+        when(repository.findById(id)).thenReturn(Optional.of(blokey));
 
         // when
-        blokeyService.deleteBlokeyByBlokeyId(id);
+        service.deleteBlokeyByBlokeyId(id);
 
         // then
-        verify(blokeyRepository).delete(blokey);
+        verify(repository).delete(blokey);
     }
 }
