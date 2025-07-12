@@ -25,7 +25,7 @@ class BlokeyServiceTest {
     @InjectMocks private BlokeyService service;
     @Mock private BlokeyRepository repository;
 
-    @DisplayName("Blokey를 생성할 때 모든 필수 값이 저장돼야 한다.")
+    @DisplayName("사용자를 생성할 때 모든 필수 값이 저장돼야 한다.")
     @Test
     void givenValidBlokeyDto_whenCreateBlokey_thenAllFieldsShouldBeSaved() {
         // given
@@ -53,7 +53,7 @@ class BlokeyServiceTest {
         assertEquals(bio, saved.getBio());
     }
 
-    @DisplayName("존재하는 ID로 Blokey를 조회하면 해당 객체를 반환해야 한다.")
+    @DisplayName("존재하는 ID로 사용자를 조회하면 해당 객체를 반환해야 한다.")
     @Test
     void givenValidId_whenFindBlokeyByBlokeyId_thenReturnBlokey() {
         // given
@@ -73,7 +73,7 @@ class BlokeyServiceTest {
         verify(repository).findById(id);
     }
 
-    @DisplayName("존재하지 않는 ID로 조회 시 예외가 발생해야 한다.")
+    @DisplayName("존재하지 않는 ID로 사용자 조회 시 예외가 발생해야 한다.")
     @Test
     void givenInvalidId_whenFindBlokeyByBlokeyId_thenThrowException() {
         // given
@@ -87,7 +87,7 @@ class BlokeyServiceTest {
         });
     }
 
-    @DisplayName("존재하는 ID로 Blokey를 조회하면 DTO로 변환하여 반환해야 한다.")
+    @DisplayName("존재하는 ID로 사용자를 조회하면 DTO로 변환하여 반환해야 한다.")
     @Test
     void givenValidId_whenReadBlokeyByBlokeyId_thenReturnDto() {
         // given
@@ -126,7 +126,7 @@ class BlokeyServiceTest {
     }
 
     @Test
-    @DisplayName("존재하는 Blokey 삭제 시 delete 메서드 호출되어야 한다.")
+    @DisplayName("존재하는 사용자 삭제 시 삭제 메서드 호출되어야 한다.")
     void deleteBlokey_whenDeleteBlokeyByBlokeyId_thenCallRepositoryDeleteMethod() {
         // given
         UUID id = UUID.randomUUID();

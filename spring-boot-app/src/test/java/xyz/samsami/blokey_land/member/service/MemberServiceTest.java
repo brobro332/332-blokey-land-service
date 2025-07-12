@@ -52,7 +52,7 @@ class MemberServiceTest {
             .build();
     }
 
-    @DisplayName("Member를 저장할 때 모든 필수 값이 저장되어야 한다.")
+    @DisplayName("멤버를 저장할 때 모든 필수 값이 저장되어야 한다.")
     @Test
     void givenValidParameter_whenCreateMember_thenAllFieldsShouldBeSaved() {
         // given
@@ -70,7 +70,7 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("존재하는 ID가 주어졌을 때 Member가 반환되어야 한다.")
+    @DisplayName("존재하는 ID가 주어졌을 때 멤버가 반환되어야 한다.")
     void givenValidMemberId_whenFindMemberByMemberId_thenReturnMember() {
         // given
         Member member = mock(Member.class);
@@ -97,7 +97,7 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("유효한 파라미터가 주어지면 Member 역할이 수정되어야 한다.")
+    @DisplayName("유효한 파라미터가 주어지면 멤버 역할이 수정되어야 한다.")
     void givenValidParameter_whenUpdateMemberByMemberId_thenRoleUpdated() {
         // given
         Member member = mock(Member.class);
@@ -116,7 +116,7 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("유효한 멤버 ID가 주어지면 Member가 삭제되어야 한다.")
+    @DisplayName("유효한 멤버 ID가 주어지면 멤버가 삭제되어야 한다.")
     void givenValidMemberId_whenDeleteMemberByMemberId_thenDeleteCalled() {
         // given
         Member member = mock(Member.class);

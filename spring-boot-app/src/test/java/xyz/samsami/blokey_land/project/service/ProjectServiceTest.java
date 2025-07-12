@@ -40,7 +40,7 @@ class ProjectServiceTest {
         blokey = new Blokey(blokeyId, "nickname", "bio");
     }
 
-    @DisplayName("유효한 파라미터가 주어졌을 때 Project와 Member를 생성해야 한다.")
+    @DisplayName("유효한 파라미터가 주어졌을 때 프로젝트와 멤버를 생성해야 한다.")
     @Test
     void givenValidParameter_whenCreateProject_thenProjectAndMemberShouldBeCreated() {
         // given
@@ -67,7 +67,7 @@ class ProjectServiceTest {
         verify(memberService).createMember(project, blokey, RoleType.LEADER);
     }
     
-    @DisplayName("존재하는 ID로 Project를 조회하면 해당 객체를 반환해야 한다.")
+    @DisplayName("존재하는 ID로 프로젝트를 조회하면 해당 객체를 반환해야 한다.")
     @Test
     void givenValidId_whenReadProjectByProjectId_thenReturnProject() {
         // given

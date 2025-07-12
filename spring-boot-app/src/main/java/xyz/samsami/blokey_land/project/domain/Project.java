@@ -7,7 +7,6 @@ import xyz.samsami.blokey_land.common.domain.CommonDateTime;
 import xyz.samsami.blokey_land.project.type.ProjectStatusType;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Entity
 @Getter
