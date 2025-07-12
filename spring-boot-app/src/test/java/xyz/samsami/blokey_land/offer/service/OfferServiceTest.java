@@ -68,7 +68,7 @@ class OfferServiceTest {
             .build();
     }
 
-    @DisplayName("Offer를 저장할 때 모든 필수 값이 저장되어야 한다.")
+    @DisplayName("제안을 저장할 때 모든 필수 값이 저장되어야 한다.")
     @Test
     void givenValidParameter_whenCreateOffer_thenAllFieldsShouldBeSaved() {
         // given
@@ -100,7 +100,7 @@ class OfferServiceTest {
         }
     }
 
-    @DisplayName("유효한 파라미터가 주어졌을 때 Offer 상태를 수정해야 한다.")
+    @DisplayName("유효한 파라미터가 주어졌을 때 제안 상태를 수정해야 한다.")
     @Test
     void givenValidParameter_whenUpdateOffer_thenStatusUpdatedAndMemberCreatedIfAccepted() {
         // given
@@ -121,7 +121,7 @@ class OfferServiceTest {
         verify(memberService).createMember(project, blokey, RoleType.MEMBER);
     }
 
-    @DisplayName("상태가 ACCEPTED가 아닐 경우 Member 생성 호출은 없어야 한다.")
+    @DisplayName("상태가 ACCEPTED가 아닐 경우 멤버 생성 호출은 없어야 한다.")
     @Test
     void givenNotAcceptedStatus_whenUpdateOffer_thenOnlyStatusUpdated() {
         // given
@@ -140,7 +140,7 @@ class OfferServiceTest {
         verifyNoInteractions(memberService);
     }
 
-    @DisplayName("유효한 ID가 주어졌을 때 Offer를 삭제해야 한다.")
+    @DisplayName("유효한 ID가 주어졌을 때 제안을 삭제해야 한다.")
     @Test
     void givenValidOfferId_whenDeleteOffer_thenOfferDeleted() {
         // given

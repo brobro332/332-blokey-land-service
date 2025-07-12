@@ -1,11 +1,11 @@
 package xyz.samsami.blokey_land.member.repository;
 
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import xyz.samsami.blokey_land.blokey.domain.Blokey;
@@ -21,8 +21,8 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@DataJpaTest
+@SpringBootTest(properties = "spring.profiles.active=test")
+@Transactional
 class MemberRepositoryTest extends ContainerBaseTest {
     @Autowired private MemberRepository repository;
     @Autowired private BlokeyRepository blokeyRepository;
@@ -42,7 +42,7 @@ class MemberRepositoryTest extends ContainerBaseTest {
     }
 
     @Test
-    @DisplayName("Project ID로 Member 조회 시 해당 Project의 Member 목록이 페이지 형태로 반환된다")
+    @DisplayName("프로젝트 ID로 멤버 조회 시 해당 프로젝트의 멤버 목록이 페이지 형태로 반환된다")
     void givenProjectId_whenFindDtoByProjectId_thenReturnsPagedMembers() {
         // when
         Page<MemberRespDto> result = repository.findDtoByProjectId(project.getId(), PageRequest.of(0, 10));
@@ -50,11 +50,11 @@ class MemberRepositoryTest extends ContainerBaseTest {
         // then
         assertThat(result).isNotEmpty();
         assertThat(result.getContent()).extracting("nickname")
-                .containsExactlyInAnyOrder("닉네임 1", "닉네임 2");
+            .containsExactlyInAnyOrder("닉네임 1", "닉네임 2");
     }
 
     @Test
-    @DisplayName("Blokey ID로 Member 조회 시 해당 Blokey가 속한 Member 목록이 페이지 형태로 반환된다")
+    @DisplayName("사용자 ID로 멤버 조회 시 해당 사용자가 속한 멤버 목록이 페이지 형태로 반환된다")
     void givenBlokeyId_whenFindDtoByBlokeyId_thenReturnsPagedMembers() {
         // when
         Page<MemberRespDto> result = repository.findDtoByBlokeyId(blokey1.getId(), PageRequest.of(0, 10));

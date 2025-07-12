@@ -60,7 +60,7 @@ class TaskServiceTest {
             .build();
     }
 
-    @DisplayName("Task을 저장할 때 모든 필수 값이 저장되어야 한다.")
+    @DisplayName("태스크를 저장할 때 모든 필수 값이 저장되어야 한다.")
     @Test
     void givenValidParameter_whenCreateTask_thenAllFieldsShouldBeSaved() {
         // given
@@ -171,7 +171,7 @@ class TaskServiceTest {
     }
 
     @Test
-    @DisplayName("유효한 ID가 주어졌을 때 Task를 삭제해야 한다.")
+    @DisplayName("유효한 ID가 주어졌을 때 태스크를 삭제해야 한다.")
     void givenValidId_whenDeleteTask_thenRepositoryDeleteCalled() {
         // given
         when(repository.findById(taskId)).thenReturn(Optional.of(task));
@@ -185,7 +185,7 @@ class TaskServiceTest {
     }
 
     @Test
-    @DisplayName("Milestone가 주어졌을 때 관련 Task의 마일스톤이 제거되어야 한다.")
+    @DisplayName("마일스톤이 주어졌을 때 관련 태스크의 마일스톤이 제거되어야 한다.")
     void givenMilestone_whenClearMilestoneFromTasks_thenRepositoryMethodCalled() {
         // given
         Milestone milestone = mock(Milestone.class);
@@ -198,7 +198,7 @@ class TaskServiceTest {
     }
 
     @Test
-    @DisplayName("유효한 ID가 주어졌을 때 Task 조회 시 객체를 반환해야 한다.")
+    @DisplayName("유효한 ID가 주어졌을 때 태스크 조회 시 객체를 반환해야 한다.")
     void givenValidTaskId_whenFindTask_thenReturnTask() {
         // given
         when(repository.findById(taskId)).thenReturn(Optional.of(task));
@@ -212,7 +212,7 @@ class TaskServiceTest {
     }
 
     @Test
-    @DisplayName("없는 TaskId로 조회 시 예외를 던진다")
+    @DisplayName("유효하지 않은 태스크 ID로 조회 시 예외를 던진다")
     void givenInvalidTaskId_whenFindTask_thenThrowException() {
         // given
         when(repository.findById(taskId)).thenReturn(Optional.empty());

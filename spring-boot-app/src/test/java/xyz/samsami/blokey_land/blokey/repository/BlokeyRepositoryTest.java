@@ -1,10 +1,10 @@
 package xyz.samsami.blokey_land.blokey.repository;
 
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import xyz.samsami.blokey_land.blokey.domain.Blokey;
@@ -25,8 +25,8 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@DataJpaTest
+@SpringBootTest
+@Transactional
 class BlokeyRepositoryTest extends ContainerBaseTest {
     @Autowired private BlokeyRepository repository;
     @Autowired private MemberRepository memberRepository;
@@ -34,7 +34,7 @@ class BlokeyRepositoryTest extends ContainerBaseTest {
     @Autowired private ProjectRepository projectRepository;
 
     @Test
-    @DisplayName("프로젝트에 속하지 않은 Blokey 정보 및 제안 대기 여부 조회")
+    @DisplayName("프로젝트에 속하지 않은 사용자 정보 및 제안 대기 여부 조회")
     void givenProjectWithMembersAndOffers_whenFindByNotInProject_thenReturnsBlokeyWithPendingOffer() {
         // given
         Project project = projectRepository.save(
