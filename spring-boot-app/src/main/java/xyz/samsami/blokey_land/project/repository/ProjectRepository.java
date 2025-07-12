@@ -11,13 +11,6 @@ import java.util.UUID;
 
 public interface ProjectRepository extends JpaRepository<Project, Long> {
     @Query("""
-        SELECT DISTINCT m.project
-        FROM Member m
-        WHERE m.blokey.id = :blokeyId
-    """)
-    List<Project> findProjectsByBlokeyId(@Param("blokeyId") UUID blokeyId);
-
-    @Query("""
     SELECT new xyz.samsami.blokey_land.project.dto.ProjectRespDto(
         p.id,
         p.title,

@@ -21,7 +21,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(properties = "spring.profiles.active=test")
+@SpringBootTest
 @Transactional
 class MemberRepositoryTest extends ContainerBaseTest {
     @Autowired private MemberRepository repository;
