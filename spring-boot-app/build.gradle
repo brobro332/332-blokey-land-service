@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.5.0'
 	id 'io.spring.dependency-management' version '1.1.7'
+	id 'jacoco'
 }
 
 group = 'xyz.samsami'
@@ -10,6 +11,28 @@ version = '0.0.1-SNAPSHOT'
 java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+jacoco {
+	toolVersion = "0.8.10"
+}
+
+jacocoTestReport {
+	reports {
+		xml.required = true
+		html.required = true
+	}
+
+	afterEvaluate {
+		classDirectories.setFrom(
+			files(classDirectories.files.collect {
+				fileTree(dir: it, include: [
+					'**/service/**',
+					'**/repository/**'
+				])
+			})
+		)
 	}
 }
 

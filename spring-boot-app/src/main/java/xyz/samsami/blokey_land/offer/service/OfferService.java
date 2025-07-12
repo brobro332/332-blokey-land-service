@@ -55,7 +55,7 @@ public class OfferService {
     }
 
     @Transactional
-    public void updateOffer(Long offerId, OfferReqUpdateDto dto) {
+    public void updateOfferByOfferId(Long offerId, OfferReqUpdateDto dto) {
         Offer offer = findOfferByOfferId(offerId);
         if (offer != null) {
             OfferStatusType status = dto.getStatus();

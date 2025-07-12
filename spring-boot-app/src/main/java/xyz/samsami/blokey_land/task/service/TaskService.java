@@ -9,7 +9,6 @@ import xyz.samsami.blokey_land.common.exception.CommonException;
 import xyz.samsami.blokey_land.common.type.ExceptionType;
 import xyz.samsami.blokey_land.milestone.domain.Milestone;
 import xyz.samsami.blokey_land.project.domain.Project;
-import xyz.samsami.blokey_land.project.dto.ProjectReqReadDto;
 import xyz.samsami.blokey_land.project.service.ProjectService;
 import xyz.samsami.blokey_land.task.domain.Task;
 import xyz.samsami.blokey_land.task.dto.TaskReqCreateDto;

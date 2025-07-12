@@ -68,7 +68,7 @@ public class ProjectService {
         project.updateDescription(dto.getDescription());
         project.updateImageUrl(dto.getImageUrl());
         project.updateStatus(dto.getStatus());
-        project.updateIsPrivate(dto.isPrivate());
+        project.updateIsPrivate(dto.getIsPrivate());
         project.updateEstimatedStartDate(dto.getEstimatedStartDate());
         project.updateEstimatedEndDate(dto.getEstimatedEndDate());
         project.updateActualStartDate(dto.getActualStartDate());
