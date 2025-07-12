@@ -56,10 +56,10 @@ const GanttWithSummary: React.FC<GanttWithSummaryProps> = ({
   const today = new Date();
   const todayTime = today.getTime();
 
-  const baseStartDate = useMemo(
-    () => new Date(todayTime - 15 * MS_PER_DAY),
-    [todayTime]
-  );
+  const baseStartDate = useMemo(() => {
+    const d = new Date(todayTime - 15 * MS_PER_DAY);
+    return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  }, [todayTime]);
   const daysToShow = 31;
   const dayWidth = 30;
   const rowHeight = 35;
@@ -89,6 +89,11 @@ const GanttWithSummary: React.FC<GanttWithSummaryProps> = ({
     (today.getTime() - baseStartDate.getTime()) / MS_PER_DAY
   );
 
+  function parseLocalDate(dateStr: string) {
+    const [year, month, day] = dateStr.split("-").map(Number);
+    return new Date(year, month - 1, day);
+  }
+
   const filteredTasks = useMemo(() => {
     if (!selectedProjectId) return [];
     const chartEndDate = new Date(
@@ -103,8 +108,8 @@ const GanttWithSummary: React.FC<GanttWithSummaryProps> = ({
         return { ...task, start, end };
       })
       .filter((task) => {
-        const taskStart = new Date(task.start!);
-        const taskEnd = new Date(task.end!);
+        const taskStart = parseLocalDate(task.start!);
+        const taskEnd = parseLocalDate(task.end!);
         return taskEnd >= baseStartDate && taskStart <= chartEndDate;
       });
   }, [tasks, baseStartDate, daysToShow, selectedProjectId]);
