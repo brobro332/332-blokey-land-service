@@ -21,6 +21,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     @Query("""
         SELECT t
         FROM Task t
+        JOIN FETCH t.project
         WHERE t.project.id = :projectId
     """)
     List<Task> findAllByProjectId(@Param("projectId") Long projectId);

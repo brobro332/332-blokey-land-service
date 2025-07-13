@@ -45,7 +45,7 @@ class MilestoneDslRepositoryTest extends ContainerBaseTest {
             Milestone.builder()
                 .title("제목")
                 .description("설명")
-                .dueDate(LocalDate.now())
+                .dueDate(LocalDate.of(2025, 7, 12))
                 .project(project)
                 .build()
         );
@@ -54,7 +54,7 @@ class MilestoneDslRepositoryTest extends ContainerBaseTest {
             Milestone.builder()
                 .title("제목")
                 .description("설명")
-                .dueDate(LocalDate.now().plusDays(1))
+                .dueDate(LocalDate.of(2025, 7, 12).plusDays(1))
                 .project(project)
                 .build()
         );

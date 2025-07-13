@@ -26,9 +26,11 @@ public abstract class ContainerBaseTest {
 
     @DynamicPropertySource
     static void overrideProps(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", POSTGRES_CONTAINER::getJdbcUrl);
+        String originalJdbcUrl = POSTGRES_CONTAINER.getJdbcUrl();
+        String p6spyJdbcUrl = originalJdbcUrl.replace("jdbc:postgresql:", "jdbc:p6spy:postgresql:");
+        registry.add("spring.datasource.url", () -> p6spyJdbcUrl);
         registry.add("spring.datasource.username", POSTGRES_CONTAINER::getUsername);
         registry.add("spring.datasource.password", POSTGRES_CONTAINER::getPassword);
-        registry.add("file.upload-dir", () -> "/test-uploads");
+        registry.add("spring.datasource.driver-class-name", () -> "com.p6spy.engine.spy.P6SpyDriver");
     }
 }
