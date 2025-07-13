@@ -88,6 +88,9 @@ class TaskRepositoryTest extends ContainerBaseTest {
                 .actualEndDate(LocalDate.now())
                 .build()
         );
+
+        entityManager.flush();
+        entityManager.clear();
     }
 
     @Test
@@ -114,5 +117,6 @@ class TaskRepositoryTest extends ContainerBaseTest {
         assertThat(tasks).hasSize(2);
         assertThat(tasks).extracting("title")
             .containsExactlyInAnyOrder("제목 1", "제목 2");
+        assertThat(tasks.getFirst().getProject().getTitle()).isEqualTo("제목");
     }
 }
