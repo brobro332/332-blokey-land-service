@@ -20,7 +20,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   project,
   onEditClick,
   onDelete,
-  isLeader = false,
+  isLeader,
 }) => {
   const navigate = useNavigate();
 
@@ -28,7 +28,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     <div
       onClick={() =>
         navigate("/private/tasks", {
-          state: { project: project },
+          state: { project: project, isLeader: isLeader },
         })
       }
       className="flex-shrink-0 w-72 bg-white rounded-xl border border-gray-200 shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer flex flex-col relative group"

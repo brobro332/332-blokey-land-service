@@ -36,6 +36,7 @@ const TaskBoard: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const project: Project = location.state?.project;
+  const isLeader: boolean = location.state?.isLeader;
 
   /**
    * @description 태스크 생성
@@ -142,7 +143,7 @@ const TaskBoard: React.FC = () => {
             </div>
 
             <div className="flex space-x-2">
-              {project?.leader && (
+              {isLeader && (
                 <>
                   <button
                     onClick={() => setIsMemberModalOpen(true)}

@@ -3,7 +3,7 @@ import { FaSearch, FaBars } from "react-icons/fa";
 import { Menu, ViewMode } from "../../../types/common";
 import { Blokey } from "../../../types/blokey";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../../App";
+import { useAuth } from "../../../contexts/AuthContext";
 
 interface HeaderProps {
   viewMode: ViewMode;

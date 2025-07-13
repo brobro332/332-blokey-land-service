@@ -130,7 +130,7 @@ const MilestoneCreateModal: React.FC<MilestoneCreateModalProps> = ({
         </label>
         <input
           type="text"
-          placeholder="제목"
+          placeholder="마일스톤 제목"
           value={newMilestone.title}
           onChange={(e) =>
             setNewMilestone((prev) => ({ ...prev, title: e.target.value }))
@@ -142,7 +142,7 @@ const MilestoneCreateModal: React.FC<MilestoneCreateModalProps> = ({
           설명
         </label>
         <textarea
-          placeholder="설명"
+          placeholder="마일스톤 설명"
           value={newMilestone.description}
           onChange={(e) =>
             setNewMilestone((prev) => ({

@@ -4,8 +4,8 @@ export interface Project {
   description: string;
   imageUrl?: string;
   status?: "ACTIVE" | "COMPLETED" | "DELETED";
-  isPrivate: string;
-  leader?: boolean;
+  isPrivate: boolean;
+  isLeader?: boolean;
   estimatedStartDate: string;
   estimatedEndDate: string;
   actualStartDate: string;

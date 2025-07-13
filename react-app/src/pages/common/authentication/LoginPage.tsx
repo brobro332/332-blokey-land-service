@@ -10,6 +10,7 @@ import intro2 from "../../../assets/image/intro-2.png";
 import intro3 from "../../../assets/image/intro-3.png";
 import { apiAxios } from "../../../utils/tsx/Api";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../contexts/AuthContext";
 
 const images = [intro1, intro2, intro3];
 
@@ -17,6 +18,8 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+
+  const { setIsAuthenticated, setBlokey } = useAuth();
 
   const navigate = useNavigate();
 
@@ -36,6 +39,14 @@ const LoginPage = () => {
       } else {
         localStorage.removeItem("savedEmail");
       }
+
+      const res = await apiAxios("/blokey-land/api/blokeys/me", {
+        method: "GET",
+        withCredentials: true,
+      });
+
+      setBlokey(res);
+      setIsAuthenticated(true);
 
       navigate("/private/dashboard");
     } catch (err) {

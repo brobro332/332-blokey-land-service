@@ -1,5 +1,6 @@
 package xyz.samsami.blokey_land.project.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -7,7 +8,6 @@ import lombok.NoArgsConstructor;
 import xyz.samsami.blokey_land.project.type.ProjectStatusType;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
@@ -20,7 +20,7 @@ public class ProjectRespDto {
     private String imageUrl;
     private ProjectStatusType status;
     private boolean isPrivate;
-    private boolean isLeader;
+    @JsonProperty("isLeader") private boolean isLeader;
     private LocalDate estimatedStartDate;
     private LocalDate estimatedEndDate;
     private LocalDate actualStartDate;

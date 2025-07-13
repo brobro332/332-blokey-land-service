@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { apiAxios } from "../../../utils/tsx/Api";
 import { Offer } from "../../../types/offer";
-import { useAuth } from "../../../App";
+import { useAuth } from "../../../contexts/AuthContext";
 
 const MyPageOffersSection: React.FC = () => {
   const { blokey } = useAuth();
