@@ -229,7 +229,7 @@ const MilestoneCalendar: React.FC<MilestoneCalendarProps> = ({
               });
             }
           }}
-          isLeader={selectedProject?.leader}
+          isLeader={selectedProject?.isLeader}
           displayDate={selectedMilestones[0]?.dueDate?.slice(0, 10) ?? ""}
         />
       )}

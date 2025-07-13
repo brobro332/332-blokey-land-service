@@ -4,7 +4,7 @@ import Sidebar from "./Sidebar";
 import Header from "./Header";
 import { Menu, ViewMode } from "../../../types/common";
 import { getSelectedMenuFromPath, menuToPath } from "../../../utils/ts/menu";
-import { useAuth } from "../../../App";
+import { useAuth } from "../../../contexts/AuthContext";
 
 const Main = () => {
   const [viewMode, setViewMode] = useState<ViewMode>("private");
