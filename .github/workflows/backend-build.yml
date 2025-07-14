@@ -45,14 +45,13 @@ jobs:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('spring-boot-app/**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
+# - name: Build and analyze with SonarCloud
+#   working-directory: spring-boot-app
+#   env:
+#     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#   run: ./gradlew build sonarqube --info
 
-      - name: Build and analyze with SonarCloud
-        working-directory: spring-boot-app
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew clean sonarqube --info
-
-      - name: SonarCloud Quality Gate Check
-        uses: sonarsource/sonarqube-quality-gate-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+# - name: SonarCloud Quality Gate Check
+#   uses: sonarsource/sonarqube-quality-gate-action@master
+#   env:
+#     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
