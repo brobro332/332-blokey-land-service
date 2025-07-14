@@ -13,17 +13,17 @@ import xyz.samsami.blokey_land.common.type.ExceptionType;
 import xyz.samsami.blokey_land.member.service.MemberService;
 import xyz.samsami.blokey_land.member.type.RoleType;
 import xyz.samsami.blokey_land.project.domain.Project;
-import xyz.samsami.blokey_land.project.dto.ProjectReqCreateDto;
-import xyz.samsami.blokey_land.project.dto.ProjectReqReadDto;
-import xyz.samsami.blokey_land.project.dto.ProjectReqUpdateDto;
-import xyz.samsami.blokey_land.project.dto.ProjectRespDto;
+import xyz.samsami.blokey_land.project.dto.*;
 import xyz.samsami.blokey_land.project.mapper.ProjectMapper;
 import xyz.samsami.blokey_land.project.repository.ProjectDslRepository;
 import xyz.samsami.blokey_land.project.repository.ProjectRepository;
 import xyz.samsami.blokey_land.project.type.ProjectStatusType;
+import xyz.samsami.blokey_land.task.dto.TaskRespDto;
+import xyz.samsami.blokey_land.task.mapper.TaskMapper;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -44,19 +44,34 @@ public class ProjectService {
         }
     }
 
-    public List<ProjectRespDto> readAllProjects(String blokeyId) {
+    public List<ProjectOnlyRespDto> readAllProjects(String blokeyId) {
         return repository.findProjectsWithRoleByBlokeyId(UUID.fromString(blokeyId));
     }
 
-    public Slice<ProjectRespDto> readProjectsSlice(ProjectReqReadDto dto, String blokeyId, Pageable pageable) {
+    public List<ProjectWithTaskResponseDto> readAllProjectsWithTasks(String blokeyId) {
+        List<Project> projects = repository.findProjectsWithTasksByBlokeyId(UUID.fromString(blokeyId));
+
+        return projects.stream()
+            .map(project -> {
+                List<TaskRespDto> taskRespDtoList = project.getTasks()
+                    .stream()
+                    .map(TaskMapper::toRespDto)
+                    .toList();
+
+                return ProjectMapper.toRespDtoWithTaskDtoList(project, taskRespDtoList);
+            })
+            .collect(Collectors.toList());
+    }
+
+    public Slice<ProjectOnlyRespDto> readProjectsSlice(ProjectReqReadDto dto, String blokeyId, Pageable pageable) {
         return dslRepository.readProjectsSlice(dto, blokeyId, pageable);
     }
 
-    public Page<ProjectRespDto> readProjectsPage(ProjectReqReadDto dto, String blokeyId, Pageable pageable) {
+    public Page<ProjectOnlyRespDto> readProjectsPage(ProjectReqReadDto dto, String blokeyId, Pageable pageable) {
         return dslRepository.readProjectsPage(dto, blokeyId, pageable);
     }
 
-    public ProjectRespDto readProjectByProjectId(Long projectId) {
+    public ProjectOnlyRespDto readProjectByProjectId(Long projectId) {
         return ProjectMapper.toRespDto(findProjectByProjectId(projectId));
     }
 

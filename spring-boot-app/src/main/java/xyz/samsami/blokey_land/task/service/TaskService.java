@@ -31,9 +31,11 @@ public class TaskService {
     @Transactional
     public TaskRespDto createTask(TaskReqCreateDto dto) {
         Project project = projectService.findProjectByProjectId(dto.getProjectId());
-        if (project != null) return TaskMapper.toRespDto(repository.save(TaskMapper.toEntity(dto, project)));
+        if (project == null) return null;
 
-        return null;
+        Task task = repository.save(TaskMapper.toEntity(dto, project));
+        project.addTask(task);
+        return TaskMapper.toRespDto(task);
     }
 
     public List<TaskRespDto> readAllTasksByProjectId(Long projectId) {

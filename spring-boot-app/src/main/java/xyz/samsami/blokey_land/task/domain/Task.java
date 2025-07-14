@@ -50,6 +50,7 @@ public class Task extends CommonDateTime {
     @JoinColumn(name = "milestone_id")
     private Milestone milestone;
 
+    public void updateProject(Project project) { if (project != null) this.project = project; }
     public void updateTitle(String title) { if (title != null) this.title = title; }
     public void updateDescription(String description) { if (description != null) this.description = description; }
     public void updateAssignee(UUID assignee) { if (assignee != null) this.assignee = assignee; }

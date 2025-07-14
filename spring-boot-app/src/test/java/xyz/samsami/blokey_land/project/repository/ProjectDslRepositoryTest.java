@@ -15,7 +15,7 @@ import xyz.samsami.blokey_land.member.repository.MemberRepository;
 import xyz.samsami.blokey_land.member.type.RoleType;
 import xyz.samsami.blokey_land.project.domain.Project;
 import xyz.samsami.blokey_land.project.dto.ProjectReqReadDto;
-import xyz.samsami.blokey_land.project.dto.ProjectRespDto;
+import xyz.samsami.blokey_land.project.dto.ProjectOnlyRespDto;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -65,10 +65,10 @@ class ProjectDslRepositoryTest extends ContainerBaseTest {
         Pageable pageable = PageRequest.of(0, 10);
 
         // when
-        Slice<ProjectRespDto> result = dslRepository.readProjectsSlice(dto, blokey.getId().toString(), pageable);
+        Slice<ProjectOnlyRespDto> result = dslRepository.readProjectsSlice(dto, blokey.getId().toString(), pageable);
 
         // then
         assertThat(result.getContent()).hasSize(2);
-        assertThat(result.getContent()).anyMatch(ProjectRespDto::isLeader);
+        assertThat(result.getContent()).anyMatch(ProjectOnlyRespDto::getIsLeader);
     }
 }

@@ -9,10 +9,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import xyz.samsami.blokey_land.common.dto.CommonRespDto;
 import xyz.samsami.blokey_land.common.type.ResultType;
-import xyz.samsami.blokey_land.project.dto.ProjectReqCreateDto;
-import xyz.samsami.blokey_land.project.dto.ProjectReqReadDto;
-import xyz.samsami.blokey_land.project.dto.ProjectReqUpdateDto;
-import xyz.samsami.blokey_land.project.dto.ProjectRespDto;
+import xyz.samsami.blokey_land.project.dto.*;
 import xyz.samsami.blokey_land.project.service.ProjectService;
 
 import java.util.List;
@@ -32,40 +29,48 @@ public class ProjectController implements ProjectApi {
     }
 
     @Override
-    public CommonRespDto<List<ProjectRespDto>> readAllProjects(
+    public CommonRespDto<List<ProjectOnlyRespDto>> readAllProjects(
         @RequestHeader("X-Account-Id") String blokeyId
     ) {
-        List<ProjectRespDto> list = service.readAllProjects(blokeyId);
+        List<ProjectOnlyRespDto> list = service.readAllProjects(blokeyId);
         return CommonRespDto.of(ResultType.SUCCESS, "프로젝트 목록 조회 완료", list);
     }
 
     @Override
-    public CommonRespDto<Slice<ProjectRespDto>> readProjectsSlice(
+    public CommonRespDto<List<ProjectWithTaskResponseDto>> readAllProjectsWithTasks(
+            @RequestHeader("X-Account-Id") String blokeyId
+    ) {
+        List<ProjectWithTaskResponseDto> list = service.readAllProjectsWithTasks(blokeyId);
+        return CommonRespDto.of(ResultType.SUCCESS, "프로젝트 및 태스크 목록 조회 완료", list);
+    }
+
+    @Override
+    public CommonRespDto<Slice<ProjectOnlyRespDto>> readProjectsSlice(
         @ModelAttribute ProjectReqReadDto dto,
         @RequestHeader("X-Account-Id") String blokeyId,
         @PageableDefault(
             sort = "id", direction = Sort.Direction.DESC
         ) Pageable pageable
     ) {
-        Slice<ProjectRespDto> slice = service.readProjectsSlice(dto, blokeyId, pageable);
+        Slice<ProjectOnlyRespDto> slice = service.readProjectsSlice(dto, blokeyId, pageable);
         return CommonRespDto.of(ResultType.SUCCESS, "프로젝트 목록 조회 완료", slice);
     }
 
     @Override
-    public CommonRespDto<Page<ProjectRespDto>> readProjectsPage(
+    public CommonRespDto<Page<ProjectOnlyRespDto>> readProjectsPage(
             @ModelAttribute ProjectReqReadDto dto,
             @RequestHeader("X-Account-Id") String blokeyId,
             @PageableDefault(
                 sort = "id", direction = Sort.Direction.DESC
             ) Pageable pageable
     ) {
-        Page<ProjectRespDto> page = service.readProjectsPage(dto, blokeyId, pageable);
+        Page<ProjectOnlyRespDto> page = service.readProjectsPage(dto, blokeyId, pageable);
         return CommonRespDto.of(ResultType.SUCCESS, "프로젝트 목록 조회 완료", page);
     }
 
     @Override
-    public CommonRespDto<ProjectRespDto> readProjectByProjectId(@PathVariable Long projectId) {
-        ProjectRespDto dto = service.readProjectByProjectId(projectId);
+    public CommonRespDto<ProjectOnlyRespDto> readProjectByProjectId(@PathVariable Long projectId) {
+        ProjectOnlyRespDto dto = service.readProjectByProjectId(projectId);
         return CommonRespDto.of(ResultType.SUCCESS, "프로젝트 정보 조회 완료", dto);
     }
 

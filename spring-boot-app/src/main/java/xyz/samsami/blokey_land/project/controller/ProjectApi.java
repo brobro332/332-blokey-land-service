@@ -10,10 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import xyz.samsami.blokey_land.common.dto.CommonRespDto;
-import xyz.samsami.blokey_land.project.dto.ProjectReqCreateDto;
-import xyz.samsami.blokey_land.project.dto.ProjectReqReadDto;
-import xyz.samsami.blokey_land.project.dto.ProjectReqUpdateDto;
-import xyz.samsami.blokey_land.project.dto.ProjectRespDto;
+import xyz.samsami.blokey_land.project.dto.*;
 
 import java.util.List;
 
@@ -29,13 +26,19 @@ public interface ProjectApi {
 
     @Operation(summary = "프로젝트 전체 목록 조회", description = "프로젝트 전체 목록을 조회합니다.")
     @GetMapping("/all")
-    CommonRespDto<List<ProjectRespDto>> readAllProjects(
+    CommonRespDto<List<ProjectOnlyRespDto>> readAllProjects(
+        @RequestHeader("X-Account-Id") String blokeyId
+    );
+
+    @Operation(summary = "프로젝트 및 태스크 전체 목록 조회", description = "프로젝트 및 태스크 전체 목록을 조회합니다.")
+    @GetMapping("/all-with-tasks")
+    CommonRespDto<List<ProjectWithTaskResponseDto>> readAllProjectsWithTasks(
         @RequestHeader("X-Account-Id") String blokeyId
     );
 
     @Operation(summary = "프로젝트 목록 슬라이스 조회", description = "프로젝트 목록 슬라이스를 조회합니다.")
     @GetMapping("/slice")
-    CommonRespDto<Slice<ProjectRespDto>> readProjectsSlice(
+    CommonRespDto<Slice<ProjectOnlyRespDto>> readProjectsSlice(
         @ModelAttribute ProjectReqReadDto dto,
         @RequestHeader("X-Account-Id") String blokeyId,
         @Parameter(hidden = true)
@@ -45,7 +48,7 @@ public interface ProjectApi {
 
     @Operation(summary = "프로젝트 목록 페이지 조회", description = "프로젝트 목록 페이지를 조회합니다.")
     @GetMapping("/page")
-    CommonRespDto<Page<ProjectRespDto>> readProjectsPage(
+    CommonRespDto<Page<ProjectOnlyRespDto>> readProjectsPage(
         @ModelAttribute ProjectReqReadDto dto,
         @RequestHeader("X-Account-Id") String blokeyId,
         @Parameter(hidden = true)
@@ -55,7 +58,7 @@ public interface ProjectApi {
 
     @Operation(summary = "프로젝트 단건 조회", description = "프로젝트 상세 정보를 조회합니다.")
     @GetMapping("/{projectId}")
-    CommonRespDto<ProjectRespDto> readProjectByProjectId(@PathVariable Long projectId);
+    CommonRespDto<ProjectOnlyRespDto> readProjectByProjectId(@PathVariable Long projectId);
 
     @Operation(summary = "프로젝트 수정", description = "프로젝트 정보를 수정합니다.")
     @PatchMapping("/{projectId}")
