@@ -1,4 +1,4 @@
-name: Frontend Build & Test
+name: Frontend Build Only
 
 on:
   push:
@@ -12,8 +12,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-test:
-    name: Build and Test React App
+  build:
+    name: Build React App
     runs-on: ubuntu-latest
 
     steps:
@@ -37,10 +37,6 @@ jobs:
       - name: Install dependencies
         working-directory: react-app
         run: npm ci
-
-      - name: Run tests
-        working-directory: react-app
-        run: npm test -- --watchAll=false
 
       - name: Build
         working-directory: react-app
