@@ -9,7 +9,6 @@ import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import xyz.samsami.blokey_land.common.exception.CommonException;
-import xyz.samsami.blokey_land.milestone.domain.Milestone;
 import xyz.samsami.blokey_land.project.domain.Project;
 import xyz.samsami.blokey_land.project.service.ProjectService;
 import xyz.samsami.blokey_land.project.type.ProjectStatusType;
@@ -182,19 +181,6 @@ class TaskServiceTest {
         // then
         verify(repository).findById(taskId);
         verify(repository).delete(task);
-    }
-
-    @Test
-    @DisplayName("마일스톤이 주어졌을 때 관련 태스크의 마일스톤이 제거되어야 한다.")
-    void givenMilestone_whenClearMilestoneFromTasks_thenRepositoryMethodCalled() {
-        // given
-        Milestone milestone = mock(Milestone.class);
-
-        // when
-        service.clearMilestoneFromTasks(milestone);
-
-        // then
-        verify(repository).clearMilestoneFromTasks(milestone);
     }
 
     @Test

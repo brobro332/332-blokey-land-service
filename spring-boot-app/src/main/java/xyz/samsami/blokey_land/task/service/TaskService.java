@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import xyz.samsami.blokey_land.common.exception.CommonException;
 import xyz.samsami.blokey_land.common.type.ExceptionType;
-import xyz.samsami.blokey_land.milestone.domain.Milestone;
 import xyz.samsami.blokey_land.project.domain.Project;
 import xyz.samsami.blokey_land.project.service.ProjectService;
 import xyz.samsami.blokey_land.task.domain.Task;
@@ -71,11 +70,6 @@ public class TaskService {
     @Transactional
     public void deleteTaskByTaskId(Long taskId) {
         repository.delete(findTaskByTaskId(taskId));
-    }
-
-    @Transactional
-    public void clearMilestoneFromTasks(Milestone milestone) {
-        repository.clearMilestoneFromTasks(milestone);
     }
 
     public Task findTaskByTaskId(Long taskId) {

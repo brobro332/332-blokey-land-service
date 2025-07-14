@@ -1,7 +1,10 @@
 package xyz.samsami.blokey_land.milestone.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import xyz.samsami.blokey_land.common.dto.CommonRespDto;
 import xyz.samsami.blokey_land.common.type.ResultType;
 import xyz.samsami.blokey_land.milestone.dto.MilestoneReqCreateDto;
@@ -49,14 +52,5 @@ public class MilestoneController implements MilestoneApi {
     public CommonRespDto<Void> deleteMilestoneByMilestoneId(@PathVariable Long milestoneId) {
         service.deleteMilestoneByMilestoneId(milestoneId);
         return CommonRespDto.of(ResultType.SUCCESS, "마일스톤 삭제 완료", null);
-    }
-
-    @Override
-    public CommonRespDto<Void> setMilestoneToTask(
-        @PathVariable Long taskId,
-        @RequestParam(required = false) Long milestoneId
-    ) {
-        service.setMilestoneToTask(taskId, milestoneId);
-        return CommonRespDto.of(ResultType.SUCCESS, "마일스톤 설정 완료", null);
     }
 }

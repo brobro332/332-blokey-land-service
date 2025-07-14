@@ -17,20 +17,18 @@ import xyz.samsami.blokey_land.milestone.repository.MilestoneRepository;
 import xyz.samsami.blokey_land.project.domain.Project;
 import xyz.samsami.blokey_land.project.service.ProjectService;
 import xyz.samsami.blokey_land.project.type.ProjectStatusType;
-import xyz.samsami.blokey_land.task.domain.Task;
-import xyz.samsami.blokey_land.task.service.TaskService;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class MilestoneServiceTest {
     @InjectMocks private MilestoneService service;
     @Mock private ProjectService projectService;
-    @Mock private TaskService taskService;
     @Mock private MilestoneRepository repository;
 
     private Milestone milestone;
@@ -114,26 +112,6 @@ class MilestoneServiceTest {
 
         // then
         verify(repository).delete(milestone);
-        verify(taskService).clearMilestoneFromTasks(milestone);
-    }
-
-    @DisplayName("유효한 파라미터가 주어지면 태스크 데이터에 마일스톤 필드 값이 설정되어야 한다.")
-    @Test
-    void givenValidParameter_whenSetMilestoneToTask_thenTaskUpdated() {
-        // given
-        Task task = mock(Task.class);
-
-        Long taskId = 1L;
-        Long milestoneId = 2L;
-
-        when(repository.findById(milestoneId)).thenReturn(Optional.of(milestone));
-        when(taskService.findTaskByTaskId(taskId)).thenReturn(task);
-
-        // when
-        service.setMilestoneToTask(taskId, milestoneId);
-
-        // then
-        verify(task).updateMilestone(milestone);
     }
 
     @DisplayName("존재하는 ID로 마일스톤 조회 시 해당 객체가 반환되어야 한다.")

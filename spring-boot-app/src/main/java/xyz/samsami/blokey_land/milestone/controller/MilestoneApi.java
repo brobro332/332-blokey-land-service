@@ -44,11 +44,4 @@ public interface MilestoneApi {
     @Operation(summary = "마일스톤 삭제", description = "마일스톤을 삭제합니다.")
     @DeleteMapping("/milestones/{milestoneId}")
     CommonRespDto<Void> deleteMilestoneByMilestoneId(@PathVariable Long milestoneId);
-
-    @Operation(summary = "작업에 마일스톤 설정", description = "작업에 마일스톤을 설정하거나 해제합니다.")
-    @PatchMapping("/tasks/{taskId}/milestone")
-    CommonRespDto<Void> setMilestoneToTask(
-        @PathVariable Long taskId,
-        @RequestParam(required = false) Long milestoneId
-    );
 }

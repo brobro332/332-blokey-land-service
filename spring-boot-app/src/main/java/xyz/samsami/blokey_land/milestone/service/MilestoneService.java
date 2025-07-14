@@ -15,8 +15,6 @@ import xyz.samsami.blokey_land.milestone.repository.MilestoneDslRepository;
 import xyz.samsami.blokey_land.milestone.repository.MilestoneRepository;
 import xyz.samsami.blokey_land.project.domain.Project;
 import xyz.samsami.blokey_land.project.service.ProjectService;
-import xyz.samsami.blokey_land.task.domain.Task;
-import xyz.samsami.blokey_land.task.service.TaskService;
 
 import java.util.List;
 
@@ -25,7 +23,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MilestoneService {
     private final ProjectService projectService;
-    private final TaskService taskService;
     private final MilestoneRepository repository;
     private final MilestoneDslRepository dslRepository;
 
@@ -59,15 +56,7 @@ public class MilestoneService {
         Milestone milestone = findMilestoneByMilestoneId(milestoneId);
         if (milestone != null) {
             repository.delete(milestone);
-            taskService.clearMilestoneFromTasks(milestone);
         }
-    }
-
-    @Transactional
-    public void setMilestoneToTask(Long taskId, Long milestoneId) {
-        Milestone milestone = repository.findById(milestoneId).orElse(null);
-        Task task = taskService.findTaskByTaskId(taskId);
-        if (task != null) task.updateMilestone(milestone);
     }
 
     public Milestone findMilestoneByMilestoneId(Long milestoneId) {

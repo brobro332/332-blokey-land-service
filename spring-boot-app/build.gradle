@@ -42,15 +42,15 @@ jacocoTestReport {
 	}
 }
 
-sonarqube {
-    properties {
-        property "sonar.projectKey", "brobro332_332-blokey-land-service"
-        property "sonar.organization", "brobro332"
-        property "sonar.host.url", "https://sonarcloud.io"
+sonar {
+	properties {
+		property "sonar.projectKey", "brobro332_332-blokey-land-service"
+		property "sonar.organization", "brobro332"
+		property "sonar.host.url", "https://sonarcloud.io"
+		property "sonar.coverage.jacoco.xmlReportPaths", "${layout.buildDirectory.get().asFile}/reports/jacoco/test/jacocoTestReport.xml"
 
-        property "sonar.inclusions", "src/main/java/**/service/**,src/main/java/**/repository/**"
-
-        property "sonar.coverage.exclusions", """
+		property "sonar.inclusions", "src/main/java/**/service/**,src/main/java/**/repository/**"
+		property "sonar.coverage.exclusions", """
             **/*Application.class,
             **/*Application.java,
             **/config/**,
@@ -59,7 +59,7 @@ sonarqube {
             **/exception/**,
             **/common/**
         """
-    }
+	}
 }
 
 configurations {
