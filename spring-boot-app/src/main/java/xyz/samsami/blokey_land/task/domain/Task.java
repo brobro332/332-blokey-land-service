@@ -2,6 +2,7 @@ package xyz.samsami.blokey_land.task.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Check;
 import xyz.samsami.blokey_land.common.domain.CommonDateTime;
 import xyz.samsami.blokey_land.milestone.domain.Milestone;
 import xyz.samsami.blokey_land.project.domain.Project;
@@ -20,6 +21,7 @@ public class Task extends CommonDateTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, length = 100)
     private String title;
 
     @Column(columnDefinition = "TEXT")
@@ -29,6 +31,7 @@ public class Task extends CommonDateTime {
     private UUID assignee;
 
     @Column
+    @Check(constraints = "progress >= 0 AND progress <= 100")
     private Integer progress;
 
     @Column
