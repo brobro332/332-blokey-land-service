@@ -80,6 +80,7 @@ dependencies {
 	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
 	implementation 'org.apache.commons:commons-compress:1.26.2'
 	implementation 'p6spy:p6spy:3.9.1'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
 	annotationProcessor 'org.projectlombok:lombok'
 	annotationProcessor 'com.querydsl:querydsl-apt:5.0.0:jakarta'
