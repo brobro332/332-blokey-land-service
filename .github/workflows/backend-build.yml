@@ -46,15 +46,13 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('spring-boot-app/**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
 
-      - name: Build and analyze with SonarQube
+      - name: Build and analyze with SonarCloud
         working-directory: spring-boot-app
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: ./gradlew build sonarqube --info
 
-      - name: SonarQube Quality Gate Check
+      - name: SonarCloud Quality Gate Check
         uses: sonarsource/sonarqube-quality-gate-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}

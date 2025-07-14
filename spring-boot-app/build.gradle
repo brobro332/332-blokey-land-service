@@ -38,10 +38,11 @@ jacocoTestReport {
 }
 
 sonar {
-	properties {
-		property "sonar.projectKey", "332-blokey-land-service"
-		property "sonar.projectName", "332-blokey-land-service"
-	}
+    properties {
+        property "sonar.projectKey", "brobro332_332-blokey-land-service"
+        property "sonar.organization", "brobro332"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
 }
 
 configurations {
