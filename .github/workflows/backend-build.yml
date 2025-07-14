@@ -51,7 +51,3 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: ./gradlew build sonarqube --info
-#      - name: SonarCloud Quality Gate Check
-#        uses: sonarsource/sonarqube-quality-gate-action@master
-#        env:
-#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
