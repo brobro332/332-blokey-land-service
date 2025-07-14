@@ -6,12 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import xyz.samsami.blokey_land.common.dto.FieldErrorDto;
 import xyz.samsami.blokey_land.common.type.ExceptionType;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
-import java.util.List;
 
 @Slf4j
 @RestControllerAdvice
@@ -20,17 +18,11 @@ public class CommonExceptionHandler {
     public ResponseEntity<CommonExceptionEntity> handleValidationException(MethodArgumentNotValidException e) {
         log.error("🔺 유효성 체크 예외 발생", e);
 
-        List<FieldErrorDto> errors = e.getBindingResult().getFieldErrors()
-            .stream()
-            .map(fe -> new FieldErrorDto(fe.getField(), fe.getDefaultMessage()))
-            .toList();
-
         ExceptionType type = ExceptionType.BAD_REQUEST;
 
         CommonExceptionEntity entity = CommonExceptionEntity.builder()
             .code(type.getCode())
             .message(type.getMessage())
-            .errors(errors)
             .timestamp(OffsetDateTime.now(ZoneId.of("Asia/Seoul")))
             .build();
 
