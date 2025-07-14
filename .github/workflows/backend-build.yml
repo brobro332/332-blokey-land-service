@@ -53,7 +53,6 @@ jobs:
         run: ./gradlew build sonarqube --info
 
       - name: SonarCloud Quality Gate Check
-        working-directory: spring-boot-app
         uses: sonarsource/sonarqube-quality-gate-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
