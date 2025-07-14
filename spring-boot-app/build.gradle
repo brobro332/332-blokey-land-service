@@ -29,13 +29,13 @@ jacocoTestReport {
 		classDirectories.setFrom(
 			files(classDirectories.files.collect {
 				fileTree(dir: it,
-                        include: [
-                            '**/service/**',
-                            '**/repository/**'
-                        ],
-                        exclude: [
-                                '**/common/**'
-                        ]
+					include: [
+						'**/service/**',
+						'**/repository/**'
+					],
+					exclude: [
+							'**/common/**'
+					]
                 )
 			})
 		)
