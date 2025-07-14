@@ -28,6 +28,10 @@ jobs:
           java-version: 17
           distribution: "zulu"
 
+      - name: Make gradlew executable
+        working-directory: spring-boot-app
+        run: chmod +x gradlew
+
       - name: Cache SonarQube packages
         uses: actions/cache@v4
         with:
