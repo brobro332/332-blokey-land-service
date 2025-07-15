@@ -18,15 +18,17 @@
 
 ### 🛠 **프로젝트 환경**
 
-- 언어: `Java 21`, `Typescript`
-- 프레임워크: `Spring boot 3.5.0`
-- 데이터베이스: `PostgreSQL`
+- `Language`: `Java 21`, `Typescript`
+- `Framework`: `Spring boot 3.5.0`
+- `Database`: `PostgreSQL`
 - `IDE`: `IntelliJ IDEA`
 - `CSR`: `React`
-- 빌드 도구: `Gradle`
+- `Build-Tool`: `Gradle`
 - `ORM`: `JPA`
-- 동적쿼리 라이브러리: `QueryDSL`
+- `Query Library`: `QueryDSL`
 - `DevOps`: `Docker`, `Docker-compose`
+- `Test`: `JUnit`, `JaCoCo`, `SonarQube`, `Cypress`
+- `CI`: `GitHub Actions`
 
 ### 📃 **개발 환경 구축 매뉴얼**
 
@@ -127,8 +129,8 @@ POSTGRES_INTERNAL_PORT               # PostgreSQL 내부 포트
 #### ✅ `Blokey-Land` 서비스 프론트엔드 서버 (`332-blokey-land-service`)
 
 ```bash
-CYPRESS_BASE_URL=http://localhost:3000
-REACT_APP_API_BASE_URL=http://localhost:8080
+CYPRESS_BASE_URL=http://localhost:3000        # Cypress E2E 테스트 URL
+REACT_APP_API_BASE_URL=http://localhost:8080  # API 기본 URL
 ```
 
 ### 🚀 **`Swagger`**
@@ -139,8 +141,8 @@ REACT_APP_API_BASE_URL=http://localhost:8080
 
 ### 🎈 **`E2E` 테스트**
 
-- 테스트에 앞서 환경변수 파일 섹션을 참고하여 `.env.development` 파일을 `/react-app` 디렉터리의 루트 경로에 저장합니다.
-- 본 `E2E` 테스트는 `DB`에 데이터가 없는 초기 상태임을 기준으로 두 개의 터미널을 사용하여 진행합니다.
+- 환경변수 파일 섹션을 참고하여 `.env.development` 파일을 `332-blokey-land-service/react-app` 디렉터리에 저장합니다.
+- 본 `E2E` 테스트는 `DB`에 데이터가 없는 초기 상태를 기준으로 두 개의 터미널을 사용하여 진행합니다.
 
 ```bash
 # 1. Blokey-Land 서비스 내 /react-app 디렉터리로 이동
