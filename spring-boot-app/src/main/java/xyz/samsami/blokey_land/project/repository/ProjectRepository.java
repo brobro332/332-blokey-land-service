@@ -4,21 +4,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import xyz.samsami.blokey_land.project.domain.Project;
-import xyz.samsami.blokey_land.project.dto.ProjectRespDto;
+import xyz.samsami.blokey_land.project.dto.ProjectOnlyRespDto;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface ProjectRepository extends JpaRepository<Project, Long> {
     @Query("""
-        SELECT DISTINCT m.project
-        FROM Member m
-        WHERE m.blokey.id = :blokeyId
-    """)
-    List<Project> findProjectsByBlokeyId(@Param("blokeyId") UUID blokeyId);
-
-    @Query("""
-    SELECT new xyz.samsami.blokey_land.project.dto.ProjectRespDto(
+    SELECT new xyz.samsami.blokey_land.project.dto.ProjectOnlyRespDto(
         p.id,
         p.title,
         p.description,
@@ -35,5 +28,14 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     JOIN m.project p
     WHERE m.blokey.id = :blokeyId
     """)
-    List<ProjectRespDto> findProjectsWithRoleByBlokeyId(@Param("blokeyId") UUID blokeyId);
+    List<ProjectOnlyRespDto> findProjectsWithRoleByBlokeyId(@Param("blokeyId") UUID blokeyId);
+
+    @Query("""
+        SELECT DISTINCT p
+        FROM Member m
+        JOIN m.project p
+        LEFT JOIN FETCH p.tasks t
+        WHERE m.blokey.id = :blokeyId
+    """)
+    List<Project> findProjectsWithTasksByBlokeyId(@Param("blokeyId") UUID blokeyId);
 }

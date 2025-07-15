@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { apiAxios } from "../utils/tsx/Api";
+import { Task } from "../types/task";
 
 interface Project {
   id: number;
   title: string;
+  tasks: Task[];
 }
 
 const useProjects = () => {
@@ -12,7 +14,7 @@ const useProjects = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const res = await apiAxios("/blokey-land/api/projects/all", {
+        const res = await apiAxios("/blokey-land/api/projects/all-with-tasks", {
           method: "GET",
           withCredentials: true,
         });
@@ -22,6 +24,7 @@ const useProjects = () => {
           .map((p: any) => ({
             id: p.id,
             title: p.title,
+            tasks: p.tasks,
           }));
 
         setProjects(simplifiedProjects);

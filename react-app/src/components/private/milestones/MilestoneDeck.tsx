@@ -24,7 +24,6 @@ interface MilestoneDeckProps {
   onBack: () => void;
   onCreate: () => void;
   displayDate: string;
-  isLeader: boolean | undefined;
 }
 
 const MilestoneDeck: React.FC<MilestoneDeckProps> = ({
@@ -33,7 +32,6 @@ const MilestoneDeck: React.FC<MilestoneDeckProps> = ({
   onBack,
   onCreate,
   displayDate,
-  isLeader,
 }) => {
   const pageSize = 5;
   const [visibleCount, setVisibleCount] = useState(pageSize);
@@ -114,7 +112,6 @@ const MilestoneDeck: React.FC<MilestoneDeckProps> = ({
    * @description 마일스톤 목록 초기화
    */
   useEffect(() => {
-    console.log("MilestoneDeck milestones changed", milestones);
     setCurrentMilestones(milestones);
   }, [milestones]);
 
@@ -227,7 +224,6 @@ const MilestoneDeck: React.FC<MilestoneDeckProps> = ({
           onClose={() => setSelectedMilestone(null)}
           onUpdate={updateMilestone}
           onDelete={deleteMilestone}
-          isLeader={isLeader}
         />
       )}
     </div>

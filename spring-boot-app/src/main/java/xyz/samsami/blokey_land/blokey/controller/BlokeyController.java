@@ -1,6 +1,7 @@
 package xyz.samsami.blokey_land.blokey.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +23,7 @@ public class BlokeyController implements BlokeyApi {
     private final BlokeyService service;
 
     @Override
-    public CommonRespDto<Void> createBlokey(@RequestBody BlokeyReqCreateDto dto) {
+    public CommonRespDto<Void> createBlokey(@Valid @RequestBody BlokeyReqCreateDto dto) {
         service.createBlokey(dto);
         return CommonRespDto.of(ResultType.SUCCESS, "사용자 등록 완료", null);
     }

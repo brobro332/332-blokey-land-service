@@ -18,7 +18,7 @@ interface ProjectsProps {
     title: string,
     description: string,
     imageUrl: string,
-    isPrivate: "public" | "private",
+    isPrivate: false | true,
     estimatedStartDate: string,
     estimatedEndDate: string,
     actualStartDate: string,
@@ -223,7 +223,7 @@ const ProjectDeck: React.FC<ProjectsProps> = ({
             project={project}
             onEditClick={handleEditClick}
             onDelete={onDelete}
-            isLeader={project.leader}
+            isLeader={project.isLeader}
           />
         ))}
       </div>
@@ -250,7 +250,7 @@ const ProjectDeck: React.FC<ProjectsProps> = ({
                 estimatedEndDate: editProject.estimatedEndDate ?? "",
                 actualStartDate: editProject.actualStartDate ?? "",
                 actualEndDate: editProject.actualEndDate ?? "",
-                isPrivate: editProject.isPrivate ? "private" : "public",
+                isPrivate: editProject.isPrivate ? true : false,
               }
             : undefined
         }

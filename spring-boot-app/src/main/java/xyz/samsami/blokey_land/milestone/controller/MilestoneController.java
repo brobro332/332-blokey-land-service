@@ -25,9 +25,10 @@ public class MilestoneController implements MilestoneApi {
 
     @Override
     public CommonRespDto<List<MilestoneRespDto>> readMilestones(
-        @ModelAttribute MilestoneReqReadDto dto
+        @ModelAttribute MilestoneReqReadDto dto,
+        @RequestHeader("X-Account-Id") String blokeyId
     ) {
-        List<MilestoneRespDto> list = service.readMilestones(dto);
+        List<MilestoneRespDto> list = service.readMilestones(dto, blokeyId);
         return CommonRespDto.of(ResultType.SUCCESS, "마일스톤 목록 조회 완료", list);
     }
 
@@ -49,14 +50,5 @@ public class MilestoneController implements MilestoneApi {
     public CommonRespDto<Void> deleteMilestoneByMilestoneId(@PathVariable Long milestoneId) {
         service.deleteMilestoneByMilestoneId(milestoneId);
         return CommonRespDto.of(ResultType.SUCCESS, "마일스톤 삭제 완료", null);
-    }
-
-    @Override
-    public CommonRespDto<Void> setMilestoneToTask(
-        @PathVariable Long taskId,
-        @RequestParam(required = false) Long milestoneId
-    ) {
-        service.setMilestoneToTask(taskId, milestoneId);
-        return CommonRespDto.of(ResultType.SUCCESS, "마일스톤 설정 완료", null);
     }
 }

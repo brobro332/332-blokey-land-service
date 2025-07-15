@@ -36,9 +36,11 @@ const TaskCreateModal: React.FC<Props> = ({
             </label>
             <input
               className="w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-400"
-              placeholder="제목을 입력하세요"
+              placeholder="태스크 제목"
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
+              minLength={2}
+              maxLength={100}
             />
           </div>
 
@@ -48,7 +50,7 @@ const TaskCreateModal: React.FC<Props> = ({
             </label>
             <textarea
               className="w-full border rounded-md p-2 resize-none h-24 focus:outline-none focus:ring-2 focus:ring-green-400"
-              placeholder="설명을 입력하세요"
+              placeholder="태스크 설명"
               value={form.description}
               onChange={(e) =>
                 setForm({ ...form, description: e.target.value })
@@ -59,7 +61,7 @@ const TaskCreateModal: React.FC<Props> = ({
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="inline-flex text-sm font-medium text-gray-700 mb-1">
-                시작 예정일
+                시작예정일
                 {
                   FaStar({
                     size: 10,
@@ -78,7 +80,7 @@ const TaskCreateModal: React.FC<Props> = ({
             </div>
             <div>
               <label className="inline-flex text-sm font-medium text-gray-700 mb-1">
-                종료 예정일
+                종료예정일
                 {
                   FaStar({
                     size: 10,

@@ -7,12 +7,9 @@ spring:
     url: ${DATA_POSTGRES_URI}
     username: ${DATA_POSTGRES_USERNAME}
     password: ${DATA_POSTGRES_PASSWORD}
+    driver-class-name: com.p6spy.engine.spy.P6SpyDriver
   jpa:
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-        use_sql_comments: true
+    show-sql: false
     hibernate:
       ddl-auto: update
   servlet:
@@ -22,8 +19,8 @@ spring:
 
 logging:
   level:
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql: TRACE
+    com.p6spy: DEBUG
+    p6spy: DEBUG
 
 file:
   upload-dir: ${FILE_UPLOAD_DIR}

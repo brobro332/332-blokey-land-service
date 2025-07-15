@@ -3,5 +3,5 @@ export interface Milestone {
   title: string;
   description?: string;
   dueDate?: string;
-  projectId?: number;
+  projectId: number;
 }

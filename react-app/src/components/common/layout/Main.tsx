@@ -4,7 +4,7 @@ import Sidebar from "./Sidebar";
 import Header from "./Header";
 import { Menu, ViewMode } from "../../../types/common";
 import { getSelectedMenuFromPath, menuToPath } from "../../../utils/ts/menu";
-import { useAuth } from "../../../App";
+import { useAuth } from "../../../contexts/AuthContext";
 
 const Main = () => {
   const [viewMode, setViewMode] = useState<ViewMode>("private");
@@ -23,6 +23,12 @@ const Main = () => {
           selectedMenu={selectedMenu}
           onMenuClick={(menu: Menu) => {
             const path = menuToPath[menu] || "/private/dashboard";
+
+            if (path === "/community/projects") {
+              alert("준비 중인 기능입니다. 곧 업데이트될 예정입니다.");
+              return;
+            }
+
             navigate(path);
           }}
         />

@@ -1,4 +1,4 @@
-# 🏰 332-blokey-land-service
+# 🏰 `332-blokey-land-service`
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/c1729a3c-8c1d-4d86-bbfd-afe080ccecab" width="400" />
@@ -11,23 +11,27 @@
 
 ### ⏱ **개발 기간**
 
-- `v1.0.0` (`2025-06-06 ~ 2025-06-15`) : 서비스 구조 설계 및 초기 기능 구현
-- `v1.0.1` (`2025-06-24 ~ 2025-07-07`) : 프론트엔드 개발 및 도메인 로직 정비
-- `v1.0.2` (`2025-07-08`) : 개발 환경에서 웹 접속 시 무한 새로고침 버그 핫픽스
+- `v1.0.0` (`2025-06-06 ~ 2025-06-15`): 서비스 구조 설계 및 초기 기능 구현
+- `v1.0.1` (`2025-06-24 ~ 2025-07-07`): 프론트엔드 개발 및 도메인 로직 정비
+- `v1.0.2` (`2025-07-08`): 개발 환경에서 웹 접속 시 무한 새로고침 버그 핫픽스
+- `v1.1.0` (`2025-07-09 ~ 2025-07-15`): 테스트 환경 구축 및 기존 기능 개선 작업
 
 ### 🛠 **프로젝트 환경**
 
-- 언어: `Java 21`, `Typescript`
-- 프레임워크 : `Spring boot 3.5.0`
-- 데이터베이스: `PostgreSQL`
+- `Language`: `Java 21`, `Typescript`
+- `Framework`: `Spring boot 3.5.0`
+- `Database`: `PostgreSQL`
 - `IDE`: `IntelliJ IDEA`
-- `CSR` : `React`
-- 빌드 도구: `Gradle`
+- `CSR`: `React`
+- `Build-Tool`: `Gradle`
 - `ORM`: `JPA`
-- 동적쿼리 라이브러리: `QueryDSL`
+- `Query Library`: `QueryDSL`
 - `DevOps`: `Docker`, `Docker-compose`
+- `Test`: `JUnit`, `JaCoCo`, `SonarQube`, `Cypress`
+- `CI`: `GitHub Actions`
 
 ### 📃 **개발 환경 구축 매뉴얼**
+
 - 프로젝트 개발 버전 실행에 있어 `.env` 파일, `Docker`, `Docker-compose`, `CLI` 환경, 웹 브라우저가 필요합니다.
 
 ```bash
@@ -52,10 +56,12 @@ docker-compose up -d --build       # docker-compose 이미지 빌드 및 실행
 ```
 
 ### ⚙️ **환경변수 파일**
+
 - 각 프로젝트별 `.env` 파일의 환경변수 목록입니다.
 - 보안을 위해 `.env` 파일은 `.gitignore`에 추가하여 `Git` 저장소에 커밋되지 않도록 해주세요.
+- `Blokey-Land` 서비스 프론트엔드 서버는 환경변수 파일명을 `.env.development`로 저장해야 합니다.
 
-#### ✅ 인증 서버 (332-sentinel-server)
+#### ✅ 인증 서버 (`332-sentinel-server`)
 
 ```bash
 # SERVER
@@ -98,12 +104,12 @@ GLOBALCORS_ALLOWED_ORIGINS           # Cross-Origin 요청 허용 도메인
 JWT_SECRET_KEY                       # JWT 시크릿 키 (Git 등 외부에 노출되지 않도록 주의하세요.)
 ```
 
-#### ✅ Blokey-Land 서비스 (332-blokey-land-service)
+#### ✅ `Blokey-Land` 서비스 백엔드 서버 (`332-blokey-land-service`)
 
 ```bash
 # SERVER
-PORT                                 # Blokey-Land 서비스 포트 번호
-ADDRESS                              # Blokey-Land 서비스 바인딩 IP
+PORT                                 # Blokey-Land 서비스 백엔드 서버 포트 번호
+ADDRESS                              # Blokey-Land 서비스 백엔드 서버 바인딩 IP
 FILE_UPLOAD_DIR                      # 첨부파일 업로드 시 저장 디렉터리 경로
 
 # NGINX
@@ -120,7 +126,34 @@ POSTGRES_EXTERNAL_PORT               # PostgreSQL 외부 포트
 POSTGRES_INTERNAL_PORT               # PostgreSQL 내부 포트
 ```
 
+#### ✅ `Blokey-Land` 서비스 프론트엔드 서버 (`332-blokey-land-service`)
+
+```bash
+CYPRESS_BASE_URL=http://localhost:3000        # Cypress E2E 테스트 URL
+REACT_APP_API_BASE_URL=http://localhost:8080  # API 기본 URL
+```
+
 ### 🚀 **`Swagger`**
+
 - 각 프로젝트의 포트 번호 환경변수 값을 `URL` 에 포함해주세요.
-- 인증 서버 : `http://localhost:${PORT}/webjars/swagger-ui/index.html`
-- Blokey-Land 서비스 : `http://localhost:${PORT}/swagger-ui/index.html`
+- 인증 서버: `http://localhost:${PORT}/webjars/swagger-ui/index.html`
+- `Blokey-Land` 서비스 백엔드 서버: `http://localhost:${PORT}/swagger-ui/index.html`
+
+### 🎈 **`E2E` 테스트**
+
+- 환경변수 파일 섹션을 참고하여 `.env.development` 파일을 `332-blokey-land-service/react-app` 디렉터리에 저장합니다.
+- 본 `E2E` 테스트는 `DB`에 데이터가 없는 초기 상태를 기준으로 두 개의 터미널을 사용하여 진행합니다.
+
+```bash
+# 1. Blokey-Land 서비스 내 /react-app 디렉터리로 이동
+cd 332-blokey-land-service/react-app
+
+# 2. 터미널Ⅰ: 리액트 앱 개발 환경 실행
+npm start
+
+# 3. 터미널Ⅱ: E2E 테스트 콘솔 실행
+npx cypress open
+
+# 4. joinTester1 → joinTester2 → init 순으로 실행합니다.
+#    DB에 데이터가 저장되므로 일회성으로 진행합니다.
+```

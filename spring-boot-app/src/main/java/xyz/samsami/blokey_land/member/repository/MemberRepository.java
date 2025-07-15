@@ -7,10 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import xyz.samsami.blokey_land.member.domain.Member;
 import xyz.samsami.blokey_land.member.dto.MemberRespDto;
-import xyz.samsami.blokey_land.project.domain.Project;
-import xyz.samsami.blokey_land.blokey.domain.Blokey;
 
-import java.util.Optional;
 import java.util.UUID;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {

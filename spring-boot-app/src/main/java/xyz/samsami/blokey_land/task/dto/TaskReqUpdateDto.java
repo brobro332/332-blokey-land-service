@@ -1,5 +1,8 @@
 package xyz.samsami.blokey_land.task.dto;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,10 +18,14 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class TaskReqUpdateDto {
+    @Size(min = 2, max = 100, message = "태스크 제목은 2자 이상 100자 이하로 입력해주세요.")
     private String title;
+
+    @Min(0) @Max(100)
+    private Integer progress;
+
     private String description;
     private UUID assignee;
-    private Integer progress;
     private TaskStatusType status;
     private PriorityType priority;
     private LocalDate estimatedStartDate;

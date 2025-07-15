@@ -7,9 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import xyz.samsami.blokey_land.common.exception.CommonException;
 import xyz.samsami.blokey_land.common.type.ExceptionType;
-import xyz.samsami.blokey_land.milestone.domain.Milestone;
 import xyz.samsami.blokey_land.project.domain.Project;
-import xyz.samsami.blokey_land.project.dto.ProjectReqReadDto;
 import xyz.samsami.blokey_land.project.service.ProjectService;
 import xyz.samsami.blokey_land.task.domain.Task;
 import xyz.samsami.blokey_land.task.dto.TaskReqCreateDto;
@@ -32,9 +30,11 @@ public class TaskService {
     @Transactional
     public TaskRespDto createTask(TaskReqCreateDto dto) {
         Project project = projectService.findProjectByProjectId(dto.getProjectId());
-        if (project != null) return TaskMapper.toRespDto(repository.save(TaskMapper.toEntity(dto, project)));
+        if (project == null) return null;
 
-        return null;
+        Task task = repository.save(TaskMapper.toEntity(dto, project));
+        project.addTask(task);
+        return TaskMapper.toRespDto(task);
     }
 
     public List<TaskRespDto> readAllTasksByProjectId(Long projectId) {
@@ -70,11 +70,6 @@ public class TaskService {
     @Transactional
     public void deleteTaskByTaskId(Long taskId) {
         repository.delete(findTaskByTaskId(taskId));
-    }
-
-    @Transactional
-    public void clearMilestoneFromTasks(Milestone milestone) {
-        repository.clearMilestoneFromTasks(milestone);
     }
 
     public Task findTaskByTaskId(Long taskId) {

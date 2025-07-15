@@ -46,7 +46,7 @@ const ProjectsPage: React.FC = () => {
     title: string,
     description: string,
     imageUrl: string,
-    isPrivate: "public" | "private",
+    isPrivate: false | true,
     estimatedStartDate: string,
     estimatedEndDate: string,
     actualStartDate: string,

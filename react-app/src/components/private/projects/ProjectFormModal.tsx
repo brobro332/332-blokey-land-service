@@ -17,13 +17,13 @@ interface ProjectFormModalProps {
     actualStartDate: string;
     actualEndDate: string;
     imageUrl: string;
-    isPrivate: "public" | "private";
+    isPrivate: false | true;
   };
   onCreate?: (
     title: string,
     description: string,
     imageUrl: string,
-    isPrivate: "public" | "private",
+    isPrivate: false | true,
     estimatedStartDate: string,
     estimatedEndDate: string,
     actualStartDate: string,
@@ -44,7 +44,7 @@ const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
   const [description, setDescription] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [isPrivate, setIsPrivate] = useState<"public" | "private">("public");
+  const [isPrivate, setIsPrivate] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [estimatedStartDate, setEstimatedStartDate] = useState("");
   const [estimatedEndDate, setEstimatedEndDate] = useState("");
@@ -143,7 +143,7 @@ const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
       setEstimatedEndDate(initialData.estimatedEndDate);
       setActualStartDate(initialData.actualStartDate);
       setActualEndDate(initialData.actualEndDate);
-      setIsPrivate(initialData.isPrivate ? "private" : "public");
+      setIsPrivate(initialData.isPrivate ? true : false);
       setImagePreview(initialData.imageUrl || null);
       setImageFile(null);
     } else if (mode === "create") {
@@ -153,7 +153,7 @@ const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
       setEstimatedEndDate("");
       setActualStartDate("");
       setActualEndDate("");
-      setIsPrivate("public");
+      setIsPrivate(false);
       setImagePreview(null);
       setImageFile(null);
     }
@@ -185,6 +185,8 @@ const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
               className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+              minLength={2}
+              maxLength={100}
               disabled={isSubmitting}
             />
           </div>
@@ -289,9 +291,9 @@ const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
                   <input
                     type="radio"
                     name="isPrivate"
-                    value="public"
-                    checked={isPrivate === "public"}
-                    onChange={() => setIsPrivate("public")}
+                    value="false"
+                    checked={isPrivate === false}
+                    onChange={() => setIsPrivate(false)}
                     disabled={isSubmitting}
                   />
                   <span>공개</span>
@@ -301,8 +303,8 @@ const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
                     type="radio"
                     name="isPrivate"
                     value="private"
-                    checked={isPrivate === "private"}
-                    onChange={() => setIsPrivate("private")}
+                    checked={isPrivate === true}
+                    onChange={() => setIsPrivate(true)}
                     disabled={isSubmitting}
                   />
                   <span>비공개</span>
@@ -343,7 +345,7 @@ const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
               setActualEndDate("");
               setImageFile(null);
               setImagePreview(null);
-              setIsPrivate("public");
+              setIsPrivate(false);
               onClose();
             }}
             disabled={isSubmitting}

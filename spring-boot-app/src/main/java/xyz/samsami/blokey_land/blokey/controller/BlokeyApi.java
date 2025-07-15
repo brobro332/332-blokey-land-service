@@ -3,6 +3,7 @@ package xyz.samsami.blokey_land.blokey.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -20,7 +21,7 @@ import java.util.UUID;
 public interface BlokeyApi {
     @Operation(summary = "사용자 생성", description = "새로운 사용자를 생성합니다.")
     @PostMapping
-    CommonRespDto<Void> createBlokey(@RequestBody BlokeyReqCreateDto dto);
+    CommonRespDto<Void> createBlokey(@Valid @RequestBody BlokeyReqCreateDto dto);
 
     @Operation(summary = "사용자 목록 조회", description = "사용자 목록을 조회합니다.")
     @GetMapping

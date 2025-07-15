@@ -1,0 +1,43 @@
+name: Frontend Build
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build React App
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Cache npm modules
+        uses: actions/cache@v4
+        with:
+          path: react-app/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('react-app/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        working-directory: react-app
+        run: npm ci
+
+      - name: Build
+        working-directory: react-app
+        run: npm run build

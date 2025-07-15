@@ -25,7 +25,8 @@ public interface MilestoneApi {
     @Operation(summary = "마일스톤 목록 조회", description = "프로젝트 도메인에서 마일스톤 목록을 조회합니다.")
     @GetMapping("/milestones")
     CommonRespDto<List<MilestoneRespDto>> readMilestones(
-        @ModelAttribute MilestoneReqReadDto dto
+        @ModelAttribute MilestoneReqReadDto dto,
+        @RequestHeader("X-Account-Id") String blokeyId
     );
 
     @Operation(summary = "프로젝트 별 마일스톤 목록 조회", description = "프로젝트 도메인에서 마일스톤 목록을 조회합니다.")
@@ -44,11 +45,4 @@ public interface MilestoneApi {
     @Operation(summary = "마일스톤 삭제", description = "마일스톤을 삭제합니다.")
     @DeleteMapping("/milestones/{milestoneId}")
     CommonRespDto<Void> deleteMilestoneByMilestoneId(@PathVariable Long milestoneId);
-
-    @Operation(summary = "작업에 마일스톤 설정", description = "작업에 마일스톤을 설정하거나 해제합니다.")
-    @PatchMapping("/tasks/{taskId}/milestone")
-    CommonRespDto<Void> setMilestoneToTask(
-        @PathVariable Long taskId,
-        @RequestParam(required = false) Long milestoneId
-    );
 }
