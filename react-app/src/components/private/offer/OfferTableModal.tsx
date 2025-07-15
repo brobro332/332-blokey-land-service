@@ -131,7 +131,10 @@ const OfferTableModal: React.FC<OfferTableModalProps> = ({
       if (!selectedProjectId) return;
       try {
         const res = await apiAxios<Page<Offer>>(
-          `/blokey-land/api/offers?projectId=${selectedProjectId}&offerer=${offerer}&page=${page}&size=${PAGE_SIZE}`
+          `/blokey-land/api/offers?projectId=${selectedProjectId}&offerer=${offerer}&page=${page}&size=${PAGE_SIZE}`,
+          {
+            withCredentials: true,
+          }
         );
         setOffers(res.content || []);
         if (offerer === "BLOKEY") setReceivedTotalPages(res.totalPages);
@@ -183,7 +186,10 @@ const OfferTableModal: React.FC<OfferTableModalProps> = ({
 
     try {
       const data = await apiAxios<Page<Blokey>>(
-        `/blokey-land/api/blokeys?excludeProjectId=${selectedProjectId}&page=${blokeysPageNumber}&size=${PAGE_SIZE}`
+        `/blokey-land/api/blokeys?excludeProjectId=${selectedProjectId}&page=${blokeysPageNumber}&size=${PAGE_SIZE}`,
+        {
+          withCredentials: true,
+        }
       );
       setBlokeysPage(data);
     } catch {
@@ -214,7 +220,10 @@ const OfferTableModal: React.FC<OfferTableModalProps> = ({
       return;
     }
     apiAxios<Page<Member>>(
-      `/blokey-land/api/projects/${selectedProjectId}/members?page=0&size=10`
+      `/blokey-land/api/projects/${selectedProjectId}/members?page=0&size=10`,
+      {
+        withCredentials: true,
+      }
     )
       .then((res) => setMembers(res.content))
       .catch(() => {});

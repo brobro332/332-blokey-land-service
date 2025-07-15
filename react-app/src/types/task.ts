@@ -13,4 +13,6 @@ export interface Task {
   actualEndDate?: string;
   projectId?: number;
   milestoneId?: number;
+  start?: string;
+  end?: string;
 }

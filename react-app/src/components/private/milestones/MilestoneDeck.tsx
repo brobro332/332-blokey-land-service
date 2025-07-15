@@ -114,7 +114,6 @@ const MilestoneDeck: React.FC<MilestoneDeckProps> = ({
    * @description 마일스톤 목록 초기화
    */
   useEffect(() => {
-    console.log("MilestoneDeck milestones changed", milestones);
     setCurrentMilestones(milestones);
   }, [milestones]);
 

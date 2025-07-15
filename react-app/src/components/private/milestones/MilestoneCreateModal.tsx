@@ -44,6 +44,11 @@ const MilestoneCreateModal: React.FC<MilestoneCreateModalProps> = ({
   onClose,
   onCreate,
 }) => {
+  const selectedId = newMilestone.projectId ?? selectedProject?.id ?? "";
+
+  const selectedProjectTitle =
+    projects.find((p) => p.id === selectedId)?.title ?? "프로젝트 선택";
+
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50"
@@ -73,7 +78,7 @@ const MilestoneCreateModal: React.FC<MilestoneCreateModalProps> = ({
           </div>
         ) : (
           <Listbox
-            value={newMilestone.projectId ?? ""}
+            value={selectedId}
             onChange={(value) =>
               setNewMilestone((prev) => ({
                 ...prev,
@@ -83,38 +88,38 @@ const MilestoneCreateModal: React.FC<MilestoneCreateModalProps> = ({
           >
             <div className="relative">
               <ListboxButton className="block w-full px-3 py-2 border rounded mb-2 text-left">
-                {newMilestone.projectId
-                  ? projects.find((p) => p.id === newMilestone.projectId)?.title
-                  : "프로젝트 선택"}
+                {selectedProjectTitle}
               </ListboxButton>
 
-              <ListboxOptions className="absolute z-10 mt-1 max-h-60 w-full overflow-y-auto bg-white border rounded shadow-lg">
-                <ListboxOption key="empty" value="">
-                  {({ focus, selected }) => (
-                    <div
-                      className={`cursor-pointer px-4 py-2 ${
-                        focus ? "bg-green-100" : ""
-                      } ${selected ? "font-semibold" : ""}`}
-                    >
-                      프로젝트 선택
-                    </div>
-                  )}
-                </ListboxOption>
-
-                {projects.map((project) => (
-                  <ListboxOption key={project.id} value={project.id}>
+              {!selectedProject && (
+                <ListboxOptions className="absolute z-10 mt-1 max-h-60 w-full overflow-y-auto bg-white border rounded shadow-lg">
+                  <ListboxOption key="empty" value="">
                     {({ focus, selected }) => (
                       <div
                         className={`cursor-pointer px-4 py-2 ${
                           focus ? "bg-green-100" : ""
                         } ${selected ? "font-semibold" : ""}`}
                       >
-                        {project.title}
+                        프로젝트 선택
                       </div>
                     )}
                   </ListboxOption>
-                ))}
-              </ListboxOptions>
+
+                  {projects.map((project) => (
+                    <ListboxOption key={project.id} value={project.id}>
+                      {({ focus, selected }) => (
+                        <div
+                          className={`cursor-pointer px-4 py-2 ${
+                            focus ? "bg-green-100" : ""
+                          } ${selected ? "font-semibold" : ""}`}
+                        >
+                          {project.title}
+                        </div>
+                      )}
+                    </ListboxOption>
+                  ))}
+                </ListboxOptions>
+              )}
             </div>
           </Listbox>
         )}
