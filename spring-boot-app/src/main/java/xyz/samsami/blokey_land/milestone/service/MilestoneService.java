@@ -15,17 +15,15 @@ import xyz.samsami.blokey_land.milestone.repository.MilestoneDslRepository;
 import xyz.samsami.blokey_land.milestone.repository.MilestoneRepository;
 import xyz.samsami.blokey_land.project.domain.Project;
 import xyz.samsami.blokey_land.project.service.ProjectService;
-import xyz.samsami.blokey_land.task.domain.Task;
-import xyz.samsami.blokey_land.task.service.TaskService;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MilestoneService {
     private final ProjectService projectService;
-    private final TaskService taskService;
     private final MilestoneRepository repository;
     private final MilestoneDslRepository dslRepository;
 
@@ -35,8 +33,8 @@ public class MilestoneService {
         if (project != null) repository.save(MilestoneMapper.toEntity(dto, project));
     }
 
-    public List<MilestoneRespDto> readMilestones(MilestoneReqReadDto dto) {
-        return dslRepository.readMilestones(dto);
+    public List<MilestoneRespDto> readMilestones(MilestoneReqReadDto dto, String blokeyId) {
+        return dslRepository.readMilestones(dto, UUID.fromString(blokeyId));
     }
 
     public List<MilestoneRespDto> readMilestonesByProjectId(Long projectId) {
@@ -59,15 +57,7 @@ public class MilestoneService {
         Milestone milestone = findMilestoneByMilestoneId(milestoneId);
         if (milestone != null) {
             repository.delete(milestone);
-            taskService.clearMilestoneFromTasks(milestone);
         }
-    }
-
-    @Transactional
-    public void setMilestoneToTask(Long taskId, Long milestoneId) {
-        Milestone milestone = repository.findById(milestoneId).orElse(null);
-        Task task = taskService.findTaskByTaskId(taskId);
-        if (task != null) task.updateMilestone(milestone);
     }
 
     public Milestone findMilestoneByMilestoneId(Long milestoneId) {

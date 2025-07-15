@@ -23,6 +23,12 @@ const Main = () => {
           selectedMenu={selectedMenu}
           onMenuClick={(menu: Menu) => {
             const path = menuToPath[menu] || "/private/dashboard";
+
+            if (path === "/community/projects") {
+              alert("준비 중인 기능입니다. 곧 업데이트될 예정입니다.");
+              return;
+            }
+
             navigate(path);
           }}
         />

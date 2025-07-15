@@ -13,16 +13,21 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ProjectRespDto {
+public class ProjectOnlyRespDto {
     private Long id;
     private String title;
     private String description;
     private String imageUrl;
     private ProjectStatusType status;
     private boolean isPrivate;
-    @JsonProperty("isLeader") private boolean isLeader;
+    private boolean isLeader;
     private LocalDate estimatedStartDate;
     private LocalDate estimatedEndDate;
     private LocalDate actualStartDate;
     private LocalDate actualEndDate;
+
+    @JsonProperty("isLeader")
+    public boolean getIsLeader() {
+        return isLeader;
+    }
 }

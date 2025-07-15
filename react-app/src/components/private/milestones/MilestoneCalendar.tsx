@@ -60,7 +60,9 @@ const MilestoneCalendar: React.FC<MilestoneCalendarProps> = ({
    * @description 마일스톤 생성
    */
   const handleCreate = async () => {
-    if (!newMilestone.title.trim() || !newMilestone.projectId) {
+    const projectIdToUse = newMilestone.projectId ?? selectedProject?.id;
+
+    if (!newMilestone.title.trim() || !projectIdToUse) {
       alert("프로젝트와 제목은 필수입니다.");
       return;
     }
@@ -69,7 +71,7 @@ const MilestoneCalendar: React.FC<MilestoneCalendarProps> = ({
       title: newMilestone.title,
       description: newMilestone.description,
       dueDate: newMilestone.dueDate,
-      projectId: newMilestone.projectId,
+      projectId: projectIdToUse,
     });
 
     await refetchMilestones();
@@ -229,7 +231,6 @@ const MilestoneCalendar: React.FC<MilestoneCalendarProps> = ({
               });
             }
           }}
-          isLeader={selectedProject?.isLeader}
           displayDate={selectedMilestones[0]?.dueDate?.slice(0, 10) ?? ""}
         />
       )}

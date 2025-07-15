@@ -12,16 +12,22 @@ import xyz.samsami.blokey_land.blokey.service.BlokeyService;
 import xyz.samsami.blokey_land.member.service.MemberService;
 import xyz.samsami.blokey_land.member.type.RoleType;
 import xyz.samsami.blokey_land.project.domain.Project;
+import xyz.samsami.blokey_land.project.dto.ProjectOnlyRespDto;
 import xyz.samsami.blokey_land.project.dto.ProjectReqCreateDto;
 import xyz.samsami.blokey_land.project.dto.ProjectReqUpdateDto;
+import xyz.samsami.blokey_land.project.dto.ProjectWithTaskResponseDto;
 import xyz.samsami.blokey_land.project.repository.ProjectRepository;
 import xyz.samsami.blokey_land.project.type.ProjectStatusType;
+import xyz.samsami.blokey_land.task.domain.Task;
+import xyz.samsami.blokey_land.task.type.TaskStatusType;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -67,6 +73,102 @@ class ProjectServiceTest {
         verify(memberService).createMember(project, blokey, RoleType.LEADER);
     }
     
+    @DisplayName("사용자 ID가 주어졌을 때 프로젝트 응답 DTO 목록을 반환해야 한다.")
+    @Test
+    void givenValidBlokeyId_whenReadAllProjects_thenReturnProjectOnlyDtoList() {
+        // given
+        List<ProjectOnlyRespDto> dtoList = List.of(
+            ProjectOnlyRespDto.builder()
+                .id(1L)
+                .title("테스트 프로젝트 1")
+                .description("단위 테스트용 프로젝트 설명 1")
+                .imageUrl("/image1")
+                .status(ProjectStatusType.ACTIVE)
+                .isPrivate(false)
+                .isLeader(true)
+                .estimatedStartDate(LocalDate.of(2025, 7, 1))
+                .estimatedEndDate(LocalDate.of(2025, 12, 31))
+                .actualStartDate(LocalDate.of(2025, 7, 3))
+                .actualEndDate(null)
+                .build(),
+            ProjectOnlyRespDto.builder()
+                .id(2L)
+                .title("테스트 프로젝트 2")
+                .description("단위 테스트용 프로젝트 설명 2")
+                .imageUrl("/image1")
+                .status(ProjectStatusType.ACTIVE)
+                .isPrivate(false)
+                .isLeader(true)
+                .estimatedStartDate(LocalDate.of(2025, 7, 1))
+                .estimatedEndDate(LocalDate.of(2025, 12, 31))
+                .actualStartDate(LocalDate.of(2025, 7, 3))
+                .actualEndDate(null)
+                .build()
+        );
+
+        when(repository.findProjectsWithRoleByBlokeyId(blokeyId)).thenReturn(dtoList);
+    
+        // when
+        List<ProjectOnlyRespDto> result = service.readAllProjects(blokeyId.toString());
+    
+        // then
+        assertEquals(2, result.size());
+    }
+
+    @DisplayName("사용자 ID가 주어졌을 때 프로젝트 및 태스크 응답 DTO 목록을 반환해야 한다.")
+    @Test
+    void givenValidBlokeyId_whenReadAllProjectsWithTasks_thenReturnProjectWithTasksDtoList() {
+        // given
+        Project project = Project.builder()
+            .id(1L)
+            .title("테스트 프로젝트")
+            .description("테스트 프로젝트 설명입니다.")
+            .imageUrl("image")
+            .status(ProjectStatusType.ACTIVE)
+            .isPrivate(false)
+            .estimatedStartDate(LocalDate.of(2025, 7, 1))
+            .estimatedEndDate(LocalDate.of(2025, 12, 31))
+            .actualStartDate(LocalDate.of(2025, 7, 3))
+            .actualEndDate(null)
+            .build();
+
+        Task task1 = Task.builder()
+            .title("테스크 1")
+            .description("테스트용 테스크 1입니다.")
+            .status(TaskStatusType.TODO)
+            .project(project)
+            .build();
+
+        Task task2 = Task.builder()
+            .title("테스크 2")
+            .description("테스트용 테스크 2입니다.")
+            .status(TaskStatusType.IN_PROGRESS)
+            .project(project)
+            .build();
+
+        Task task3 = Task.builder()
+            .title("테스크 3")
+            .description("테스트용 테스크 3입니다.")
+            .status(TaskStatusType.DONE)
+            .project(project)
+            .build();
+
+        project.addTask(task1);
+        project.addTask(task2);
+        project.addTask(task3);
+
+        List<Project> projectList = List.of(project);
+
+        when(repository.findProjectsWithTasksByBlokeyId(blokeyId)).thenReturn(projectList);
+
+        // when
+        List<ProjectWithTaskResponseDto> result = service.readAllProjectsWithTasks(blokeyId.toString());
+
+        // then
+        assertEquals(1, result.size());
+        assertEquals(3, result.getFirst().getTasks().size());
+    }
+    
     @DisplayName("존재하는 ID로 프로젝트를 조회하면 해당 객체를 반환해야 한다.")
     @Test
     void givenValidId_whenReadProjectByProjectId_thenReturnProject() {
@@ -106,7 +208,7 @@ class ProjectServiceTest {
 
     @DisplayName("유효한 파라미터가 주어지면 프로젝트 정보가 수정되어야 한다.")
     @Test
-    void givenValidParameter_whenUpdateProject_thenProjectShouldBeUpdated() {
+    void givenValidParameter_whenUpdateProjectByProjectId_thenProjectShouldBeUpdated() {
         // given
         Long projectId = 1L;
         Project project = Project.builder()

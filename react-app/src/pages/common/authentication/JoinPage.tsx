@@ -19,11 +19,35 @@ const JoinPage = () => {
   const [password, setPassword] = useState("");
   const [nickname, setNickname] = useState("");
   const [bio, setBio] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
+  const validate = () => {
+    let isValid = true;
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setEmailError("올바른 이메일 형식을 입력하세요.");
+      isValid = false;
+    } else {
+      setEmailError("");
+    }
+
+    if (password.length < 8) {
+      setPasswordError("비밀번호는 최소 8자 이상이어야 합니다.");
+      isValid = false;
+    } else {
+      setPasswordError("");
+    }
+
+    return isValid;
+  };
 
   /**
    * @description 회원가입
    */
   const joinAccount = async () => {
+    if (!validate()) return;
+
     try {
       await apiAxios("/api/accounts", {
         method: "POST",
@@ -60,6 +84,7 @@ const JoinPage = () => {
               onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
             />
+            {emailError && <p className="text-red-500 text-sm">{emailError}</p>}
             <input
               type="password"
               placeholder="비밀번호"
@@ -67,17 +92,23 @@ const JoinPage = () => {
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
             />
+            {passwordError && (
+              <p className="text-red-500 text-sm">{passwordError}</p>
+            )}
             <input
               type="text"
               placeholder="닉네임"
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
+              minLength={2}
+              maxLength={20}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
             />
             <textarea
               placeholder="한 줄 소개"
               value={bio}
               onChange={(e) => setBio(e.target.value)}
+              maxLength={200}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-green-400"
               rows={3}
             />

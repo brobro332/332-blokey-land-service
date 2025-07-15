@@ -62,7 +62,6 @@ const MyPageProfileSection: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {/* 닉네임 행 */}
           <tr>
             <td className="border border-gray-200 px-4 py-2 font-semibold bg-green-600 text-white text-center">
               닉네임
@@ -74,6 +73,8 @@ const MyPageProfileSection: React.FC = () => {
                   onChange={(e) => setNickname(e.target.value)}
                   className="w-full border border-gray-200 rounded px-2 py-1 text-sm box-border"
                   style={{ minHeight: "2rem" }}
+                  minLength={2}
+                  maxLength={20}
                 />
               ) : (
                 <p className="px-2 py-1 text-sm min-h-[2rem] leading-relaxed">
@@ -83,7 +84,6 @@ const MyPageProfileSection: React.FC = () => {
             </td>
           </tr>
 
-          {/* 소개 행 */}
           <tr>
             <td className="border border-gray-200 px-4 py-2 font-semibold bg-green-600 text-white text-center">
               소개
@@ -96,6 +96,7 @@ const MyPageProfileSection: React.FC = () => {
                   onChange={(e) => setBio(e.target.value)}
                   className="w-full border border-gray-200 rounded px-2 py-1 text-sm box-border"
                   style={{ minHeight: "2rem" }}
+                  maxLength={200}
                 />
               ) : (
                 <p className="px-2 py-1 text-sm min-h-[2rem] leading-relaxed">
@@ -107,7 +108,6 @@ const MyPageProfileSection: React.FC = () => {
         </tbody>
       </table>
 
-      {/* 버튼 영역 */}
       <div className="mt-4 space-x-2">
         {editMode ? (
           <>

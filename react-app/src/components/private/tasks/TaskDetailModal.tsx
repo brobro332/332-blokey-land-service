@@ -54,6 +54,8 @@ const TaskDetailModal: React.FC<Props> = ({
               className="text-xl font-bold text-gray-800 border p-1 rounded w-full"
               value={form.title ?? ""}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
+              minLength={2}
+              maxLength={100}
             />
           </div>
         ) : (
@@ -96,6 +98,8 @@ const TaskDetailModal: React.FC<Props> = ({
                 onChange={(e) =>
                   setForm({ ...form, progress: Number(e.target.value) })
                 }
+                min={0}
+                max={100}
               />
             ) : (
               <span>{task.progress ?? "미정"}</span>

@@ -1,28 +1,30 @@
 package xyz.samsami.blokey_land.project.dto;
 
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import xyz.samsami.blokey_land.project.type.ProjectStatusType;
+import xyz.samsami.blokey_land.task.dto.TaskRespDto;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class ProjectReqUpdateDto {
-    @Size(min = 2, max = 100, message = "프로젝트 제목은 2자 이상 100자 이하로 입력해주세요.")
+public class ProjectWithTaskResponseDto {
+    private Long id;
     private String title;
-
     private String description;
     private String imageUrl;
     private ProjectStatusType status;
-    private Boolean isPrivate;
+    private boolean isPrivate;
     private LocalDate estimatedStartDate;
     private LocalDate estimatedEndDate;
     private LocalDate actualStartDate;
     private LocalDate actualEndDate;
+
+    private List<TaskRespDto> tasks;
 }

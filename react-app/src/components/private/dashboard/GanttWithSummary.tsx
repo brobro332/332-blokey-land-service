@@ -6,52 +6,47 @@ import {
   ListboxOptions,
 } from "@headlessui/react";
 import ProgressPieChart from "./ProgressPieChart";
-import TaskCountBarChart from "./TaskCountBarChart";
+import ResourceCountBarChart from "./ResourceCountBarChart";
 import DelayDonutChart from "./DelayDonutChart";
-
-export interface Task {
-  id: number;
-  title: string;
-  description: string;
-  assignee: string | null;
-  progress: number;
-  status: string;
-  priority: string;
-  projectId: number | null;
-  estimatedStartDate: string;
-  estimatedEndDate: string;
-  actualStartDate: string | null;
-  actualEndDate: string | null;
-  start?: string;
-  end?: string;
-}
+import { Task } from "../../../types/task";
+import { Milestone } from "../../../types/milestone";
 
 interface Project {
   id: number;
   title: string;
+  tasks: Task[];
 }
 
 interface GanttWithSummaryProps {
-  tasks: Task[];
   projects: Project[];
+  selectedProjectId: number;
+  setSelectedProjectId: (id: number) => void;
+  milestones: Milestone[];
 }
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
 const GanttWithSummary: React.FC<GanttWithSummaryProps> = ({
-  tasks,
   projects,
+  selectedProjectId,
+  setSelectedProjectId,
+  milestones,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const leftRef = useRef<HTMLDivElement>(null);
   const rightRef = useRef<HTMLDivElement>(null);
-  const [selectedProjectId, setSelectedProjectId] = useState<number | null>(
-    null
-  );
   const [hoverTask, setHoverTask] = useState<Task | null>(null);
   const [tooltipPos, setTooltipPos] = useState<{ x: number; y: number } | null>(
     null
   );
+
+  const [hoverMilestones, setHoverMilestones] = useState<
+    { id: number; title: string; dueDate?: string }[]
+  >([]);
+  const [bookmarkTooltipPos, setBookmarkTooltipPos] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
 
   const today = new Date();
   const todayTime = today.getTime();
@@ -60,17 +55,12 @@ const GanttWithSummary: React.FC<GanttWithSummaryProps> = ({
     const d = new Date(todayTime - 15 * MS_PER_DAY);
     return new Date(d.getFullYear(), d.getMonth(), d.getDate());
   }, [todayTime]);
+
   const daysToShow = 31;
   const dayWidth = 30;
   const rowHeight = 35;
   const headerHeight = 40;
   const minRows = 5;
-
-  useEffect(() => {
-    if (projects.length > 0 && selectedProjectId === null) {
-      setSelectedProjectId(projects[0].id);
-    }
-  }, [projects, selectedProjectId]);
 
   useEffect(() => {
     const right = rightRef.current;
@@ -96,23 +86,28 @@ const GanttWithSummary: React.FC<GanttWithSummaryProps> = ({
 
   const filteredTasks = useMemo(() => {
     if (!selectedProjectId) return [];
+
+    const project = projects.find((p) => p.id === selectedProjectId);
+    if (!project || !project.tasks) return [];
+
     const chartEndDate = new Date(
       baseStartDate.getTime() + (daysToShow - 1) * MS_PER_DAY
     );
 
-    return tasks
-      .filter((task) => task.projectId === selectedProjectId)
+    return project.tasks
       .map((task) => {
         const start = task.actualStartDate ?? task.estimatedStartDate;
         const end = task.actualEndDate ?? task.estimatedEndDate;
         return { ...task, start, end };
       })
       .filter((task) => {
-        const taskStart = parseLocalDate(task.start!);
-        const taskEnd = parseLocalDate(task.end!);
+        if (!task.start || !task.end) return false;
+
+        const taskStart = parseLocalDate(task.start);
+        const taskEnd = parseLocalDate(task.end);
         return taskEnd >= baseStartDate && taskStart <= chartEndDate;
       });
-  }, [tasks, baseStartDate, daysToShow, selectedProjectId]);
+  }, [projects, baseStartDate, daysToShow, selectedProjectId]);
 
   const progressData = useMemo(() => {
     if (!filteredTasks.length) return [];
@@ -243,29 +238,94 @@ const GanttWithSummary: React.FC<GanttWithSummaryProps> = ({
                 height: headerHeight,
                 borderBottom: "1px solid rgba(0,0,0,0.1)",
                 userSelect: "none",
+                overflow: "visible", // 툴팁 안 잘리게
               }}
             >
               <svg
                 width={dayWidth * daysToShow}
                 height={headerHeight}
-                style={{ display: "block" }}
+                style={{ display: "block", overflow: "visible" }}
               >
                 {[...Array(daysToShow)].map((_, i) => {
                   const date = new Date(
                     baseStartDate.getTime() + i * MS_PER_DAY
                   );
                   const day = date.getDate();
+
+                  const milestonesAtDay = milestones.filter((ms) => {
+                    if (!ms.dueDate) return false;
+                    const msDate = parseLocalDate(ms.dueDate);
+                    return (
+                      msDate.getFullYear() === date.getFullYear() &&
+                      msDate.getMonth() === date.getMonth() &&
+                      msDate.getDate() === date.getDate()
+                    );
+                  });
+
+                  const textX = i * dayWidth + dayWidth / 2;
+                  const textY = 20;
+                  const bookmarkStartY = 24; // 세로 배열 시작 위치
+
                   return (
-                    <text
-                      key={i}
-                      x={i * dayWidth + dayWidth / 2}
-                      y={20}
-                      textAnchor="middle"
-                      fontSize={12}
-                      fill="#333"
-                    >
-                      {day}
-                    </text>
+                    <g key={i}>
+                      <text
+                        x={textX}
+                        y={textY}
+                        textAnchor="middle"
+                        fontSize={12}
+                        fill="#333"
+                      >
+                        {day}
+                      </text>
+
+                      {milestonesAtDay.slice(0, 10).map((ms, idx) => (
+                        <g
+                          key={ms.id}
+                          transform={`translate(${textX - 8}, ${
+                            bookmarkStartY + idx * 15
+                          })`}
+                          pointerEvents="auto"
+                          aria-label={ms.title}
+                          onMouseEnter={(e) => {
+                            e.stopPropagation();
+                            setHoverMilestones((prev) => {
+                              if (prev.find((m) => m.id === ms.id)) return prev;
+                              return [...prev, ms];
+                            });
+                            setBookmarkTooltipPos({
+                              x: e.clientX,
+                              y: e.clientY,
+                            });
+                          }}
+                          onMouseMove={(e) => {
+                            setBookmarkTooltipPos({
+                              x: e.clientX,
+                              y: e.clientY,
+                            });
+                          }}
+                          onMouseLeave={() => {
+                            setHoverMilestones([]);
+                            setBookmarkTooltipPos(null);
+                          }}
+                          style={{ cursor: "pointer" }}
+                        >
+                          <svg
+                            width={20}
+                            height={14}
+                            viewBox="0 0 20 14"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M0 0 H14 L20 7 L14 14 H0 Z"
+                              fill="red"
+                              stroke="white"
+                              strokeWidth={1}
+                            />
+                          </svg>
+                        </g>
+                      ))}
+                    </g>
                   );
                 })}
               </svg>
@@ -288,90 +348,63 @@ const GanttWithSummary: React.FC<GanttWithSummaryProps> = ({
                 />
               )}
 
-              {filteredTasks.length === 0 ? (
-                <>
-                  <rect
-                    x={0}
-                    y={0}
-                    width={dayWidth * daysToShow}
-                    height={svgHeight - headerHeight}
-                    fill="#F3F4F6"
-                    rx={8}
-                    ry={8}
-                  />
-                  <text
-                    x={(dayWidth * daysToShow) / 2}
-                    y={(svgHeight - headerHeight) / 2}
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                    fontSize={18}
-                    fill="#9CA3AF"
-                    pointerEvents="none"
-                    style={{ userSelect: "none" }}
-                  >
-                    데이터가 없습니다.
-                  </text>
-                </>
-              ) : (
-                filteredTasks.map((task, idx) => {
-                  const taskStart = new Date(task.start!);
-                  const taskEnd = new Date(task.end!);
-                  const startOffset = Math.max(
-                    0,
-                    Math.floor(
-                      (taskStart.getTime() - baseStartDate.getTime()) /
-                        MS_PER_DAY
-                    )
-                  );
-                  const endOffset = Math.min(
-                    daysToShow,
-                    Math.floor(
-                      (taskEnd.getTime() - baseStartDate.getTime()) / MS_PER_DAY
-                    ) + 1
-                  );
-                  const barX = startOffset * dayWidth;
-                  const barWidth = (endOffset - startOffset) * dayWidth;
-                  const progressWidth = (task.progress ?? 0) * barWidth * 0.01;
+              {filteredTasks.map((task, idx) => {
+                const taskStart = new Date(task.start!);
+                const taskEnd = new Date(task.end!);
+                const startOffset = Math.max(
+                  0,
+                  Math.floor(
+                    (taskStart.getTime() - baseStartDate.getTime()) / MS_PER_DAY
+                  )
+                );
+                const endOffset = Math.min(
+                  daysToShow,
+                  Math.floor(
+                    (taskEnd.getTime() - baseStartDate.getTime()) / MS_PER_DAY
+                  ) + 1
+                );
+                const barX = startOffset * dayWidth;
+                const barWidth = (endOffset - startOffset) * dayWidth;
+                const progressWidth = (task.progress ?? 0) * barWidth * 0.01;
 
-                  return (
-                    <g
-                      key={task.id}
-                      transform={`translate(0, ${rowHeight * idx})`}
-                    >
-                      <rect
-                        x={barX}
-                        y={6}
-                        width={barWidth}
-                        height={rowHeight - 12}
-                        fill="#ECECEC"
-                        rx={3}
-                        ry={3}
-                        onMouseEnter={(e) => {
-                          setHoverTask(task);
-                          setTooltipPos({ x: e.clientX, y: e.clientY });
-                        }}
-                        onMouseMove={(e) => {
-                          setTooltipPos({ x: e.clientX, y: e.clientY });
-                        }}
-                        onMouseLeave={() => {
-                          setHoverTask(null);
-                          setTooltipPos(null);
-                        }}
-                      />
-                      <rect
-                        x={barX}
-                        y={6}
-                        width={progressWidth}
-                        height={rowHeight - 12}
-                        fill="orange"
-                        rx={3}
-                        ry={3}
-                        pointerEvents="none"
-                      />
-                    </g>
-                  );
-                })
-              )}
+                return (
+                  <g
+                    key={task.id}
+                    transform={`translate(0, ${rowHeight * idx})`}
+                  >
+                    <rect
+                      x={barX}
+                      y={6}
+                      width={barWidth}
+                      height={rowHeight - 12}
+                      fill="#ECECEC"
+                      rx={3}
+                      ry={3}
+                      onMouseEnter={(e) => {
+                        setHoverTask(task);
+                        setTooltipPos({ x: e.clientX, y: e.clientY });
+                      }}
+                      onMouseMove={(e) => {
+                        setTooltipPos({ x: e.clientX, y: e.clientY });
+                      }}
+                      onMouseLeave={() => {
+                        setHoverTask(null);
+                        setTooltipPos(null);
+                      }}
+                    />
+                    <rect
+                      x={barX}
+                      y={6}
+                      width={progressWidth}
+                      height={rowHeight - 12}
+                      fill="orange"
+                      rx={3}
+                      ry={3}
+                      pointerEvents="none"
+                    />
+                  </g>
+                );
+              })}
             </svg>
           </div>
         </div>
@@ -385,7 +418,12 @@ const GanttWithSummary: React.FC<GanttWithSummaryProps> = ({
           <ProgressPieChart data={progressData} />
         </div>
         <div className="flex-1 flex justify-center">
-          <TaskCountBarChart tasks={tasks} projects={projects} />
+          <ResourceCountBarChart
+            task={filteredTasks}
+            milestones={milestones}
+            projects={projects}
+            selectedProjectId={selectedProjectId}
+          />
         </div>
         <div className="flex-1 flex justify-center">
           <DelayDonutChart tasks={delayTasksForDonut} />
@@ -415,6 +453,34 @@ const GanttWithSummary: React.FC<GanttWithSummaryProps> = ({
           <div>시작: {hoverTask.start}</div>
           <div>종료: {hoverTask.end}</div>
           <div>진척도: {hoverTask.progress ?? 0}%</div>
+        </div>
+      )}
+
+      {hoverMilestones.length > 0 && bookmarkTooltipPos && (
+        <div
+          style={{
+            position: "fixed",
+            top: bookmarkTooltipPos.y + 10,
+            left: bookmarkTooltipPos.x + 10,
+            backgroundColor: "rgba(0,0,0,0.85)",
+            color: "white",
+            padding: "6px 10px",
+            borderRadius: 6,
+            pointerEvents: "none",
+            whiteSpace: "normal",
+            fontSize: 12,
+            zIndex: 9999,
+            maxWidth: 220,
+            userSelect: "none",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
+          }}
+        >
+          {hoverMilestones.map((ms) => (
+            <div key={ms.id} style={{ marginBottom: 4 }}>
+              <strong>{ms.title}</strong>
+              <div>마감일: {ms.dueDate}</div>
+            </div>
+          ))}
         </div>
       )}
     </div>

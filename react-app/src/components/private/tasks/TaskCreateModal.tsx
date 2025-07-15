@@ -39,6 +39,8 @@ const TaskCreateModal: React.FC<Props> = ({
               placeholder="태스크 제목"
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
+              minLength={2}
+              maxLength={100}
             />
           </div>
 

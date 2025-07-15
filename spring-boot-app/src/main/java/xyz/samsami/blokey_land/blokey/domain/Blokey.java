@@ -4,7 +4,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 import xyz.samsami.blokey_land.common.domain.CommonTimestamp;
 
 import java.util.UUID;
@@ -18,10 +17,10 @@ public class Blokey extends CommonTimestamp {
     @Id
     private UUID id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private String nickname;
 
-    @Column(length = 1000)
+    @Column(length = 200)
     private String bio;
 
     public void updateNickname(String nickname) { if (nickname != null) this.nickname = nickname; }

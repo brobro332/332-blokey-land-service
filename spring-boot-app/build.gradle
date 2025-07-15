@@ -42,15 +42,15 @@ jacocoTestReport {
 	}
 }
 
-sonarqube {
-    properties {
-        property "sonar.projectKey", "brobro332_332-blokey-land-service"
-        property "sonar.organization", "brobro332"
-        property "sonar.host.url", "https://sonarcloud.io"
+sonar {
+	properties {
+		property "sonar.projectKey", "brobro332_332-blokey-land-service"
+		property "sonar.organization", "brobro332"
+		property "sonar.host.url", "https://sonarcloud.io"
+		property "sonar.coverage.jacoco.xmlReportPaths", "${layout.buildDirectory.get().asFile}/reports/jacoco/test/jacocoTestReport.xml"
 
-        property "sonar.inclusions", "src/main/java/**/service/**,src/main/java/**/repository/**"
-
-        property "sonar.coverage.exclusions", """
+		property "sonar.inclusions", "src/main/java/**/service/**,src/main/java/**/repository/**"
+		property "sonar.coverage.exclusions", """
             **/*Application.class,
             **/*Application.java,
             **/config/**,
@@ -59,7 +59,7 @@ sonarqube {
             **/exception/**,
             **/common/**
         """
-    }
+	}
 }
 
 configurations {
@@ -80,6 +80,7 @@ dependencies {
 	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
 	implementation 'org.apache.commons:commons-compress:1.26.2'
 	implementation 'p6spy:p6spy:3.9.1'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
 	annotationProcessor 'org.projectlombok:lombok'
 	annotationProcessor 'com.querydsl:querydsl-apt:5.0.0:jakarta'

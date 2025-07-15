@@ -5,8 +5,11 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import xyz.samsami.blokey_land.common.domain.CommonDateTime;
 import xyz.samsami.blokey_land.project.type.ProjectStatusType;
+import xyz.samsami.blokey_land.task.domain.Task;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -33,6 +36,11 @@ public class Project extends CommonDateTime {
     @Column(nullable = false)
     @ColumnDefault("false")
     private boolean isPrivate;
+
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Task> tasks = new ArrayList<>();
+
+    public void addTask(Task task) { tasks.add(task); }
 
     public void updateTitle(String title) { if (title != null) this.title = title; }
     public void updateDescription(String description) { if (description != null) this.description = description; }

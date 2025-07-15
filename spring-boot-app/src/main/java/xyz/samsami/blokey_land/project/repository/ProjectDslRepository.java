@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import xyz.samsami.blokey_land.member.type.RoleType;
 import xyz.samsami.blokey_land.project.domain.Project;
 import xyz.samsami.blokey_land.project.dto.ProjectReqReadDto;
-import xyz.samsami.blokey_land.project.dto.ProjectRespDto;
+import xyz.samsami.blokey_land.project.dto.ProjectOnlyRespDto;
 import xyz.samsami.blokey_land.project.mapper.ProjectMapper;
 
 import java.util.List;
@@ -26,7 +26,7 @@ public class ProjectDslRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public Slice<ProjectRespDto> readProjectsSlice(ProjectReqReadDto dto, String blokeyId, Pageable pageable) {
+    public Slice<ProjectOnlyRespDto> readProjectsSlice(ProjectReqReadDto dto, String blokeyId, Pageable pageable) {
         UUID blokeyUuid = UUID.fromString(blokeyId);
 
         List<Tuple> rows = baseQuery(dto, blokeyUuid)
@@ -38,7 +38,7 @@ public class ProjectDslRepository {
         boolean hasNext = rows.size() > pageable.getPageSize();
         if (hasNext) rows.removeLast();
 
-        List<ProjectRespDto> dtoList = rows.stream()
+        List<ProjectOnlyRespDto> dtoList = rows.stream()
             .map(tuple -> {
                 Project p = tuple.get(project);
                 RoleType role = tuple.get(member.role);
@@ -49,7 +49,7 @@ public class ProjectDslRepository {
         return new SliceImpl<>(dtoList, pageable, hasNext);
     }
 
-    public Page<ProjectRespDto> readProjectsPage(ProjectReqReadDto dto, String blokeyId, Pageable pageable) {
+    public Page<ProjectOnlyRespDto> readProjectsPage(ProjectReqReadDto dto, String blokeyId, Pageable pageable) {
         UUID blokeyUuid = UUID.fromString(blokeyId);
 
         List<Tuple> rows = baseQuery(dto, blokeyUuid)
@@ -60,7 +60,7 @@ public class ProjectDslRepository {
 
         long totalCount = countQuery(dto, blokeyUuid);
 
-        List<ProjectRespDto> dtoList = rows.stream()
+        List<ProjectOnlyRespDto> dtoList = rows.stream()
             .map(tuple -> {
                 Project p = tuple.get(project);
                 RoleType role = tuple.get(member.role);
@@ -89,8 +89,8 @@ public class ProjectDslRepository {
             .join(member.project, project)
             .join(member.blokey, blokey)
             .where(
-                    member.blokey.id.eq(blokeyUuid),
-                    buildPredicate(dto)
+                member.blokey.id.eq(blokeyUuid),
+                buildPredicate(dto)
             )
             .fetchOne();
     }

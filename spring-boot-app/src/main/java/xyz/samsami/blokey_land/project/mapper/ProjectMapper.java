@@ -2,7 +2,11 @@ package xyz.samsami.blokey_land.project.mapper;
 
 import xyz.samsami.blokey_land.project.domain.Project;
 import xyz.samsami.blokey_land.project.dto.ProjectReqCreateDto;
-import xyz.samsami.blokey_land.project.dto.ProjectRespDto;
+import xyz.samsami.blokey_land.project.dto.ProjectOnlyRespDto;
+import xyz.samsami.blokey_land.project.dto.ProjectWithTaskResponseDto;
+import xyz.samsami.blokey_land.task.dto.TaskRespDto;
+
+import java.util.List;
 
 public class ProjectMapper {
     public static Project toEntity(ProjectReqCreateDto dto) {
@@ -19,8 +23,8 @@ public class ProjectMapper {
             .build();
     }
 
-    public static ProjectRespDto toRespDto(Project project) {
-        return ProjectRespDto.builder()
+    public static ProjectOnlyRespDto toRespDto(Project project) {
+        return ProjectOnlyRespDto.builder()
             .id(project.getId())
             .title(project.getTitle())
             .description(project.getDescription())
@@ -34,8 +38,8 @@ public class ProjectMapper {
             .build();
     }
 
-    public static ProjectRespDto toRespDtoWithIsLeader(Project project, boolean isLeader) {
-        return ProjectRespDto.builder()
+    public static ProjectOnlyRespDto toRespDtoWithIsLeader(Project project, boolean isLeader) {
+        return ProjectOnlyRespDto.builder()
             .id(project.getId())
             .title(project.getTitle())
             .description(project.getDescription())
@@ -47,6 +51,22 @@ public class ProjectMapper {
             .estimatedEndDate(project.getEstimatedEndDate())
             .actualStartDate(project.getActualStartDate())
             .actualEndDate(project.getActualEndDate())
+            .build();
+    }
+
+    public static ProjectWithTaskResponseDto toRespDtoWithTaskDtoList(Project project, List<TaskRespDto> taskRespDtoList) {
+        return ProjectWithTaskResponseDto.builder()
+            .id(project.getId())
+            .title(project.getTitle())
+            .description(project.getDescription())
+            .imageUrl(project.getImageUrl())
+            .status(project.getStatus())
+            .isPrivate(project.isPrivate())
+            .estimatedStartDate(project.getEstimatedStartDate())
+            .estimatedEndDate(project.getEstimatedEndDate())
+            .actualStartDate(project.getActualStartDate())
+            .actualEndDate(project.getActualEndDate())
+            .tasks(taskRespDtoList)
             .build();
     }
 }

@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { loadingController } from "../ts/loadingController";
 
-const API_BASE_URL = "";
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "";
 
 export const apiAxios = async <T = any,>(
   path: string,

@@ -30,7 +30,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [blokey, setBlokey] = useState<Blokey | null>(null);
 
   useEffect(() => {
-    console.log("AuthProvider: checking started");
     apiAxios("/api/accounts/session", { withCredentials: true })
       .then(() => {
         setIsAuthenticated(true);

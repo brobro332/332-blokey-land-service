@@ -57,6 +57,7 @@ const TaskBoard: React.FC = () => {
       const response = await apiAxios<Task>("/blokey-land/api/tasks", {
         method: "POST",
         data: payload,
+        withCredentials: true,
       });
 
       setTasks((prev) => [...prev, response]);
@@ -77,6 +78,7 @@ const TaskBoard: React.FC = () => {
       await apiAxios(`/blokey-land/api/tasks/${selectedTask.id}`, {
         method: "PATCH",
         data: updated,
+        withCredentials: true,
       });
 
       setTasks((prev) =>
@@ -120,6 +122,7 @@ const TaskBoard: React.FC = () => {
       await apiAxios(`/blokey-land/api/tasks/${taskId}`, {
         method: "PATCH",
         data: { status: newStatus },
+        withCredentials: true,
       });
       setTasks((prev) =>
         prev.map((t) => (t.id === taskId ? { ...t, status: newStatus } : t))

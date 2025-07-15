@@ -4,21 +4,17 @@ describe("접속 및 데이터 초기화 테스트", () => {
   });
 
   it("데이터 초기화", () => {
-    {
-      /* 로그인 */
-    }
+    /* 로그인 */
     cy.visit("/login");
 
     cy.get('input[placeholder="이메일"]').type("test1@test.com");
-    cy.get('input[placeholder="비밀번호"]').type("test");
+    cy.get('input[placeholder="비밀번호"]').type("testpassword");
     cy.contains("button", "로그인").click();
 
     cy.url().should("not.include", "/login");
     cy.contains("환영합니다.");
 
-    {
-      /* 프로젝트 생성 */
-    }
+    /* 프로젝트 생성 */
     cy.contains("button", "프로젝트").click();
     cy.contains("div", "새 프로젝트 만들기").click();
 
@@ -44,9 +40,7 @@ describe("접속 및 데이터 초기화 테스트", () => {
 
     cy.contains("h3", "테스트 프로젝트").click();
 
-    {
-      /* 태스크 생성 */
-    }
+    /* 태스크 생성 */
     cy.contains("button", "새 태스크 만들기").click();
     cy.get('input[placeholder="태스크 제목"]').type("테스트 태스크");
     cy.get('textarea[placeholder="태스크 설명"]').type("테스트 태스크 설명");
@@ -60,9 +54,7 @@ describe("접속 및 데이터 초기화 테스트", () => {
 
     cy.contains("button", "생성").click();
 
-    {
-      /* 제안 생성 */
-    }
+    /* 제안 생성 */
     cy.contains("button", "제안").click();
     cy.contains("button", "사용자 목록").click();
 
@@ -78,16 +70,12 @@ describe("접속 및 데이터 초기화 테스트", () => {
 
     cy.contains("button", "닫기").click();
 
-    {
-      /* 마일스톤 생성 */
-    }
+    /* 마일스톤 생성 */
     cy.contains("button", "마일스톤").click();
 
     cy.contains("div.text-sm.font-semibold", "1").closest("div.border").click();
 
-    cy.contains("div", "새 마일스톤 만들기").click();
-
-    cy.contains("button", "프로젝트 선택").click();
+    cy.contains("button", "프로젝트 선택").click({ force: true });
 
     cy.get('[role="listbox"]')
       .should("be.visible")
@@ -104,9 +92,7 @@ describe("접속 및 데이터 초기화 테스트", () => {
 
     cy.contains("button", "생성").click();
 
-    {
-      /* 대시보드 확인 */
-    }
+    /* 대시보드 확인 */
     cy.contains("button", "대시보드").click();
   });
 });

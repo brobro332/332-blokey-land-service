@@ -9,7 +9,6 @@ import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import xyz.samsami.blokey_land.common.exception.CommonException;
-import xyz.samsami.blokey_land.milestone.domain.Milestone;
 import xyz.samsami.blokey_land.project.domain.Project;
 import xyz.samsami.blokey_land.project.service.ProjectService;
 import xyz.samsami.blokey_land.project.type.ProjectStatusType;
@@ -43,8 +42,18 @@ class TaskServiceTest {
 
     @BeforeEach
     void setUp() {
-        task = mock(Task.class);
-        taskId = 1L;
+        UUID assigneeId = UUID.randomUUID();
+
+        task = Task.builder()
+            .title("제목 2")
+            .description("설명 2")
+            .project(project)
+            .assignee(assigneeId)
+            .estimatedStartDate(LocalDate.now())
+            .estimatedEndDate(LocalDate.now())
+            .actualStartDate(LocalDate.now())
+            .actualEndDate(LocalDate.now())
+            .build();
 
         projectId= 1L;
         project = Project.builder()
@@ -80,19 +89,6 @@ class TaskServiceTest {
             .build();
 
         when(projectService.findProjectByProjectId(projectId)).thenReturn(project);
-
-        Task task = Task.builder()
-            .title(dto.getTitle())
-            .description(dto.getDescription())
-            .assignee(assigneeId)
-            .priority(dto.getPriority())
-            .progress(dto.getProgress())
-            .estimatedStartDate(dto.getEstimatedStartDate())
-            .estimatedEndDate(dto.getEstimatedEndDate())
-            .actualStartDate(dto.getActualStartDate())
-            .actualEndDate(dto.getActualEndDate())
-            .project(project)
-            .build();
 
         TaskRespDto expectedRespDto = TaskRespDto.builder()
             .id(task.getId())
@@ -138,6 +134,8 @@ class TaskServiceTest {
     @DisplayName("유효한 파라미터가 주어졌을 때 정보가 수정되어야 한다.")
     void givenValidParameter_whenUpdateTaskByTaskId_thenTaskShouldBeUpdated() {
         // given
+        task = spy(task);
+
         when(repository.findById(taskId)).thenReturn(Optional.of(task));
 
         TaskReqUpdateDto dto = TaskReqUpdateDto.builder()
@@ -182,19 +180,6 @@ class TaskServiceTest {
         // then
         verify(repository).findById(taskId);
         verify(repository).delete(task);
-    }
-
-    @Test
-    @DisplayName("마일스톤이 주어졌을 때 관련 태스크의 마일스톤이 제거되어야 한다.")
-    void givenMilestone_whenClearMilestoneFromTasks_thenRepositoryMethodCalled() {
-        // given
-        Milestone milestone = mock(Milestone.class);
-
-        // when
-        service.clearMilestoneFromTasks(milestone);
-
-        // then
-        verify(repository).clearMilestoneFromTasks(milestone);
     }
 
     @Test
