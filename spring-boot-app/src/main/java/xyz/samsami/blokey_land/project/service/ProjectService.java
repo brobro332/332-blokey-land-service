@@ -23,7 +23,6 @@ import xyz.samsami.blokey_land.task.mapper.TaskMapper;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -60,7 +59,7 @@ public class ProjectService {
 
                 return ProjectMapper.toRespDtoWithTaskDtoList(project, taskRespDtoList);
             })
-            .collect(Collectors.toList());
+            .toList();
     }
 
     public Slice<ProjectOnlyRespDto> readProjectsSlice(ProjectReqReadDto dto, String blokeyId, Pageable pageable) {

@@ -42,8 +42,18 @@ class TaskServiceTest {
 
     @BeforeEach
     void setUp() {
-        task = mock(Task.class);
-        taskId = 1L;
+        UUID assigneeId = UUID.randomUUID();
+
+        task = Task.builder()
+            .title("제목 2")
+            .description("설명 2")
+            .project(project)
+            .assignee(assigneeId)
+            .estimatedStartDate(LocalDate.now())
+            .estimatedEndDate(LocalDate.now())
+            .actualStartDate(LocalDate.now())
+            .actualEndDate(LocalDate.now())
+            .build();
 
         projectId= 1L;
         project = Project.builder()
@@ -79,19 +89,6 @@ class TaskServiceTest {
             .build();
 
         when(projectService.findProjectByProjectId(projectId)).thenReturn(project);
-
-        Task task = Task.builder()
-            .title(dto.getTitle())
-            .description(dto.getDescription())
-            .assignee(assigneeId)
-            .priority(dto.getPriority())
-            .progress(dto.getProgress())
-            .estimatedStartDate(dto.getEstimatedStartDate())
-            .estimatedEndDate(dto.getEstimatedEndDate())
-            .actualStartDate(dto.getActualStartDate())
-            .actualEndDate(dto.getActualEndDate())
-            .project(project)
-            .build();
 
         TaskRespDto expectedRespDto = TaskRespDto.builder()
             .id(task.getId())
@@ -137,6 +134,8 @@ class TaskServiceTest {
     @DisplayName("유효한 파라미터가 주어졌을 때 정보가 수정되어야 한다.")
     void givenValidParameter_whenUpdateTaskByTaskId_thenTaskShouldBeUpdated() {
         // given
+        task = spy(task);
+
         when(repository.findById(taskId)).thenReturn(Optional.of(task));
 
         TaskReqUpdateDto dto = TaskReqUpdateDto.builder()

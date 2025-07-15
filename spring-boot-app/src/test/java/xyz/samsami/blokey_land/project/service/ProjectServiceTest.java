@@ -106,7 +106,7 @@ class ProjectServiceTest {
 
     @DisplayName("유효한 파라미터가 주어지면 프로젝트 정보가 수정되어야 한다.")
     @Test
-    void givenValidParameter_whenUpdateProject_thenProjectShouldBeUpdated() {
+    void givenValidParameter_whenUpdateProjectByProjectId_thenProjectShouldBeUpdated() {
         // given
         Long projectId = 1L;
         Project project = Project.builder()
