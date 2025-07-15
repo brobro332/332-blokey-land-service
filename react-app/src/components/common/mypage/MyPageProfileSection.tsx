@@ -62,7 +62,6 @@ const MyPageProfileSection: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {/* 닉네임 행 */}
           <tr>
             <td className="border border-gray-200 px-4 py-2 font-semibold bg-green-600 text-white text-center">
               닉네임
@@ -83,7 +82,6 @@ const MyPageProfileSection: React.FC = () => {
             </td>
           </tr>
 
-          {/* 소개 행 */}
           <tr>
             <td className="border border-gray-200 px-4 py-2 font-semibold bg-green-600 text-white text-center">
               소개
@@ -107,7 +105,6 @@ const MyPageProfileSection: React.FC = () => {
         </tbody>
       </table>
 
-      {/* 버튼 영역 */}
       <div className="mt-4 space-x-2">
         {editMode ? (
           <>
