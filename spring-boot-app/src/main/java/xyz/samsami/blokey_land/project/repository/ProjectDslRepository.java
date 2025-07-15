@@ -89,8 +89,8 @@ public class ProjectDslRepository {
             .join(member.project, project)
             .join(member.blokey, blokey)
             .where(
-                    member.blokey.id.eq(blokeyUuid),
-                    buildPredicate(dto)
+                member.blokey.id.eq(blokeyUuid),
+                buildPredicate(dto)
             )
             .fetchOne();
     }

@@ -8,8 +8,7 @@ const MilestoneDetailModal: React.FC<{
   onClose: () => void;
   onUpdate: (updated: Milestone) => void;
   onDelete: (id: number) => void;
-  isLeader: boolean | undefined;
-}> = ({ milestone, projectTitle, onClose, onUpdate, onDelete, isLeader }) => {
+}> = ({ milestone, projectTitle, onClose, onUpdate, onDelete }) => {
   const [editMode, setEditMode] = useState(false);
   const [form, setForm] = useState<Milestone>({ ...milestone });
 
@@ -69,6 +68,8 @@ const MilestoneDetailModal: React.FC<{
                 className="w-full border rounded px-3 py-2 mb-2"
                 value={form.title}
                 onChange={(e) => setForm({ ...form, title: e.target.value })}
+                minLength={2}
+                maxLength={100}
               />
             </>
           ) : (
@@ -163,22 +164,20 @@ const MilestoneDetailModal: React.FC<{
               >
                 닫기
               </button>
-              {isLeader && (
-                <>
-                  <button
-                    onClick={handleDeleteClick}
-                    className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-                  >
-                    삭제
-                  </button>
-                  <button
-                    onClick={() => setEditMode(true)}
-                    className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-                  >
-                    수정
-                  </button>
-                </>
-              )}
+              <>
+                <button
+                  onClick={handleDeleteClick}
+                  className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                >
+                  삭제
+                </button>
+                <button
+                  onClick={() => setEditMode(true)}
+                  className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                >
+                  수정
+                </button>
+              </>
             </>
           )}
         </div>

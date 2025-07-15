@@ -25,7 +25,8 @@ public interface MilestoneApi {
     @Operation(summary = "마일스톤 목록 조회", description = "프로젝트 도메인에서 마일스톤 목록을 조회합니다.")
     @GetMapping("/milestones")
     CommonRespDto<List<MilestoneRespDto>> readMilestones(
-        @ModelAttribute MilestoneReqReadDto dto
+        @ModelAttribute MilestoneReqReadDto dto,
+        @RequestHeader("X-Account-Id") String blokeyId
     );
 
     @Operation(summary = "프로젝트 별 마일스톤 목록 조회", description = "프로젝트 도메인에서 마일스톤 목록을 조회합니다.")

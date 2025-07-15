@@ -73,6 +73,8 @@ const MyPageProfileSection: React.FC = () => {
                   onChange={(e) => setNickname(e.target.value)}
                   className="w-full border border-gray-200 rounded px-2 py-1 text-sm box-border"
                   style={{ minHeight: "2rem" }}
+                  minLength={2}
+                  maxLength={20}
                 />
               ) : (
                 <p className="px-2 py-1 text-sm min-h-[2rem] leading-relaxed">
@@ -94,6 +96,7 @@ const MyPageProfileSection: React.FC = () => {
                   onChange={(e) => setBio(e.target.value)}
                   className="w-full border border-gray-200 rounded px-2 py-1 text-sm box-border"
                   style={{ minHeight: "2rem" }}
+                  maxLength={200}
                 />
               ) : (
                 <p className="px-2 py-1 text-sm min-h-[2rem] leading-relaxed">

@@ -17,6 +17,7 @@ import xyz.samsami.blokey_land.project.domain.Project;
 import xyz.samsami.blokey_land.project.service.ProjectService;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Transactional(readOnly = true)
@@ -32,8 +33,8 @@ public class MilestoneService {
         if (project != null) repository.save(MilestoneMapper.toEntity(dto, project));
     }
 
-    public List<MilestoneRespDto> readMilestones(MilestoneReqReadDto dto) {
-        return dslRepository.readMilestones(dto);
+    public List<MilestoneRespDto> readMilestones(MilestoneReqReadDto dto, String blokeyId) {
+        return dslRepository.readMilestones(dto, UUID.fromString(blokeyId));
     }
 
     public List<MilestoneRespDto> readMilestonesByProjectId(Long projectId) {

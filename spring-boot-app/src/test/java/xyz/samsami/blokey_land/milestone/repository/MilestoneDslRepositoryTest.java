@@ -5,7 +5,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import xyz.samsami.blokey_land.blokey.domain.Blokey;
+import xyz.samsami.blokey_land.blokey.repository.BlokeyRepository;
 import xyz.samsami.blokey_land.common.ContainerBaseTest;
+import xyz.samsami.blokey_land.member.domain.Member;
+import xyz.samsami.blokey_land.member.repository.MemberRepository;
+import xyz.samsami.blokey_land.member.type.RoleType;
 import xyz.samsami.blokey_land.milestone.domain.Milestone;
 import xyz.samsami.blokey_land.milestone.dto.MilestoneReqReadDto;
 import xyz.samsami.blokey_land.milestone.dto.MilestoneRespDto;
@@ -14,6 +19,7 @@ import xyz.samsami.blokey_land.project.repository.ProjectRepository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,11 +29,16 @@ class MilestoneDslRepositoryTest extends ContainerBaseTest {
     @Autowired private MilestoneRepository repository;
     @Autowired private MilestoneDslRepository dslRepository;
     @Autowired private ProjectRepository projectRepository;
+    @Autowired private BlokeyRepository blokeyRepository;
+    @Autowired private MemberRepository memberRepository;
 
     @Test
     @DisplayName("프로젝트 ID가 주어졌을 때 프로젝트에 속하는 응답 DTO 조회")
     void givenParameter_whenReadMilestones_thenReturnsDto() {
         // given
+        UUID blokeyId = UUID.randomUUID();
+        Blokey blokey = blokeyRepository.save(new Blokey(blokeyId, "닉네임", "소개"));
+
         Project project = projectRepository.save(
             Project.builder()
                 .title("제목")
@@ -38,6 +49,14 @@ class MilestoneDslRepositoryTest extends ContainerBaseTest {
                 .estimatedEndDate(LocalDate.now())
                 .actualStartDate(LocalDate.now())
                 .actualEndDate(LocalDate.now())
+                .build()
+        );
+
+        memberRepository.save(
+            Member.builder()
+                .blokey(blokey)
+                .project(project)
+                .role(RoleType.LEADER)
                 .build()
         );
 
@@ -68,7 +87,7 @@ class MilestoneDslRepositoryTest extends ContainerBaseTest {
         request.setProjectId(project.getId());
 
         // when
-        List<MilestoneRespDto> result = dslRepository.readMilestones(request);
+        List<MilestoneRespDto> result = dslRepository.readMilestones(request, blokeyId);
 
         // then
         assertThat(result).hasSize(1);

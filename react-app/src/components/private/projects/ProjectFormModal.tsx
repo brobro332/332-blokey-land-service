@@ -185,6 +185,8 @@ const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
               className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+              minLength={2}
+              maxLength={100}
               disabled={isSubmitting}
             />
           </div>

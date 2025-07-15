@@ -140,6 +140,8 @@ const MilestoneCreateModal: React.FC<MilestoneCreateModalProps> = ({
           onChange={(e) =>
             setNewMilestone((prev) => ({ ...prev, title: e.target.value }))
           }
+          minLength={2}
+          maxLength={100}
           className="block w-full px-3 py-2 border rounded mb-2"
         />
 

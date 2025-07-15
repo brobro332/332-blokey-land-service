@@ -8,7 +8,7 @@ describe("접속 및 데이터 초기화 테스트", () => {
     cy.visit("/login");
 
     cy.get('input[placeholder="이메일"]').type("test1@test.com");
-    cy.get('input[placeholder="비밀번호"]').type("test");
+    cy.get('input[placeholder="비밀번호"]').type("testpassword");
     cy.contains("button", "로그인").click();
 
     cy.url().should("not.include", "/login");
@@ -75,9 +75,7 @@ describe("접속 및 데이터 초기화 테스트", () => {
 
     cy.contains("div.text-sm.font-semibold", "1").closest("div.border").click();
 
-    cy.contains("div", "새 마일스톤 만들기").click();
-
-    cy.contains("button", "프로젝트 선택").click();
+    cy.contains("button", "프로젝트 선택").click({ force: true });
 
     cy.get('[role="listbox"]')
       .should("be.visible")

@@ -2,6 +2,7 @@ package xyz.samsami.blokey_land.milestone.repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,9 @@ import xyz.samsami.blokey_land.milestone.dto.MilestoneRespDto;
 import xyz.samsami.blokey_land.milestone.mapper.MilestoneMapper;
 
 import java.util.List;
+import java.util.UUID;
 
+import static xyz.samsami.blokey_land.member.domain.QMember.member;
 import static xyz.samsami.blokey_land.milestone.domain.QMilestone.milestone;
 import static xyz.samsami.blokey_land.project.domain.QProject.project;
 
@@ -21,8 +24,8 @@ import static xyz.samsami.blokey_land.project.domain.QProject.project;
 public class MilestoneDslRepository {
     private final JPAQueryFactory queryFactory;
 
-    public List<MilestoneRespDto> readMilestones(MilestoneReqReadDto dto) {
-        List<Milestone> milestones = fetchMilestones(dto);
+    public List<MilestoneRespDto> readMilestones(MilestoneReqReadDto dto, UUID blokeyId) {
+        List<Milestone> milestones = fetchMilestones(dto, blokeyId);
 
         return milestones.stream()
             .map(MilestoneMapper::toRespDto)
@@ -53,13 +56,22 @@ public class MilestoneDslRepository {
         return builder;
     }
 
-    private List<Milestone> fetchMilestones(MilestoneReqReadDto dto) {
+    private List<Milestone> fetchMilestones(MilestoneReqReadDto dto, UUID blokeyId) {
         BooleanBuilder predicate = buildPredicate(dto);
 
         JPAQuery<Milestone> query = queryFactory
             .selectFrom(milestone)
             .join(milestone.project, project).fetchJoin()
-            .where(predicate)
+            .where(
+                predicate.and(
+                    project.id.in(
+                        JPAExpressions
+                            .select(member.project.id)
+                            .from(member)
+                            .where(member.blokey.id.eq(blokeyId))
+                    )
+                )
+            )
             .orderBy(milestone.id.desc());
 
         return query.fetch();
