@@ -105,6 +105,7 @@ const GanttWithSummary: React.FC<GanttWithSummaryProps> = ({
 
         const taskStart = parseLocalDate(task.start);
         const taskEnd = parseLocalDate(task.end);
+
         return taskEnd >= baseStartDate && taskStart <= chartEndDate;
       });
   }, [projects, baseStartDate, daysToShow, selectedProjectId]);
