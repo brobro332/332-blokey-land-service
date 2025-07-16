@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.UUID;
 
 @Service
 public class FileService {
@@ -20,18 +21,26 @@ public class FileService {
 
     public String saveFile(MultipartFile file) {
         try {
-            Path dirPath = Paths.get(uploadDir);
+            Path dirPath = Paths.get(uploadDir).normalize().toAbsolutePath();
+            Files.createDirectories(dirPath);
 
-            if (!Files.exists(dirPath)) Files.createDirectories(dirPath);
+            String originalFileName = file.getOriginalFilename();
+            if (originalFileName == null || originalFileName.isBlank()) {
+                throw new CommonException(ExceptionType.BAD_REQUEST, "파일명이 비어있습니다.");
+            }
+            String safeFileName = UUID.randomUUID() + "_" + originalFileName;
 
-            String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-            Path filePath = dirPath.resolve(fileName);
-
-            try (InputStream inputStream = file.getInputStream()) {
-                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+            Path targetPath = dirPath.resolve(safeFileName).normalize();
+            if (!targetPath.startsWith(dirPath)) {
+                throw new CommonException(ExceptionType.INTERNAL_SERVER_ERROR, "잘못된 파일 경로입니다.");
             }
 
-            return fileName;
+            try (InputStream inputStream = file.getInputStream()) {
+                Files.copy(inputStream, targetPath, StandardCopyOption.REPLACE_EXISTING);
+            }
+
+            return safeFileName;
+
         } catch (IOException e) {
             throw new CommonException(ExceptionType.INTERNAL_SERVER_ERROR, "파일 저장 중 오류가 발생했습니다.");
         }
