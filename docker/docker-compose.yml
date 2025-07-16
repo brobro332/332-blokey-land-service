@@ -52,9 +52,25 @@ services:
     env_file:
       - .env
 
+  elasticsearch-blokey:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.9.0
+    container_name: elasticsearch-blokey
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=true
+      - ES_JAVA_OPTS=-Xms256m -Xmx256m
+      - ELASTIC_PASSWORD=${ELASTICSEARCH_PASSWORD}
+    ports:
+      - "${ELASTICSEARCH_EXTERNAL_PORT}:${ELASTICSEARCH_INTERNAL_PORT}"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    networks:
+      - network-sentinel 
+
 volumes:
   spring-uploads:
   pgdata:
+  esdata:
 
 networks:
   network-sentinel:
