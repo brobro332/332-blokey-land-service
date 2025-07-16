@@ -31,7 +31,7 @@ public class ProjectDslRepository {
 
         List<Tuple> rows = baseQuery(dto, blokeyUuid)
             .offset(pageable.getOffset())
-            .limit(pageable.getPageSize() + 1)
+            .limit(pageable.getPageSize() + 1L)
             .orderBy(project.id.desc())
             .fetch();
 
