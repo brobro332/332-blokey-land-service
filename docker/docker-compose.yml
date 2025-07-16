@@ -13,6 +13,8 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${DATA_POSTGRES_PASSWORD}
     depends_on:
       - postgres
+    volumes:
+      - spring-uploads:/app/uploads
     networks:
       - network-sentinel
     env_file:
@@ -51,6 +53,7 @@ services:
       - .env
 
 volumes:
+  spring-uploads:
   pgdata:
 
 networks:

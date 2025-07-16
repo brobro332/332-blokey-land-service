@@ -1,3 +1,5 @@
+/// <reference types="cypress" />
+
 describe("접속 및 데이터 초기화 테스트", () => {
   it("사이트 접속", () => {
     cy.visit("/");

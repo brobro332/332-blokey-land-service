@@ -60,8 +60,9 @@ class MemberRepositoryTest extends ContainerBaseTest {
         Page<MemberRespDto> result = repository.findDtoByBlokeyId(blokey1.getId(), PageRequest.of(0, 10));
 
         // then
-        assertThat(result).isNotEmpty();
-        assertThat(result).hasSize(1);
+        assertThat(result)
+            .isNotEmpty()
+            .hasSize(1);
         MemberRespDto dto = result.getContent().getFirst();
         assertThat(dto.getNickname()).isEqualTo("닉네임 1");
         assertThat(dto.getProjectId()).isEqualTo(project.getId());
