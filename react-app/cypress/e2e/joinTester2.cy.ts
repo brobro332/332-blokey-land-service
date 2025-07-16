@@ -1,3 +1,5 @@
+/// <reference types="cypress" />
+
 describe("회원가입 테스트", () => {
   it("회원가입", () => {
     cy.visit("/");

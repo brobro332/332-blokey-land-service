@@ -7,5 +7,7 @@ import xyz.samsami.blokey_land.common.ContainerBaseTest;
 @SpringBootTest
 class BlokeyLandApplicationTests extends ContainerBaseTest {
 	@Test
-	void contextLoads() { }
+	void contextLoads() {
+		/* 컨텍스트 로드 테스트 */
+	}
 }
