@@ -4,7 +4,7 @@ CREATE TABLE blokey (
     nickname VARCHAR(20) NOT NULL,
     bio VARCHAR(200),
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    modified_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- project
@@ -20,7 +20,7 @@ CREATE TABLE project (
     actual_start_date DATE,
     actual_end_date DATE,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    modified_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- member
@@ -30,7 +30,7 @@ CREATE TABLE member (
     project_id BIGINT,
     blokey_id UUID,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modified_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_member_project FOREIGN KEY (project_id) REFERENCES project(id),
     CONSTRAINT fk_member_blokey FOREIGN KEY (blokey_id) REFERENCES blokey(id)
 );
@@ -43,7 +43,7 @@ CREATE TABLE milestone (
     due_date DATE,
     project_id BIGINT,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modified_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_milestone_project FOREIGN KEY (project_id) REFERENCES project(id)
 );
 
@@ -62,7 +62,7 @@ CREATE TABLE task (
     actual_start_date DATE,
     actual_end_date DATE,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modified_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_task_project FOREIGN KEY (project_id) REFERENCES project(id)
 );
 
@@ -74,7 +74,15 @@ CREATE TABLE offer (
     offerer VARCHAR(10),
     status VARCHAR(10),
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modified_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_offer_project FOREIGN KEY (project_id) REFERENCES project(id),
     CONSTRAINT fk_offer_blokey FOREIGN KEY (blokey_id) REFERENCES blokey(id)
+);
+
+-- shedlock
+CREATE TABLE shedlock (
+    name VARCHAR(64) NOT NULL PRIMARY KEY,
+    lock_until TIMESTAMP NOT NULL,
+    locked_at TIMESTAMP NOT NULL,
+    locked_by VARCHAR(255) NOT NULL
 );
