@@ -1,4 +1,4 @@
-package xyz.samsami.blokey_land.position.domain;
+package xyz.samsami.blokey_land.discipline.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,7 +10,7 @@ import xyz.samsami.blokey_land.project.domain.Project;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class ProjectPosition extends CommonTimestamp {
+public class ProjectDiscipline extends CommonTimestamp {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,7 +19,7 @@ public class ProjectPosition extends CommonTimestamp {
     private Project project;
 
     @ManyToOne
-    private Position position;
+    private Discipline discipline;
 
     public void updateProject(Project project) { if (project != null) this.project = project; }
 }

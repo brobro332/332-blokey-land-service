@@ -1,0 +1,59 @@
+-- skill
+CREATE TABLE skill (
+    id BIGINT PRIMARY KEY,
+    name VARCHAR(30) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modified_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- discipline
+CREATE TABLE discipline (
+    id BIGINT PRIMARY KEY,
+    name VARCHAR(20) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modified_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- blokey_skill
+CREATE TABLE blokey_skill (
+    id BIGSERIAL PRIMARY KEY,
+    blokey_id UUID NOT NULL,
+    skill_id BIGINT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modified_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (blokey_id) REFERENCES blokey(id) ON DELETE CASCADE,
+    FOREIGN KEY (skill_id) REFERENCES skill(id) ON DELETE CASCADE
+);
+
+-- blokey_discipline
+CREATE TABLE blokey_discipline (
+    id BIGSERIAL PRIMARY KEY,
+    blokey_id UUID NOT NULL,
+    discipline_id BIGINT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modified_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (blokey_id) REFERENCES blokey(id) ON DELETE CASCADE,
+    FOREIGN KEY (discipline_id) REFERENCES discipline(id) ON DELETE CASCADE
+);
+
+-- project_skill
+CREATE TABLE project_skill (
+    id BIGSERIAL PRIMARY KEY,
+    project_id BIGINT NOT NULL,
+    skill_id BIGINT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modified_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (project_id) REFERENCES project(id) ON DELETE CASCADE,
+    FOREIGN KEY (skill_id) REFERENCES skill(id) ON DELETE CASCADE
+);
+
+-- project_discipline
+CREATE TABLE project_discipline (
+    id BIGSERIAL PRIMARY KEY,
+    project_id BIGINT NOT NULL,
+    discipline_id BIGINT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modified_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (project_id) REFERENCES project(id) ON DELETE CASCADE,
+    FOREIGN KEY (discipline_id) REFERENCES discipline(id) ON DELETE CASCADE
+);

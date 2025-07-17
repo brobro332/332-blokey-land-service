@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import xyz.samsami.blokey_land.common.domain.CommonDateTime;
-import xyz.samsami.blokey_land.position.domain.ProjectPosition;
+import xyz.samsami.blokey_land.discipline.domain.ProjectDiscipline;
 import xyz.samsami.blokey_land.project.type.ProjectStatusType;
 import xyz.samsami.blokey_land.skill.domain.ProjectSkill;
 import xyz.samsami.blokey_land.task.domain.Task;
@@ -48,7 +48,7 @@ public class Project extends CommonDateTime {
     private Set<ProjectSkill> skills = new HashSet<>();
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private Set<ProjectPosition> positions = new HashSet<>();
+    private Set<ProjectDiscipline> disciplines = new HashSet<>();
 
     public void addTask(Task task) {
         tasks.add(task);
@@ -70,14 +70,14 @@ public class Project extends CommonDateTime {
         projectSkill.updateProject(null);
     }
 
-    public void addPosition(ProjectPosition projectPosition) {
-        positions.add(projectPosition);
-        projectPosition.updateProject(this);
+    public void addDiscipline(ProjectDiscipline projectDiscipline) {
+        disciplines.add(projectDiscipline);
+        projectDiscipline.updateProject(this);
     }
 
-    public void removePosition(ProjectPosition projectPosition) {
-        positions.remove(projectPosition);
-        projectPosition.updateProject(null);
+    public void removeDiscipline(ProjectDiscipline projectDiscipline) {
+        disciplines.remove(projectDiscipline);
+        projectDiscipline.updateProject(null);
     }
 
     public void updateTitle(String title) { if (title != null) this.title = title; }

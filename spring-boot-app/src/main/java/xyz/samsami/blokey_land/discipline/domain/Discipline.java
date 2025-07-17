@@ -1,4 +1,4 @@
-package xyz.samsami.blokey_land.position.domain;
+package xyz.samsami.blokey_land.discipline.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,7 +9,7 @@ import xyz.samsami.blokey_land.common.domain.CommonTimestamp;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class Position extends CommonTimestamp {
+public class Discipline extends CommonTimestamp {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

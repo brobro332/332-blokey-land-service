@@ -3,7 +3,7 @@ package xyz.samsami.blokey_land.blokey.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import xyz.samsami.blokey_land.common.domain.CommonTimestamp;
-import xyz.samsami.blokey_land.position.domain.BlokeyPosition;
+import xyz.samsami.blokey_land.discipline.domain.BlokeyDiscipline;
 import xyz.samsami.blokey_land.skill.domain.BlokeySkill;
 
 import java.util.HashSet;
@@ -29,7 +29,7 @@ public class Blokey extends CommonTimestamp {
     private Set<BlokeySkill> skills = new HashSet<>();
 
     @OneToMany(mappedBy = "blokey", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private Set<BlokeyPosition> positions = new HashSet<>();
+    private Set<BlokeyDiscipline> disciplines = new HashSet<>();
 
     public void addSkill(BlokeySkill blokeySkill) {
         skills.add(blokeySkill);
@@ -41,14 +41,14 @@ public class Blokey extends CommonTimestamp {
         blokeySkill.updateBlokey(null);
     }
 
-    public void addPosition(BlokeyPosition blokeyPosition) {
-        positions.add(blokeyPosition);
-        blokeyPosition.updateBlokey(this);
+    public void addDiscipline(BlokeyDiscipline blokeyDiscipline) {
+        disciplines.add(blokeyDiscipline);
+        blokeyDiscipline.updateBlokey(this);
     }
 
-    public void removePosition(BlokeyPosition blokeyPosition) {
-        positions.remove(blokeyPosition);
-        blokeyPosition.updateBlokey(null);
+    public void removeDiscipline(BlokeyDiscipline blokeyDiscipline) {
+        disciplines.remove(blokeyDiscipline);
+        blokeyDiscipline.updateBlokey(null);
     }
 
     public void updateNickname(String nickname) { if (nickname != null) this.nickname = nickname; }
