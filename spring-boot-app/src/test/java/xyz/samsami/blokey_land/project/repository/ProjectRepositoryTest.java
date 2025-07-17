@@ -39,7 +39,13 @@ class ProjectRepositoryTest extends ContainerBaseTest {
     @BeforeEach
     void setUp() {
         blokeyId = UUID.randomUUID();
-        blokey = blokeyRepository.save(new Blokey(blokeyId, "닉네임", "소개"));
+        blokey = blokeyRepository.save(
+            Blokey.builder()
+                .id(blokeyId)
+                .nickname("닉네임")
+                .bio("소개")
+                .build()
+        );
 
         project1 = repository.save(Project.builder()
             .title("제목 1")

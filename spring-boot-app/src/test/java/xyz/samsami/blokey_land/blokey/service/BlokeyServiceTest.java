@@ -1,5 +1,6 @@
 package xyz.samsami.blokey_land.blokey.service;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,16 +26,27 @@ class BlokeyServiceTest {
     @InjectMocks private BlokeyService service;
     @Mock private BlokeyRepository repository;
 
+    UUID blokeyId;
+    Blokey blokey;
+    String nickname = "테스트_닉네임_텍스트";
+    String bio = "테스트_소개_텍스트";
+
+    @BeforeEach
+    void setUp() {
+        blokeyId = UUID.randomUUID();
+        blokey = Blokey.builder()
+            .id(blokeyId)
+            .nickname(nickname)
+            .bio(bio)
+            .build();
+    }
+
     @DisplayName("사용자를 생성할 때 모든 필수 값이 저장돼야 한다.")
     @Test
     void givenValidBlokeyDto_whenCreateBlokey_thenAllFieldsShouldBeSaved() {
         // given
-        UUID id = UUID.randomUUID();
-        String nickname = "nickname";
-        String bio = "bio";
-
         BlokeyReqCreateDto dto = BlokeyReqCreateDto.builder()
-            .id(id)
+            .id(blokeyId)
             .nickname(nickname)
             .bio(bio)
             .build();
@@ -48,7 +60,7 @@ class BlokeyServiceTest {
         verify(repository).save(captor.capture());
         Blokey saved = captor.getValue();
 
-        assertEquals(id, saved.getId());
+        assertEquals(blokeyId, saved.getId());
         assertEquals(nickname, saved.getNickname());
         assertEquals(bio, saved.getBio());
     }
@@ -57,33 +69,30 @@ class BlokeyServiceTest {
     @Test
     void givenValidId_whenFindBlokeyByBlokeyId_thenReturnBlokey() {
         // given
-        UUID id = UUID.randomUUID();
-        Blokey blokey = new Blokey(id, "nickname", "bio");
-
-        when(repository.findById(id)).thenReturn(Optional.of(blokey));
+        when(repository.findById(blokeyId)).thenReturn(Optional.of(blokey));
 
         // when
-        Blokey found = service.findBlokeyByBlokeyId(id);
+        Blokey found = service.findBlokeyByBlokeyId(blokeyId);
 
         // then
         assertEquals(blokey.getId(), found.getId());
         assertEquals(blokey.getNickname(), found.getNickname());
         assertEquals(blokey.getBio(), found.getBio());
 
-        verify(repository).findById(id);
+        verify(repository).findById(blokeyId);
     }
 
     @DisplayName("존재하지 않는 ID로 사용자 조회 시 예외가 발생해야 한다.")
     @Test
     void givenInvalidId_whenFindBlokeyByBlokeyId_thenThrowException() {
         // given
-        UUID nonExistingId = UUID.randomUUID();
+        UUID undefinedId = UUID.randomUUID();
 
-        when(repository.findById(nonExistingId)).thenReturn(Optional.empty());
+        when(repository.findById(undefinedId)).thenReturn(Optional.empty());
 
         // when & then
         assertThrows(CommonException.class, () -> {
-            service.findBlokeyByBlokeyId(nonExistingId);
+            service.findBlokeyByBlokeyId(undefinedId);
         });
     }
 
@@ -91,18 +100,15 @@ class BlokeyServiceTest {
     @Test
     void givenValidId_whenReadBlokeyByBlokeyId_thenReturnDto() {
         // given
-        UUID id = UUID.randomUUID();
-        Blokey blokey = new Blokey(id, "nickname", "bio");
-
-        when(repository.findById(id)).thenReturn(Optional.of(blokey));
+        when(repository.findById(blokeyId)).thenReturn(Optional.of(blokey));
 
         // when
-        BlokeyRespDto dto = service.readBlokeyByBlokeyId(id);
+        BlokeyRespDto dto = service.readBlokeyByBlokeyId(blokeyId);
 
         // then
-        assertEquals(id, dto.getId());
-        assertEquals("nickname", dto.getNickname());
-        assertEquals("bio", dto.getBio());
+        assertEquals(blokeyId, dto.getId());
+        assertEquals(nickname, dto.getNickname());
+        assertEquals(bio, dto.getBio());
         assertFalse(dto.isHasPendingOffer());
     }
 
@@ -110,19 +116,22 @@ class BlokeyServiceTest {
     @DisplayName("닉네임 또는 소개가 있으면 상태 변경 메서드가 호출되어야 한다.")
     void updateBlokey_whenUpdateBlokeyByBlokeyId_thenCallStateChangingMethod() {
         // given
-        UUID id = UUID.randomUUID();
-        BlokeyReqUpdateDto dto = new BlokeyReqUpdateDto("newNickname", "newBio");
-        Blokey blokey = mock(Blokey.class);
+        UUID newId = UUID.randomUUID();
+        String newNickname = "테스트_수정_닉네임_텍스트";
+        String newBio = "테스트_수정_소개_텍스트";
 
-        when(repository.findById(id)).thenReturn(Optional.of(blokey));
+        BlokeyReqUpdateDto dto = new BlokeyReqUpdateDto(newNickname, newBio);
+        Blokey mock = mock(Blokey.class);
+
+        when(repository.findById(newId)).thenReturn(Optional.of(mock));
 
         // when
-        service.updateBlokeyByBlokeyId(id, dto);
+        service.updateBlokeyByBlokeyId(newId, dto);
 
         // then
-        verify(repository).findById(id);
-        verify(blokey).updateNickname("newNickname");
-        verify(blokey).updateBio("newBio");
+        verify(repository).findById(newId);
+        verify(mock).updateNickname(newNickname);
+        verify(mock).updateBio(newBio);
     }
 
     @Test
@@ -130,14 +139,14 @@ class BlokeyServiceTest {
     void deleteBlokey_whenDeleteBlokeyByBlokeyId_thenCallRepositoryDeleteMethod() {
         // given
         UUID id = UUID.randomUUID();
-        Blokey blokey = mock(Blokey.class);
+        Blokey mock = mock(Blokey.class);
 
-        when(repository.findById(id)).thenReturn(Optional.of(blokey));
+        when(repository.findById(id)).thenReturn(Optional.of(mock));
 
         // when
         service.deleteBlokeyByBlokeyId(id);
 
         // then
-        verify(repository).delete(blokey);
+        verify(repository).delete(mock);
     }
 }

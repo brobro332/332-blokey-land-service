@@ -43,7 +43,11 @@ class ProjectServiceTest {
     @BeforeEach
     void setUp() {
         blokeyId = UUID.randomUUID();
-        blokey = new Blokey(blokeyId, "nickname", "bio");
+        blokey = Blokey.builder()
+            .id(blokeyId)
+            .nickname("닉네임")
+            .bio("소개")
+            .build();
     }
 
     @DisplayName("유효한 파라미터가 주어졌을 때 프로젝트와 멤버를 생성해야 한다.")

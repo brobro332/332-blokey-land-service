@@ -33,7 +33,13 @@ class TaskRepositoryTest extends ContainerBaseTest {
     @BeforeEach
     void setUp() {
         UUID blokeyId = UUID.randomUUID();
-        blokeyRepository.save(new Blokey(blokeyId, "닉네임", "소개"));
+        blokeyRepository.save(
+            Blokey.builder()
+                .id(blokeyId)
+                .nickname("닉네임")
+                .bio("소개")
+                .build()
+        );
 
         project = projectRepository.save(
             Project.builder()

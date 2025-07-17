@@ -34,7 +34,13 @@ class OfferRepositoryTest extends ContainerBaseTest {
     void givenProjectId_whenFindDtoByProjectId_thenReturnDto() {
         // given
         UUID blokeyId = UUID.randomUUID();
-        Blokey blokey = blokeyRepository.save(new Blokey(blokeyId, "닉네임", "소개"));
+        Blokey blokey = blokeyRepository.save(
+            Blokey.builder()
+                .id(blokeyId)
+                .nickname("닉네임")
+                .bio("소개")
+                .build()
+        );
 
         Project project = projectRepository.save(Project.builder()
             .title("제목")
@@ -71,7 +77,13 @@ class OfferRepositoryTest extends ContainerBaseTest {
     void givenBlokeyId_whenFindDtoByBlokeyId_thenReturnDto() {
         // given
         UUID blokeyId = UUID.randomUUID();
-        Blokey blokey = blokeyRepository.save(new Blokey(blokeyId, "닉네임", "소개"));
+        Blokey blokey = blokeyRepository.save(
+            Blokey.builder()
+                .id(blokeyId)
+                .nickname("닉네임")
+                .bio("소개")
+                .build()
+        );
 
         Project project = projectRepository.save(Project.builder()
             .title("제목")

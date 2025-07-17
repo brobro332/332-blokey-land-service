@@ -33,7 +33,12 @@ class ProjectDslRepositoryTest extends ContainerBaseTest {
     @Test
     void givenTitleFilter_whenReadProjectsSlice_thenFiltered() {
         UUID blokeyId = UUID.randomUUID();
-        Blokey blokey = blokeyRepository.save(new Blokey(blokeyId, "닉네임", "소개"));
+        Blokey blokey = blokeyRepository.save(Blokey.builder()
+            .id(blokeyId)
+            .nickname("닉네임")
+            .bio("소개")
+            .build()
+        );
 
         Project project1 = repository.save(Project.builder().title("검색어").build());
         Project project2 = repository.save(Project.builder().title("다른 제목").build());
@@ -55,7 +60,13 @@ class ProjectDslRepositoryTest extends ContainerBaseTest {
     void givenValidParameter_whenReadProjectsPage_thenReturnPage() {
         // given
         UUID blokeyId = UUID.randomUUID();
-        Blokey blokey = blokeyRepository.save(new Blokey(blokeyId, "닉네임", "소개"));
+        Blokey blokey = blokeyRepository.save(
+            Blokey.builder()
+                .id(blokeyId)
+                .nickname("닉네임")
+                .bio("소개")
+                .build()
+        );
 
         for (int i = 0; i < 15; i++) {
             Project project = repository.save(Project.builder()

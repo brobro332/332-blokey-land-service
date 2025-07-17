@@ -36,7 +36,11 @@ class MemberServiceTest {
     @BeforeEach
     void setUp() {
         UUID blokeyId = UUID.randomUUID();
-        blokey = new Blokey(blokeyId, "nickname", "bio");
+        blokey = Blokey.builder()
+            .id(blokeyId)
+            .nickname("닉네임")
+            .bio("소개")
+            .build();
 
         Long projectId = 1L;
         project = Project.builder()

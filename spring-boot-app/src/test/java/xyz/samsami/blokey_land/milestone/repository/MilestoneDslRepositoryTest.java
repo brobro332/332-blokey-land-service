@@ -37,7 +37,13 @@ class MilestoneDslRepositoryTest extends ContainerBaseTest {
     void givenParameter_whenReadMilestones_thenReturnsDto() {
         // given
         UUID blokeyId = UUID.randomUUID();
-        Blokey blokey = blokeyRepository.save(new Blokey(blokeyId, "닉네임", "소개"));
+        Blokey blokey = blokeyRepository.save(
+            Blokey.builder()
+                .id(blokeyId)
+                .nickname("닉네임")
+                .bio("소개")
+                .build()
+        );
 
         Project project = projectRepository.save(
             Project.builder()

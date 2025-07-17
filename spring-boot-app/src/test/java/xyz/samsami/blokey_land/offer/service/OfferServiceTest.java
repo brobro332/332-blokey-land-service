@@ -52,7 +52,11 @@ class OfferServiceTest {
         offer = mock(Offer.class);
 
         blokeyId = UUID.randomUUID();
-        blokey = new Blokey(blokeyId, "nickname", "bio");
+        blokey = Blokey.builder()
+            .id(blokeyId)
+            .nickname("닉네임")
+            .bio("소개")
+            .build();
 
         projectId= 1L;
         project = Project.builder()

@@ -34,8 +34,21 @@ class MemberRepositoryTest extends ContainerBaseTest {
     @BeforeEach
     void setUp() {
         project = projectRepository.save(Project.builder().title("테스트").build());
-        blokey1 = blokeyRepository.save(new Blokey(UUID.randomUUID(), "닉네임 1", "소개 1"));
-        Blokey blokey2 = blokeyRepository.save(new Blokey(UUID.randomUUID(), "닉네임 2", "소개 2"));
+        blokey1 = blokeyRepository.save(
+            Blokey.builder()
+                .id(UUID.randomUUID())
+                .nickname("닉네임 1")
+                .bio("소개 1")
+                .build()
+        );
+        
+        Blokey blokey2 = blokeyRepository.save(
+            Blokey.builder()
+                .id(UUID.randomUUID())
+                .nickname("닉네임 2")
+                .bio("소개 2")
+                .build()
+        );
 
         repository.save(Member.builder().role(RoleType.LEADER).project(project).blokey(blokey1).build());
         repository.save(Member.builder().role(RoleType.LEADER).project(project).blokey(blokey2).build());

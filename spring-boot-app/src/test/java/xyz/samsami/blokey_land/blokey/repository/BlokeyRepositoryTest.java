@@ -1,6 +1,7 @@
 package xyz.samsami.blokey_land.blokey.repository;
 
 import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,15 +34,43 @@ class BlokeyRepositoryTest extends ContainerBaseTest {
     @Autowired private OfferRepository offerRepository;
     @Autowired private ProjectRepository projectRepository;
 
-    @Test
-    @DisplayName("프로젝트에 속하지 않은 사용자 정보 및 제안 대기 여부 조회")
-    void givenProjectWithMembersAndOffers_whenFindByNotInProject_thenReturnsBlokeyWithPendingOffer() {
+    UUID firstBlokeyId;
+    Blokey firstBlokey;
+
+    UUID secondBlokeyId;
+    Blokey secondBlokey;
+
+    String nickname = "테스트_닉네임_텍스트";
+    String bio = "테스트_소개_텍스트";
+
+    Project project;
+
+    @BeforeEach
+    void setUp() {
+        firstBlokeyId = UUID.randomUUID();
+        secondBlokeyId = UUID.randomUUID();
+
+        firstBlokey = repository.save(
+            Blokey.builder()
+                .id(firstBlokeyId)
+                .nickname(nickname + "_1")
+                .bio(bio + "_1")
+                .build()
+        );
+        secondBlokey = repository.save(
+            Blokey.builder()
+                .id(secondBlokeyId)
+                .nickname(nickname + "_2")
+                .bio(bio + "_2")
+                .build()
+        );
+
         // given
-        Project project = projectRepository.save(
+        project = projectRepository.save(
             Project.builder()
-                .title("제목")
-                .description("설명")
-                .imageUrl("이미지 URL")
+                .title("테스트_프로젝트_제목_텍스트")
+                .description("테스트_프로젝트_설명_텍스트")
+                .imageUrl("테스트_프로젝트_이미지_URL_텍스트")
                 .isPrivate(true)
                 .estimatedStartDate(LocalDate.now())
                 .estimatedEndDate(LocalDate.now())
@@ -50,26 +79,28 @@ class BlokeyRepositoryTest extends ContainerBaseTest {
                 .build()
         );
 
-        Blokey blokey1 = repository.save(new Blokey(UUID.randomUUID(), "닉네임 1", "소개 1"));
-        Blokey blokey2 = repository.save(new Blokey(UUID.randomUUID(), "닉네임 2", "소개 2"));
 
         memberRepository.save(
             Member.builder()
                 .role(RoleType.LEADER)
                 .project(project)
-                .blokey(blokey1)
+                .blokey(firstBlokey)
                 .build()
         );
 
         offerRepository.save(
             Offer.builder()
                 .project(project)
-                .blokey(blokey2)
+                .blokey(secondBlokey)
                 .offerer(OfferType.PROJECT)
                 .status(OfferStatusType.PENDING)
                 .build()
         );
+    }
 
+    @Test
+    @DisplayName("프로젝트에 속하지 않은 사용자 정보 및 제안 대기 여부 조회")
+    void givenProjectWithMembersAndOffers_whenFindByNotInProject_thenReturnsBlokeyWithPendingOffer() {
         // when
         Page<BlokeyRespDto> result = repository.findByNotInProject(project.getId(), PageRequest.of(0, 10));
 
@@ -77,9 +108,9 @@ class BlokeyRepositoryTest extends ContainerBaseTest {
         assertThat(result).hasSize(1);
         BlokeyRespDto dto = result.getContent().getFirst();
 
-        assertThat(dto.getId()).isEqualTo(blokey2.getId());
-        assertThat(dto.getNickname()).isEqualTo(blokey2.getNickname());
-        assertThat(dto.getBio()).isEqualTo(blokey2.getBio());
+        assertThat(dto.getId()).isEqualTo(secondBlokey.getId());
+        assertThat(dto.getNickname()).isEqualTo(secondBlokey.getNickname());
+        assertThat(dto.getBio()).isEqualTo(secondBlokey.getBio());
         assertThat(dto.isHasPendingOffer()).isTrue();
     }
 }
