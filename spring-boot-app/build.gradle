@@ -73,14 +73,35 @@ repositories {
 }
 
 dependencies {
-	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.8")
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	// Spring Boot Stater
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'io.github.cdimascio:dotenv-java:2.2.4'
-	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
-	implementation 'org.apache.commons:commons-compress:1.26.2'
-	implementation 'p6spy:p6spy:3.9.1'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-batch'
+	implementation 'org.springframework.boot:spring-boot-starter-graphql'
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
+
+	// Spring Data
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+
+	// Flyway
+	implementation 'org.flywaydb:flyway-core:9.22.3'
+
+	// ShedLock
+	implementation 'net.javacrumbs.shedlock:shedlock-spring:5.12.0'
+	implementation 'net.javacrumbs.shedlock:shedlock-provider-jdbc-template:5.12.0'
+
+	// Swagger
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9'
+
+	// QueryDSL
+	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+
+	// DotEnv
+	implementation 'io.github.cdimascio:dotenv-java:2.2.4'
+
+	// P6spy
+	implementation 'p6spy:p6spy:3.9.1'
 
 	annotationProcessor 'org.projectlombok:lombok'
 	annotationProcessor 'com.querydsl:querydsl-apt:5.0.0:jakarta'
