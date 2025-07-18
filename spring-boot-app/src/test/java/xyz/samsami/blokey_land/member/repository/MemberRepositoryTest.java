@@ -17,6 +17,7 @@ import xyz.samsami.blokey_land.member.type.RoleType;
 import xyz.samsami.blokey_land.project.domain.Project;
 import xyz.samsami.blokey_land.project.repository.ProjectRepository;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,30 +29,51 @@ class MemberRepositoryTest extends ContainerBaseTest {
     @Autowired private BlokeyRepository blokeyRepository;
     @Autowired private ProjectRepository projectRepository;
 
-    private Project project;
-    private Blokey blokey1;
+    UUID firstBlokeyId;
+    Blokey firstBlokey;
+    UUID secondBlokeyId;
+    Blokey secondBlokey;
+
+    String nickname = "테스트_닉네임_텍스트";
+    String bio = "테스트_소개_텍스트";
+
+    Project project;
 
     @BeforeEach
     void setUp() {
-        project = projectRepository.save(Project.builder().title("테스트").build());
-        blokey1 = blokeyRepository.save(
+        firstBlokeyId = UUID.randomUUID();
+        secondBlokeyId = UUID.randomUUID();
+
+        firstBlokey = blokeyRepository.save(
             Blokey.builder()
-                .id(UUID.randomUUID())
-                .nickname("닉네임 1")
-                .bio("소개 1")
+                .id(firstBlokeyId)
+                .nickname(nickname + "_1")
+                .bio(bio + "_1")
                 .build()
         );
-        
-        Blokey blokey2 = blokeyRepository.save(
+        secondBlokey = blokeyRepository.save(
             Blokey.builder()
-                .id(UUID.randomUUID())
-                .nickname("닉네임 2")
-                .bio("소개 2")
+                .id(secondBlokeyId)
+                .nickname(nickname + "_2")
+                .bio(bio + "_2")
                 .build()
         );
 
-        repository.save(Member.builder().role(RoleType.LEADER).project(project).blokey(blokey1).build());
-        repository.save(Member.builder().role(RoleType.LEADER).project(project).blokey(blokey2).build());
+        project = projectRepository.save(
+            Project.builder()
+                .title("테스트_프로젝트_제목_텍스트")
+                .description("테스트_프로젝트_설명_텍스트")
+                .imageUrl("테스트_프로젝트_이미지_URL_텍스트")
+                .isPrivate(true)
+                .estimatedStartDate(LocalDate.now())
+                .estimatedEndDate(LocalDate.now())
+                .actualStartDate(LocalDate.now())
+                .actualEndDate(LocalDate.now())
+                .build()
+        );
+
+        repository.save(Member.builder().role(RoleType.LEADER).project(project).blokey(firstBlokey).build());
+        repository.save(Member.builder().role(RoleType.LEADER).project(project).blokey(secondBlokey).build());
     }
 
     @Test
@@ -63,21 +85,21 @@ class MemberRepositoryTest extends ContainerBaseTest {
         // then
         assertThat(result).isNotEmpty();
         assertThat(result.getContent()).extracting("nickname")
-            .containsExactlyInAnyOrder("닉네임 1", "닉네임 2");
+            .containsExactlyInAnyOrder(nickname + "_1", nickname + "_2");
     }
 
     @Test
     @DisplayName("사용자 ID로 멤버 조회 시 해당 사용자가 속한 멤버 목록이 페이지 형태로 반환된다")
     void givenBlokeyId_whenFindDtoByBlokeyId_thenReturnsPagedMembers() {
         // when
-        Page<MemberRespDto> result = repository.findDtoByBlokeyId(blokey1.getId(), PageRequest.of(0, 10));
+        Page<MemberRespDto> result = repository.findDtoByBlokeyId(firstBlokey.getId(), PageRequest.of(0, 10));
 
         // then
         assertThat(result)
             .isNotEmpty()
             .hasSize(1);
         MemberRespDto dto = result.getContent().getFirst();
-        assertThat(dto.getNickname()).isEqualTo("닉네임 1");
+        assertThat(dto.getNickname()).isEqualTo(nickname + "_1");
         assertThat(dto.getProjectId()).isEqualTo(project.getId());
     }
 }

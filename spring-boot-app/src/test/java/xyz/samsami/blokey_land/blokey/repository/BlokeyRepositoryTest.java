@@ -36,7 +36,6 @@ class BlokeyRepositoryTest extends ContainerBaseTest {
 
     UUID firstBlokeyId;
     Blokey firstBlokey;
-
     UUID secondBlokeyId;
     Blokey secondBlokey;
 
@@ -65,7 +64,6 @@ class BlokeyRepositoryTest extends ContainerBaseTest {
                 .build()
         );
 
-        // given
         project = projectRepository.save(
             Project.builder()
                 .title("테스트_프로젝트_제목_텍스트")
@@ -78,7 +76,6 @@ class BlokeyRepositoryTest extends ContainerBaseTest {
                 .actualEndDate(LocalDate.now())
                 .build()
         );
-
 
         memberRepository.save(
             Member.builder()

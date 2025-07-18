@@ -43,3 +43,6 @@ logging:
 
 file:
   upload-dir: ${FILE_UPLOAD_DIR}
+
+github:
+  access-token: ${GITHUB_ACCESS_TOKEN}

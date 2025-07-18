@@ -1,8 +1,6 @@
 package xyz.samsami.blokey_land.skill.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import xyz.samsami.blokey_land.common.domain.CommonTimestamp;
 
@@ -13,8 +11,12 @@ import xyz.samsami.blokey_land.common.domain.CommonTimestamp;
 @Builder
 public class Skill extends CommonTimestamp {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, length = 30)
     private String name;
+
+    @Column(name = "display_name", nullable = false, length = 30)
+    private String displayName;
 }
