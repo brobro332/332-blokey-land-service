@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -22,4 +23,6 @@ public class BlokeyReqCreateDto {
 
     @Size(max = 200, message = "소개는 200자 이하로 입력해주세요.")
     private String bio;
+
+    private List<Long> skills;
 }

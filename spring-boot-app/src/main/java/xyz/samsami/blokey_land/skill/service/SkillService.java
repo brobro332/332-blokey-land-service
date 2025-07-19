@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
+import xyz.samsami.blokey_land.common.exception.CommonException;
+import xyz.samsami.blokey_land.common.type.ExceptionType;
+import xyz.samsami.blokey_land.skill.domain.Skill;
 import xyz.samsami.blokey_land.skill.dto.GithubTopicItemDto;
 import xyz.samsami.blokey_land.skill.dto.GithubTopicSearchRespDto;
 import xyz.samsami.blokey_land.skill.repository.SkillRepository;
@@ -41,5 +44,11 @@ public class SkillService {
     public void saveTopicUpsert(GithubTopicItemDto topic) {
         String displayName = topic.displayName() != null ? topic.displayName() : topic.name();
         repository.insertIgnoreConflict(topic.name(), displayName);
+    }
+
+    public Skill findSkillBySkillId(Long skillId) {
+        return repository.findById(skillId).orElseThrow(() ->
+            new CommonException(ExceptionType.NOT_FOUND, null)
+        );
     }
 }

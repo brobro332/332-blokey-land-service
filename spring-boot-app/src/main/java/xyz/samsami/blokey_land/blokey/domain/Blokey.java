@@ -5,6 +5,7 @@ import lombok.*;
 import xyz.samsami.blokey_land.common.domain.CommonTimestamp;
 import xyz.samsami.blokey_land.discipline.domain.BlokeyDiscipline;
 import xyz.samsami.blokey_land.skill.domain.BlokeySkill;
+import xyz.samsami.blokey_land.skill.domain.RelationTarget;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -15,7 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class Blokey extends CommonTimestamp {
+public class Blokey extends CommonTimestamp implements RelationTarget {
     @Id
     private UUID id;
 
@@ -26,9 +27,11 @@ public class Blokey extends CommonTimestamp {
     private String bio;
 
     @OneToMany(mappedBy = "blokey", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @Builder.Default
     private Set<BlokeySkill> skills = new HashSet<>();
 
     @OneToMany(mappedBy = "blokey", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @Builder.Default
     private Set<BlokeyDiscipline> disciplines = new HashSet<>();
 
     public void addSkill(BlokeySkill blokeySkill) {

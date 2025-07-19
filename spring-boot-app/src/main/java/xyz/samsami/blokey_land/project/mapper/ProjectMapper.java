@@ -3,7 +3,7 @@ package xyz.samsami.blokey_land.project.mapper;
 import xyz.samsami.blokey_land.project.domain.Project;
 import xyz.samsami.blokey_land.project.dto.ProjectReqCreateDto;
 import xyz.samsami.blokey_land.project.dto.ProjectOnlyRespDto;
-import xyz.samsami.blokey_land.project.dto.ProjectWithTaskResponseDto;
+import xyz.samsami.blokey_land.project.dto.ProjectWithTaskRespDto;
 import xyz.samsami.blokey_land.task.dto.TaskRespDto;
 
 import java.util.List;
@@ -54,8 +54,8 @@ public class ProjectMapper {
             .build();
     }
 
-    public static ProjectWithTaskResponseDto toRespDtoWithTaskDtoList(Project project, List<TaskRespDto> taskRespDtoList) {
-        return ProjectWithTaskResponseDto.builder()
+    public static ProjectWithTaskRespDto toRespDtoWithTaskDtoList(Project project, List<TaskRespDto> taskRespDtoList) {
+        return ProjectWithTaskRespDto.builder()
             .id(project.getId())
             .title(project.getTitle())
             .description(project.getDescription())

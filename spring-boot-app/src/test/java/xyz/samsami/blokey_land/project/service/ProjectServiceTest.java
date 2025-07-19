@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -15,16 +16,20 @@ import xyz.samsami.blokey_land.project.domain.Project;
 import xyz.samsami.blokey_land.project.dto.ProjectOnlyRespDto;
 import xyz.samsami.blokey_land.project.dto.ProjectReqCreateDto;
 import xyz.samsami.blokey_land.project.dto.ProjectReqUpdateDto;
-import xyz.samsami.blokey_land.project.dto.ProjectWithTaskResponseDto;
+import xyz.samsami.blokey_land.project.dto.ProjectWithTaskRespDto;
 import xyz.samsami.blokey_land.project.repository.ProjectRepository;
 import xyz.samsami.blokey_land.project.type.ProjectStatusType;
+import xyz.samsami.blokey_land.skill.domain.ProjectSkill;
+import xyz.samsami.blokey_land.skill.domain.Skill;
+import xyz.samsami.blokey_land.skill.dto.SkillRespDto;
+import xyz.samsami.blokey_land.skill.service.ProjectSkillService;
+import xyz.samsami.blokey_land.skill.service.helper.SkillAttachHelper;
 import xyz.samsami.blokey_land.task.domain.Task;
 import xyz.samsami.blokey_land.task.type.TaskStatusType;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -35,13 +40,20 @@ class ProjectServiceTest {
     @InjectMocks private ProjectService service;
     @Mock private BlokeyService blokeyService;
     @Mock private MemberService memberService;
+    @Mock private ProjectSkillService projectSkillService;
     @Mock private ProjectRepository repository;
+    @Mock private SkillAttachHelper skillAttachHelper;
 
-    private UUID blokeyId;
-    private Blokey blokey;
+    UUID blokeyId;
+    Blokey blokey;
+    Skill skill1;
+    Skill skill2;
 
     @BeforeEach
     void setUp() {
+        skill1 = Skill.builder().id(1L).name("java").build();
+        skill2 = Skill.builder().id(2L).name("python").build();
+
         blokeyId = UUID.randomUUID();
         blokey = Blokey.builder()
             .id(blokeyId)
@@ -76,7 +88,7 @@ class ProjectServiceTest {
         verify(repository).save(any(Project.class));
         verify(memberService).createMember(project, blokey, RoleType.LEADER);
     }
-    
+
     @DisplayName("사용자 ID가 주어졌을 때 프로젝트 응답 DTO 목록을 반환해야 한다.")
     @Test
     void givenValidBlokeyId_whenReadAllProjects_thenReturnProjectOnlyDtoList() {
@@ -110,13 +122,45 @@ class ProjectServiceTest {
                 .build()
         );
 
+        Skill skill1 = Skill.builder().id(1L).name("Java").build();
+        Skill skill2 = Skill.builder().id(2L).name("Spring").build();
+
+        Project project1 = Project.builder().id(1L).build();
+        Project project2 = Project.builder().id(2L).build();
+
+        List<ProjectSkill> projectSkills = List.of(
+            ProjectSkill.builder().project(project1).skill(skill1).build(),
+            ProjectSkill.builder().project(project2).skill(skill2).build()
+        );
+
         when(repository.findProjectsWithRoleByBlokeyId(blokeyId)).thenReturn(dtoList);
-    
+        when(skillAttachHelper.<ProjectOnlyRespDto>attachSkills(anyList()))
+            .thenAnswer(invocation -> {
+                List<ProjectOnlyRespDto> inputList = invocation.getArgument(0);
+
+                return inputList.stream()
+                    .map(dto -> {
+                        if (dto.getId() == 1L) {
+                            return dto.toBuilder()
+                                    .skills(Set.of(new SkillRespDto(1L, "Java")))
+                                    .build();
+                        } else if (dto.getId() == 2L) {
+                            return dto.toBuilder()
+                                    .skills(Set.of(new SkillRespDto(2L, "Spring")))
+                                    .build();
+                        }
+                        return dto;
+                    })
+                    .collect(Collectors.toList());
+            });
+
         // when
         List<ProjectOnlyRespDto> result = service.readAllProjects(blokeyId.toString());
-    
+
         // then
         assertEquals(2, result.size());
+        assertTrue(result.stream().anyMatch(p -> p.getSkills().stream().anyMatch(s -> s.getName().equals("Java"))));
+        assertTrue(result.stream().anyMatch(p -> p.getSkills().stream().anyMatch(s -> s.getName().equals("Spring"))));
     }
 
     @DisplayName("사용자 ID가 주어졌을 때 프로젝트 및 태스크 응답 DTO 목록을 반환해야 한다.")
@@ -164,9 +208,11 @@ class ProjectServiceTest {
         List<Project> projectList = List.of(project);
 
         when(repository.findProjectsWithTasksByBlokeyId(blokeyId)).thenReturn(projectList);
+        when(skillAttachHelper.attachSkills(ArgumentMatchers.<List<ProjectWithTaskRespDto>>any()))
+            .thenAnswer(invocation -> invocation.getArgument(0));
 
         // when
-        List<ProjectWithTaskResponseDto> result = service.readAllProjectsWithTasks(blokeyId.toString());
+        List<ProjectWithTaskRespDto> result = service.readAllProjectsWithTasks(blokeyId.toString());
 
         // then
         assertEquals(1, result.size());
@@ -210,11 +256,17 @@ class ProjectServiceTest {
         verify(repository).findById(id);
     }
 
-    @DisplayName("유효한 파라미터가 주어지면 프로젝트 정보가 수정되어야 한다.")
+    @DisplayName("유효한 파라미터가 주어지면 프로젝트 정보와 스킬이 수정되어야 한다.")
     @Test
     void givenValidParameter_whenUpdateProjectByProjectId_thenProjectShouldBeUpdated() {
         // given
         Long projectId = 1L;
+
+        ProjectSkill ps1 = ProjectSkill.builder().skill(skill1).build();
+        ProjectSkill ps2 = ProjectSkill.builder().skill(skill2).build();
+
+        Set<ProjectSkill> existingSkills = new HashSet<>(Set.of(ps1, ps2));
+
         Project project = Project.builder()
             .id(projectId)
             .title("제목")
@@ -228,28 +280,39 @@ class ProjectServiceTest {
             .actualEndDate(LocalDate.now())
             .build();
 
+        project.updateSkills(existingSkills);
+
+        List<Long> newSkills = List.of(2L, 3L);
+
         ProjectReqUpdateDto dto = ProjectReqUpdateDto.builder()
             .title("수정 제목")
             .description("수정 설명")
             .imageUrl("수정 이미지 URL")
             .status(ProjectStatusType.COMPLETED)
+            .isPrivate(true)
             .estimatedStartDate(LocalDate.now())
             .estimatedEndDate(LocalDate.now())
             .actualStartDate(LocalDate.now())
             .actualEndDate(LocalDate.now())
+            .skills(newSkills)
             .build();
 
+        ProjectService spyService = spy(service);
+
         when(repository.findById(projectId)).thenReturn(Optional.of(project));
+        doNothing().when(spyService).addSkillToProject(any(Project.class), anyLong());
+        doNothing().when(spyService).removeSkillFromProject(any(Project.class), anyLong());
 
         // when
-        service.updateProjectByProjectId(projectId, dto);
+        spyService.updateProjectByProjectId(projectId, dto);
 
         // then
         assertEquals("수정 제목", project.getTitle());
         assertEquals(ProjectStatusType.COMPLETED, project.getStatus());
         assertTrue(project.isPrivate());
-
         verify(repository).findById(projectId);
+        verify(spyService).addSkillToProject(project, 3L);
+        verify(spyService).removeSkillFromProject(project, 1L);
     }
 
     @DisplayName("유효한 ID가 주어지면 프로젝트 상태를 DELETED로 변경해야 한다.")

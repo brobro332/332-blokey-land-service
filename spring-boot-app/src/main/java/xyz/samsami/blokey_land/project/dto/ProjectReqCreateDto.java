@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import xyz.samsami.blokey_land.project.type.ProjectStatusType;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -23,6 +24,7 @@ public class ProjectReqCreateDto {
     private String imageUrl;
     private final ProjectStatusType status = ProjectStatusType.ACTIVE;
     private boolean isPrivate;
+    private List<Long> skills;
     private LocalDate estimatedStartDate;
     private LocalDate estimatedEndDate;
     private LocalDate actualStartDate;

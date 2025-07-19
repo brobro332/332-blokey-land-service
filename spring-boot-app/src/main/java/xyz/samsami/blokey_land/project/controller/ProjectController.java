@@ -37,10 +37,10 @@ public class ProjectController implements ProjectApi {
     }
 
     @Override
-    public CommonRespDto<List<ProjectWithTaskResponseDto>> readAllProjectsWithTasks(
+    public CommonRespDto<List<ProjectWithTaskRespDto>> readAllProjectsWithTasks(
             @RequestHeader("X-Account-Id") String blokeyId
     ) {
-        List<ProjectWithTaskResponseDto> list = service.readAllProjectsWithTasks(blokeyId);
+        List<ProjectWithTaskRespDto> list = service.readAllProjectsWithTasks(blokeyId);
         return CommonRespDto.of(ResultType.SUCCESS, "프로젝트 및 태스크 목록 조회 완료", list);
     }
 

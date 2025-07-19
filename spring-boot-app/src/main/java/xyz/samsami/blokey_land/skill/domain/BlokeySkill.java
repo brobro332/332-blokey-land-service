@@ -10,7 +10,7 @@ import xyz.samsami.blokey_land.common.domain.CommonTimestamp;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class BlokeySkill extends CommonTimestamp {
+public class BlokeySkill extends CommonTimestamp implements SkillRelation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import xyz.samsami.blokey_land.blokey.domain.Blokey;
 import xyz.samsami.blokey_land.blokey.dto.BlokeyRespDto;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface BlokeyRepository extends JpaRepository<Blokey, UUID> {
@@ -30,4 +31,12 @@ public interface BlokeyRepository extends JpaRepository<Blokey, UUID> {
         GROUP BY b.id, b.nickname, b.bio
     """)
     Page<BlokeyRespDto> findByNotInProject(@Param("projectId") Long projectId, Pageable pageable);
+
+    @Query("""
+        SELECT b
+        FROM Blokey b
+        LEFT JOIN FETCH b.skills
+        WHERE b.id = :blokeyId
+    """)
+    Optional<Blokey> findByIdWithSkills(@Param("blokeyId") UUID blokeyId);
 }

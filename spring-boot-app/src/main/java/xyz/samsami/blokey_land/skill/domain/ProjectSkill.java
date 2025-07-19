@@ -10,7 +10,7 @@ import xyz.samsami.blokey_land.project.domain.Project;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class ProjectSkill extends CommonTimestamp {
+public class ProjectSkill extends CommonTimestamp implements SkillRelation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

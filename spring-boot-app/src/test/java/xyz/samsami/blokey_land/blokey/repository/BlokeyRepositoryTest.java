@@ -20,6 +20,8 @@ import xyz.samsami.blokey_land.offer.type.OfferStatusType;
 import xyz.samsami.blokey_land.offer.type.OfferType;
 import xyz.samsami.blokey_land.project.domain.Project;
 import xyz.samsami.blokey_land.project.repository.ProjectRepository;
+import xyz.samsami.blokey_land.skill.domain.BlokeySkill;
+import xyz.samsami.blokey_land.skill.domain.Skill;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -34,11 +36,10 @@ class BlokeyRepositoryTest extends ContainerBaseTest {
     @Autowired private OfferRepository offerRepository;
     @Autowired private ProjectRepository projectRepository;
 
-    UUID firstBlokeyId;
-    Blokey firstBlokey;
-    UUID secondBlokeyId;
-    Blokey secondBlokey;
-
+    UUID blokeyId1;
+    UUID blokeyId2;
+    Blokey blokey1;
+    Blokey blokey2;
     String nickname = "테스트_닉네임_텍스트";
     String bio = "테스트_소개_텍스트";
 
@@ -46,23 +47,27 @@ class BlokeyRepositoryTest extends ContainerBaseTest {
 
     @BeforeEach
     void setUp() {
-        firstBlokeyId = UUID.randomUUID();
-        secondBlokeyId = UUID.randomUUID();
+        blokeyId1 = UUID.randomUUID();
+        blokeyId2 = UUID.randomUUID();
 
-        firstBlokey = repository.save(
+        blokey1 = repository.save(
             Blokey.builder()
-                .id(firstBlokeyId)
+                .id(blokeyId1)
                 .nickname(nickname + "_1")
                 .bio(bio + "_1")
                 .build()
         );
-        secondBlokey = repository.save(
+        blokey2 = repository.save(
             Blokey.builder()
-                .id(secondBlokeyId)
+                .id(blokeyId2)
                 .nickname(nickname + "_2")
                 .bio(bio + "_2")
                 .build()
         );
+
+        Skill skill = Skill.builder().id(1L).name("java").displayName("Java").build();
+        BlokeySkill blokeySkill = BlokeySkill.builder().blokey(blokey1).skill(skill).build();
+        blokey1.addSkill(blokeySkill);
 
         project = projectRepository.save(
             Project.builder()
@@ -81,14 +86,14 @@ class BlokeyRepositoryTest extends ContainerBaseTest {
             Member.builder()
                 .role(RoleType.LEADER)
                 .project(project)
-                .blokey(firstBlokey)
+                .blokey(blokey1)
                 .build()
         );
 
         offerRepository.save(
             Offer.builder()
                 .project(project)
-                .blokey(secondBlokey)
+                .blokey(blokey2)
                 .offerer(OfferType.PROJECT)
                 .status(OfferStatusType.PENDING)
                 .build()
@@ -105,9 +110,10 @@ class BlokeyRepositoryTest extends ContainerBaseTest {
         assertThat(result).hasSize(1);
         BlokeyRespDto dto = result.getContent().getFirst();
 
-        assertThat(dto.getId()).isEqualTo(secondBlokey.getId());
-        assertThat(dto.getNickname()).isEqualTo(secondBlokey.getNickname());
-        assertThat(dto.getBio()).isEqualTo(secondBlokey.getBio());
+        assertThat(dto.getId()).isEqualTo(blokey2.getId());
+        assertThat(dto.getNickname()).isEqualTo(blokey2.getNickname());
+        assertThat(dto.getBio()).isEqualTo(blokey2.getBio());
+        assertThat(dto.getSkills().size()).isEqualTo(0);
         assertThat(dto.isHasPendingOffer()).isTrue();
     }
 }

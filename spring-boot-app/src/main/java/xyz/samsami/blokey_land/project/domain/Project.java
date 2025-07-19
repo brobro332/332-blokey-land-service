@@ -7,6 +7,7 @@ import xyz.samsami.blokey_land.common.domain.CommonDateTime;
 import xyz.samsami.blokey_land.discipline.domain.ProjectDiscipline;
 import xyz.samsami.blokey_land.project.type.ProjectStatusType;
 import xyz.samsami.blokey_land.skill.domain.ProjectSkill;
+import xyz.samsami.blokey_land.skill.domain.RelationTarget;
 import xyz.samsami.blokey_land.task.domain.Task;
 
 import java.time.LocalDate;
@@ -19,7 +20,7 @@ import java.util.Set;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Project extends CommonDateTime {
+public class Project extends CommonDateTime implements RelationTarget {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -85,6 +86,7 @@ public class Project extends CommonDateTime {
     public void updateImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
     public void updateStatus(ProjectStatusType status) { if (status != null) this.status = status; }
     public void updateIsPrivate(Boolean isPrivate) { if (isPrivate != null) this.isPrivate = isPrivate; }
+    public void updateSkills(Set<ProjectSkill> skills) { if (skills != null) this.skills = skills; }
 
     @Builder
     public Project(
