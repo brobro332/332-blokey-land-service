@@ -29,11 +29,10 @@ class MemberRepositoryTest extends ContainerBaseTest {
     @Autowired private BlokeyRepository blokeyRepository;
     @Autowired private ProjectRepository projectRepository;
 
-    UUID firstBlokeyId;
-    Blokey firstBlokey;
-    UUID secondBlokeyId;
-    Blokey secondBlokey;
-
+    UUID blokeyId1;
+    UUID blokeyId2;
+    Blokey blokey1;
+    Blokey blokey2;
     String nickname = "테스트_닉네임_텍스트";
     String bio = "테스트_소개_텍스트";
 
@@ -41,19 +40,19 @@ class MemberRepositoryTest extends ContainerBaseTest {
 
     @BeforeEach
     void setUp() {
-        firstBlokeyId = UUID.randomUUID();
-        secondBlokeyId = UUID.randomUUID();
+        blokeyId1 = UUID.randomUUID();
+        blokeyId2 = UUID.randomUUID();
 
-        firstBlokey = blokeyRepository.save(
+        blokey1 = blokeyRepository.save(
             Blokey.builder()
-                .id(firstBlokeyId)
+                .id(blokeyId1)
                 .nickname(nickname + "_1")
                 .bio(bio + "_1")
                 .build()
         );
-        secondBlokey = blokeyRepository.save(
+        blokey2 = blokeyRepository.save(
             Blokey.builder()
-                .id(secondBlokeyId)
+                .id(blokeyId2)
                 .nickname(nickname + "_2")
                 .bio(bio + "_2")
                 .build()
@@ -72,8 +71,8 @@ class MemberRepositoryTest extends ContainerBaseTest {
                 .build()
         );
 
-        repository.save(Member.builder().role(RoleType.LEADER).project(project).blokey(firstBlokey).build());
-        repository.save(Member.builder().role(RoleType.LEADER).project(project).blokey(secondBlokey).build());
+        repository.save(Member.builder().role(RoleType.LEADER).project(project).blokey(blokey1).build());
+        repository.save(Member.builder().role(RoleType.LEADER).project(project).blokey(blokey2).build());
     }
 
     @Test
@@ -92,7 +91,7 @@ class MemberRepositoryTest extends ContainerBaseTest {
     @DisplayName("사용자 ID로 멤버 조회 시 해당 사용자가 속한 멤버 목록이 페이지 형태로 반환된다")
     void givenBlokeyId_whenFindDtoByBlokeyId_thenReturnsPagedMembers() {
         // when
-        Page<MemberRespDto> result = repository.findDtoByBlokeyId(firstBlokey.getId(), PageRequest.of(0, 10));
+        Page<MemberRespDto> result = repository.findDtoByBlokeyId(blokey1.getId(), PageRequest.of(0, 10));
 
         // then
         assertThat(result)
