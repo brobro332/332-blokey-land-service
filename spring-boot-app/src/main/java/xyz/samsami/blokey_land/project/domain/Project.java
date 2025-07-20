@@ -7,7 +7,7 @@ import xyz.samsami.blokey_land.common.domain.CommonDateTime;
 import xyz.samsami.blokey_land.discipline.domain.ProjectDiscipline;
 import xyz.samsami.blokey_land.project.type.ProjectStatusType;
 import xyz.samsami.blokey_land.skill.domain.ProjectSkill;
-import xyz.samsami.blokey_land.skill.domain.RelationTarget;
+import xyz.samsami.blokey_land.common.domain.RelationTarget;
 import xyz.samsami.blokey_land.task.domain.Task;
 
 import java.time.LocalDate;

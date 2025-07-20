@@ -70,3 +70,13 @@ CREATE TABLE project_discipline (
 );
 CREATE INDEX idx_project_discipline_project_id ON project_discipline(project_id);
 CREATE INDEX idx_project_discipline_discipline_id ON project_discipline(discipline_id);
+
+INSERT INTO discipline (name) VALUES
+('프론트엔드 개발'), ('백엔드 개발'), ('풀스택 개발'), ('모바일 개발'),
+('데브옵스'), ('데이터 과학'), ('머신러닝'), ('인공지능'),
+('클라우드 컴퓨팅'), ('사이버 보안'), ('데이터베이스 관리'), ('품질 보증'),
+('UI/UX 디자인'), ('임베디드 시스템'), ('게임 개발'), ('소프트웨어 아키텍처'),
+('시스템 프로그래밍'), ('네트워크 엔지니어링'), ('빅데이터'), ('블록체인 개발'),
+('API 개발'), ('기술 문서 작성'), ('프로젝트 관리'), ('스크럼 마스터'),
+('자동화 엔지니어링'), ('사이트 신뢰성 엔지니어링'), ('컴퓨터 비전'), ('자연어 처리'),
+('증강현실/가상현실 개발'), ('데이터 엔지니어링'), ('성능 엔지니어링');

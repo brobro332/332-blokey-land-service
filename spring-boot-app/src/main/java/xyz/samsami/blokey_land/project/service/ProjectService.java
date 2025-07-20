@@ -8,6 +8,9 @@ import xyz.samsami.blokey_land.blokey.domain.Blokey;
 import xyz.samsami.blokey_land.blokey.service.BlokeyService;
 import xyz.samsami.blokey_land.common.exception.CommonException;
 import xyz.samsami.blokey_land.common.type.ExceptionType;
+import xyz.samsami.blokey_land.discipline.domain.Discipline;
+import xyz.samsami.blokey_land.discipline.service.DisciplineService;
+import xyz.samsami.blokey_land.discipline.service.ProjectDisciplineService;
 import xyz.samsami.blokey_land.member.service.MemberService;
 import xyz.samsami.blokey_land.member.type.RoleType;
 import xyz.samsami.blokey_land.project.domain.Project;
@@ -15,18 +18,16 @@ import xyz.samsami.blokey_land.project.dto.*;
 import xyz.samsami.blokey_land.project.mapper.ProjectMapper;
 import xyz.samsami.blokey_land.project.repository.ProjectDslRepository;
 import xyz.samsami.blokey_land.project.repository.ProjectRepository;
+import xyz.samsami.blokey_land.project.service.helper.ProjectAttachHelper;
 import xyz.samsami.blokey_land.project.type.ProjectStatusType;
 import xyz.samsami.blokey_land.skill.domain.Skill;
 import xyz.samsami.blokey_land.skill.service.ProjectSkillService;
 import xyz.samsami.blokey_land.skill.service.SkillService;
-import xyz.samsami.blokey_land.skill.service.helper.SkillAttachHelper;
 import xyz.samsami.blokey_land.task.dto.TaskRespDto;
 import xyz.samsami.blokey_land.task.mapper.TaskMapper;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,9 +38,11 @@ public class ProjectService {
     private final MemberService memberService;
     private final SkillService skillService;
     private final ProjectSkillService projectSkillService;
+    private final DisciplineService disciplineService;
+    private final ProjectDisciplineService projectDisciplineService;
     private final ProjectRepository repository;
     private final ProjectDslRepository dslRepository;
-    private final SkillAttachHelper skillAttachHelper;
+    private final ProjectAttachHelper projectAttachHelper;
 
     @Transactional
     public void createProject(ProjectReqCreateDto dto, String blokeyId) {
@@ -52,21 +55,23 @@ public class ProjectService {
         memberService.createMember(project, blokey, RoleType.LEADER);
 
         if (dto.getSkills() != null && !dto.getSkills().isEmpty()) {
-            for (Long skillId : dto.getSkills()) {
-                addSkillToProject(project, skillId);
-            }
+            for (Long skillId : dto.getSkills()) addSkillToProject(project, skillId);
+        }
+
+        if (dto.getDisciplines() != null && !dto.getDisciplines().isEmpty()) {
+            for (Long disciplineId : dto.getDisciplines()) addDisciplineToProject(project, disciplineId);
         }
     }
 
     public List<ProjectOnlyRespDto> readAllProjects(String blokeyId) {
         List<ProjectOnlyRespDto> list = repository.findProjectsWithRoleByBlokeyId(UUID.fromString(blokeyId));
-        return skillAttachHelper.attachSkills(list);
+        return projectAttachHelper.attachAll(list);
     }
 
     public List<ProjectWithTaskRespDto> readAllProjectsWithTasks(String blokeyId) {
         List<Project> projects = repository.findProjectsWithTasksByBlokeyId(UUID.fromString(blokeyId));
 
-        List<ProjectWithTaskRespDto> dtoList = projects.stream()
+        List<ProjectWithTaskRespDto> list = projects.stream()
             .map(project -> {
                 List<TaskRespDto> taskRespDtoList = project.getTasks().stream()
                     .map(TaskMapper::toRespDto)
@@ -76,25 +81,25 @@ public class ProjectService {
             })
             .toList();
 
-        return skillAttachHelper.attachSkills(dtoList);
+        return projectAttachHelper.attachAll(list);
     }
 
     public Slice<ProjectOnlyRespDto> readProjectsSlice(ProjectReqReadDto dto, String blokeyId, Pageable pageable) {
         Slice<ProjectOnlyRespDto> slice = dslRepository.readProjectsSlice(dto, blokeyId, pageable);
-        List<ProjectOnlyRespDto> modifiedContent = skillAttachHelper.attachSkills(slice.getContent());
-        return new SliceImpl<>(modifiedContent, pageable, slice.hasNext());
+        List<ProjectOnlyRespDto> withSkillsAndDisciplines = projectAttachHelper.attachAll(slice.getContent());
+        return new SliceImpl<>(withSkillsAndDisciplines, pageable, slice.hasNext());
     }
 
     public Page<ProjectOnlyRespDto> readProjectsPage(ProjectReqReadDto dto, String blokeyId, Pageable pageable) {
         Page<ProjectOnlyRespDto> page = dslRepository.readProjectsPage(dto, blokeyId, pageable);
-        List<ProjectOnlyRespDto> modifiedContent = skillAttachHelper.attachSkills(page.getContent());
-        return new PageImpl<>(modifiedContent, pageable, page.getTotalElements());
+        List<ProjectOnlyRespDto> withSkillsAndDisciplines = projectAttachHelper.attachAll(page.getContent());
+        return new PageImpl<>(withSkillsAndDisciplines, pageable, page.getTotalElements());
     }
 
     public ProjectOnlyRespDto readProjectByProjectId(Long projectId) {
         ProjectOnlyRespDto dto = ProjectMapper.toRespDto(findProjectByProjectId(projectId));
-        List<ProjectOnlyRespDto> result = skillAttachHelper.attachSkills(List.of(dto));
-        return result.getFirst();
+        List<ProjectOnlyRespDto> withSkillsAndDisciplines = projectAttachHelper.attachAll(List.of(dto));
+        return withSkillsAndDisciplines.getFirst();
     }
 
     @Transactional
@@ -112,18 +117,21 @@ public class ProjectService {
         project.updateActualEndDate(dto.getActualEndDate());
 
         if (dto.getSkills() != null) {
-            Set<Long> newSkillIds = new HashSet<>(dto.getSkills());
-            Set<Long> existingSkillIds = project.getSkills().stream()
-                .map(ps -> ps.getSkill().getId())
-                .collect(Collectors.toSet());
+            syncCollectionById(
+                project.getSkills().stream().map(ps -> ps.getSkill().getId()).collect(Collectors.toSet()),
+                new HashSet<>(dto.getSkills()),
+                skillId -> addSkillToProject(project, skillId),
+                skillId -> removeSkillFromProject(project, skillId)
+            );
+        }
 
-            for (Long skillId : newSkillIds) {
-                if (!existingSkillIds.contains(skillId)) addSkillToProject(project, skillId);
-            }
-
-            for (Long skillId : existingSkillIds) {
-                if (!newSkillIds.contains(skillId)) removeSkillFromProject(project, skillId);
-            }
+        if (dto.getDisciplines() != null) {
+            syncCollectionById(
+                project.getDisciplines().stream().map(pd -> pd.getDiscipline().getId()).collect(Collectors.toSet()),
+                new HashSet<>(dto.getDisciplines()),
+                disciplineId -> addDisciplineToProject(project, disciplineId),
+                disciplineId -> removeDisciplineFromProject(project, disciplineId)
+            );
         }
     }
 
@@ -151,5 +159,37 @@ public class ProjectService {
         Skill skill = skillService.findSkillBySkillId(skillId);
 
         projectSkillService.delete(project, skill);
+    }
+
+    @Transactional
+    public void addDisciplineToProject(Project project, Long disciplineId) {
+        Discipline discipline = disciplineService.findDisciplineByDisciplineId(disciplineId);
+
+        projectDisciplineService.create(project, discipline);
+    }
+
+    @Transactional
+    public void removeDisciplineFromProject(Project project, Long disciplineId) {
+        Discipline discipline = disciplineService.findDisciplineByDisciplineId(disciplineId);
+
+        projectDisciplineService.delete(project, discipline);
+    }
+
+    private <T, ID> void syncCollectionById(
+        Collection<ID> currentIds,
+        Collection<ID> newIds,
+        Consumer<ID> adder,
+        Consumer<ID> remover
+    ) {
+        Set<ID> current = new HashSet<>(currentIds);
+        Set<ID> target = new HashSet<>(newIds);
+
+        for (ID id : target) {
+            if (!current.contains(id)) adder.accept(id);
+        }
+
+        for (ID id : current) {
+            if (!target.contains(id)) remover.accept(id);
+        }
     }
 }

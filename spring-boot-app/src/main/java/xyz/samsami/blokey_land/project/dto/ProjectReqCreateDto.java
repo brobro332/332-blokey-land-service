@@ -25,6 +25,7 @@ public class ProjectReqCreateDto {
     private final ProjectStatusType status = ProjectStatusType.ACTIVE;
     private boolean isPrivate;
     private List<Long> skills;
+    private List<Long> disciplines;
     private LocalDate estimatedStartDate;
     private LocalDate estimatedEndDate;
     private LocalDate actualStartDate;

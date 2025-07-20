@@ -23,6 +23,7 @@ public class ProjectReqUpdateDto {
     private ProjectStatusType status;
     private Boolean isPrivate;
     private List<Long> skills;
+    private List<Long> disciplines;
     private LocalDate estimatedStartDate;
     private LocalDate estimatedEndDate;
     private LocalDate actualStartDate;

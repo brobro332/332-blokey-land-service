@@ -5,7 +5,7 @@ import lombok.*;
 import xyz.samsami.blokey_land.common.domain.CommonTimestamp;
 import xyz.samsami.blokey_land.discipline.domain.BlokeyDiscipline;
 import xyz.samsami.blokey_land.skill.domain.BlokeySkill;
-import xyz.samsami.blokey_land.skill.domain.RelationTarget;
+import xyz.samsami.blokey_land.common.domain.RelationTarget;
 
 import java.util.HashSet;
 import java.util.Set;

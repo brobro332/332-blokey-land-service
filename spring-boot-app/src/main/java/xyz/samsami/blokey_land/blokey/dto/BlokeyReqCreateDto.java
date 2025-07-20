@@ -25,4 +25,5 @@ public class BlokeyReqCreateDto {
     private String bio;
 
     private List<Long> skills;
+    private List<Long> disciplines;
 }

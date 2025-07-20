@@ -14,6 +14,8 @@ import xyz.samsami.blokey_land.blokey.dto.BlokeyReqUpdateDto;
 import xyz.samsami.blokey_land.blokey.dto.BlokeyRespDto;
 import xyz.samsami.blokey_land.blokey.repository.BlokeyRepository;
 import xyz.samsami.blokey_land.common.exception.CommonException;
+import xyz.samsami.blokey_land.discipline.service.BlokeyDisciplineService;
+import xyz.samsami.blokey_land.discipline.service.DisciplineService;
 import xyz.samsami.blokey_land.skill.domain.BlokeySkill;
 import xyz.samsami.blokey_land.skill.domain.Skill;
 import xyz.samsami.blokey_land.skill.service.BlokeySkillService;
@@ -32,7 +34,9 @@ class BlokeyServiceTest {
     @InjectMocks private BlokeyService service;
     @Mock private BlokeyRepository repository;
     @Mock private SkillService skillService;
+    @Mock private DisciplineService disciplineService;
     @Mock private BlokeySkillService blokeySkillService;
+    @Mock private BlokeyDisciplineService blokeyDisciplineService;
 
     UUID blokeyId;
     Blokey blokey;
@@ -120,7 +124,7 @@ class BlokeyServiceTest {
     @Test
     void givenValidId_whenReadBlokeyByBlokeyId_thenReturnDto() {
         // given
-        when(repository.findByIdWithSkills(blokeyId)).thenReturn(Optional.of(blokey));
+        when(repository.findById(blokeyId)).thenReturn(Optional.of(blokey));
 
         // when
         BlokeyRespDto dto = service.readBlokeyByBlokeyId(blokeyId);
@@ -141,8 +145,9 @@ class BlokeyServiceTest {
         String newNickname = "테스트_수정_닉네임_텍스트";
         String newBio = "테스트_수정_소개_텍스트";
         List<Long> newSkills = List.of(2L, 3L);
+        List<Long> newDisciplines = List.of(2L, 3L);
 
-        BlokeyReqUpdateDto dto = new BlokeyReqUpdateDto(newNickname, newBio, newSkills);
+        BlokeyReqUpdateDto dto = new BlokeyReqUpdateDto(newNickname, newBio, newSkills, newDisciplines);
         Blokey mock = mock(Blokey.class);
 
         BlokeySkill firstBlokeySkill = BlokeySkill.builder().blokey(mock).skill(skill1).build();

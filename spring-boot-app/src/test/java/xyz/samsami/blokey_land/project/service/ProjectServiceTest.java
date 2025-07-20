@@ -18,12 +18,11 @@ import xyz.samsami.blokey_land.project.dto.ProjectReqCreateDto;
 import xyz.samsami.blokey_land.project.dto.ProjectReqUpdateDto;
 import xyz.samsami.blokey_land.project.dto.ProjectWithTaskRespDto;
 import xyz.samsami.blokey_land.project.repository.ProjectRepository;
+import xyz.samsami.blokey_land.project.service.helper.ProjectAttachHelper;
 import xyz.samsami.blokey_land.project.type.ProjectStatusType;
 import xyz.samsami.blokey_land.skill.domain.ProjectSkill;
 import xyz.samsami.blokey_land.skill.domain.Skill;
 import xyz.samsami.blokey_land.skill.dto.SkillRespDto;
-import xyz.samsami.blokey_land.skill.service.ProjectSkillService;
-import xyz.samsami.blokey_land.skill.service.helper.SkillAttachHelper;
 import xyz.samsami.blokey_land.task.domain.Task;
 import xyz.samsami.blokey_land.task.type.TaskStatusType;
 
@@ -40,9 +39,8 @@ class ProjectServiceTest {
     @InjectMocks private ProjectService service;
     @Mock private BlokeyService blokeyService;
     @Mock private MemberService memberService;
-    @Mock private ProjectSkillService projectSkillService;
     @Mock private ProjectRepository repository;
-    @Mock private SkillAttachHelper skillAttachHelper;
+    @Mock private ProjectAttachHelper projectAttachHelper;
 
     UUID blokeyId;
     Blokey blokey;
@@ -122,19 +120,8 @@ class ProjectServiceTest {
                 .build()
         );
 
-        Skill skill1 = Skill.builder().id(1L).name("Java").build();
-        Skill skill2 = Skill.builder().id(2L).name("Spring").build();
-
-        Project project1 = Project.builder().id(1L).build();
-        Project project2 = Project.builder().id(2L).build();
-
-        List<ProjectSkill> projectSkills = List.of(
-            ProjectSkill.builder().project(project1).skill(skill1).build(),
-            ProjectSkill.builder().project(project2).skill(skill2).build()
-        );
-
         when(repository.findProjectsWithRoleByBlokeyId(blokeyId)).thenReturn(dtoList);
-        when(skillAttachHelper.<ProjectOnlyRespDto>attachSkills(anyList()))
+        when(projectAttachHelper.<ProjectOnlyRespDto>attachAll(anyList()))
             .thenAnswer(invocation -> {
                 List<ProjectOnlyRespDto> inputList = invocation.getArgument(0);
 
@@ -208,7 +195,7 @@ class ProjectServiceTest {
         List<Project> projectList = List.of(project);
 
         when(repository.findProjectsWithTasksByBlokeyId(blokeyId)).thenReturn(projectList);
-        when(skillAttachHelper.attachSkills(ArgumentMatchers.<List<ProjectWithTaskRespDto>>any()))
+        when(projectAttachHelper.attachAll(ArgumentMatchers.<List<ProjectWithTaskRespDto>>any()))
             .thenAnswer(invocation -> invocation.getArgument(0));
 
         // when

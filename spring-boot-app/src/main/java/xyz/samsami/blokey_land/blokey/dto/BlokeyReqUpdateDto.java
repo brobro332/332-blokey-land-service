@@ -18,4 +18,5 @@ public class BlokeyReqUpdateDto {
     private String bio;
 
     private List<Long> skills;
+    private List<Long> disciplines;
 }

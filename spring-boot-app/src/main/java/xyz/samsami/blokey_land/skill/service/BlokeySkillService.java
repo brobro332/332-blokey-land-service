@@ -3,6 +3,7 @@ package xyz.samsami.blokey_land.skill.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import xyz.samsami.blokey_land.blokey.domain.Blokey;
+import xyz.samsami.blokey_land.common.service.AbstractRelationService;
 import xyz.samsami.blokey_land.skill.domain.BlokeySkill;
 import xyz.samsami.blokey_land.skill.domain.Skill;
 import xyz.samsami.blokey_land.skill.repository.BlokeySkillRepository;
@@ -14,7 +15,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class BlokeySkillService extends SkillRelationService<BlokeySkill, Blokey> {
+public class BlokeySkillService extends AbstractRelationService<BlokeySkill, Blokey, Skill> {
     private final BlokeySkillRepository repository;
 
     @Override

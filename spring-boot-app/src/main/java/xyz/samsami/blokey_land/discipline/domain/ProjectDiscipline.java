@@ -10,7 +10,7 @@ import xyz.samsami.blokey_land.project.domain.Project;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class ProjectDiscipline extends CommonTimestamp {
+public class ProjectDiscipline extends CommonTimestamp implements DisciplineRelation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -12,8 +12,10 @@ import java.util.Set;
 
 public interface ProjectSkillRepository extends JpaRepository<ProjectSkill, Long> {
     ProjectSkill findByProjectAndSkill(Project project, Skill skill);
+
     @Query("""
-        SELECT ps FROM ProjectSkill ps
+        SELECT ps
+        FROM ProjectSkill ps
         JOIN FETCH ps.skill
         WHERE ps.project.id
         IN :projectIds
