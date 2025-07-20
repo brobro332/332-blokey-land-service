@@ -64,7 +64,7 @@ public class ProjectService {
     }
 
     public List<ProjectOnlyRespDto> readAllProjects(String blokeyId) {
-        List<ProjectOnlyRespDto> list = repository.findProjectsWithRoleByBlokeyId(UUID.fromString(blokeyId));
+        List<ProjectOnlyRespDto> list = repository.findProjectsByBlokeyId(UUID.fromString(blokeyId));
         return projectAttachHelper.attachAll(list);
     }
 

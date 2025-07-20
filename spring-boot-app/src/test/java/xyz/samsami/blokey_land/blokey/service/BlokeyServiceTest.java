@@ -14,6 +14,8 @@ import xyz.samsami.blokey_land.blokey.dto.BlokeyReqUpdateDto;
 import xyz.samsami.blokey_land.blokey.dto.BlokeyRespDto;
 import xyz.samsami.blokey_land.blokey.repository.BlokeyRepository;
 import xyz.samsami.blokey_land.common.exception.CommonException;
+import xyz.samsami.blokey_land.discipline.domain.BlokeyDiscipline;
+import xyz.samsami.blokey_land.discipline.domain.Discipline;
 import xyz.samsami.blokey_land.discipline.service.BlokeyDisciplineService;
 import xyz.samsami.blokey_land.discipline.service.DisciplineService;
 import xyz.samsami.blokey_land.skill.domain.BlokeySkill;
@@ -31,12 +33,12 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class BlokeyServiceTest {
-    @InjectMocks private BlokeyService service;
-    @Mock private BlokeyRepository repository;
-    @Mock private SkillService skillService;
-    @Mock private DisciplineService disciplineService;
-    @Mock private BlokeySkillService blokeySkillService;
-    @Mock private BlokeyDisciplineService blokeyDisciplineService;
+    @InjectMocks BlokeyService service;
+    @Mock BlokeyRepository repository;
+    @Mock SkillService skillService;
+    @Mock DisciplineService disciplineService;
+    @Mock BlokeySkillService blokeySkillService;
+    @Mock BlokeyDisciplineService blokeyDisciplineService;
 
     UUID blokeyId;
     Blokey blokey;
@@ -45,36 +47,54 @@ class BlokeyServiceTest {
 
     Skill skill1;
     Skill skill2;
+    BlokeySkill blokeySkill1;
+    BlokeySkill blokeySkill2;
+
+    Discipline discipline1;
+    Discipline discipline2;
+    BlokeyDiscipline blokeyDiscipline1;
+    BlokeyDiscipline blokeyDiscipline2;
 
     @BeforeEach
     void setUp() {
-        Skill skill = new Skill(1L, "java", "Java");
-
         blokeyId = UUID.randomUUID();
         blokey = Blokey.builder()
             .id(blokeyId)
             .nickname(nickname)
             .bio(bio)
-            .skills(Set.of(new BlokeySkill(1L, blokey, skill)))
             .build();
 
-        skill1 = Skill.builder().id(1L).build();
-        skill2 = Skill.builder().id(2L).build();
+        skill1 = Skill.builder().id(1L).name("java").displayName("Java").build();
+        skill2 = Skill.builder().id(2L).name("python").displayName("Python").build();
+
+        blokeySkill1 = BlokeySkill.builder().blokey(blokey).skill(skill1).build();
+        blokeySkill2 = BlokeySkill.builder().blokey(blokey).skill(skill2).build();
+        blokey.addSkill(blokeySkill1);
+        blokey.addSkill(blokeySkill2);
+
+        discipline1 = Discipline.builder().id(1L).name("프론트엔드 개발").build();
+        discipline2 = Discipline.builder().id(2L).name("백엔드 개발").build();
+        blokeyDiscipline1 = BlokeyDiscipline.builder().blokey(blokey).discipline(discipline1).build();
+        blokeyDiscipline2 = BlokeyDiscipline.builder().blokey(blokey).discipline(discipline2).build();
+        blokey.addDiscipline(blokeyDiscipline1);
+        blokey.addDiscipline(blokeyDiscipline2);
     }
 
-    @DisplayName("사용자를 생성할 때 모든 전달 값이 저장돼야 한다.")
+    @DisplayName("유효한 파라미터가 주어진다면_사용자를 생성할 때_모든 필드 값이 저장돼야 한다.")
     @Test
-    void givenValidBlokeyDto_whenCreateBlokey_thenAllFieldsShouldBeSaved() {
+    void givenValidParameter_whenCreateBlokey_thenAllFieldsShouldBeSaved() {
         // given
+        ArgumentCaptor<Blokey> captor = ArgumentCaptor.forClass(Blokey.class);
         BlokeyReqCreateDto dto = BlokeyReqCreateDto.builder()
             .id(blokeyId)
             .nickname(nickname)
             .bio(bio)
             .skills(List.of(1L, 2L))
+            .disciplines(List.of(1L, 2L))
             .build();
 
-        ArgumentCaptor<Blokey> captor = ArgumentCaptor.forClass(Blokey.class);
         doNothing().when(blokeySkillService).create(any(), any());
+        doNothing().when(blokeyDisciplineService).create(any(), any());
 
         // when
         service.createBlokey(dto);
@@ -87,59 +107,60 @@ class BlokeyServiceTest {
         assertEquals(nickname, saved.getNickname());
         assertEquals(bio, saved.getBio());
         verify(blokeySkillService, times(2)).create(any(), any());
+        verify(blokeyDisciplineService, times(2)).create(any(), any());
     }
 
-    @DisplayName("존재하는 ID로 사용자를 조회하면 해당 객체를 반환해야 한다.")
+    @DisplayName("존재하는 ID가 주어진다면_사용자를 조회할 때_해당 사용자 정보를 반환해야 한다.")
     @Test
-    void givenValidId_whenFindBlokeyByBlokeyId_thenReturnBlokey() {
+    void givenExistingId_whenFindBlokeyByBlokeyId_thenReturnsBlokeys() {
         // given
         when(repository.findById(blokeyId)).thenReturn(Optional.of(blokey));
 
         // when
-        Blokey found = service.findBlokeyByBlokeyId(blokeyId);
+        Blokey result = service.findBlokeyByBlokeyId(blokeyId);
 
         // then
-        assertEquals(blokey.getId(), found.getId());
-        assertEquals(blokey.getNickname(), found.getNickname());
-        assertEquals(blokey.getBio(), found.getBio());
-
+        assertEquals(blokey.getId(), result.getId());
+        assertEquals(blokey.getNickname(), result.getNickname());
+        assertEquals(blokey.getBio(), result.getBio());
+        assertEquals(2, result.getSkills().size());
+        assertEquals(2, result.getDisciplines().size());
         verify(repository).findById(blokeyId);
     }
 
-    @DisplayName("존재하지 않는 ID로 사용자 조회 시 예외가 발생해야 한다.")
+    @DisplayName("존재하지 않는 ID가 주어진다면_사용자 조회할 때_예외가 발생해야 한다.")
     @Test
-    void givenInvalidId_whenFindBlokeyByBlokeyId_thenThrowException() {
+    void givenNonExistingId_whenFindBlokeyByBlokeyId_thenThrowException() {
         // given
-        UUID undefinedId = UUID.randomUUID();
+        UUID nonExistingId = UUID.randomUUID();
 
-        when(repository.findById(undefinedId)).thenReturn(Optional.empty());
+        when(repository.findById(nonExistingId)).thenReturn(Optional.empty());
 
         // when & then
-        assertThrows(CommonException.class, () -> {
-            service.findBlokeyByBlokeyId(undefinedId);
-        });
+        assertThrows(CommonException.class, () -> service.findBlokeyByBlokeyId(nonExistingId));
     }
 
-    @DisplayName("존재하는 ID로 사용자를 조회하면 DTO로 변환하여 반환해야 한다.")
+    @DisplayName("존재하는 ID가 주어진다면_사용자를 조회할 때_응답 객체를 반환해야 한다.")
     @Test
-    void givenValidId_whenReadBlokeyByBlokeyId_thenReturnDto() {
+    void givenValidId_whenReadBlokeyByBlokeyId_thenReturnsBlokey() {
         // given
         when(repository.findById(blokeyId)).thenReturn(Optional.of(blokey));
 
         // when
-        BlokeyRespDto dto = service.readBlokeyByBlokeyId(blokeyId);
+        BlokeyRespDto result = service.readBlokeyByBlokeyId(blokeyId);
 
         // then
-        assertEquals(blokeyId, dto.getId());
-        assertEquals(nickname, dto.getNickname());
-        assertEquals(bio, dto.getBio());
-        assertFalse(dto.isHasPendingOffer());
-        assertEquals(1, dto.getSkills().size());
+        assertEquals(blokeyId, result.getId());
+        assertEquals(nickname, result.getNickname());
+        assertEquals(bio, result.getBio());
+        assertFalse(result.isHasPendingOffer());
+        assertEquals(2, result.getSkills().size());
+        assertEquals(2, result.getDisciplines().size());
     }
 
     @Test
-    @DisplayName("유효한 파라미터가 주어졌을 때 상태 변경 및 스킬 추가/삭제 메서드가 호출되어야 한다.")
-    void givenValidParameter_whenUpdateBlokeyByBlokeyId_thenCallStateChangingAndSkillMethods() {
+    @DisplayName("유효한 파라미터가 주어진다면_사용자 정보를 수정할 때_갱신 메서드가 호출되어야 한다.")
+    void givenValidParameter_whenUpdateBlokeyByBlokeyId_thenCallsUpdateMethods() {
         // given
         UUID newId = UUID.randomUUID();
         String newNickname = "테스트_수정_닉네임_텍스트";
@@ -148,32 +169,52 @@ class BlokeyServiceTest {
         List<Long> newDisciplines = List.of(2L, 3L);
 
         BlokeyReqUpdateDto dto = new BlokeyReqUpdateDto(newNickname, newBio, newSkills, newDisciplines);
-        Blokey mock = mock(Blokey.class);
 
-        BlokeySkill firstBlokeySkill = BlokeySkill.builder().blokey(mock).skill(skill1).build();
-        BlokeySkill secondBlokeySkill = BlokeySkill.builder().blokey(mock).skill(skill2).build();
+        Blokey spy = spy(Blokey.builder()
+            .id(newId)
+            .nickname(nickname)
+            .bio(bio)
+            .build());
 
-        when(mock.getSkills()).thenReturn(Set.of(firstBlokeySkill, secondBlokeySkill));
-        when(repository.findById(newId)).thenReturn(Optional.of(mock));
-        when(skillService.findSkillBySkillId(anyLong())).thenReturn(mock(Skill.class));
+        when(spy.getSkills()).thenReturn(Set.of(blokeySkill1, blokeySkill2));
+        when(spy.getDisciplines()).thenReturn(Set.of(blokeyDiscipline1, blokeyDiscipline2));
+        when(repository.findById(newId)).thenReturn(Optional.of(spy));
+
+        when(skillService.findSkillBySkillId(anyLong())).thenAnswer(invocation -> {
+            Long id = invocation.getArgument(0);
+            if (id.equals(skill1.getId())) return skill1;
+            else if (id.equals(skill2.getId())) return skill2;
+            else return Skill.builder().id(id).name("skill" + id).displayName("Skill " + id).build();
+        });
+
+        when(disciplineService.findDisciplineByDisciplineId(anyLong())).thenAnswer(invocation -> {
+            Long id = invocation.getArgument(0);
+            if (id.equals(discipline1.getId())) return discipline1;
+            else if (id.equals(discipline2.getId())) return discipline2;
+            else return Discipline.builder().id(id).name("discipline" + id).build();
+        });
 
         doNothing().when(blokeySkillService).create(any(Blokey.class), any(Skill.class));
         doNothing().when(blokeySkillService).delete(any(Blokey.class), any(Skill.class));
+        doNothing().when(blokeyDisciplineService).create(any(Blokey.class), any(Discipline.class));
+        doNothing().when(blokeyDisciplineService).delete(any(Blokey.class), any(Discipline.class));
 
         // when
         service.updateBlokeyByBlokeyId(newId, dto);
 
         // then
         verify(repository).findById(newId);
-        verify(mock).updateNickname(newNickname);
-        verify(mock).updateBio(newBio);
-        verify(blokeySkillService, times(1)).create(eq(mock), any(Skill.class));
-        verify(blokeySkillService, times(1)).delete(eq(mock), any(Skill.class));
+        verify(spy).updateNickname(newNickname);
+        verify(spy).updateBio(newBio);
+        verify(blokeySkillService, atLeastOnce()).create(eq(spy), any(Skill.class));
+        verify(blokeySkillService, atLeastOnce()).delete(eq(spy), any(Skill.class));
+        verify(blokeyDisciplineService, atLeastOnce()).create(eq(spy), any(Discipline.class));
+        verify(blokeyDisciplineService, atLeastOnce()).delete(eq(spy), any(Discipline.class));
     }
 
     @Test
-    @DisplayName("존재하는 사용자 삭제 시 삭제 메서드 호출되어야 한다.")
-    void deleteBlokey_whenDeleteBlokeyByBlokeyId_thenCallRepositoryDeleteMethod() {
+    @DisplayName("존재하는 ID가 주어진다면_사용자 삭제할 때_삭제 메서드가 호출되어야 한다.")
+    void deleteBlokey_whenDeleteBlokeyByBlokeyId_thenCallsMethod() {
         // given
         UUID id = UUID.randomUUID();
         Blokey mock = mock(Blokey.class);

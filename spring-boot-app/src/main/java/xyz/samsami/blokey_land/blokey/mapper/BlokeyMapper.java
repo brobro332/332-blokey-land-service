@@ -3,6 +3,7 @@ package xyz.samsami.blokey_land.blokey.mapper;
 import xyz.samsami.blokey_land.blokey.domain.Blokey;
 import xyz.samsami.blokey_land.blokey.dto.BlokeyReqCreateDto;
 import xyz.samsami.blokey_land.blokey.dto.BlokeyRespDto;
+import xyz.samsami.blokey_land.discipline.mapper.DisciplineMapper;
 import xyz.samsami.blokey_land.skill.mapper.SkillMapper;
 
 import java.util.stream.Collectors;
@@ -17,6 +18,11 @@ public class BlokeyMapper {
                 blokey.getSkills().stream()
                     .map(blokeySkill -> SkillMapper.toRespDto(blokeySkill.getSkill()))
                     .collect(Collectors.toSet())
+            )
+            .disciplines(
+                 blokey.getDisciplines().stream()
+                     .map(blokeyDiscipline -> DisciplineMapper.toRespDto(blokeyDiscipline.getDiscipline()))
+                     .collect(Collectors.toSet())
             )
             .build();
     }

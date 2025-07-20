@@ -69,6 +69,8 @@ public class ProjectOnlyRespDto implements
         this.estimatedEndDate = estimatedEndDate;
         this.actualStartDate = actualStartDate;
         this.actualEndDate = actualEndDate;
+        this.skills = Set.of();
+        this.disciplines = Set.of();
     }
 
     @Override
