@@ -100,7 +100,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("존재하지 않는 ID가 주어졌을 때 예외가 발생해야 한다.")
-    void givenInvalidMemberId_whenFindMemberByMemberId_thenThrowException() {
+    void givenInvalidMemberId_whenFindMemberByMemberId_thenThrowsException() {
         // given
         when(repository.findById(memberId)).thenReturn(Optional.empty());
 
