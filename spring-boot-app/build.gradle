@@ -55,6 +55,7 @@ sonar {
             **/*Application.java,
             **/config/**,
             **/dto/**,
+            **/helper/**,
             **/entity/**,
             **/exception/**,
             **/common/**
