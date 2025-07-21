@@ -20,11 +20,11 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class BlokeySkillServiceTest {
-    @InjectMocks private BlokeySkillService blokeySkillService;
-    @Mock private BlokeySkillRepository blokeySkillRepository;
+    @InjectMocks BlokeySkillService blokeySkillService;
+    @Mock BlokeySkillRepository blokeySkillRepository;
 
-    private Blokey blokey;
-    private Skill skill;
+    Blokey blokey;
+    Skill skill;
 
     @BeforeEach
     void setUp() {
@@ -38,7 +38,7 @@ class BlokeySkillServiceTest {
     }
 
     @Test
-    @DisplayName("이미 존재하지 않는 경우 연관관계를 생성하고 저장한다.")
+    @DisplayName("사용자와 스킬이 주어진다면_연관관계를 생성할 때_올바르게 저장돼야 한다.")
     void givenBlokeyAndSkill_whenCreateRelation_thenSaveNewRelation() {
         // given
         when(blokeySkillRepository.findByBlokeyAndSkill(blokey, skill)).thenReturn(null);
@@ -54,7 +54,7 @@ class BlokeySkillServiceTest {
     }
 
     @Test
-    @DisplayName("이미 존재하는 경우, BlokeySkill을 생성하지 않는다.")
+    @DisplayName("이미 존재하는 연관관계가 주어진다면_연관관계를 생성할 때_생성하지 않아야 한다.")
     void givenExistingRelation_whenCreateRelation_thenDoNothing() {
         // given
         BlokeySkill existingRelation = BlokeySkill.builder()
@@ -72,7 +72,7 @@ class BlokeySkillServiceTest {
     }
 
     @Test
-    @DisplayName("존재하는 경우, BlokeySkill을 삭제한다.")
+    @DisplayName("연관관계가 주어진다면_연관관계를 삭제할 때_올바르게 제거돼야 한다.")
     void givenExistingRelation_whenDeleteRelation_thenDeleteCalled() {
         // given
         BlokeySkill relation = BlokeySkill.builder()
@@ -90,8 +90,8 @@ class BlokeySkillServiceTest {
     }
 
     @Test
-    @DisplayName("존재하지 않는 경우, 삭제 시 CommonException을 발생시킨다.")
-    void givenNonExistingRelation_whenDeleteRelation_thenThrowException() {
+    @DisplayName("존재하지 않는 연관관계가 주어진다면_연관관계를 삭제할 때_예외를 발생시킨다.")
+    void givenNonExistingRelation_whenDeleteRelation_thenThrowsException() {
         // given
         when(blokeySkillRepository.findByBlokeyAndSkill(blokey, skill)).thenReturn(null);
 

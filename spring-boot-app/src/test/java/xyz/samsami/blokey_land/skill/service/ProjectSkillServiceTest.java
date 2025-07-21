@@ -18,8 +18,8 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ProjectSkillServiceTest {
-    @InjectMocks private ProjectSkillService projectSkillService;
-    @Mock private ProjectSkillRepository projectSkillRepository;
+    @InjectMocks ProjectSkillService projectSkillService;
+    @Mock ProjectSkillRepository projectSkillRepository;
 
     Project project;
     Skill skill;
@@ -31,7 +31,7 @@ class ProjectSkillServiceTest {
     }
 
     @Test
-    @DisplayName("이미 존재하지 않는 경우 연관관계를 생성하고 저장한다.")
+    @DisplayName("프로젝트와 스킬이 주어진다면_연관관계를 생성할 때_올바르게 저장해야 한다.")
     void givenProjectAndSkill_whenCreateRelation_thenSaveNewRelation() {
         // given
         when(projectSkillRepository.findByProjectAndSkill(project, skill)).thenReturn(null);
@@ -46,7 +46,7 @@ class ProjectSkillServiceTest {
     }
 
     @Test
-    @DisplayName("이미 존재하는 경우 연관관계를 생성하지 않는다.")
+    @DisplayName("이미 존재하는 프로젝트와 스킬이 주어진다면_연관관계를 생성할 때_연관관계를 생성하지 않는다.")
     void givenExistingRelation_whenCreateRelation_thenDoNothing() {
         // given
         ProjectSkill existingRelation = ProjectSkill.builder().project(project).skill(skill).build();
@@ -61,8 +61,8 @@ class ProjectSkillServiceTest {
     }
 
     @Test
-    @DisplayName("존재하는 경우 연관관계를 삭제한다.")
-    void givenExistingRelation_whenDeleteRelation_thenDeleteCalled() {
+    @DisplayName("존재하는 연관관계가 주어진다면_연관관계를 삭제할 때_올바르게 삭제해야 한다.")
+    void givenExistingRelation_whenDeleteRelation_thenCallsMethod() {
         // given
         ProjectSkill relation = ProjectSkill.builder().project(project).skill(skill).build();
 
@@ -76,8 +76,8 @@ class ProjectSkillServiceTest {
     }
 
     @Test
-    @DisplayName("존재하지 않는 경우 삭제 시 예외 발생")
-    void givenNonExistingRelation_whenDeleteRelation_thenThrowException() {
+    @DisplayName("존재하지 않는 연관관계가 주어진다면_연관관계를 삭제할 때_예외가 발생해야 한다.")
+    void givenNonExistingRelation_whenDeleteRelation_thenThrowsException() {
         // given
         when(projectSkillRepository.findByProjectAndSkill(project, skill)).thenReturn(null);
 

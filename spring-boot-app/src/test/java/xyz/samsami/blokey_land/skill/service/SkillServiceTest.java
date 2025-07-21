@@ -20,13 +20,13 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class SkillServiceTest {
-    @InjectMocks private SkillService service;
-    @Mock(answer = Answers.RETURNS_DEEP_STUBS) private WebClient webClient;
-    @Mock private SkillRepository repository;
+    @InjectMocks SkillService service;
+    @Mock(answer = Answers.RETURNS_DEEP_STUBS) WebClient webClient;
+    @Mock SkillRepository repository;
 
     @Test
-    @DisplayName("유효한 파라미터가 주어지면 저장 메서드가 호출되어야 한다.")
-    void givenValidParameter_whenSaveTopicsAtoZ_thenCallInsertIgnoreConflict() {
+    @DisplayName("유효한 파라미터가 주어지면_깃허브 토픽을 검색하고 저장할 때_저장 메서드가 호출되어야 한다.")
+    void givenValidParameter_whenSaveTopicsAtoZ_thenCallsMethod() {
         // given
         GithubTopicItemDto item = new GithubTopicItemDto("java", "Java");
         GithubTopicSearchRespDto respDto = new GithubTopicSearchRespDto(List.of(item));
