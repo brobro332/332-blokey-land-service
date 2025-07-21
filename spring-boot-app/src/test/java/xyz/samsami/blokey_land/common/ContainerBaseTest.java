@@ -40,5 +40,6 @@ public abstract class ContainerBaseTest {
         registry.add("server.port", () -> "8081");
         registry.add("server.address", () -> "0.0.0.0");
         registry.add("spring.jpa.hibernate.ddl-auto", () -> "update");
+        registry.add("github.access-token", () -> "");
     }
 }

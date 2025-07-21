@@ -23,23 +23,31 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @Transactional
 class TaskRepositoryTest extends ContainerBaseTest {
-    @Autowired private TaskRepository repository;
-    @Autowired private ProjectRepository projectRepository;
-    @Autowired private BlokeyRepository blokeyRepository;
     @Autowired EntityManager entityManager;
+    @Autowired TaskRepository repository;
+    @Autowired ProjectRepository projectRepository;
+    @Autowired BlokeyRepository blokeyRepository;
 
-    private Project project;
+    UUID blokeyId;
+    Blokey blokey;
+    String nickname = "테스트_닉네임_텍스트";
+    String bio = "테스트_소개_텍스트";
+
+    Project project;
+    String title = "테스트_제목_텍스트";
+    String description = "테스트_설명_텍스트";
+    String imageUrl = "테스트_이미지_URL_텍스트";
 
     @BeforeEach
     void setUp() {
-        UUID blokeyId = UUID.randomUUID();
-        blokeyRepository.save(new Blokey(blokeyId, "닉네임", "소개"));
+        blokeyId = UUID.randomUUID();
+        blokey = blokeyRepository.save(Blokey.builder().id(blokeyId).nickname(nickname).bio(bio).build());
 
         project = projectRepository.save(
             Project.builder()
-                .title("제목")
-                .description("설명")
-                .imageUrl("이미지 URL")
+                .title(title)
+                .description(description)
+                .imageUrl(imageUrl)
                 .isPrivate(true)
                 .estimatedStartDate(LocalDate.now())
                 .estimatedEndDate(LocalDate.now())
@@ -48,46 +56,41 @@ class TaskRepositoryTest extends ContainerBaseTest {
                 .build()
         );
 
-        repository.save(
-            Task.builder()
-                .title("제목 1")
-                .description("설명 1")
-                .project(project)
-                .assignee(blokeyId)
-                .estimatedStartDate(LocalDate.now())
-                .estimatedEndDate(LocalDate.now())
-                .actualStartDate(LocalDate.now())
-                .actualEndDate(LocalDate.now())
-                .build()
-        );
 
-        repository.save(
-            Task.builder()
-                .title("제목 2")
-                .description("설명 2")
-                .project(project)
-                .assignee(blokeyId)
-                .estimatedStartDate(LocalDate.now())
-                .estimatedEndDate(LocalDate.now())
-                .actualStartDate(LocalDate.now())
-                .actualEndDate(LocalDate.now())
-                .build()
-        );
+        for (int i = 1; i <= 5; i++) {
+            repository.save(
+                Task.builder()
+                    .title(title + "_" + i)
+                    .description(description + "_" + i)
+                    .project(project)
+                    .assignee(blokeyId)
+                    .estimatedStartDate(LocalDate.now())
+                    .estimatedEndDate(LocalDate.now())
+                    .actualStartDate(LocalDate.now())
+                    .actualEndDate(LocalDate.now())
+                    .build()
+            );
+        }
 
         entityManager.flush();
         entityManager.clear();
     }
 
     @Test
-    @DisplayName("유효한 파라미터가 주어졌을 때 객체 목록을 반환해야 한다.")
-    void givenValidParameter_whenFindAllByProjectId_thenReturn() {
+    @DisplayName("유효한 파라미터가 주어진다면_태스크를 조회할 때_객체 목록을 반환해야 한다.")
+    void givenValidParameter_whenFindAllByProjectId_thenReturnsDto() {
         // when
         List<Task> tasks = repository.findAllByProjectId(project.getId());
 
         // then
-        assertThat(tasks).hasSize(2);
+        assertThat(tasks).hasSize(5);
         assertThat(tasks).extracting("title")
-            .containsExactlyInAnyOrder("제목 1", "제목 2");
-        assertThat(tasks.getFirst().getProject().getTitle()).isEqualTo("제목");
+            .containsExactlyInAnyOrder(
+                "테스트_제목_텍스트_1",
+                "테스트_제목_텍스트_2",
+                "테스트_제목_텍스트_3",
+                "테스트_제목_텍스트_4",
+                "테스트_제목_텍스트_5"
+            );
     }
 }

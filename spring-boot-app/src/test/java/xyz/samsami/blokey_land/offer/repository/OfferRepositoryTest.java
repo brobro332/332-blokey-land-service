@@ -1,6 +1,8 @@
 package xyz.samsami.blokey_land.offer.repository;
 
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,27 +27,35 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @Transactional
 class OfferRepositoryTest extends ContainerBaseTest {
-    @Autowired private OfferRepository repository;
-    @Autowired private ProjectRepository projectRepository;
-    @Autowired private BlokeyRepository blokeyRepository;
+    @Autowired EntityManager entityManager;
+    @Autowired OfferRepository repository;
+    @Autowired ProjectRepository projectRepository;
+    @Autowired BlokeyRepository blokeyRepository;
 
-    @Test
-    @DisplayName("프로젝트 ID가 주어졌을 때 제안 조회 시 DTO를 응답해야 한다.")
-    void givenProjectId_whenFindDtoByProjectId_thenReturnDto() {
-        // given
-        UUID blokeyId = UUID.randomUUID();
-        Blokey blokey = blokeyRepository.save(new Blokey(blokeyId, "닉네임", "소개"));
+    UUID blokeyId;
+    Blokey blokey;
+    String nickname = "테스트_닉네임_텍스트";
+    String bio = "테스트_소개_텍스트";
 
-        Project project = projectRepository.save(Project.builder()
-            .title("제목")
-            .description("설명")
-            .imageUrl("이미지 URL")
-            .isPrivate(true)
-            .estimatedStartDate(LocalDate.now())
-            .estimatedEndDate(LocalDate.now())
-            .actualStartDate(LocalDate.now())
-            .actualEndDate(LocalDate.now())
-            .build());
+    Project project;
+
+    @BeforeEach
+    void setUp() {
+        blokeyId = UUID.randomUUID();
+        blokey = blokeyRepository.save(Blokey.builder().id(blokeyId).nickname(nickname).bio(bio).build());
+
+        project = projectRepository.save(
+            Project.builder()
+                .title("테스트_제목_텍스트")
+                .description("테스트_설명_텍스트")
+                .imageUrl("테스트_이미지_URL_텍스트")
+                .isPrivate(true)
+                .estimatedStartDate(LocalDate.now())
+                .estimatedEndDate(LocalDate.now())
+                .actualStartDate(LocalDate.now())
+                .actualEndDate(LocalDate.now())
+                .build()
+        );
 
         repository.save(
             Offer.builder()
@@ -56,6 +66,22 @@ class OfferRepositoryTest extends ContainerBaseTest {
                 .build()
         );
 
+        repository.save(
+            Offer.builder()
+                .project(project)
+                .blokey(blokey)
+                .offerer(OfferType.BLOKEY)
+                .status(OfferStatusType.PENDING)
+                .build()
+        );
+
+        entityManager.flush();
+        entityManager.clear();
+    }
+
+    @Test
+    @DisplayName("유효한 프로젝트 ID가 주어진다면_제안을 조회할 때_응답 객체를 반환해야 한다.")
+    void givenValidProjectId_whenFindDtoByProjectId_thenReturnsDto() {
         // when
         Page<OfferRespDto> result = repository.findDtoByProjectId(
             project.getId(), OfferType.PROJECT, PageRequest.of(0, 10));
@@ -67,39 +93,15 @@ class OfferRepositoryTest extends ContainerBaseTest {
     }
 
     @Test
-    @DisplayName("사용자 ID가 주어졌을 때 제안 조회 시 DTO를 응답해야 한다.")
-    void givenBlokeyId_whenFindDtoByBlokeyId_thenReturnDto() {
-        // given
-        UUID blokeyId = UUID.randomUUID();
-        Blokey blokey = blokeyRepository.save(new Blokey(blokeyId, "닉네임", "소개"));
-
-        Project project = projectRepository.save(Project.builder()
-            .title("제목")
-            .description("설명")
-            .imageUrl("이미지 URL")
-            .isPrivate(true)
-            .estimatedStartDate(LocalDate.now())
-            .estimatedEndDate(LocalDate.now())
-            .actualStartDate(LocalDate.now())
-            .actualEndDate(LocalDate.now())
-            .build());
-
-        repository.save(
-            Offer.builder()
-                .project(project)
-                .blokey(blokey)
-                .offerer(OfferType.BLOKEY)
-                .status(OfferStatusType.PENDING)
-                .build()
-        );
-
+    @DisplayName("유효한 사용자 ID가 주어진다면_제안을 조회할 때_응답 객체를 반환해야 한다.")
+    void givenValidBlokeyId_whenFindDtoByBlokeyId_thenReturnDto() {
         // when
         Page<OfferRespDto> result = repository.findDtoByBlokeyId(
-            blokey.getId(), OfferType.BLOKEY, PageRequest.of(0, 10));
+            blokeyId, OfferType.BLOKEY, PageRequest.of(0, 10));
 
         // then
         assertThat(result.getContent()).hasSize(1);
-        assertThat(result.getContent().getFirst().getBlokeyId()).isEqualTo(blokey.getId());
+        assertThat(result.getContent().getFirst().getBlokeyId()).isEqualTo(blokeyId);
         assertThat(result.getContent().getFirst().getOfferer()).isEqualTo(OfferType.BLOKEY);
     }
 }

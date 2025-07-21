@@ -31,24 +31,30 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class TaskServiceTest {
-    @InjectMocks private TaskService service;
-    @Mock private ProjectService projectService;
-    @Mock private TaskRepository repository;
+    @InjectMocks TaskService service;
+    @Mock ProjectService projectService;
+    @Mock TaskRepository repository;
 
-    private Task task;
-    private Long taskId;
-    private Long projectId;
-    private Project project;
+    UUID blokeyId;
+
+    Long projectId;
+    Project project;
+    String title = "테스트_제목_텍스트";
+    String description = "테스트_설명_텍스트";
+    String imageUrl = "테스트_이미지_URL_텍스트";
+
+    Task task;
+    Long taskId;
 
     @BeforeEach
     void setUp() {
-        UUID assigneeId = UUID.randomUUID();
+        blokeyId = UUID.randomUUID();
 
         task = Task.builder()
-            .title("제목 2")
-            .description("설명 2")
+            .title(title)
+            .description(description)
             .project(project)
-            .assignee(assigneeId)
+            .assignee(blokeyId)
             .estimatedStartDate(LocalDate.now())
             .estimatedEndDate(LocalDate.now())
             .actualStartDate(LocalDate.now())
@@ -58,8 +64,9 @@ class TaskServiceTest {
         projectId= 1L;
         project = Project.builder()
             .id(projectId)
-            .title("제목")
-            .description("설명")
+            .title(title)
+            .description(description)
+            .imageUrl(imageUrl)
             .status(ProjectStatusType.ACTIVE)
             .isPrivate(true)
             .estimatedStartDate(LocalDate.now())
@@ -69,17 +76,16 @@ class TaskServiceTest {
             .build();
     }
 
-    @DisplayName("태스크를 저장할 때 모든 필수 값이 저장되어야 한다.")
+    @DisplayName("유효한 파라미터가 주어진다면_태스크를 저장할 때_모든 필수 값이 저장되어야 한다.")
     @Test
     void givenValidParameter_whenCreateTask_thenAllFieldsShouldBeSaved() {
         // given
-        UUID assigneeId = UUID.randomUUID();
         LocalDate now = LocalDate.now();
         TaskReqCreateDto dto = TaskReqCreateDto.builder()
-            .title("제목")
-            .description("설명")
+            .title(title)
+            .description(description)
+            .assignee(blokeyId)
             .projectId(1L)
-            .assignee(assigneeId)
             .priority(PriorityType.HIGH)
             .progress(80)
             .estimatedStartDate(now)
@@ -131,7 +137,7 @@ class TaskServiceTest {
     }
 
     @Test
-    @DisplayName("유효한 파라미터가 주어졌을 때 정보가 수정되어야 한다.")
+    @DisplayName("유효한 파라미터가 주어진다면_태스크를 수정할 때_태스크가 갱신돼야 한다.")
     void givenValidParameter_whenUpdateTaskByTaskId_thenTaskShouldBeUpdated() {
         // given
         task = spy(task);
@@ -139,8 +145,8 @@ class TaskServiceTest {
         when(repository.findById(taskId)).thenReturn(Optional.of(task));
 
         TaskReqUpdateDto dto = TaskReqUpdateDto.builder()
-            .title("수정 제목")
-            .description("수정 설명")
+            .title("테스트_수정_제목_텍스트")
+            .description("테스트_수정_설명_텍스트")
             .assignee(UUID.randomUUID())
             .progress(50)
             .status(TaskStatusType.IN_PROGRESS)
@@ -169,8 +175,8 @@ class TaskServiceTest {
     }
 
     @Test
-    @DisplayName("유효한 ID가 주어졌을 때 태스크를 삭제해야 한다.")
-    void givenValidId_whenDeleteTask_thenRepositoryDeleteCalled() {
+    @DisplayName("유효한 ID가 주어진다면_태스크를 삭제할 때_올바르게 삭제해야 한다.")
+    void givenValidId_whenDeleteTask_thenCallsMethod() {
         // given
         when(repository.findById(taskId)).thenReturn(Optional.of(task));
 
@@ -183,22 +189,22 @@ class TaskServiceTest {
     }
 
     @Test
-    @DisplayName("유효한 ID가 주어졌을 때 태스크 조회 시 객체를 반환해야 한다.")
-    void givenValidTaskId_whenFindTask_thenReturnTask() {
+    @DisplayName("유효한 ID가 주어진다면_태스크 조회 시_해당 엔티티를 반환해야 한다.")
+    void givenValidTaskId_whenFindTask_thenReturnsTask() {
         // given
         when(repository.findById(taskId)).thenReturn(Optional.of(task));
 
         // when
-        Task found = service.findTaskByTaskId(taskId);
+        Task result = service.findTaskByTaskId(taskId);
 
         // then
         verify(repository).findById(taskId);
-        assertEquals(task, found);
+        assertEquals(task, result);
     }
 
     @Test
-    @DisplayName("유효하지 않은 태스크 ID로 조회 시 예외를 던진다")
-    void givenInvalidTaskId_whenFindTask_thenThrowException() {
+    @DisplayName("유효하지 않은 ID가 주어진다면_태스크를 조회할 때_예외를 던져야 한다.")
+    void givenInvalidId_whenFindTask_thenThrowsException() {
         // given
         when(repository.findById(taskId)).thenReturn(Optional.empty());
 

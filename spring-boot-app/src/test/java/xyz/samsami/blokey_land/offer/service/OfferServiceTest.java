@@ -29,30 +29,37 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class OfferServiceTest {
-    @InjectMocks private OfferService service;
-    @Mock private BlokeyService blokeyService;
-    @Mock private ProjectService projectService;
-    @Mock private MemberService memberService;
-    @Mock private OfferRepository repository;
+    @InjectMocks OfferService service;
+    @Mock BlokeyService blokeyService;
+    @Mock ProjectService projectService;
+    @Mock MemberService memberService;
+    @Mock OfferRepository repository;
 
-    private Offer offer;
-    private UUID blokeyId;
-    private Blokey blokey;
-    private Long projectId;
-    private Project project;
+
+    UUID blokeyId;
+    Blokey blokey;
+    Long projectId;
+    Project project;
+    Long offerId;
+    Offer offer;
 
     @BeforeEach
     void setUp() {
+        offerId = 1L;
         offer = mock(Offer.class);
 
         blokeyId = UUID.randomUUID();
-        blokey = new Blokey(blokeyId, "nickname", "bio");
+        blokey = Blokey.builder()
+            .id(blokeyId)
+            .nickname("닉네임")
+            .bio("소개")
+            .build();
 
         projectId= 1L;
         project = Project.builder()
@@ -68,7 +75,7 @@ class OfferServiceTest {
             .build();
     }
 
-    @DisplayName("제안을 저장할 때 모든 필수 값이 저장되어야 한다.")
+    @DisplayName("유효한 파라미터가 주어진다면_제안을 저장할 때_모든 필수 값이 저장되어야 한다.")
     @Test
     void givenValidParameter_whenCreateOffer_thenAllFieldsShouldBeSaved() {
         // given
@@ -100,11 +107,10 @@ class OfferServiceTest {
         }
     }
 
-    @DisplayName("유효한 파라미터가 주어졌을 때 제안 상태를 수정해야 한다.")
+    @DisplayName("유효한 파라미터가 주어진다면_제안을 수정할 때_수락할 경우 제안 상태가 갱신되고 멤버가 생성돼야 한다.")
     @Test
     void givenValidParameter_whenUpdateOffer_thenStatusUpdatedAndMemberCreatedIfAccepted() {
         // given
-        Long offerId = 1L;
         OfferReqUpdateDto dto = OfferReqUpdateDto.builder()
             .status(OfferStatusType.ACCEPTED)
             .build();
@@ -121,11 +127,10 @@ class OfferServiceTest {
         verify(memberService).createMember(project, blokey, RoleType.MEMBER);
     }
 
-    @DisplayName("상태가 ACCEPTED가 아닐 경우 멤버 생성 호출은 없어야 한다.")
+    @DisplayName("유효한 파라미터가 주어진다면_제안을 수정할 때_수락하지 않을 경우 멤버 생성 없이 제안 상태가 갱신돼야 한다.")
     @Test
-    void givenNotAcceptedStatus_whenUpdateOffer_thenOnlyStatusUpdated() {
+    void givenValidParameter_whenUpdateOffer_thenOnlyStatusUpdated() {
         // given
-        Long offerId = 1L;
         OfferReqUpdateDto dto = OfferReqUpdateDto.builder()
             .status(OfferStatusType.REJECTED)
             .build();
@@ -140,12 +145,10 @@ class OfferServiceTest {
         verifyNoInteractions(memberService);
     }
 
-    @DisplayName("유효한 ID가 주어졌을 때 제안을 삭제해야 한다.")
+    @DisplayName("유효한 ID가 주어진다면_제안을 삭제할 때_올바르게 삭제돼야 한다.")
     @Test
-    void givenValidOfferId_whenDeleteOffer_thenOfferDeleted() {
+    void givenValidId_whenDeleteOffer_thenOfferDeleted() {
         // given
-        Long offerId = 1L;
-
         when(repository.findById(offerId)).thenReturn(Optional.of(offer));
 
         // when
@@ -155,27 +158,23 @@ class OfferServiceTest {
         verify(repository).delete(offer);
     }
 
-    @DisplayName("존재하는 ID가 주어졌을 때 객체를 반환해야 한다.")
+    @DisplayName("존재하는 ID가 주어진다면_제안을 조회할 때_엔티티를 반환해야 한다.")
     @Test
-    void givenValidOfferId_whenFindOffer_thenReturnOffer() {
+    void givenExistingId_whenFindOffer_thenReturnOffer() {
         // given
-        Long offerId = 1L;
-
         when(repository.findById(offerId)).thenReturn(Optional.of(offer));
 
         // when
-        Offer found = service.findOfferByOfferId(offerId);
+        Offer result = service.findOfferByOfferId(offerId);
 
         // then
-        assertEquals(offer, found);
+        assertEquals(offer, result);
     }
 
-    @DisplayName("존재하지 않는 ID 조회 시 예외가 발생해야 한다.")
+    @DisplayName("존재하지 않는 ID가 주어진다면_제안을 조회할 때_예외가 발생해야 한다.")
     @Test
-    void givenInvalidOfferId_whenFindOffer_thenThrowCommonException() {
+    void givenNonExistingId_whenFindOffer_thenThrowsException() {
         // given
-        Long offerId = 1L;
-
         when(repository.findById(offerId)).thenReturn(Optional.empty());
 
         // when & then

@@ -27,23 +27,30 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class MilestoneServiceTest {
-    @InjectMocks private MilestoneService service;
-    @Mock private ProjectService projectService;
-    @Mock private MilestoneRepository repository;
+    @InjectMocks MilestoneService service;
+    @Mock ProjectService projectService;
+    @Mock MilestoneRepository repository;
 
-    private Milestone milestone;
-    private Long projectId;
-    private Project project;
+    Long milestoneId;
+    Milestone milestone;
+
+    Long projectId;
+    Project project;
+    String title = "테스트_프로젝트_제목_텍스트";
+    String description = "테스트_프로젝트_설명_텍스트";
+    String imageUrl = "테스트_프로젝트_이미지_URL_텍스트";
 
     @BeforeEach
     void setUp() {
+        milestoneId = 1L;
         milestone = mock(Milestone.class);
 
-        projectId= 1L;
+        projectId = 1L;
         project = Project.builder()
             .id(projectId)
-            .title("제목")
-            .description("설명")
+            .title(title)
+            .description(description)
+            .imageUrl(imageUrl)
             .status(ProjectStatusType.ACTIVE)
             .isPrivate(true)
             .estimatedStartDate(LocalDate.now())
@@ -53,7 +60,7 @@ class MilestoneServiceTest {
             .build();
     }
 
-    @DisplayName("마일스톤을 저장할 때 모든 필수 값이 저장되어야 한다.")
+    @DisplayName("유효한 파라미터가 주어진다면_마일스톤을 저장할 때_모든 필수 값이 저장되어야 한다.")
     @Test
     void givenValidParameter_whenCreateMilestone_thenAllFieldsShouldBeSaved() {
         // given
@@ -77,11 +84,10 @@ class MilestoneServiceTest {
         }
     }
 
-    @DisplayName("유효한 파라미터로 마일스톤 수정 시 필드 값이 수정되어야 한다.")
+    @DisplayName("유효한 파라미터가 주어진다면_마일스톤을 수정할 때_올바르게 갱신되어야 한다.")
     @Test
     void givenValidParameter_whenUpdateMilestoneByMilestoneId_thenMilestoneFieldsUpdated() {
         // given
-        Long milestoneId = 1L;
         MilestoneReqUpdateDto dto = MilestoneReqUpdateDto.builder()
             .title("새 제목")
             .description("새 설명")
@@ -99,12 +105,10 @@ class MilestoneServiceTest {
         verify(milestone).updateDueDate(dto.getDueDate());
     }
 
-    @DisplayName("유효한 ID로 마일스톤 삭제 시 레포지토리와 서비스가 호출되어야 한다.")
+    @DisplayName("유효한 ID가 주어진다면_마일스톤을 삭제할 때_메서드가 호출되어야 한다.")
     @Test
-    void givenValidId_whenDeleteMilestoneByMilestoneId_thenCallRepositoryAndService() {
+    void givenValidId_whenDeleteMilestoneByMilestoneId_thenCallsMethod() {
         // given
-        Long milestoneId = 1L;
-
         when(repository.findById(milestoneId)).thenReturn(Optional.of(milestone));
 
         // when
@@ -114,26 +118,23 @@ class MilestoneServiceTest {
         verify(repository).delete(milestone);
     }
 
-    @DisplayName("존재하는 ID로 마일스톤 조회 시 해당 객체가 반환되어야 한다.")
+    @DisplayName("존재하는 ID가 주어진다면_마일스톤을 조회할 때_해당 엔티티가 반환되어야 한다.")
     @Test
-    void givenValidMilestoneId_whenFindMilestone_thenReturnMilestone() {
+    void givenValidId_whenFindMilestone_thenReturnMilestone() {
         // given
-        Long milestoneId = 1L;
-
         when(repository.findById(milestoneId)).thenReturn(Optional.of(milestone));
 
         // when
-        Milestone found = service.findMilestoneByMilestoneId(milestoneId);
+        Milestone result = service.findMilestoneByMilestoneId(milestoneId);
 
         // then
-        assertEquals(milestone, found);
+        assertEquals(milestone, result);
     }
 
-    @DisplayName("존재하지 않는 ID로 마일스톤 조회 시 예외가 발생해야 한다.")
+    @DisplayName("존재하지 않는 ID가 주어진다면_마일스톤 조회을 조회할 때_예외가 발생해야 한다.")
     @Test
-    void givenInvalidMilestoneId_whenFindMilestone_thenThrowException() {
+    void givenInvalidMilestoneId_whenFindMilestone_thenThrowsException() {
         // given
-        Long milestoneId = 1L;
         when(repository.findById(milestoneId)).thenReturn(Optional.empty());
 
         // when & then

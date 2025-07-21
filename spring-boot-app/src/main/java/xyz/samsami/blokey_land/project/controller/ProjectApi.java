@@ -32,7 +32,7 @@ public interface ProjectApi {
 
     @Operation(summary = "프로젝트 및 태스크 전체 목록 조회", description = "프로젝트 및 태스크 전체 목록을 조회합니다.")
     @GetMapping("/all-with-tasks")
-    CommonRespDto<List<ProjectWithTaskResponseDto>> readAllProjectsWithTasks(
+    CommonRespDto<List<ProjectWithTaskRespDto>> readAllProjectsWithTasks(
         @RequestHeader("X-Account-Id") String blokeyId
     );
 

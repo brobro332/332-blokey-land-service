@@ -1,5 +1,6 @@
 package xyz.samsami.blokey_land.task.repository;
 
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,23 +24,32 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @Transactional
 class TaskDslRepositoryTest extends ContainerBaseTest {
-    @Autowired private TaskDslRepository dslRepository;
-    @Autowired private TaskRepository repository;
-    @Autowired private ProjectRepository projectRepository;
-    @Autowired private BlokeyRepository blokeyRepository;
+    @Autowired EntityManager entityManager;
+    @Autowired TaskDslRepository dslRepository;
+    @Autowired TaskRepository repository;
+    @Autowired ProjectRepository projectRepository;
+    @Autowired BlokeyRepository blokeyRepository;
 
-    private Project project;
+    UUID blokeyId;
+    Blokey blokey;
+    String nickname = "테스트_닉네임_텍스트";
+    String bio = "테스트_소개_텍스트";
+
+    Project project;
+    String title = "테스트_제목_텍스트";
+    String description = "테스트_설명_텍스트";
+    String imageUrl = "테스트_이미지_URL_텍스트";
 
     @BeforeEach
     void setUp() {
-        UUID blokeyId = UUID.randomUUID();
-        blokeyRepository.save(new Blokey(blokeyId, "닉네임", "소개"));
+        blokeyId = UUID.randomUUID();
+        blokey = blokeyRepository.save(Blokey.builder().id(blokeyId).nickname(nickname).bio(bio).build());
 
         project = projectRepository.save(
             Project.builder()
-                .title("제목")
-                .description("설명")
-                .imageUrl("이미지 URL")
+                .title(title)
+                .description(description)
+                .imageUrl(imageUrl)
                 .isPrivate(true)
                 .estimatedStartDate(LocalDate.now())
                 .estimatedEndDate(LocalDate.now())
@@ -48,11 +58,12 @@ class TaskDslRepositoryTest extends ContainerBaseTest {
                 .build()
         );
 
+
         for (int i = 1; i <= 5; i++) {
             repository.save(
                 Task.builder()
-                    .title("제목 " + i)
-                    .description("설명 " + i)
+                    .title(title + "_" + i)
+                    .description(description + "_" + i)
                     .project(project)
                     .assignee(blokeyId)
                     .estimatedStartDate(LocalDate.now())
@@ -62,17 +73,20 @@ class TaskDslRepositoryTest extends ContainerBaseTest {
                     .build()
             );
         }
+
+        entityManager.flush();
+        entityManager.clear();
     }
 
     @Test
-    @DisplayName("프로젝트 ID가 주어졌을 때 태스크 조회 시 페이지를 반환해야 한다.")
-    void givenProjectId_whenReadTasksByProjectId_thenReturnPage() {
+    @DisplayName("프로젝트 ID가 주어진다면_태스크를 조회할 때_올바르게 페이지를 반환해야 한다.")
+    void givenProjectId_whenReadTasksByProjectId_thenReturnsPage() {
         var pageable = Pageable.ofSize(3);
         var result = dslRepository.readTasksByProjectId(project.getId(), pageable);
 
         assertThat(result.getContent()).hasSize(3);
         assertThat(result.getTotalElements()).isEqualTo(5);
         assertThat(result.getContent()).extracting(TaskRespDto::getTitle)
-            .contains("제목 5", "제목 4", "제목 3");
+            .contains("테스트_제목_텍스트_5", "테스트_제목_텍스트_4", "테스트_제목_텍스트_3");
     }
 }

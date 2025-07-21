@@ -69,7 +69,11 @@ public class TaskService {
 
     @Transactional
     public void deleteTaskByTaskId(Long taskId) {
-        repository.delete(findTaskByTaskId(taskId));
+        Task task = findTaskByTaskId(taskId);
+        Project project = task.getProject();
+
+        if (project != null) { project.removeTask(task); }
+        repository.delete(task);
     }
 
     public Task findTaskByTaskId(Long taskId) {

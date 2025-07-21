@@ -28,7 +28,7 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     JOIN m.project p
     WHERE m.blokey.id = :blokeyId
     """)
-    List<ProjectOnlyRespDto> findProjectsWithRoleByBlokeyId(@Param("blokeyId") UUID blokeyId);
+    List<ProjectOnlyRespDto> findProjectsByBlokeyId(@Param("blokeyId") UUID blokeyId);
 
     @Query("""
         SELECT DISTINCT p

@@ -55,6 +55,7 @@ sonar {
             **/*Application.java,
             **/config/**,
             **/dto/**,
+            **/helper/**,
             **/entity/**,
             **/exception/**,
             **/common/**
@@ -79,6 +80,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-batch'
 	implementation 'org.springframework.boot:spring-boot-starter-graphql'
 	implementation 'org.springframework.boot:spring-boot-starter-aop'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
 	// Spring Data
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'

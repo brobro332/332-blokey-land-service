@@ -1,13 +1,16 @@
 package xyz.samsami.blokey_land.blokey.repository;
 
+import lombok.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import xyz.samsami.blokey_land.blokey.domain.Blokey;
 import xyz.samsami.blokey_land.blokey.dto.BlokeyRespDto;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface BlokeyRepository extends JpaRepository<Blokey, UUID> {
@@ -30,4 +33,7 @@ public interface BlokeyRepository extends JpaRepository<Blokey, UUID> {
         GROUP BY b.id, b.nickname, b.bio
     """)
     Page<BlokeyRespDto> findByNotInProject(@Param("projectId") Long projectId, Pageable pageable);
+
+    @EntityGraph(attributePaths = {"skills", "disciplines"})
+    @NonNull Optional<Blokey> findById(@NonNull UUID blokeyId);
 }
