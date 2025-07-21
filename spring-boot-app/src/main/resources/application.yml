@@ -46,3 +46,6 @@ file:
 
 github:
   access-token: ${GITHUB_ACCESS_TOKEN}
+
+ollama:
+  request-url: ${OLLAMA_URL}

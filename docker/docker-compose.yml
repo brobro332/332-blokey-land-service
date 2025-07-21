@@ -67,10 +67,21 @@ services:
     networks:
       - network-sentinel 
 
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "${OLLAMA_EXTERNAL_PORT}:${OLLAMA_INTERNAL_PORT}"
+    volumes:
+      - oldata:/root/.ollama
+    tty: true
+    restart: always
+
 volumes:
   spring-uploads:
   pgdata:
   esdata:
+  oldata:
 
 networks:
   network-sentinel:

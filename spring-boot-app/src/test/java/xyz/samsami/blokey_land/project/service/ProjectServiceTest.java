@@ -9,9 +9,9 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 import xyz.samsami.blokey_land.blokey.domain.Blokey;
 import xyz.samsami.blokey_land.blokey.service.BlokeyService;
-import xyz.samsami.blokey_land.discipline.domain.BlokeyDiscipline;
 import xyz.samsami.blokey_land.discipline.domain.Discipline;
 import xyz.samsami.blokey_land.discipline.domain.ProjectDiscipline;
 import xyz.samsami.blokey_land.discipline.dto.DisciplineRespDto;
@@ -26,7 +26,6 @@ import xyz.samsami.blokey_land.project.dto.ProjectWithTaskRespDto;
 import xyz.samsami.blokey_land.project.repository.ProjectRepository;
 import xyz.samsami.blokey_land.project.service.helper.ProjectAttachHelper;
 import xyz.samsami.blokey_land.project.type.ProjectStatusType;
-import xyz.samsami.blokey_land.skill.domain.BlokeySkill;
 import xyz.samsami.blokey_land.skill.domain.ProjectSkill;
 import xyz.samsami.blokey_land.skill.domain.Skill;
 import xyz.samsami.blokey_land.skill.dto.SkillRespDto;
@@ -47,14 +46,15 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class ProjectServiceTest {
     @InjectMocks private ProjectService service;
-    @Mock private BlokeyService blokeyService;
-    @Mock private MemberService memberService;
-    @Mock private ProjectRepository repository;
+    @Mock BlokeyService blokeyService;
+    @Mock MemberService memberService;
+    @Mock ProjectRepository repository;
     @Mock SkillService skillService;
     @Mock DisciplineService disciplineService;
     @Mock ProjectSkillService projectSkillService;
     @Mock ProjectDisciplineService projectDisciplineService;
-    @Mock private ProjectAttachHelper projectAttachHelper;
+    @Mock ProjectAttachHelper projectAttachHelper;
+    @Mock ApplicationEventPublisher publisher;
 
     UUID blokeyId;
     Blokey blokey;

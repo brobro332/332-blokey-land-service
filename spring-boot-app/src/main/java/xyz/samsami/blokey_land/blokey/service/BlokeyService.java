@@ -1,17 +1,22 @@
 package xyz.samsami.blokey_land.blokey.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import xyz.samsami.blokey_land.blokey.domain.Blokey;
+import xyz.samsami.blokey_land.blokey.domain.BlokeySnapshot;
 import xyz.samsami.blokey_land.blokey.dto.BlokeyReqCreateDto;
 import xyz.samsami.blokey_land.blokey.dto.BlokeyReqUpdateDto;
 import xyz.samsami.blokey_land.blokey.dto.BlokeyRespDto;
 import xyz.samsami.blokey_land.blokey.mapper.BlokeyMapper;
 import xyz.samsami.blokey_land.blokey.repository.BlokeyRepository;
+import xyz.samsami.blokey_land.common.event.EmbeddingRequestedEvent;
+import xyz.samsami.blokey_land.common.event.IndexingRequestedEvent;
 import xyz.samsami.blokey_land.common.exception.CommonException;
+import xyz.samsami.blokey_land.common.type.EntityType;
 import xyz.samsami.blokey_land.common.type.ExceptionType;
 import xyz.samsami.blokey_land.common.util.StringUtil;
 import xyz.samsami.blokey_land.discipline.domain.BlokeyDiscipline;
@@ -41,6 +46,7 @@ public class BlokeyService {
     private final DisciplineService disciplineService;
     private final BlokeyDisciplineService blokeyDisciplineService;
     private final BlokeyRepository repository;
+    private final ApplicationEventPublisher publisher;
 
     @Transactional
     public void createBlokey(BlokeyReqCreateDto dto) {
@@ -48,6 +54,7 @@ public class BlokeyService {
 
         applySkillsToBlokey(dto, blokey);
         applyDisciplinesToBlokey(dto, blokey);
+        publisher.publishEvent(new EmbeddingRequestedEvent(EntityType.BLOKEY, blokey.getId()));
     }
 
     public Page<BlokeyRespDto> readBlokeys(Long projectId, Pageable pageable) {
@@ -76,6 +83,7 @@ public class BlokeyService {
     @Transactional
     public void updateBlokeyByBlokeyId(UUID blokeyId, BlokeyReqUpdateDto dto) {
         Blokey blokey = findBlokeyByBlokeyId(blokeyId);
+        BlokeySnapshot before = BlokeySnapshot.from(blokey);
 
         if (StringUtil.anyNotNullOrEmpty(dto.getNickname(), dto.getBio())) {
             blokey.updateNickname(dto.getNickname());
@@ -84,6 +92,9 @@ public class BlokeyService {
 
         if (dto.getSkills() != null) applyNewSkillsToReqUpdateDto(dto, blokey);
         if (dto.getDisciplines() != null) applyNewDisciplinesToReqUpdateDto(dto, blokey);
+
+        BlokeySnapshot after = BlokeySnapshot.from(blokey);
+        publishRequestEvents(before, after, blokeyId);
     }
 
     @Transactional
@@ -209,6 +220,14 @@ public class BlokeyService {
 
         for (ID id : existingSet) {
             if (!newSet.contains(id)) remover.accept(id);
+        }
+    }
+
+    private void publishRequestEvents(BlokeySnapshot before, BlokeySnapshot after, UUID blokeyId) {
+        if (before.isEmbeddingFieldChanged(after)) {
+            publisher.publishEvent(new EmbeddingRequestedEvent(EntityType.BLOKEY, blokeyId));
+        } else if (before.isIndexingOnlyFieldChanged(after)) {
+            publisher.publishEvent(new IndexingRequestedEvent(EntityType.BLOKEY, blokeyId));
         }
     }
 }
