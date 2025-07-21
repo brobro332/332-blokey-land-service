@@ -8,6 +8,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import xyz.samsami.blokey_land.blokey.domain.Blokey;
 import xyz.samsami.blokey_land.blokey.dto.BlokeyReqCreateDto;
 import xyz.samsami.blokey_land.blokey.dto.BlokeyReqUpdateDto;
@@ -16,10 +18,12 @@ import xyz.samsami.blokey_land.blokey.repository.BlokeyRepository;
 import xyz.samsami.blokey_land.common.exception.CommonException;
 import xyz.samsami.blokey_land.discipline.domain.BlokeyDiscipline;
 import xyz.samsami.blokey_land.discipline.domain.Discipline;
+import xyz.samsami.blokey_land.discipline.dto.DisciplineRespDto;
 import xyz.samsami.blokey_land.discipline.service.BlokeyDisciplineService;
 import xyz.samsami.blokey_land.discipline.service.DisciplineService;
 import xyz.samsami.blokey_land.skill.domain.BlokeySkill;
 import xyz.samsami.blokey_land.skill.domain.Skill;
+import xyz.samsami.blokey_land.skill.dto.SkillRespDto;
 import xyz.samsami.blokey_land.skill.service.BlokeySkillService;
 import xyz.samsami.blokey_land.skill.service.SkillService;
 
@@ -27,6 +31,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -226,5 +231,57 @@ class BlokeyServiceTest {
 
         // then
         verify(repository).delete(mock);
+    }
+
+    @Test
+    @DisplayName("유효한 파라미터가 주어진다면_분야를 적용할 때_응답 객체가 갱신되어야 한다.")
+    void givenValidParameter_whenApplyDisciplinesToRespDto_thenCallsUpdatedDto() {
+        // given
+        Set<UUID> blokeyIds = Set.of(blokeyId);
+        List<BlokeyDiscipline> blokeyDisciplineList = List.of(blokeyDiscipline1, blokeyDiscipline2);
+
+        when(repository.findById(blokeyId)).thenReturn(Optional.of(blokey));
+
+        BlokeyRespDto blokeyRespDto = service.readBlokeyByBlokeyId(blokeyId);
+        Page<BlokeyRespDto> page = new PageImpl<>(List.of(blokeyRespDto));
+
+        when(blokeyDisciplineService.findByBlokeyIdIn(blokeyIds)).thenReturn(blokeyDisciplineList);
+
+        // when
+        service.applyDisciplinesToRespDto(blokeyIds, page);
+
+        // then
+        Set<String> disciplineNames = blokeyRespDto.getDisciplines().stream()
+            .map(DisciplineRespDto::getName)
+            .collect(Collectors.toSet());
+
+        assertEquals(Set.of("프론트엔드 개발", "백엔드 개발"), disciplineNames);
+        verify(blokeyDisciplineService, times(1)).findByBlokeyIdIn(blokeyIds);
+    }
+
+    @Test
+    @DisplayName("유효한 파라미터가 주어진다면_스킬을 적용할 때_응답 객체가 갱신되어야 한다.")
+    void givenValidParameter_whenApplySkillsToRespDto_thenCallsUpdatedDto() {
+        // given
+        Set<UUID> blokeyIds = Set.of(blokeyId);
+        List<BlokeySkill> blokeySkillList = List.of(blokeySkill1, blokeySkill2);
+
+        when(repository.findById(blokeyId)).thenReturn(Optional.of(blokey));
+
+        BlokeyRespDto blokeyRespDto = service.readBlokeyByBlokeyId(blokeyId);
+        Page<BlokeyRespDto> page = new PageImpl<>(List.of(blokeyRespDto));
+
+        when(blokeySkillService.findByBlokeyIdIn(blokeyIds)).thenReturn(blokeySkillList);
+
+        // when
+        service.applySkillsToRespDto(blokeyIds, page);
+
+        // then
+        Set<String> skillNames = blokeyRespDto.getSkills().stream()
+            .map(SkillRespDto::getName)
+            .collect(Collectors.toSet());
+
+        assertEquals(Set.of("Java", "Python"), skillNames);
+        verify(blokeySkillService, times(1)).findByBlokeyIdIn(blokeyIds);
     }
 }

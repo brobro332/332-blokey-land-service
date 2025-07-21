@@ -19,13 +19,13 @@ public class ProjectDisciplineService extends AbstractRelationService<ProjectDis
     private final ProjectDisciplineRepository repository;
 
     @Override
-    protected ProjectDiscipline createRelation(Project project, Discipline Discipline) {
-        return ProjectDiscipline.builder().project(project).discipline(Discipline).build();
+    protected ProjectDiscipline createRelation(Project project, Discipline discipline) {
+        return ProjectDiscipline.builder().project(project).discipline(discipline).build();
     }
 
     @Override
-    protected Optional<ProjectDiscipline> findRelation(Project blokey, Discipline Discipline) {
-        return Optional.ofNullable(repository.findByProjectAndDiscipline(blokey, Discipline));
+    protected Optional<ProjectDiscipline> findRelation(Project blokey, Discipline discipline) {
+        return Optional.ofNullable(repository.findByProjectAndDiscipline(blokey, discipline));
     }
 
     @Override

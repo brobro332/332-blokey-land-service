@@ -119,7 +119,7 @@ public class BlokeyService {
         }
     }
 
-    private void applySkillsToRespDto(Set<UUID> blokeyIds, Page<BlokeyRespDto> page) {
+    void applySkillsToRespDto(Set<UUID> blokeyIds, Page<BlokeyRespDto> page) {
         List<BlokeySkill> blokeySkills = blokeySkillService.findByBlokeyIdIn(blokeyIds);
 
         Map<UUID, Set<SkillRespDto>> skillMap = blokeySkills.stream()
@@ -165,7 +165,7 @@ public class BlokeyService {
         }
     }
 
-    private void applyDisciplinesToRespDto(Set<UUID> blokeyIds, Page<BlokeyRespDto> page) {
+    void applyDisciplinesToRespDto(Set<UUID> blokeyIds, Page<BlokeyRespDto> page) {
         List<BlokeyDiscipline> blokeyDisciplines = blokeyDisciplineService.findByBlokeyIdIn(blokeyIds);
 
         Map<UUID, Set<DisciplineRespDto>> disciplineMap = blokeyDisciplines.stream()

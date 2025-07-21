@@ -19,13 +19,13 @@ public class BlokeyDisciplineService extends AbstractRelationService<BlokeyDisci
     private final BlokeyDisciplineRepository repository;
 
     @Override
-    protected BlokeyDiscipline createRelation(Blokey blokey, Discipline Discipline) {
-        return BlokeyDiscipline.builder().blokey(blokey).discipline(Discipline).build();
+    protected BlokeyDiscipline createRelation(Blokey blokey, Discipline discipline) {
+        return BlokeyDiscipline.builder().blokey(blokey).discipline(discipline).build();
     }
 
     @Override
-    protected Optional<BlokeyDiscipline> findRelation(Blokey blokey, Discipline Discipline) {
-        return Optional.ofNullable(repository.findByBlokeyAndDiscipline(blokey, Discipline));
+    protected Optional<BlokeyDiscipline> findRelation(Blokey blokey, Discipline discipline) {
+        return Optional.ofNullable(repository.findByBlokeyAndDiscipline(blokey, discipline));
     }
 
     @Override
