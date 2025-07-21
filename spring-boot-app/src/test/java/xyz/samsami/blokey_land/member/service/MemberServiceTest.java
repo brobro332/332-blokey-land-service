@@ -27,8 +27,8 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class MemberServiceTest {
-    @InjectMocks private MemberService service;
-    @Mock private MemberRepository repository;
+    @InjectMocks MemberService service;
+    @Mock MemberRepository repository;
 
     Blokey blokey;
     String nickname = "테스트_닉네임_텍스트";
@@ -69,7 +69,7 @@ class MemberServiceTest {
         member = mock(Member.class);
     }
 
-    @DisplayName("멤버를 저장할 때 모든 필수 값이 저장되어야 한다.")
+    @DisplayName("유효한 파라미터가 주어진다면_멤버를 저장할 때_모든 필수 값이 저장되어야 한다.")
     @Test
     void givenValidParameter_whenCreateMember_thenAllFieldsShouldBeSaved() {
         // given
@@ -86,21 +86,21 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("존재하는 ID가 주어졌을 때 멤버가 반환되어야 한다.")
-    void givenValidMemberId_whenFindMemberByMemberId_thenReturnMember() {
+    @DisplayName("존재하는 ID가 주어진다면_멤버를 조회할 때_결과가 반환되어야 한다.")
+    void givenExistingId_whenFindMemberByMemberId_thenReturnMember() {
         // given
         when(repository.findById(memberId)).thenReturn(Optional.of(member));
 
         // when
-        Member found = service.findMemberByMemberId(memberId);
+        Member result = service.findMemberByMemberId(memberId);
 
         // then
-        assertEquals(member, found);
+        assertEquals(member, result);
     }
 
     @Test
-    @DisplayName("존재하지 않는 ID가 주어졌을 때 예외가 발생해야 한다.")
-    void givenInvalidMemberId_whenFindMemberByMemberId_thenThrowsException() {
+    @DisplayName("존재하지 않는 ID가 주어진다면_멤버를 조회할 때_예외가 발생해야 한다.")
+    void givenNonExistingId_whenFindMemberByMemberId_thenThrowsException() {
         // given
         when(repository.findById(memberId)).thenReturn(Optional.empty());
 
@@ -109,7 +109,7 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("유효한 파라미터가 주어지면 멤버 역할이 수정되어야 한다.")
+    @DisplayName("유효한 파라미터가 주어진다면_멤버를 수정할 때_올바르게 갱신되어야 한다.")
     void givenValidParameter_whenUpdateMemberByMemberId_thenRoleUpdated() {
         // given
         MemberReqUpdateDto dto = MemberReqUpdateDto.builder()
@@ -126,8 +126,8 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("유효한 멤버 ID가 주어지면 멤버가 삭제되어야 한다.")
-    void givenValidMemberId_whenDeleteMemberByMemberId_thenDeleteCalled() {
+    @DisplayName("유효한 ID가 주어진다면_멤버를 삭제할 때_올바르게 삭제되어야 한다.")
+    void givenValidId_whenDeleteMemberByMemberId_thenDeleteCalled() {
         // given
         when(repository.findById(memberId)).thenReturn(Optional.of(member));
 

@@ -28,7 +28,7 @@ class DisciplineServiceTest {
     void givenExistingId_whenFindDisciplineByDisciplineId_thenReturnsDiscipline() {
         // given
         Long id = 1L;
-        Discipline discipline = Discipline.builder().id(id).name("백엔드").build();
+        Discipline discipline = Discipline.builder().id(id).name("백엔드 개발").build();
         when(repository.findById(id)).thenReturn(Optional.of(discipline));
 
         // when

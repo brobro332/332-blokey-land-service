@@ -32,7 +32,7 @@ class BlokeyDisciplineServiceTest {
     @BeforeEach
     void setUp() {
         blokey = Blokey.builder().id(UUID.randomUUID()).build();
-        discipline = Discipline.builder().id(1L).name("백엔드").build();
+        discipline = Discipline.builder().id(1L).name("백엔드 개발").build();
         relation = BlokeyDiscipline.builder().blokey(blokey).discipline(discipline).build();
     }
 
@@ -93,7 +93,7 @@ class BlokeyDisciplineServiceTest {
     }
 
     @Test
-    @DisplayName("연관관계가 주어졌다면_연관관계를 삭제할 때_연관관계가 제거되어야 한다.")
+    @DisplayName("연관관계가 주어졌다면_연관관계를 삭제할 때_올바르게 제거되어야 한다.")
     void givenRelation_whenDeleteRelation_thenShouldRemoveFromBlokeyAndDeleteFromRepository() {
         // given
         Blokey spy = spy(blokey);

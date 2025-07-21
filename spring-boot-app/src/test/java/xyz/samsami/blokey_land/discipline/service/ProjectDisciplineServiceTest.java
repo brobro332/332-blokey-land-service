@@ -76,7 +76,7 @@ class ProjectDisciplineServiceTest {
     }
 
     @Test
-    @DisplayName("연관관계가 주어진다면_연관관계를 저장할 때_올바르게 연관관계가 저장돼야 한다.")
+    @DisplayName("연관관계가 주어진다면_연관관계를 저장할 때_올바르게 저장돼야 한다.")
     void givenRelation_whenSaveRelation_thenShouldAddToProjectAndSave() {
         // given
         Project spyProject = spy(project);
@@ -94,7 +94,7 @@ class ProjectDisciplineServiceTest {
     }
 
     @Test
-    @DisplayName("연관관계가 주어졌다면_연관관계를 삭제할 때_연관관계가 제거돼야 한다.")
+    @DisplayName("연관관계가 주어진다면_연관관계를 삭제할 때_올바르게 제거돼야 한다.")
     void givenRelation_whenDeleteRelation_thenShouldRemoveFromProjectAndDelete() {
         // given
         Project spyProject = spy(project);
@@ -112,7 +112,7 @@ class ProjectDisciplineServiceTest {
     }
 
     @Test
-    @DisplayName("프로젝트 ID 목록이 주어졌다면_연관관계와 함께 관련 분야를 조회할 때_결과가 반환돼야 한다.")
+    @DisplayName("프로젝트 ID 목록이 주어진다면_연관관계와 함께 관련 분야를 조회할 때_결과가 반환돼야 한다.")
     void givenProjectIds_whenFindWithDiscipline_thenReturnProjectSkillList() {
         // given
         Set<Long> projectIds = Set.of(1L, 2L);

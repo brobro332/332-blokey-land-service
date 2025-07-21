@@ -25,9 +25,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @Transactional
 class MemberRepositoryTest extends ContainerBaseTest {
-    @Autowired private MemberRepository repository;
-    @Autowired private BlokeyRepository blokeyRepository;
-    @Autowired private ProjectRepository projectRepository;
+    @Autowired MemberRepository repository;
+    @Autowired BlokeyRepository blokeyRepository;
+    @Autowired ProjectRepository projectRepository;
 
     UUID blokeyId1;
     UUID blokeyId2;
@@ -60,9 +60,9 @@ class MemberRepositoryTest extends ContainerBaseTest {
 
         project = projectRepository.save(
             Project.builder()
-                .title("테스트_프로젝트_제목_텍스트")
-                .description("테스트_프로젝트_설명_텍스트")
-                .imageUrl("테스트_프로젝트_이미지_URL_텍스트")
+                .title("테스트_제목_텍스트")
+                .description("테스트_설명_텍스트")
+                .imageUrl("테스트_이미지_URL_텍스트")
                 .isPrivate(true)
                 .estimatedStartDate(LocalDate.now())
                 .estimatedEndDate(LocalDate.now())
@@ -76,7 +76,7 @@ class MemberRepositoryTest extends ContainerBaseTest {
     }
 
     @Test
-    @DisplayName("프로젝트 ID로 멤버 조회 시 해당 프로젝트의 멤버 목록이 페이지 형태로 반환된다")
+    @DisplayName("프로젝트 ID가 주어진다면_ 멤버를 조회할 때_해당 프로젝트의 멤버 목록이 페이지 형태로 반환된다.")
     void givenProjectId_whenFindDtoByProjectId_thenReturnsPagedMembers() {
         // when
         Page<MemberRespDto> result = repository.findDtoByProjectId(project.getId(), PageRequest.of(0, 10));
@@ -88,7 +88,7 @@ class MemberRepositoryTest extends ContainerBaseTest {
     }
 
     @Test
-    @DisplayName("사용자 ID로 멤버 조회 시 해당 사용자가 속한 멤버 목록이 페이지 형태로 반환된다")
+    @DisplayName("사용자 ID가 주어진다면_멤버를 조회할 때_해당 사용자가 속한 멤버 목록이 페이지 형태로 반환된다.")
     void givenBlokeyId_whenFindDtoByBlokeyId_thenReturnsPagedMembers() {
         // when
         Page<MemberRespDto> result = repository.findDtoByBlokeyId(blokey1.getId(), PageRequest.of(0, 10));

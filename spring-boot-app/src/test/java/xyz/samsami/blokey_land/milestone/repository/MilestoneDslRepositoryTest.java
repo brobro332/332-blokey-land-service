@@ -1,6 +1,8 @@
 package xyz.samsami.blokey_land.milestone.repository;
 
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,30 +28,35 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @Transactional
 class MilestoneDslRepositoryTest extends ContainerBaseTest {
-    @Autowired private MilestoneRepository repository;
-    @Autowired private MilestoneDslRepository dslRepository;
-    @Autowired private ProjectRepository projectRepository;
-    @Autowired private BlokeyRepository blokeyRepository;
-    @Autowired private MemberRepository memberRepository;
+    @Autowired EntityManager entityManager;
+    @Autowired MilestoneRepository repository;
+    @Autowired MilestoneDslRepository dslRepository;
+    @Autowired ProjectRepository projectRepository;
+    @Autowired BlokeyRepository blokeyRepository;
+    @Autowired MemberRepository memberRepository;
 
-    @Test
-    @DisplayName("프로젝트 ID가 주어졌을 때 프로젝트에 속하는 응답 DTO 조회")
-    void givenParameter_whenReadMilestones_thenReturnsDto() {
-        // given
-        UUID blokeyId = UUID.randomUUID();
-        Blokey blokey = blokeyRepository.save(
-            Blokey.builder()
-                .id(blokeyId)
-                .nickname("닉네임")
-                .bio("소개")
-                .build()
-        );
+    UUID blokeyId;
+    Blokey blokey;
+    String nickname = "테스트_닉네임_텍스트";
+    String bio = "테스트_소개_텍스트";
 
-        Project project = projectRepository.save(
+    Project project;
+    String title = "테스트_제목_텍스트";
+    String description = "테스트_설명_텍스트";
+    String imageUrl = "테스트_이미지_URL_텍스트";
+
+    Milestone milestone;
+
+    @BeforeEach
+    void setUp() {
+        blokeyId = UUID.randomUUID();
+        blokey = blokeyRepository.save(Blokey.builder().id(blokeyId).nickname(nickname + "_1").bio(bio + "_1").build());
+
+        project = projectRepository.save(
             Project.builder()
-                .title("제목")
-                .description("설명")
-                .imageUrl("이미지 URL")
+                .title(title)
+                .description(description)
+                .imageUrl(imageUrl)
                 .isPrivate(true)
                 .estimatedStartDate(LocalDate.now())
                 .estimatedEndDate(LocalDate.now())
@@ -60,33 +67,33 @@ class MilestoneDslRepositoryTest extends ContainerBaseTest {
 
         memberRepository.save(
             Member.builder()
-                .blokey(blokey)
-                .project(project)
                 .role(RoleType.LEADER)
+                .project(project)
+                .blokey(blokey)
                 .build()
         );
 
-        Milestone milestone1 = repository.save(
+        milestone = repository.save(
             Milestone.builder()
-                .title("제목")
-                .description("설명")
+                .title(title)
+                .description(description)
                 .dueDate(LocalDate.of(2025, 7, 12))
                 .project(project)
                 .build()
         );
 
-        repository.save(
-            Milestone.builder()
-                .title("제목")
-                .description("설명")
-                .dueDate(LocalDate.of(2025, 7, 12).plusDays(1))
-                .project(project)
-                .build()
-        );
+        entityManager.flush();
+        entityManager.clear();
+    }
 
+
+    @Test
+    @DisplayName("프로젝트 ID가 주어졌을 때 프로젝트에 속하는 응답 DTO 조회")
+    void givenParameter_whenReadMilestones_thenReturnsDto() {
+        // given
         MilestoneReqReadDto request = new MilestoneReqReadDto();
-        request.setTitle("제목");
-        request.setDescription("설명");
+        request.setTitle(title);
+        request.setDescription(description);
         request.setMonth(7);
         request.setDueDateFrom(LocalDate.of(2025, 7, 9));
         request.setDueDateTo(LocalDate.of(2025, 7, 12));
@@ -99,10 +106,10 @@ class MilestoneDslRepositoryTest extends ContainerBaseTest {
         assertThat(result).hasSize(1);
         MilestoneRespDto response = result.getFirst();
 
-        assertThat(response.getId()).isEqualTo(milestone1.getId());
-        assertThat(response.getTitle()).isEqualTo(milestone1.getTitle());
-        assertThat(response.getDescription()).isEqualTo(milestone1.getDescription());
-        assertThat(response.getDueDate()).isEqualTo(milestone1.getDueDate());
+        assertThat(response.getId()).isEqualTo(milestone.getId());
+        assertThat(response.getTitle()).isEqualTo(milestone.getTitle());
+        assertThat(response.getDescription()).isEqualTo(milestone.getDescription());
+        assertThat(response.getDueDate()).isEqualTo(milestone.getDueDate());
         assertThat(response.getProjectId()).isEqualTo(project.getId());
     }
 }
