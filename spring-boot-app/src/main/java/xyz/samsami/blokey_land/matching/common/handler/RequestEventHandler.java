@@ -4,10 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import xyz.samsami.blokey_land.common.event.EmbeddingRequestedEvent;
+import xyz.samsami.blokey_land.common.event.IndexingRequestedEvent;
 import xyz.samsami.blokey_land.common.exception.CommonException;
 import xyz.samsami.blokey_land.common.type.EntityType;
 import xyz.samsami.blokey_land.common.type.ExceptionType;
 import xyz.samsami.blokey_land.matching.embedding.service.EmbeddingService;
+import xyz.samsami.blokey_land.matching.indexing.service.IndexingService;
 
 import java.io.Serializable;
 import java.util.List;
@@ -17,15 +19,17 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class RequestEventHandler {
     private final EmbeddingService embeddingService;
-    /* TODO: 색인 서비스 구현 필요 */
-    // private final IndexingService indexingService;
+    private final IndexingService indexingService;
 
     @EventListener
     public void handle(EmbeddingRequestedEvent event) {
         List<Float> vector = embedEntity(event.getEntityType(), event.getEntityId());
+        indexingService.index(event.getEntityType(), event.getEntityId(), vector);
+    }
 
-        /* TODO: 색인 메서드 구현 필요 */
-        // indexingService.index(event.getEntityType(), event.getEntityId(), vector);
+    @EventListener
+    public void handle(IndexingRequestedEvent event) {
+        indexingService.index(event.getEntityType(), event.getEntityId(), null);
     }
 
     private List<Float> embedEntity(EntityType entityType, Serializable entityId) {

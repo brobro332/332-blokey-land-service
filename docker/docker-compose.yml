@@ -12,7 +12,10 @@ services:
       SPRING_DATASOURCE_USERNAME: ${DATA_POSTGRES_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${DATA_POSTGRES_PASSWORD}
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+      elasticsearch-blokey:
+        condition: service_healthy
     volumes:
       - spring-uploads:/app/uploads
     networks:
@@ -51,21 +54,32 @@ services:
       - network-sentinel
     env_file:
       - .env
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DATA_POSTGRES_USERNAME}"]
+      interval: 10s
+      retries: 5
+      start_period: 10s
+      timeout: 5s
 
   elasticsearch-blokey:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.9.0
     container_name: elasticsearch-blokey
     environment:
       - discovery.type=single-node
-      - xpack.security.enabled=true
+      - xpack.security.enabled=false
       - ES_JAVA_OPTS=-Xms256m -Xmx256m
-      - ELASTIC_PASSWORD=${ELASTICSEARCH_PASSWORD}
     ports:
       - "${ELASTICSEARCH_EXTERNAL_PORT}:${ELASTICSEARCH_INTERNAL_PORT}"
     volumes:
       - esdata:/usr/share/elasticsearch/data
     networks:
-      - network-sentinel 
+      - network-sentinel
+    healthcheck:
+      test: curl --silent --fail http://localhost:9200 || exit 1
+      interval: 10s
+      retries: 10
+      start_period: 20s
+      timeout: 5s
 
   ollama:
     image: ollama/ollama:latest
@@ -75,6 +89,8 @@ services:
     volumes:
       - oldata:/root/.ollama
     tty: true
+    networks:
+      - network-sentinel 
     restart: always
 
 volumes:

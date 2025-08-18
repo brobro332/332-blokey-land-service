@@ -16,7 +16,7 @@ public class OllamaEmbeddingClient {
     public List<Float> embed(String text) {
         Map<String, String> request = Map.of(
             "model", "bge-m3",
-            "input", text
+            "prompt", text
         );
 
         var response = webClient.post()
