@@ -1,12 +1,16 @@
 package xyz.samsami.blokey_land.project.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import xyz.samsami.blokey_land.blokey.domain.Blokey;
 import xyz.samsami.blokey_land.blokey.service.BlokeyService;
+import xyz.samsami.blokey_land.common.event.EmbeddingRequestedEvent;
+import xyz.samsami.blokey_land.common.event.IndexingRequestedEvent;
 import xyz.samsami.blokey_land.common.exception.CommonException;
+import xyz.samsami.blokey_land.common.type.EntityType;
 import xyz.samsami.blokey_land.common.type.ExceptionType;
 import xyz.samsami.blokey_land.discipline.domain.Discipline;
 import xyz.samsami.blokey_land.discipline.service.DisciplineService;
@@ -14,6 +18,7 @@ import xyz.samsami.blokey_land.discipline.service.ProjectDisciplineService;
 import xyz.samsami.blokey_land.member.service.MemberService;
 import xyz.samsami.blokey_land.member.type.RoleType;
 import xyz.samsami.blokey_land.project.domain.Project;
+import xyz.samsami.blokey_land.project.domain.ProjectSnapshot;
 import xyz.samsami.blokey_land.project.dto.*;
 import xyz.samsami.blokey_land.project.mapper.ProjectMapper;
 import xyz.samsami.blokey_land.project.repository.ProjectDslRepository;
@@ -43,6 +48,7 @@ public class ProjectService {
     private final ProjectRepository repository;
     private final ProjectDslRepository dslRepository;
     private final ProjectAttachHelper projectAttachHelper;
+    private final ApplicationEventPublisher publisher;
 
     @Transactional
     public void createProject(ProjectReqCreateDto dto, String blokeyId) {
@@ -61,6 +67,8 @@ public class ProjectService {
         if (dto.getDisciplines() != null && !dto.getDisciplines().isEmpty()) {
             for (Long disciplineId : dto.getDisciplines()) addDisciplineToProject(project, disciplineId);
         }
+
+        publisher.publishEvent(new EmbeddingRequestedEvent(EntityType.PROJECT, project.getId()));
     }
 
     public List<ProjectOnlyRespDto> readAllProjects(String blokeyId) {
@@ -105,6 +113,7 @@ public class ProjectService {
     @Transactional
     public void updateProjectByProjectId(Long projectId, ProjectReqUpdateDto dto) {
         Project project = findProjectByProjectId(projectId);
+        ProjectSnapshot before = ProjectSnapshot.from(project);
 
         project.updateTitle(dto.getTitle());
         project.updateDescription(dto.getDescription());
@@ -133,6 +142,9 @@ public class ProjectService {
                 disciplineId -> removeDisciplineFromProject(project, disciplineId)
             );
         }
+
+        ProjectSnapshot after = ProjectSnapshot.from(project);
+        publishRequestEvents(before, after, projectId);
     }
 
     @Transactional
@@ -190,6 +202,14 @@ public class ProjectService {
 
         for (ID id : current) {
             if (!target.contains(id)) remover.accept(id);
+        }
+    }
+
+    private void publishRequestEvents(ProjectSnapshot before, ProjectSnapshot after, Long projectId) {
+        if (before.isEmbeddingFieldChanged(after)) {
+            publisher.publishEvent(new EmbeddingRequestedEvent(EntityType.PROJECT, projectId));
+        } else if (before.isIndexingOnlyFieldChanged(after)) {
+            publisher.publishEvent(new IndexingRequestedEvent(EntityType.PROJECT, projectId));
         }
     }
 }

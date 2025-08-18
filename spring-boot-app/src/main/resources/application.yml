@@ -12,11 +12,9 @@ spring:
     show-sql: false
     hibernate:
       ddl-auto: validate
+  elasticsearch:
+    uris: ${ELASTICSEARCH_URIS}
   data:
-    elasticsearch:
-      uris: ${ELASTICSEARCH_URIS}
-      username: ${ELASTICSEARCH_USERNAME}
-      password: ${ELASTICSEARCH_PASSWORD}
     batch:
       jdbc:
         initialize-schema: always
@@ -46,3 +44,6 @@ file:
 
 github:
   access-token: ${GITHUB_ACCESS_TOKEN}
+
+ollama:
+  request-url: ${OLLAMA_URL}

@@ -8,6 +8,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import xyz.samsami.blokey_land.blokey.domain.Blokey;
@@ -44,6 +45,7 @@ class BlokeyServiceTest {
     @Mock DisciplineService disciplineService;
     @Mock BlokeySkillService blokeySkillService;
     @Mock BlokeyDisciplineService blokeyDisciplineService;
+    @Mock ApplicationEventPublisher publisher;
 
     UUID blokeyId;
     Blokey blokey;
@@ -100,6 +102,7 @@ class BlokeyServiceTest {
 
         doNothing().when(blokeySkillService).create(any(), any());
         doNothing().when(blokeyDisciplineService).create(any(), any());
+        when(repository.save(any())).thenReturn(blokey);
 
         // when
         service.createBlokey(dto);
