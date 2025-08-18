@@ -42,5 +42,6 @@ public abstract class ContainerBaseTest {
         registry.add("spring.jpa.hibernate.ddl-auto", () -> "update");
         registry.add("github.access-token", () -> "DEFAULT");
         registry.add("ollama.request-url", () -> "DEFAULT");
+        registry.add("spring.elasticsearch.uris", () -> "http://localhost:9201");
     }
 }
